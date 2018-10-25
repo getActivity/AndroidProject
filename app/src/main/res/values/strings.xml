@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">模板工程</string>
+
+    <!-- 通用 -->
+    <string name="countdown_code_send_succeed">验证码已发送，请注意查收</string>
+    <string name="two_password_input_error">两次密码输入不一致，请重新输入</string>
+    <string name="phone_input_error">手机号输入不正确</string>
+
+    <!-- 主页 -->
+    <string name="home_exit_hint">再按一次退出</string>
+    <string name="home_nav_index">首页</string>
+    <string name="home_nav_found">发现</string>
+    <string name="home_nav_message">消息</string>
+    <string name="home_nav_me">我的</string>
+
+    <!-- 登录 -->
+    <string name="login_register">注册</string>
+    <string name="login_phone_input_hint">请输入手机号</string>
+    <string name="login_password_input_hint">请输入密码</string>
+    <string name="login_forget">忘记密码？</string>
+    <string name="login_text">登录</string>
+
+    <!-- 注册 -->
+    <string name="register_text">注册</string>
+    <string name="register_hint">手机号仅用于登录和保护账号安全</string>
+    <string name="register_login">登录</string>
+    <string name="register_phone_input_hint">输入手机号码</string>
+    <string name="register_code_input_hint">输入验证码</string>
+    <string name="register_send_code">发送验证码</string>
+    <string name="register_password_input_hint1">设置密码</string>
+    <string name="register_password_input_hint2">再次输入密码</string>
+
+    <!-- 关于 -->
+    <string name="about_text">关于我们</string>
+    <string name="about_copyright">Copyright © 2018</string>
+
+</resources>

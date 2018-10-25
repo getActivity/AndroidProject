@@ -1,0 +1,184 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.TestFragmentB">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/tb_test_c_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon_back="false"
+        app:title="@string/home_nav_found" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_40">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/space_180"
+                    android:layout_height="@dimen/space_180"
+                    android:src="@mipmap/bg_launcher" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/space_180"
+                    android:layout_height="@dimen/space_180"
+                    android:layout_marginLeft="@dimen/space_40"
+                    android:src="@mipmap/ic_logo"
+                    app:civ_border_color="@color/white60"
+                    app:civ_border_width="@dimen/space_2" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/space_180"
+                    android:layout_height="@dimen/space_180"
+                    android:layout_marginLeft="@dimen/space_40"
+                    android:src="@mipmap/ic_logo"
+                    app:civ_border_color="@color/black60"
+                    app:civ_border_width="@dimen/space_2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_30"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    style="@style/ButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="普通按钮" />
+
+                <Button
+                    style="@style/ButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_20"
+                    android:enabled="false"
+                    android:text="禁用了的按钮" />
+
+                <Button
+                    style="@style/RectButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_20"
+                    android:text="不带圆角的" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_80"
+                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginRight="@dimen/space_80"
+                android:orientation="horizontal">
+
+                <EditText
+                    style="@style/EditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="请输入验证码" />
+
+                <com.hjq.baselibrary.widget.CountdownView
+                    android:id="@+id/cv_test_countdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="获取验证码" />
+
+            </LinearLayout>
+
+            <com.hjq.baselibrary.widget.ClearEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_80"
+                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginRight="@dimen/space_80"
+                android:text="这是一个带清除的按钮的EditText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginRight="@dimen/space_20"
+                android:layout_marginBottom="@dimen/space_20"
+                android:text="这是一条华丽的分割线" />
+
+            <View style="@style/HorizontalLineStyle" />
+
+            <com.hjq.baselibrary.widget.square.SquareFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_40"
+                android:background="@color/colorButtonPressed">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="这是一个正方形的FrameLayout"
+                    android:textColor="@color/white" />
+
+            </com.hjq.baselibrary.widget.square.SquareFrameLayout>
+
+            <com.hjq.baselibrary.widget.square.SquareLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_horizontal"
+                    android:text="这是一个正方形的LinearLayout"
+                    android:textColor="@color/white" />
+
+            </com.hjq.baselibrary.widget.square.SquareLinearLayout>
+
+            <com.hjq.baselibrary.widget.square.SquareRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorButtonPressed">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="这是一个正方形的RelativeLayout"
+                    android:textColor="@color/white" />
+
+            </com.hjq.baselibrary.widget.square.SquareRelativeLayout>
+
+            <com.hjq.baselibrary.widget.square.SquareImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/bg_launcher" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

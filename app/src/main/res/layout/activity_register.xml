@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.activity.RegisterActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/tb_register_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_100"
+        app:bar_style="transparent"
+        app:color_left="@color/colorAccent"
+        app:icon_back="false"
+        app:title=""
+        app:title_left="@string/register_login" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/space_80"
+            android:layout_marginRight="@dimen/space_80"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_40"
+                android:text="@string/register_text"
+                android:textColor="@color/black60"
+                android:textSize="@dimen/font_size_46px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_40"
+                android:text="@string/register_hint"
+                android:textColor="@color/black20"
+                android:textSize="@dimen/font_size_28px" />
+
+            <LinearLayout
+                android:id="@+id/ll_register_edit1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_register_phone"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/register_phone_input_hint"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:maxLines="1" />
+
+                <com.hjq.baselibrary.widget.CountdownView
+                    android:id="@+id/cv_register_countdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_20"
+                    android:text="@string/register_send_code"
+                    android:textColor="@color/colorAccent" />
+            </LinearLayout>
+
+            <View style="@style/HorizontalLineStyle" />
+
+            <EditText
+                android:id="@+id/et_register_code"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_40"
+                android:hint="@string/register_code_input_hint"
+                android:inputType="number"
+                android:maxLength="8"
+                android:maxLines="1" />
+
+            <View style="@style/HorizontalLineStyle" />
+
+            <EditText
+                android:id="@+id/et_register_password1"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_40"
+                android:hint="@string/register_password_input_hint1"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:maxLines="1" />
+
+            <View style="@style/HorizontalLineStyle" />
+
+            <EditText
+                android:id="@+id/et_register_password2"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_40"
+                android:hint="@string/register_password_input_hint2"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:maxLines="1" />
+
+            <View style="@style/HorizontalLineStyle" />
+
+            <Button
+                android:id="@+id/btn_register_commit"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="@string/register_text" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

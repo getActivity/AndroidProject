@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.LauncherActivity">
+
+    <ImageView
+        android:id="@+id/iv_launcher_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg_launcher" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/space_100"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_launcher_icon"
+            android:layout_width="@dimen/space_400"
+            android:layout_height="@dimen/space_400"
+            android:src="@mipmap/ic_logo" />
+
+        <TextView
+            android:id="@+id/iv_launcher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_100"
+            android:text="@string/app_name"
+            android:textColor="@color/white90"
+            android:textSize="@dimen/font_size_40px" />
+    </LinearLayout>
+
+</FrameLayout>

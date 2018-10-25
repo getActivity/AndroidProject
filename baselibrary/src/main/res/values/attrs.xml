@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="GestureView">
+        <!-- 选中状态的手势点-->
+        <attr name="selected" format="reference" />
+        <!-- 未选中状态的手势点-->
+        <attr name="unselected" format="reference" />
+        <!-- 画笔的颜色-->
+        <attr name="color" format="color" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hjq.demo">
+
+    <!-- 外部存储读写权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 拍照权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 联网权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 友盟统计 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:name=".common.CommonApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme">
+
+        <!-- 友盟统计 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="XXXXXXXXXXXXXXXXXXXXXXXX" /><!-- 要注意更换key -->
+
+        <!-- 友盟多渠道打包 -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
+
+        <!-- 启动页面（因为使用了LauncherTheme，所以不要给这个Activity设置screenOrientation属性，会导致崩溃） -->
+        <activity
+            android:name=".ui.activity.LauncherActivity"
+            android:theme="@style/LauncherTheme">
+
+            <!-- 程序入口 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- 主页界面 -->
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleTop" />
+
+        <!-- 登录界面 -->
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTop" />
+
+        <!-- 注册界面 -->
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:launchMode="singleTop" />
+
+        <!-- 关于界面 -->
+        <activity
+            android:name=".ui.activity.AboutActivity"
+            android:launchMode="singleTop" />
+
+        <!-- 浏览器界面 -->
+        <activity
+            android:name=".ui.activity.WebActivity"
+            android:launchMode="singleTop" />
+
+    </application>
+
+</manifest>

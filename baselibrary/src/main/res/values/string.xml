@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--刷新控件-->
+    <string name="refresh_header_pull">下拉刷新</string>
+    <string name="refresh_header_pull_over">释放立即刷新</string>
+    <string name="refresh_header_refreshing">正在刷新...</string>
+    <string name="refresh_header_completed">刷新成功</string>
+
+    <!--list view-->
+    <string name="list_view_more">查看更多</string>
+    <string name="list_view_more_failed">加载失败</string>
+    <string name="list_view_loading">加载中...</string>
+    <string name="list_view_line">我是有底线的</string>
+    <string name="list_view_content_null">还没有内容噢</string>
+    <string name="load_error">加载失败，请点击重试</string>
+    <string name="net_error">网络连接异常，请检查重试</string>
+    <string name="try_again">重试</string>
+</resources>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.TestFragmentA">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abl_test_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
+
+        <com.hjq.demo.widget.XCollapsingToolbarLayout
+            android:id="@+id/ctl_test_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_512"
+            app:contentScrim="@color/white"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:scrimVisibleHeightTrigger="@dimen/space_240">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/space_300"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/bg_launcher"
+                app:layout_collapseMode="parallax" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/t_test_title"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_marginRight="20dp"
+                app:layout_collapseMode="pin" />
+
+            <com.hjq.bar.TitleBar
+                android:id="@+id/tb_test_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                app:bar_style="transparent"
+                app:color_title="@color/white"
+                app:icon_back="false"
+                app:layout_collapseMode="pin"
+                app:line="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_20">
+
+                    <TextView
+                        android:id="@+id/tv_test_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/space_20"
+                        android:gravity="center_vertical"
+                        android:text="地区"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_size_30px" />
+
+                    <TextView
+                        android:id="@+id/tv_test_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/space_40"
+                        android:layout_marginRight="@dimen/space_100"
+                        android:background="@drawable/bg_home_search_bar_transparent"
+                        android:gravity="center"
+                        android:text="请输入搜索关键字"
+                        android:textColor="#a4a4a4"
+                        android:textSize="@dimen/font_size_28px" />
+
+                </LinearLayout>
+
+            </com.hjq.bar.TitleBar>
+
+        </com.hjq.demo.widget.XCollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/space_60"
+            android:layout_marginRight="@dimen/space_60"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

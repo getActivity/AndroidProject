@@ -1,0 +1,93 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.hjq.demo"
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 10
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 移除无用的resource文件，前提minifyEnabled必须打开
+            shrinkResources true
+            // ZipAlign优化
+            zipAlignEnabled true
+            // 设置混淆
+            minifyEnabled true
+            //加载默认混淆配置涵
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            //ZipAlign优化
+            zipAlignEnabled false
+            //设置混淆
+            minifyEnabled false
+            //加载默认混淆配置涵
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "default"//这个名字貌似随便取，也可以有多个，总之一定要有
+    //多渠道打包
+    productFlavors {
+        kuan {}     //酷安
+        tencent {}  //应用宝
+        baidu {}    //百度
+        xiaomi {}   //小米
+        huawei {}   //华为
+        qihu {}     //360
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':baselibrary')
+    // 示例：添加一个 aar 包
+    //api(name: 'password_dialog', ext: 'aar')
+
+    api "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintlayoutVersion"
+
+    // 状态栏沉浸：https://github.com/gyf-dev/ImmersionBar
+    api 'com.gyf.barlibrary:barlibrary:2.3.0'
+    // 侧滑功能：https://github.com/bingoogolapple/BGASwipeBackLayout-Android
+    api 'cn.bingoogolapple:bga-swipebacklayout:1.1.9@aar'
+
+    // 权限请求框架：https://github.com/getActivity/XXPermissions
+    api 'com.hjq:xxpermissions:5.2'
+    // 标题栏：https://github.com/getActivity/TitleBar
+    api 'com.hjq:titlebar:3.2'
+    // 吐司工具类：https://github.com/getActivity/ToastUtils
+    api 'com.hjq:toast:2.5'
+
+    // 圆形的ImageView：https://github.com/hdodenhof/CircleImageView
+    api 'de.hdodenhof:circleimageview:2.2.0'
+
+    // ButterKnife注解库：https://github.com/JakeWharton/butterknife
+    api "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
+
+    // 友盟统计
+    compileOnly 'com.umeng.analytics:analytics:6.1.4'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
