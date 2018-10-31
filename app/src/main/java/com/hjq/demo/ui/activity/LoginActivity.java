@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hjq.baselibrary.utils.TextInputHelper;
+import com.hjq.baselibrary.utils.EditTextInputHelper;
 import com.hjq.demo.R;
 import com.hjq.demo.common.CommonActivity;
 import com.hjq.toast.ToastUtils;
@@ -27,7 +27,7 @@ public class LoginActivity extends CommonActivity
     @BindView(R.id.btn_login_commit)
     Button mCommitView;
 
-    private TextInputHelper mTextInputHelper;
+    private EditTextInputHelper mEditTextInputHelper;
 
     @Override
     protected int getLayoutId() {
@@ -36,14 +36,14 @@ public class LoginActivity extends CommonActivity
 
     @Override
     protected int getTitleBarId() {
-        return R.id.tb_login_bar;
+        return R.id.tb_login_title;
     }
 
     @Override
     protected void initView() {
         mCommitView.setOnClickListener(this);
-        mTextInputHelper = new TextInputHelper(mCommitView, false);
-        mTextInputHelper.addViews(mPhoneView, mPasswordView);
+        mEditTextInputHelper = new EditTextInputHelper(mCommitView, false);
+        mEditTextInputHelper.addViews(mPhoneView, mPasswordView);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LoginActivity extends CommonActivity
 
     @Override
     protected void onDestroy() {
-        mTextInputHelper.removeViews();
+        mEditTextInputHelper.removeViews();
         super.onDestroy();
     }
 

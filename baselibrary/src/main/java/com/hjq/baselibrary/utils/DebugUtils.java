@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
 /**
- * Debug工具类
+ *    author : HJQ
+ *    github : https://github.com/getActivity/AndroidProject
+ *    time   : 2018/10/18
+ *    desc   : Debug判断工具类
  */
 public final class DebugUtils {
 

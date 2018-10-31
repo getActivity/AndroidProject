@@ -42,10 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 app:bar_style="transparent"
-                app:color_title="@color/white"
                 app:icon_back="false"
-                app:layout_collapseMode="pin"
-                app:line="false">
+                app:layout_collapseMode="pin">
 
                 <LinearLayout
                     android:layout_width="match_parent"

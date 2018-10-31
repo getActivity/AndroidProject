@@ -41,8 +41,7 @@ public abstract class UIActivity extends BaseActivity
         if (getTitleBarId() > 0) {
             ImmersionBar.setTitleBar(this, findViewById(getTitleBarId()));
         }
-        initView();
-        initData();
+        super.init();
     }
 
     public BGASwipeBackHelper getSwipeBackHelper() {

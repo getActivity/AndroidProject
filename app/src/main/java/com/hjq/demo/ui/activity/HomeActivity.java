@@ -4,11 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
+import com.hjq.baselibrary.utils.OnClickUtils;
 import com.hjq.demo.R;
 import com.hjq.demo.common.CommonActivity;
 import com.hjq.demo.ui.adapter.HomeViewPagerAdapter;
-import com.hjq.baselibrary.utils.OnClickUtils;
 import com.hjq.toast.ToastUtils;
 
 import butterknife.BindView;
@@ -20,12 +21,15 @@ import butterknife.BindView;
  *    desc   : 主页界面
  */
 public class HomeActivity extends CommonActivity implements
-        ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener {
+        ViewPager.OnPageChangeListener, Runnable,
+        BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.vp_home_pager)
     ViewPager mViewPager;
     @BindView(R.id.bv_home_navigation)
     BottomNavigationView mBottomNavigationView;
+
+    private HomeViewPagerAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -39,18 +43,40 @@ public class HomeActivity extends CommonActivity implements
 
     @Override
     protected void initView() {
-        // 限制页面数量
-        mViewPager.setOffscreenPageLimit(4);
         mViewPager.addOnPageChangeListener(this);
 
         // 不使用图标默认变色
         mBottomNavigationView.setItemIconTintList(null);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        // 修复在 ViewPager 中点击 EditText 弹出软键盘导致 BottomNavigationView 还显示在 ViewPager 下面的问题
+        postDelayed(this, 1000);
     }
 
     @Override
     protected void initData() {
-        mViewPager.setAdapter(new HomeViewPagerAdapter(this));
+        mAdapter = new HomeViewPagerAdapter(this);
+        mViewPager.setAdapter(mAdapter);
+
+        // 限制页面数量
+        mViewPager.setOffscreenPageLimit(mAdapter.getCount());
+    }
+
+    /**
+     * {@link Runnable}
+     */
+    @Override
+    public void run() {
+        /*
+         父布局为LinearLayout，因为 ViewPager 使用了权重的问题
+         软键盘在弹出的时候会把布局进行收缩，ViewPager 的高度缩小了
+         所以 BottomNavigationView 会显示在ViewPager 下面
+         解决方法是在 ViewPager 初始化高度后手动进行设置 ViewPager 高度并将权重设置为0
+         */
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mViewPager.getLayoutParams();
+        layoutParams.height = mViewPager.getHeight();
+        layoutParams.weight = 0;
+        mViewPager.setLayoutParams(layoutParams);
     }
 
     /**

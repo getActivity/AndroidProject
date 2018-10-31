@@ -11,8 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.PopupWindow;
 
-import com.hjq.baselibrary.R;
-
 /**
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
@@ -96,7 +94,7 @@ public final class PopupWindowHelper implements PopupWindow.OnDismissListener {
      * 销毁当前的PopupWindow
      */
     public void dismiss() {
-        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+        if (isShowing()) {
             mPopupWindow.dismiss();
         }
     }
@@ -105,11 +103,7 @@ public final class PopupWindowHelper implements PopupWindow.OnDismissListener {
      * 当前PopupWindow是否已经显示
      */
     public boolean isShowing() {
-        if (mPopupWindow != null) {
-            return mPopupWindow.isShowing();
-        }else {
-            return false;
-        }
+        return mPopupWindow != null && mPopupWindow.isShowing();
     }
 
     /**

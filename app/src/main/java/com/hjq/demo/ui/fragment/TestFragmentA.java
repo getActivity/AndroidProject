@@ -46,13 +46,13 @@ public class TestFragmentA extends CommonLazyFragment
 
     @Override
     protected int getTitleBarId() {
-        return 0;
+        return R.id.tb_test_bar;
     }
 
     @Override
     protected void initView() {
+        // 给这个ToolBar设置顶部内边距，才能和TitleBar进行对齐
         ImmersionBar.setTitleBar(getSupportActivity(), mToolbar);
-        ImmersionBar.setTitleBar(getSupportActivity(), mTitleBar);
 
         //设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);
@@ -79,6 +79,7 @@ public class TestFragmentA extends CommonLazyFragment
      */
     @Override
     public void onScrimsStateChange(boolean shown) {
+        // CollapsingToolbarLayout 发生了渐变
         if (shown) {
             mAddressView.setTextColor(getResources().getColor(R.color.black));
             mSearchView.setBackgroundResource(R.drawable.bg_home_search_bar_gray);

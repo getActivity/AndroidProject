@@ -9,10 +9,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!-- 应用的强调色，CheckBox，RadioButton，SwitchCompat等一般控件的选中效果默认采用该颜色 -->
         <item name="colorAccent">@color/colorAccent</item>
-        <!--  ActionMode覆盖Actionbar，不顶下来 -->
+        <!-- ActionMode覆盖Actionbar，不顶下来 -->
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <!--  ActionMode的颜色 -->
+        <!-- ActionMode的颜色 -->
         <item name="actionModeBackground">@color/colorPrimary</item>
     </style>
 

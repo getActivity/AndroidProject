@@ -22,7 +22,7 @@ public class CopyFragment extends CommonLazyFragment {
 
     @Override
     protected int getTitleBarId() {
-        return R.id.tb_copy_bar;
+        return R.id.tb_copy_title;
     }
 
     @Override

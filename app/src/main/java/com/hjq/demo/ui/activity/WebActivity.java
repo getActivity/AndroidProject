@@ -49,27 +49,27 @@ public class WebActivity extends CommonActivity {
         mWebView.setHorizontalScrollBarEnabled(false);
 
         WebSettings settings = mWebView.getSettings();
-        //允许文件访问
+        // 允许文件访问
         settings.setAllowFileAccess(true);
-        //支持javaScript
+        // 支持javaScript
         settings.setJavaScriptEnabled(true);
-        //允许网页定位
+        // 允许网页定位
         settings.setGeolocationEnabled(true);
-        //允许保存密码
+        // 允许保存密码
         settings.setSavePassword(true);
 
-        //支持播放gif动画
+        // 支持播放gif动画
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-        //解决Android 5.0上Webview默认不允许加载Http与Https混合内容
+        // 解决Android 5.0上Webview默认不允许加载Http与Https混合内容
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //两者都可以
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-        //加快HTML网页加载完成的速度，等页面finish再加载图片
+        // 加快HTML网页加载完成的速度，等页面finish再加载图片
         if(Build.VERSION.SDK_INT >= 19) {
             settings.setLoadsImagesAutomatically(true);
         } else {
@@ -119,19 +119,19 @@ public class WebActivity extends CommonActivity {
 
     private class MyWebViewClient extends WebViewClient {
 
-        //网页加载错误时回调，这个方法会在onPageFinished之前调用
+        // 网页加载错误时回调，这个方法会在onPageFinished之前调用
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, final String failingUrl) {
 
         }
 
-        //开始加载网页
+        // 开始加载网页
         @Override
         public void onPageStarted(final WebView view, final String url, Bitmap favicon) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
-        //完成加载网页
+        // 完成加载网页
         @Override
         public void onPageFinished(WebView view, String url) {
             mProgressBar.setVisibility(View.GONE);
@@ -145,7 +145,7 @@ public class WebActivity extends CommonActivity {
             // handleMessage(Message msg);// 进行其他处理
         }
 
-        //跳转到其他链接
+        // 跳转到其他链接
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, final String url) {
 
@@ -153,16 +153,17 @@ public class WebActivity extends CommonActivity {
             if (scheme != null) {
                 scheme = scheme.toLowerCase();
             }
-            if ("http".equals(scheme) || "https".equals(scheme)) {
+            if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
                 mWebView.loadUrl(url);
             }
+            // 已经处理该链接请求
             return true;
         }
     }
 
     private class MyWebChromeClient extends WebChromeClient {
 
-        //收到网页标题
+        // 收到网页标题
         @Override
         public void onReceivedTitle(WebView view, String title) {
             if (title != null) {
@@ -170,7 +171,7 @@ public class WebActivity extends CommonActivity {
             }
         }
 
-        //收到加载进度变化
+        // 收到加载进度变化
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             mProgressBar.setProgress(newProgress);

@@ -11,7 +11,8 @@
         android:id="@+id/vp_home_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:fitsSystemWindows="false" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bv_home_navigation"

@@ -4,10 +4,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hjq.baselibrary.utils.TextInputHelper;
+import com.hjq.baselibrary.utils.EditTextInputHelper;
+import com.hjq.baselibrary.widget.CountdownView;
 import com.hjq.demo.R;
 import com.hjq.demo.common.CommonActivity;
-import com.hjq.baselibrary.widget.CountdownView;
 import com.hjq.toast.ToastUtils;
 
 import butterknife.BindView;
@@ -37,7 +37,7 @@ public class RegisterActivity extends CommonActivity
     @BindView(R.id.btn_register_commit)
     Button mCommitView;
 
-    private TextInputHelper mTextInputHelper;
+    private EditTextInputHelper mEditTextInputHelper;
 
     @Override
     protected int getLayoutId() {
@@ -46,7 +46,7 @@ public class RegisterActivity extends CommonActivity
 
     @Override
     protected int getTitleBarId() {
-        return R.id.tb_register_bar;
+        return R.id.tb_register_title;
     }
 
     @Override
@@ -54,8 +54,8 @@ public class RegisterActivity extends CommonActivity
         mCountdownView.setOnClickListener(this);
         mCommitView.setOnClickListener(this);
 
-        mTextInputHelper = new TextInputHelper(mCommitView, false);
-        mTextInputHelper.addViews(mPhoneView, mCodeView, mPasswordView1, mPasswordView2);
+        mEditTextInputHelper = new EditTextInputHelper(mCommitView, false);
+        mEditTextInputHelper.addViews(mPhoneView, mCodeView, mPasswordView1, mPasswordView2);
     }
 
     @Override
@@ -71,6 +71,8 @@ public class RegisterActivity extends CommonActivity
         if (v == mCountdownView) { //获取验证码
 
             if (mPhoneView.getText().toString().length() != 11) {
+                // 重置验证码倒计时控件
+                mCountdownView.resetState();
                 ToastUtils.show(getResources().getString(R.string.phone_input_error));
                 return;
             }
@@ -93,7 +95,7 @@ public class RegisterActivity extends CommonActivity
 
     @Override
     protected void onDestroy() {
-        mTextInputHelper.removeViews();
+        mEditTextInputHelper.removeViews();
         super.onDestroy();
     }
 }

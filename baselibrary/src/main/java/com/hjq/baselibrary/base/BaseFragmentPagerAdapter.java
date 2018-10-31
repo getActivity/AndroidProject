@@ -19,7 +19,7 @@ public abstract class BaseFragmentPagerAdapter<T extends Fragment> extends Fragm
 
     private List<T> mFragments = new ArrayList<>(); // Fragment集合
 
-    private T mCurrentFragment;     // 当前显示的Fragment
+    private T mCurrentFragment; // 当前显示的Fragment
 
     /**
      * 在Activity中使用ViewPager适配器

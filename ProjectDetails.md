@@ -26,6 +26,14 @@
 
 * [CommonActivity](app/src/main/java/com/hjq/demo/common/CommonActivity.java)：继承至UIActivity，主要实现项目中的业务逻辑代码
 
+## 复制模板
+
+> 考虑到 Studio 创建一个 Activity 还是比较费劲的，所以在项目中预留了可供复制的副本
+
+* [CopyActivity.java](app/src/main/java/com/hjq/demo/ui/activity/CopyActivity.java)    对应 [activity_copy.xml](app/src/main/res/layout/activity_copy.xml)
+
+* [CopyFragment.java](app/src/main/java/com/hjq/demo/ui/fragment/CopyFragment.java)    对应 [fragment_copy.xml](app/src/main/res/layout/fragment_copy.xml)
+
 ## View 样式
 
 * 普通的圆角 Button 样式：style="@style/ButtonStyle"
@@ -46,7 +54,7 @@
 
 ## 框架使用
 
-> 具体用法可以[点击此处查看示例](app/src/main/res/layout/fragment_test_c.xml)
+> 具体用法可以[点击此处查看示例](app/src/main/java/com/hjq/demo/ui/fragment/TestFragmentC.java)
 
 ![](picture/3.png)
 

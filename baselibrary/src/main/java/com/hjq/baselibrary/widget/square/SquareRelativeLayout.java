@@ -2,7 +2,6 @@ package com.hjq.baselibrary.widget.square;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -27,6 +26,7 @@ public class SquareRelativeLayout extends RelativeLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+        super.onMeasure(SquareDelegate.measureWidth(widthMeasureSpec, heightMeasureSpec),
+                SquareDelegate.measureHeight(widthMeasureSpec, heightMeasureSpec));
     }
 }

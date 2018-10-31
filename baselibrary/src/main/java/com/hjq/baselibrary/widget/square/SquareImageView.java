@@ -1,7 +1,6 @@
 package com.hjq.baselibrary.widget.square;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
@@ -17,16 +16,17 @@ public class SquareImageView extends AppCompatImageView {
         super(context);
     }
 
-    public SquareImageView(Context context, @Nullable AttributeSet attrs) {
+    public SquareImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SquareImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SquareImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+        super.onMeasure(SquareDelegate.measureWidth(widthMeasureSpec, heightMeasureSpec),
+                SquareDelegate.measureHeight(widthMeasureSpec, heightMeasureSpec));
     }
 }

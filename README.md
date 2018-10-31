@@ -1,10 +1,12 @@
 # 模板工程
 
+> 博客地址：[但愿人长久，搬砖不再有](https://www.jianshu.com/p/77dd326f21dc)
+
 > 当我们日复一日年复一年的搬砖的时候，你是否曾想过提升一下开发效率，如果一个模板的项目摆在你的面前，你还会选择自己搭架构么
 
 > 但是做出一个好的模板项目并非易事，有多少人愿意选择去做，还有多少人选择努力去做好，可能寥寥无几，但是你今天看到的，正是你所想要的，一个真正能解决你开发新项目时最大痛点的模板工程，你不需要再麻木 Copy 原有旧项目的代码，只需改动少量代码就能得到想要的效果，你会发现开发新项目其实是一件很快乐的事
 
-> 已经正式投入公司新项目开发多时，暂时没有其他毛病，[点击此处下载Demo](https://raw.githubusercontent.com/getActivity/AndroidProject/master/AndroidProject.apk)
+> 已经正式投入公司新项目开发多时，暂时没有发现毛病，[点击此处下载Demo](https://raw.githubusercontent.com/getActivity/AndroidProject/master/AndroidProject.apk)，如果有问题随时欢迎你提交 [issues](https://github.com/getActivity/AndroidProject/issues/new) 给我反馈
 
 ![](picture/0.png)
 
@@ -24,11 +26,7 @@
 
 ![](picture/8.png)
 
-## 集成框架
-
-* 状态栏沉浸：[https://github.com/gyf-dev/ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
-
-* 侧滑功能：[https://github.com/bingoogolapple/BGASwipeBackLayout-Android](https://github.com/bingoogolapple/BGASwipeBackLayout-Android)
+#### 集成框架
 
 * 权限请求框架：[https://github.com/getActivity/XXPermissions](https://github.com/getActivity/XXPermissions)
 
@@ -36,7 +34,11 @@
 
 * 吐司工具类：[https://github.com/getActivity/ToastUtils](https://github.com/getActivity/ToastUtils)
 
-* 圆形的ImageView：[https://github.com/hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
+* 状态栏沉浸：[https://github.com/gyf-dev/ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
+
+* 界面侧滑功能：[https://github.com/bingoogolapple/BGASwipeBackLayout-Android](https://github.com/bingoogolapple/BGASwipeBackLayout-Android)
+
+* 圆形ImageView：[https://github.com/hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
 
 * ButterKnife注解：[https://github.com/JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 
@@ -50,9 +52,9 @@
 
 * 集成友盟统计：集成友盟统计，并且加入了友盟多渠道打包，在发布release包时可选择渠道包
 
-* 常用自定义View：圆形ImageView，验证码点击倒计时View，带清除按钮的EditText，正方形的FrameLayout、LinearLayout、RelativeLayout、ImageView
-
 * 界面样式规范：项目的严格按照 Material Design 设计进行配色，统一和规范Button和EditText控件样式
+
+* 常用自定义View：圆形ImageView，验证码点击倒计时View，带清除按钮的EditText，正方形的FrameLayout、LinearLayout、RelativeLayout、ImageView
 
 * 代码注释规范：代码严格按照谷歌级规范来做，如需寻找友盟相关的代码，全局搜索 "友盟" 即可，任何一处不关于原生的 API 都有非常完善的注释
 
@@ -67,6 +69,8 @@
 * 修复某些机型在 WebView 长按时布局被顶下来的问题
 
 * 修复 任务栈中 首页Activity 被重复启动的问题
+
+* 修正 Android 9.0 限制 Http 明文请求的问题
 
 #### Android技术讨论Q群：78797078
 

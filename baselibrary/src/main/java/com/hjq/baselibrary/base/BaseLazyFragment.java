@@ -127,7 +127,7 @@ public abstract class BaseLazyFragment extends Fragment {
     //引入布局
     protected abstract int getLayoutId();
 
-    //标题栏id，用于状态栏沉浸
+    //标题栏id
     protected abstract int getTitleBarId();
 
     //初始化控件
@@ -152,7 +152,7 @@ public abstract class BaseLazyFragment extends Fragment {
      *
      * @param cls          目标Activity的Class
      */
-    public void startActivity(Class<?> cls) {
+    public void startActivity(Class<? extends Activity> cls) {
         startActivity(new Intent(getContext(), cls));
     }
 

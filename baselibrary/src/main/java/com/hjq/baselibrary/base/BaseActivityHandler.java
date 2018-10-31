@@ -2,7 +2,6 @@ package com.hjq.baselibrary.base;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.os.Message;
 
 import java.lang.ref.WeakReference;
 
@@ -24,7 +23,14 @@ public abstract class BaseActivityHandler<T extends Activity> extends Handler {
      * 判断当前Handler是否可用
      */
     public boolean isEnabled() {
-        return mActivity.get() != null && !mActivity.get().isFinishing();
+        return getActivity() != null && !getActivity().isFinishing();
+    }
+
+    /**
+     * 获取Activity对象
+     */
+    public T getActivity() {
+        return mActivity.get();
     }
 
     /**

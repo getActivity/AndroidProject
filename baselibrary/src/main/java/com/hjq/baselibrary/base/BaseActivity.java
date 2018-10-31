@@ -1,8 +1,8 @@
 package com.hjq.baselibrary.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.hjq.baselibrary.utils.KeyboardUtils;
@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     //引入布局
     protected abstract int getLayoutId();
 
-    //标题栏id，用于状态栏沉浸
+    //标题栏id
     protected abstract int getTitleBarId();
 
     //初始化控件
@@ -55,7 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param cls       目标Activity的Class
      */
-    public void startActivity(Class<?> cls) {
+    public void startActivity(Class<? extends Activity> cls) {
         startActivity(new Intent(this, cls));
     }
 

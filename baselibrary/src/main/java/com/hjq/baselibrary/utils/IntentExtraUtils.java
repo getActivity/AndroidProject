@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 意图数据存取工具类
+ *    author : HJQ
+ *    github : https://github.com/getActivity/AndroidProject
+ *    time   : 2018/10/18
+ *    desc   : 意图数据存取工具类
  */
 public final class IntentExtraUtils {
 

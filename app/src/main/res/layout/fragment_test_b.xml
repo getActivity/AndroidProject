@@ -7,7 +7,7 @@
     tools:context=".ui.fragment.TestFragmentB">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_test_c_bar"
+        android:id="@+id/tb_test_b_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon_back="false"

@@ -9,7 +9,7 @@
     tools:context=".ui.activity.RegisterActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_register_bar"
+        android:id="@+id/tb_register_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_100"
         app:bar_style="transparent"

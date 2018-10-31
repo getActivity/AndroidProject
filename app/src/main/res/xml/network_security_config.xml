@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 解决 Android P 禁用 http 请求的问题 -->
+<network-security-config>
+    <!-- 允许明文通信 -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

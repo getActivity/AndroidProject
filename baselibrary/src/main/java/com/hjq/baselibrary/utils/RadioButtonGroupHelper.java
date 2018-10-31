@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 多个CompoundButton选中处理辅助类
+ *    author : HJQ
+ *    github : https://github.com/getActivity/AndroidProject
+ *    time   : 2018/10/18
+ *    desc   : 多个CompoundButton选中处理辅助类
  */
 public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedChangeListener {
 

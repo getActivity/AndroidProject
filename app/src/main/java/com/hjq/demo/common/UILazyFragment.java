@@ -28,8 +28,8 @@ public abstract class UILazyFragment extends BaseLazyFragment {
         }
 
         //设置标题栏
-        if (!isLazyLoad() && getTitleBarId() > 0) {
-            ImmersionBar.setTitleBar(mActivity, view.findViewById(getTitleBarId()));
+        if (getTitleBarId() > 0) {
+            ImmersionBar.setTitleBar(mActivity, findViewById(getTitleBarId()));
         }
     }
 

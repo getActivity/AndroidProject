@@ -3,11 +3,11 @@ package com.hjq.demo.ui.adapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.hjq.demo.common.CommonLazyFragment;
 import com.hjq.baselibrary.base.BaseFragmentPagerAdapter;
+import com.hjq.demo.common.CommonLazyFragment;
 import com.hjq.demo.ui.fragment.TestFragmentA;
-import com.hjq.demo.ui.fragment.TestFragmentC;
 import com.hjq.demo.ui.fragment.TestFragmentB;
+import com.hjq.demo.ui.fragment.TestFragmentC;
 import com.hjq.demo.ui.fragment.TestFragmentD;
 
 import java.util.List;

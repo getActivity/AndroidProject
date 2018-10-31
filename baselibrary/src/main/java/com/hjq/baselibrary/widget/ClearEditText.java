@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.TintableBackgroundView;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
@@ -29,17 +28,17 @@ public class ClearEditText extends AppCompatEditText
     private OnTouchListener mOnTouchListener;
     private OnFocusChangeListener mOnFocusChangeListener;
 
-    public ClearEditText(final Context context) {
+    public ClearEditText(Context context) {
         super(context);
         initialize(context);
     }
 
-    public ClearEditText(final Context context, final AttributeSet attrs) {
+    public ClearEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public ClearEditText(final Context context, final AttributeSet attrs, final int defStyleAttr) {
+    public ClearEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
@@ -60,6 +59,8 @@ public class ClearEditText extends AppCompatEditText
     }
 
     private void setClearIconVisible(final boolean visible) {
+        if (mClearIcon.isVisible() == visible) return;
+
         mClearIcon.setVisible(visible, false);
         final Drawable[] compoundDrawables = getCompoundDrawables();
         setCompoundDrawables(
@@ -85,7 +86,7 @@ public class ClearEditText extends AppCompatEditText
 
     @Override
     public void onFocusChange(final View view, final boolean hasFocus) {
-        if (hasFocus) {
+        if (hasFocus && getText() != null) {
             setClearIconVisible(getText().length() > 0);
         } else {
             setClearIconVisible(false);
@@ -116,7 +117,7 @@ public class ClearEditText extends AppCompatEditText
      */
 
     @Override
-    public final void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+    public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
         if (isFocused()) {
             setClearIconVisible(s.length() > 0);
         }

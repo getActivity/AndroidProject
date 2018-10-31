@@ -43,7 +43,7 @@ android {
         baidu {}    //百度
         xiaomi {}   //小米
         huawei {}   //华为
-        qihu {}     //360
+        google {}   //谷歌
 
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]

@@ -32,7 +32,7 @@ public class TestFragmentB extends CommonLazyFragment
 
     @Override
     protected int getTitleBarId() {
-        return R.id.tb_test_c_bar;
+        return R.id.tb_test_b_title;
     }
 
     @Override
