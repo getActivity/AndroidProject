@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.hjq.toast.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -85,24 +86,17 @@ public abstract class CommonActivity extends UIActivity
      * {@link OnTitleBarListener}
      */
 
-    /**
-     * 标题栏左边的View被点击了
-     */
+    // 标题栏左边的View被点击了
     @Override
     public void onLeftClick(View v) {
         onBackPressed();
     }
 
-
-    /**
-     * 标题栏中间的View被点击了
-     */
+    // 标题栏中间的View被点击了
     @Override
     public void onTitleClick(View v) {}
 
-    /**
-     * 标题栏右边的View被点击了
-     */
+    // 标题栏右边的View被点击了
     @Override
     public void onRightClick(View v) {}
 
@@ -128,5 +122,12 @@ public abstract class CommonActivity extends UIActivity
     protected void onDestroy() {
         super.onDestroy();
         if (mButterKnife != null) mButterKnife.unbind();
+    }
+
+    /**
+     * 显示一个吐司
+     */
+    public void toast(CharSequence s) {
+        ToastUtils.show(s);
     }
 }

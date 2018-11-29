@@ -12,7 +12,7 @@ import java.util.List;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 多个CompoundButton选中处理辅助类
+ *    desc   : 多个 CompoundButton 选中处理辅助类（用于代替 RadioGroup）
  */
 public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedChangeListener {
 

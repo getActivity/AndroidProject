@@ -51,7 +51,7 @@ public class TestFragmentB extends CommonLazyFragment
     @Override
     public void onClick(View v) {
         if (v == mCountdownView) {
-            ToastUtils.show(getResources().getString(R.string.countdown_code_send_succeed));
+            toast(getResources().getString(R.string.countdown_code_send_succeed));
         }
     }
 

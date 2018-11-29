@@ -11,6 +11,23 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    //APK 签名的那些事：https://www.jianshu.com/p/a1f8e5896aa2
+//    signingConfigs {
+//        release {
+//            keyAlias '密钥别称'
+//            keyPassword '密钥密码'
+//            storeFile file('E:/MySign.jks')
+//            storePassword '密钥库密码'
+//        }
+//
+//        debug {
+//            keyAlias '密钥别称'
+//            keyPassword '密钥密码'
+//            storeFile file('E:/MySign.jks')
+//            storePassword '密钥库密码'
+//        }
+//    }
     buildTypes {
         release {
             // 不显示Log
@@ -23,6 +40,8 @@ android {
             minifyEnabled true
             //加载默认混淆配置涵
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 正式环境签名
+            //signingConfig signingConfigs.release
         }
 
         debug {
@@ -32,6 +51,8 @@ android {
             minifyEnabled false
             //加载默认混淆配置涵
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 开发环境签名
+            //signingConfig signingConfigs.debug
         }
     }
 
@@ -49,37 +70,50 @@ android {
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
     }
+
+    // JNI 目录
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
+// api 与 implementation的区别：https://www.jianshu.com/p/8962d6ba936e
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
-    api project(':baselibrary')
+    // 依赖 libs 目录下所有 Jar 包
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // 基础库（不包任何第三方框架）
+    implementation project(':baselibrary')
     // 示例：添加一个 aar 包
-    //api(name: 'password_dialog', ext: 'aar')
+    // implementation(name: 'password_dialog', ext: 'aar')
 
-    api "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-    api "com.android.support:design:$rootProject.ext.supportLibraryVersion"
-    api "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
-    api "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
-    api "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintlayoutVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintlayoutVersion"
+
+    // Dex分包，解决 65k 问题
+    implementation 'com.android.support:multidex:1.0.3'
 
     // 状态栏沉浸：https://github.com/gyf-dev/ImmersionBar
-    api 'com.gyf.barlibrary:barlibrary:2.3.0'
+    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
     // 侧滑功能：https://github.com/bingoogolapple/BGASwipeBackLayout-Android
-    api 'cn.bingoogolapple:bga-swipebacklayout:1.1.9@aar'
+    implementation 'cn.bingoogolapple:bga-swipebacklayout:1.1.9@aar'
 
     // 权限请求框架：https://github.com/getActivity/XXPermissions
-    api 'com.hjq:xxpermissions:5.2'
+    implementation 'com.hjq:xxpermissions:5.2'
     // 标题栏：https://github.com/getActivity/TitleBar
-    api 'com.hjq:titlebar:3.2'
+    implementation 'com.hjq:titlebar:3.5'
     // 吐司工具类：https://github.com/getActivity/ToastUtils
-    api 'com.hjq:toast:2.5'
+    implementation 'com.hjq:toast:5.0'
 
     // 圆形的ImageView：https://github.com/hdodenhof/CircleImageView
-    api 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     // ButterKnife注解库：https://github.com/JakeWharton/butterknife
-    api "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
 
     // 友盟统计

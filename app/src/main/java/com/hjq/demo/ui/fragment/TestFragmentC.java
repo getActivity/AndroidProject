@@ -78,9 +78,9 @@ public class TestFragmentC extends CommonLazyFragment
     @Override
     public void onClick(View v) {
         if (v == mToastView) {
-            ToastUtils.show("我是吐司");
+            toast("我是吐司");
         }else if (v == mPermissionView) {
-            XXPermissions.with(getSupportActivity())
+            XXPermissions.with(getFragmentActivity())
                     //.constantRequest() //可设置被拒绝后继续申请，直到用户授权或者永久拒绝
                     //.permission(Permission.SYSTEM_ALERT_WINDOW, Permission.REQUEST_INSTALL_PACKAGES) //支持请求6.0悬浮窗权限8.0请求安装权限
                     .permission(Permission.CAMERA) //不指定权限则自动获取清单中的危险权限
@@ -89,37 +89,37 @@ public class TestFragmentC extends CommonLazyFragment
                         @Override
                         public void hasPermission(List<String> granted, boolean isAll) {
                             if (isAll) {
-                                ToastUtils.show("获取权限成功");
+                                toast("获取权限成功");
                             }else {
-                                ToastUtils.show("获取权限成功，部分权限未正常授予");
+                                toast("获取权限成功，部分权限未正常授予");
                             }
                         }
 
                         @Override
                         public void noPermission(List<String> denied, boolean quick) {
                             if(quick) {
-                                ToastUtils.show("被永久拒绝授权，请手动授予权限");
+                                toast("被永久拒绝授权，请手动授予权限");
                                 //如果是被永久拒绝就跳转到应用权限系统设置页面
-                                XXPermissions.gotoPermissionSettings(getSupportActivity());
+                                XXPermissions.gotoPermissionSettings(getFragmentActivity());
                             }else {
-                                ToastUtils.show("获取权限失败");
+                                toast("获取权限失败");
                             }
                         }
                     });
         }else if (v == mStateBlackView) {
-            UIActivity activity = (UIActivity) getSupportActivity();
+            UIActivity activity = (UIActivity) getFragmentActivity();
             activity.getStatusBarConfig().statusBarDarkFont(true).init();
         }else if (v == mStateWhiteView) {
-            UIActivity activity = (UIActivity) getSupportActivity();
+            UIActivity activity = (UIActivity) getFragmentActivity();
             activity.getStatusBarConfig().statusBarDarkFont(false).init();
         }else if (v == mSwipeEnabledView) {
-            UIActivity activity = (UIActivity) getSupportActivity();
+            UIActivity activity = (UIActivity) getFragmentActivity();
             activity.getSwipeBackHelper().setSwipeBackEnable(true);
-            ToastUtils.show("当前界面不会生效，其他界面调用才会有效果");
+            toast("当前界面不会生效，其他界面调用才会有效果");
         }else if (v == mSwipeDisableView) {
-            UIActivity activity = (UIActivity) getSupportActivity();
+            UIActivity activity = (UIActivity) getFragmentActivity();
             activity.getSwipeBackHelper().setSwipeBackEnable(false);
-            ToastUtils.show("当前界面不会生效，其他界面调用才会有效果");
+            toast("当前界面不会生效，其他界面调用才会有效果");
         }
     }
 }

@@ -8,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +20,18 @@ import java.lang.reflect.Field;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : Fragment懒加载基类
+ *    desc   : Fragment 懒加载基类
  */
 public abstract class BaseLazyFragment extends Fragment {
 
-    private boolean isLazyLoad = false;//是否已经懒加载
-    private View mRootView;//根布局
-    public Activity mActivity;//Activity对象
+    // Activity对象
+    public FragmentActivity mActivity;
+    // 根布局
+    private View mRootView;
+    // 当前是否进行过懒加载
+    private boolean isLazyLoad = false;
+    // 当前 Fragment 是否可见
+    private boolean isFragmentVisible;
 
     /**
      * 获得全局的，防止使用getActivity()为空
@@ -33,10 +39,13 @@ public abstract class BaseLazyFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.mActivity = (Activity) context;
+        this.mActivity = (FragmentActivity) context;
     }
 
-    public Activity getSupportActivity() {
+    /**
+     * 获取Activity，防止出现 getActivity() 为空
+     */
+    public FragmentActivity getFragmentActivity() {
         return mActivity;
     }
 
@@ -73,35 +82,41 @@ public abstract class BaseLazyFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mActivity = null;
-        mRootView = null;
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (isVisibleToUser && !isLazyLoad() && getView() != null) {
+        if (isFragmentVisible && !isLazyLoad && getView() != null) {
             isLazyLoad = true;
             init();
         }
     }
 
-    private boolean isVisibleToUser;
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        this.isVisibleToUser = isVisibleToUser;
-        if (isVisibleToUser && !isLazyLoad() && getView() != null) {
-            isLazyLoad = true;
-            init();
+        this.isFragmentVisible = isVisibleToUser;
+        if (isVisibleToUser && getView() != null) {
+            if (!isLazyLoad) {
+                isLazyLoad = true;
+                init();
+            }else {
+                // 从不可见到可见
+                onRestart();
+            }
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
 
-    public boolean isVisibleToUser() {
-        return isVisibleToUser;
+    /**
+     * 当前 Fragment 是否可见
+     */
+    public boolean isFragmentVisible() {
+        return isFragmentVisible;
+    }
+
+    /**
+     * 跟 Activity 的同名方法一样
+     */
+    protected void onRestart() {
+        // 从可见的状态变成不可见状态，再从不可见状态变成可见状态时回调
     }
 
     @Override
@@ -154,6 +169,23 @@ public abstract class BaseLazyFragment extends Fragment {
      */
     public void startActivity(Class<? extends Activity> cls) {
         startActivity(new Intent(getContext(), cls));
+    }
+
+    /**
+     * 跳转到其他 Activity 并销毁当前 Activity
+     *
+     * @param cls       目标Activity的Class
+     */
+    public void startActivityFinish(Class<? extends Activity> cls) {
+        startActivity(cls);
+        mActivity.finish();
+    }
+
+    /**
+     * 获取系统服务
+     */
+    public Object getSystemService(@NonNull String name) {
+        return mActivity.getSystemService(name);
     }
 
     /**

@@ -1,11 +1,10 @@
 package com.hjq.demo.ui.activity;
 
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.gyf.barlibrary.BarHide;
 import com.hjq.demo.R;
@@ -13,7 +12,6 @@ import com.hjq.demo.common.CommonActivity;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.hjq.toast.ToastUtils;
 
 import java.util.List;
 
@@ -29,11 +27,11 @@ public class LauncherActivity extends CommonActivity
         implements OnPermission, Animation.AnimationListener {
 
     @BindView(R.id.iv_launcher_bg)
-    ImageView mImageView;
+    View mImageView;
     @BindView(R.id.iv_launcher_icon)
-    ImageView mIconView;
+    View mIconView;
     @BindView(R.id.iv_launcher_name)
-    TextView mTextView;
+    View mTextView;
 
     @Override
     protected int getLayoutId() {
@@ -98,6 +96,22 @@ public class LauncherActivity extends CommonActivity
     }
 
     @Override
+    public void noPermission(List<String> denied, boolean quick) {
+        if (quick) {
+            toast("没有权限访问文件，请手动授予权限");
+            XXPermissions.gotoPermissionSettings(LauncherActivity.this, true);
+        }else {
+            toast("请先授予文件读写权限");
+            getWindow().getDecorView().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    requestFilePermission();
+                }
+            }, 2000);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         //禁用返回键
         //super.onBackPressed();
@@ -117,22 +131,6 @@ public class LauncherActivity extends CommonActivity
     public boolean isSupportSwipeBack() {
         //不使用侧滑功能
         return !super.isSupportSwipeBack();
-    }
-
-    @Override
-    public void noPermission(List<String> denied, boolean quick) {
-        if (quick) {
-            ToastUtils.show("没有权限访问文件，请手动授予权限");
-            XXPermissions.gotoPermissionSettings(LauncherActivity.this, true);
-        }else {
-            ToastUtils.show("请先授予文件读写权限");
-            getWindow().getDecorView().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    requestFilePermission();
-                }
-            }, 2000);
-        }
     }
 
     /**

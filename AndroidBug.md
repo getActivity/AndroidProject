@@ -65,7 +65,7 @@
         android:alwaysRetainTaskState="true"
         android:launchMode="singleTop" />
 
-#### 修复 Android P 限制 Http 明文请求的问题
+#### 修复 Android 9.0 限制 Http 明文请求的问题
 
 > Android P 限制了明文流量的网络请求，非加密的流量请求都会被系统禁止掉。
 如果当前应用的请求是 htttp 请求，而非 https ,这样就会导系统禁止当前应用进行该请求，如果 WebView 的 url 用 http 协议，同样会出现加载失败，https 不受影响

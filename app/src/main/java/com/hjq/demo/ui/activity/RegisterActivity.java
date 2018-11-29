@@ -8,7 +8,6 @@ import com.hjq.baselibrary.utils.EditTextInputHelper;
 import com.hjq.baselibrary.widget.CountdownView;
 import com.hjq.demo.R;
 import com.hjq.demo.common.CommonActivity;
-import com.hjq.toast.ToastUtils;
 
 import butterknife.BindView;
 
@@ -73,21 +72,21 @@ public class RegisterActivity extends CommonActivity
             if (mPhoneView.getText().toString().length() != 11) {
                 // 重置验证码倒计时控件
                 mCountdownView.resetState();
-                ToastUtils.show(getResources().getString(R.string.phone_input_error));
+                toast(getResources().getString(R.string.phone_input_error));
                 return;
             }
 
-            ToastUtils.show(getResources().getString(R.string.countdown_code_send_succeed));
+            toast(getResources().getString(R.string.countdown_code_send_succeed));
 
         }else if (v == mCommitView) { //提交注册
 
             if (mPhoneView.getText().toString().length() != 11) {
-                ToastUtils.show(getResources().getString(R.string.phone_input_error));
+                toast(getResources().getString(R.string.phone_input_error));
                 return;
             }
 
             if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
-                ToastUtils.show(getResources().getString(R.string.two_password_input_error));
+                toast(getResources().getString(R.string.two_password_input_error));
                 return;
             }
         }

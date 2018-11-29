@@ -8,7 +8,7 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 支持侧滑的UIApplication基类
+ *    desc   : 支持侧滑的Application基类
  */
 public abstract class UIApplication extends Application {
 

@@ -21,9 +21,8 @@ public abstract class UILazyFragment extends BaseLazyFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         //初始化沉浸式状态栏
-        if (isVisibleToUser() && isStatusBarEnabled() && isLazyLoad()) {
+        if (isFragmentVisible() && isStatusBarEnabled() && isLazyLoad()) {
             statusBarConfig().init();
         }
 

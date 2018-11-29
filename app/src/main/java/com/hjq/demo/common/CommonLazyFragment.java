@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hjq.toast.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -46,5 +47,12 @@ public abstract class CommonLazyFragment extends UILazyFragment {
     public void onDestroy() {
         super.onDestroy();
         mButterKnife.unbind();
+    }
+
+    /**
+     * 显示一个吐司
+     */
+    public void toast(CharSequence s) {
+        ToastUtils.show(s);
     }
 }

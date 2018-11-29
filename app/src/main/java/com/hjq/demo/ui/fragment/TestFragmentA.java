@@ -27,7 +27,7 @@ public class TestFragmentA extends CommonLazyFragment
     XCollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.t_test_title)
     Toolbar mToolbar;
-    @BindView(R.id.tb_test_bar)
+    @BindView(R.id.tb_test_a_bar)
     TitleBar mTitleBar;
 
     @BindView(R.id.tv_test_address)
@@ -46,13 +46,13 @@ public class TestFragmentA extends CommonLazyFragment
 
     @Override
     protected int getTitleBarId() {
-        return R.id.tb_test_bar;
+        return R.id.tb_test_a_bar;
     }
 
     @Override
     protected void initView() {
         // 给这个ToolBar设置顶部内边距，才能和TitleBar进行对齐
-        ImmersionBar.setTitleBar(getSupportActivity(), mToolbar);
+        ImmersionBar.setTitleBar(getFragmentActivity(), mToolbar);
 
         //设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);

@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +19,21 @@ import java.util.List;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : ListView适配器基类
+ *    desc   : ListView 适配器基类
  */
 public abstract class BaseListViewAdapter<T, VH extends BaseListViewAdapter.ViewHolder> extends BaseAdapter {
 
+    // 列表数据
     private List<T> mDataSet;
+    // 上下文对象
     private Context mContext;
+
+    //当前列表的页码，默认为第一页，用于分页加载功能
+    private int mPageNumber = 1;
+    //是否是最后一页，默认为false，用于分页加载功能
+    private boolean mLastPage;
+    //标记对象
+    private Object mTag;
 
     public BaseListViewAdapter(Context context) {
         this.mContext = context;
@@ -149,13 +160,68 @@ public abstract class BaseListViewAdapter<T, VH extends BaseListViewAdapter.View
         notifyDataSetChanged();
     }
 
+    /**
+     * 获取上下文对象，注意不要在构造方法中调用
+     */
     public Context getContext() {
         return mContext;
+    }
+
+    /**
+     * 如果非要在构造方法中使用上下文对象，可以提前设置，否则只能setAdapter之后才能获取
+     */
+    public void setContext(Context context) {
+        mContext = context;
+    }
+
+    /**
+     * 获取当前的页码
+     */
+    public int getPageNumber() {
+        return mPageNumber;
+    }
+
+    /**
+     * 设置当前的页码
+     */
+    public void setPageNumber(int pageNumber) {
+        mPageNumber = pageNumber;
+    }
+
+    /**
+     * 当前是否为最后一页
+     */
+    public boolean isLastPage() {
+        return mLastPage;
+    }
+
+    /**
+     * 设置是否为最后一页
+     */
+    public void setLastPage(boolean lastPage) {
+        mLastPage = lastPage;
+    }
+
+    /**
+     * 获取标记
+     */
+    public Object getTag() {
+        return mTag;
+    }
+
+    /**
+     * 设置标记
+     */
+    public void setTag(Object tag) {
+        mTag = tag;
     }
 
     public static class ViewHolder {
 
         public final View itemView;
+
+        // 内存优化和防止泄露
+        private SparseArray<WeakReference<View>> mViews = new SparseArray<>();
 
         public ViewHolder(View itemView) {
             this.itemView = itemView;
@@ -165,8 +231,15 @@ public abstract class BaseListViewAdapter<T, VH extends BaseListViewAdapter.View
             return itemView;
         }
 
-        public final <T extends View> T findView(@IdRes int id) {
-            return (T) itemView.findViewById(id);
+        public final <V extends View> V findView(@IdRes int id) {
+            WeakReference<View> reference = mViews.get(id);
+            if (reference != null && reference.get() != null) {
+                return (V) reference.get();
+            }else {
+                View view = itemView.findViewById(id);
+                mViews.put(id, new WeakReference<>(view));
+                return (V) view;
+            }
         }
 
         public final ViewHolder setText(@IdRes int id, String text) {

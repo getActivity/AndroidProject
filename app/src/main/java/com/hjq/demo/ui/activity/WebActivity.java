@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.hjq.baselibrary.utils.IntentExtraUtils;
 import com.hjq.baselibrary.utils.WebViewLifecycleUtils;
 import com.hjq.demo.R;
 import com.hjq.demo.common.CommonActivity;
@@ -81,7 +82,9 @@ public class WebActivity extends CommonActivity {
     protected void initData() {
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.setWebChromeClient(new MyWebChromeClient());
-        mWebView.loadUrl("https://github.com/getActivity/AndroidProject");
+
+        String url = IntentExtraUtils.getInstance(WebActivity.class).getString();
+        mWebView.loadUrl(url);
     }
 
     @Override

@@ -38,7 +38,7 @@
                 app:layout_collapseMode="pin" />
 
             <com.hjq.bar.TitleBar
-                android:id="@+id/tb_test_bar"
+                android:id="@+id/tb_test_a_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 app:bar_style="transparent"

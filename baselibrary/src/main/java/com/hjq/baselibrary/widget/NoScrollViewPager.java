@@ -1,5 +1,6 @@
 package com.hjq.baselibrary.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -21,15 +22,16 @@ public class NoScrollViewPager extends ViewPager {
         super(context, attrs);
     }
 
-    // 不拦截这个事件
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        // 不拦截这个事件
         return false;
     }
 
-    // 不处理这个事件
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        // 不处理这个事件
         return false;
     }
 }

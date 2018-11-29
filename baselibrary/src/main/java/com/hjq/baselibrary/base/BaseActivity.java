@@ -1,8 +1,10 @@
 package com.hjq.baselibrary.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.hjq.baselibrary.utils.KeyboardUtils;
@@ -11,9 +13,12 @@ import com.hjq.baselibrary.utils.KeyboardUtils;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : Activity基类
+ *    desc   : Activity 基类
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    // 单例的 Handler 对象
+    private static final Handler HANDLER = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,22 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 跳转到其他Activity
+     * 获取一个 Context 对象
+     */
+    public Context getContext() {
+        return getBaseContext();
+    }
+
+
+    /**
+     * 获取当前 Activity 对象
+     */
+    public <A extends BaseActivity> A getActivity() {
+        return (A) this;
+    }
+
+    /**
+     * 跳转到其他 Activity
      *
      * @param cls       目标Activity的Class
      */
@@ -60,33 +80,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 延迟执行某个任务
+     * 跳转到其他 Activity 并销毁当前 Activity
      *
-     * @param action          Runnable对象
+     * @param cls       目标Activity的Class
      */
-    public boolean post(Runnable action) {
-        return getWindow().getDecorView().post(action);
+    public void startActivityFinish(Class<? extends Activity> cls) {
+        startActivity(cls);
+        finish();
     }
 
     /**
-     * 延迟某个时间执行某个任务
-     *
-     * @param action        Runnable对象
-     * @param delayMillis   延迟的时间
+     * 获取一个 Handler 对象
      */
-    public boolean postDelayed(Runnable action, long delayMillis) {
-        return getWindow().getDecorView().postDelayed(action, delayMillis);
-    }
-
-    /**
-     * 删除某个延迟任务
-     * @param action        Runnable对象
-     */
-    public boolean removeCallbacks(Runnable action) {
-        if(getWindow().getDecorView() != null) {
-            return getWindow().getDecorView().removeCallbacks(action);
-        }else {
-            return true;
-        }
+    public static Handler getHandler() {
+        return HANDLER;
     }
 }

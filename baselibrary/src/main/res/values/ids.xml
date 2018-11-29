@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="dialog_id_this" type="id" />
+
+    <item name="dialog_id_click_listener" type="id" />
+
+</resources>

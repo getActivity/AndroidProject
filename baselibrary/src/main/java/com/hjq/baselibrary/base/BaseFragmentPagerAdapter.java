@@ -13,11 +13,11 @@ import java.util.List;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : FragmentPagerAdapter基类
+ *    desc   : FragmentPagerAdapter 基类
  */
 public abstract class BaseFragmentPagerAdapter<T extends Fragment> extends FragmentPagerAdapter {
 
-    private List<T> mFragments = new ArrayList<>(); // Fragment集合
+    private List<T> mFragmentSet = new ArrayList<>(); // Fragment集合
 
     private T mCurrentFragment; // 当前显示的Fragment
 
@@ -37,7 +37,7 @@ public abstract class BaseFragmentPagerAdapter<T extends Fragment> extends Fragm
 
     public BaseFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        init(fm, mFragments);
+        init(fm, mFragmentSet);
     }
 
     //初始化Fragment
@@ -45,12 +45,12 @@ public abstract class BaseFragmentPagerAdapter<T extends Fragment> extends Fragm
 
     @Override
     public T getItem(int position) {
-        return mFragments.get(position);
+        return mFragmentSet.get(position);
     }
 
     @Override
     public int getCount() {
-        return mFragments.size();
+        return mFragmentSet.size();
     }
 
     @Override
@@ -66,7 +66,7 @@ public abstract class BaseFragmentPagerAdapter<T extends Fragment> extends Fragm
      * 获取Fragment集合
      */
     public List<T> getAllFragment() {
-        return mFragments;
+        return mFragmentSet;
     }
 
     /**

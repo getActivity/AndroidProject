@@ -1,8 +1,9 @@
 package com.hjq.baselibrary.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 /**
  *    author : HJQ
@@ -10,7 +11,8 @@ import android.util.AttributeSet;
  *    time   : 2018/10/18
  *    desc   : 验证码倒计时
  */
-public class CountdownView extends AppCompatTextView implements Runnable {
+@SuppressLint("AppCompatCustomView")
+public class CountdownView extends TextView implements Runnable {
 
     private int mTotalTime = 60; // 倒计时秒数
     private static final String TIME_UNIT = "S"; // 秒数单位文本

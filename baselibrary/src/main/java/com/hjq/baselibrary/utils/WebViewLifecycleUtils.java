@@ -7,7 +7,7 @@ import android.webkit.WebView;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : WebView生命周期优化工具
+ *    desc   : WebView 生命周期优化工具
  */
 public final class WebViewLifecycleUtils {
 

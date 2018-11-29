@@ -3,6 +3,7 @@ package com.hjq.demo.ui.fragment;
 import android.view.View;
 import android.widget.Button;
 
+import com.hjq.baselibrary.utils.IntentExtraUtils;
 import com.hjq.demo.R;
 import com.hjq.demo.common.CommonLazyFragment;
 import com.hjq.demo.ui.activity.AboutActivity;
@@ -69,7 +70,9 @@ public class TestFragmentD extends CommonLazyFragment
         }else if (v == mAboutView) {
             startActivity(AboutActivity.class);
         }else if (v == mBrowserView) {
-            startActivity(WebActivity.class);
+            IntentExtraUtils.getInstance(WebActivity.class)
+                    .putString("https://github.com/getActivity/")
+                    .startActivity(getActivity());
         }
     }
 

@@ -7,7 +7,7 @@ import android.content.pm.ApplicationInfo;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : Debug判断工具类
+ *    desc   : Debug 判断工具类
  */
 public final class DebugUtils {
 

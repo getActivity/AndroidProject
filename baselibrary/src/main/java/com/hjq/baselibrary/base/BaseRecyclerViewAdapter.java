@@ -6,16 +6,14 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hjq.baselibrary.listener.OnItemClickListener;
-import com.hjq.baselibrary.listener.OnItemLongClickListener;
-import com.hjq.baselibrary.listener.OnScrollingListener;
-
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,24 +21,27 @@ import java.util.List;
  *    author : HJQ
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : RecyclerView适配器基类
+ *    desc   : RecyclerView 适配器基类
  */
 public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdapter.ViewHolder>
                         extends RecyclerView.Adapter<VH> {
     //列表数据
     private List<T> mDataSet;
-    //当前列表的页码，默认为第一页，用于分页加载功能
-    private int mPageNumber = 1;
-    //是否是最后一页，默认为false，用于分页加载功能
-    private boolean mLastPage;
-
     //RecyclerView对象
     private RecyclerView mRecyclerView;
     //上下文对象，注意不要在构造函数中使用
     private Context mContext;
 
+    //当前列表的页码，默认为第一页，用于分页加载功能
+    private int mPageNumber = 1;
+    //是否是最后一页，默认为false，用于分页加载功能
+    private boolean mLastPage;
     //标记对象
     private Object mTag;
+
+    public BaseRecyclerViewAdapter(Context context) {
+        mContext = context;
+    }
 
     @Override
     public int getItemCount() {
@@ -162,13 +163,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
     }
 
     /**
-     * 如果非要在构造方法中使用上下文对象，可以提前设置，否则只能setAdapter之后才能获取
-     */
-    public void setContext(Context context) {
-        mContext = context;
-    }
-
-    /**
      * 获取当前的页码
      */
     public int getPageNumber() {
@@ -216,6 +210,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
     public class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
 
+        // 内存优化和防止泄露
+        private SparseArray<WeakReference<View>> mViews = new SparseArray<>();
+
         public ViewHolder(ViewGroup parent, int layoutId) {
             this(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
         }
@@ -242,8 +239,15 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
             return false;
         }
 
-        public final <T extends View> T findView(@IdRes int id) {
-            return (T) itemView.findViewById(id);
+        public final <V extends View> V findView(@IdRes int id) {
+            WeakReference<View> reference = mViews.get(id);
+            if (reference != null && reference.get() != null) {
+                return (V) reference.get();
+            }else {
+                View view = itemView.findViewById(id);
+                mViews.put(id, new WeakReference<>(view));
+                return (V) view;
+            }
         }
 
         public final ViewHolder setText(@IdRes int id, String text) {
@@ -283,9 +287,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
-        if (mContext == null) {
-            mContext = recyclerView.getContext();
-        }
         //用户设置了滚动监听，需要给RecyclerView设置监听
         if (mScrollListener != null) {
             //添加滚动监听
@@ -307,7 +308,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
             mRecyclerView.removeOnScrollListener(mScrollListener);
         }
         mRecyclerView = null;
-        mContext = null;
     }
 
     /**
@@ -378,5 +378,78 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
                 onScrollingListener.onScrolling(recyclerView);
             }
         }
+    }
+
+    /**
+     * 设置RecyclerView条目点击监听
+     */
+    private OnItemChildClickListener onItemChildClickListener;
+    public void setOnItemChildClickListener(OnItemChildClickListener l) {
+        onItemChildClickListener = l;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * RecyclerView条目点击监听类
+     */
+    public interface OnItemClickListener{
+
+        /**
+         * 当RecyclerView某个条目被点击时回调
+         *
+         * @param itemView      被点击的条目对象
+         * @param position      被点击的条目位置
+         */
+        void onItemClick(View itemView, int position);
+    }
+
+    /**
+     * RecyclerView条目长按监听类
+     */
+    public interface OnItemLongClickListener {
+
+        /**
+         * 当RecyclerView某个条目被长按时回调
+         *
+         * @param itemView      被点击的条目对象
+         * @param position      被点击的条目位置
+         * @return              是否拦截事件
+         */
+        boolean onItemLongClick(View itemView, int position);
+    }
+
+    /**
+     * RecyclerView滚动监听类
+     */
+    public interface OnScrollingListener {
+
+        /**
+         * 列表滚动到最顶部
+         */
+        void onScrollTop(RecyclerView recyclerView);
+
+        /**
+         * 列表滚动到最底部
+         */
+        void onScrollDown(RecyclerView recyclerView);
+
+        /**
+         * 列表滚动中
+         */
+        void onScrolling(RecyclerView recyclerView);
+    }
+
+    /**
+     * RecyclerView条目子View点击监听类
+     */
+    public interface OnItemChildClickListener{
+
+        /**
+         * 当RecyclerView某个条目被点击时回调
+         *
+         * @param viewId        被点击的条目子 View Id
+         * @param position      被点击的条目位置
+         */
+        void onItemChildClick(int viewId, int position);
     }
 }
