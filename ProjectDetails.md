@@ -6,7 +6,11 @@
 
 * app：关于 APP 功能实现的业务逻辑代码，集成了一些常用的框架
 
-* baselibrary：只存放关于技术实现的代码，不集成任何框架
+* base：只存放关于技术实现的代码，不集成任何框架
+
+* widget：自定义一些精品的 View
+
+* umeng：集成友盟 SDK 相关文件
 
 > 本项目基于最新的 Android SDK 28 编译，[点击此处查看配置](build.gradle)，最低安装要求为 Android 4.0
 

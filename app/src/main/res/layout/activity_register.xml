@@ -65,7 +65,7 @@
                     android:maxLength="11"
                     android:maxLines="1" />
 
-                <com.hjq.baselibrary.widget.CountdownView
+                <com.hjq.widget.CountdownView
                     android:id="@+id/cv_register_countdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

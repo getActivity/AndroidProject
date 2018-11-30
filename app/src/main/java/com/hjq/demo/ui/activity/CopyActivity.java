@@ -1,7 +1,7 @@
 package com.hjq.demo.ui.activity;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 
 /**
  *    author : HJQ
@@ -9,7 +9,7 @@ import com.hjq.demo.common.CommonActivity;
  *    time   : 2018/10/18
  *    desc   : 可进行拷贝的副本
  */
-public class CopyActivity extends CommonActivity {
+public class CopyActivity extends MyActivity {
 
     @Override
     protected int getLayoutId() {

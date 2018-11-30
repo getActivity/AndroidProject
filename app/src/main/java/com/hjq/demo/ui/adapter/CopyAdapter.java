@@ -3,7 +3,7 @@ package com.hjq.demo.ui.adapter;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import com.hjq.baselibrary.base.BaseRecyclerViewAdapter;
+import com.hjq.base.BaseRecyclerViewAdapter;
 import com.hjq.demo.R;
 
 /**

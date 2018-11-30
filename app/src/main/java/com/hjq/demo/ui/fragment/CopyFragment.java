@@ -1,7 +1,7 @@
 package com.hjq.demo.ui.fragment;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonLazyFragment;
+import com.hjq.demo.base.MyLazyFragment;
 
 /**
  *    author : HJQ
@@ -9,7 +9,7 @@ import com.hjq.demo.common.CommonLazyFragment;
  *    time   : 2018/10/18
  *    desc   : 可进行拷贝的副本
  */
-public class CopyFragment extends CommonLazyFragment {
+public class CopyFragment extends MyLazyFragment {
 
     public static CopyFragment newInstance() {
         return new CopyFragment();

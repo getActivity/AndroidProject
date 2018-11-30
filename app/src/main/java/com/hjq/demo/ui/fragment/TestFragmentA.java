@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonLazyFragment;
+import com.hjq.demo.base.MyLazyFragment;
 import com.hjq.demo.widget.XCollapsingToolbarLayout;
 
 import butterknife.BindView;
@@ -18,7 +18,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 项目炫酷效果示例
  */
-public class TestFragmentA extends CommonLazyFragment
+public class TestFragmentA extends MyLazyFragment
         implements XCollapsingToolbarLayout.OnScrimsListener {
 
     @BindView(R.id.abl_test_bar)

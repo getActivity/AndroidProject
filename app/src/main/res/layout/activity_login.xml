@@ -25,7 +25,7 @@
         android:layout_margin="@dimen/space_60"
         android:src="@mipmap/ic_logo" />
 
-    <com.hjq.baselibrary.widget.ClearEditText
+    <com.hjq.widget.ClearEditText
         android:id="@+id/et_login_phone"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         android:layout_marginLeft="@dimen/space_80"
         android:layout_marginRight="@dimen/space_80" />
 
-    <com.hjq.baselibrary.widget.ClearEditText
+    <com.hjq.widget.ClearEditText
         android:id="@+id/et_login_password"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"

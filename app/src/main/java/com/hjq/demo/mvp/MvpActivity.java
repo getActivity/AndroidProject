@@ -1,6 +1,6 @@
 package com.hjq.demo.mvp;
 
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 
 /**
  *    author : HJQ
@@ -8,7 +8,7 @@ import com.hjq.demo.common.CommonActivity;
  *    time   : 2018/11/17
  *    desc   : MVP Activity 基类
  */
-public abstract class MvpActivity<P extends MvpPresenter> extends CommonActivity {
+public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity {
 
     private P mPresenter;
 

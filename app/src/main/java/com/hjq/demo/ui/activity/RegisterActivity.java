@@ -4,10 +4,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hjq.baselibrary.utils.EditTextInputHelper;
-import com.hjq.baselibrary.widget.CountdownView;
+import com.hjq.demo.utils.EditTextInputHelper;
+import com.hjq.widget.CountdownView;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 
 import butterknife.BindView;
 
@@ -17,7 +17,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 注册界面
  */
-public class RegisterActivity extends CommonActivity
+public class RegisterActivity extends MyActivity
         implements View.OnClickListener {
 
     @BindView(R.id.et_register_phone)

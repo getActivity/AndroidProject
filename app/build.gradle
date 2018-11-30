@@ -84,7 +84,12 @@ dependencies {
     // 依赖 libs 目录下所有 Jar 包
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // 基础库（不包任何第三方框架）
-    implementation project(':baselibrary')
+    implementation project(':base')
+    // 自定义 View
+    implementation project(':widget')
+    // 友盟
+    implementation project(':umeng')
+
     // 示例：添加一个 aar 包
     // implementation(name: 'password_dialog', ext: 'aar')
 
@@ -115,9 +120,6 @@ dependencies {
     // ButterKnife注解库：https://github.com/JakeWharton/butterknife
     implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
-
-    // 友盟统计
-    compileOnly 'com.umeng.analytics:analytics:6.1.4'
 }
 
 repositories {

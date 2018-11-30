@@ -195,11 +195,6 @@
    public void openFileChooser(...);
 }
 
-#友盟统计
--keepclassmembers class * {
-   public <init> (org.json.JSONObject);
-}
-
 #极光推送
 -dontoptimize
 -dontpreverify
@@ -225,3 +220,17 @@
 -keep public class android.support.design.R$* { *; }
 
 ########################################################
+
+#友盟统计
+-keep class com.umeng.** {*;}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep public class [您的应用包名].R$*{
+    public static final int *;
+}

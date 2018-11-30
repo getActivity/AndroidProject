@@ -2,10 +2,9 @@ package com.hjq.demo.ui.fragment;
 
 import android.view.View;
 
-import com.hjq.baselibrary.widget.CountdownView;
+import com.hjq.widget.CountdownView;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonLazyFragment;
-import com.hjq.toast.ToastUtils;
+import com.hjq.demo.base.MyLazyFragment;
 
 import butterknife.BindView;
 
@@ -15,7 +14,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 项目自定义控件展示
  */
-public class TestFragmentB extends CommonLazyFragment
+public class TestFragmentB extends MyLazyFragment
         implements View.OnClickListener {
 
     @BindView(R.id.cv_test_countdown)

@@ -3,9 +3,9 @@ package com.hjq.demo.ui.fragment;
 import android.view.View;
 import android.widget.Button;
 
-import com.hjq.baselibrary.utils.IntentExtraUtils;
+import com.hjq.demo.utils.IntentExtraUtils;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonLazyFragment;
+import com.hjq.demo.base.MyLazyFragment;
 import com.hjq.demo.ui.activity.AboutActivity;
 import com.hjq.demo.ui.activity.LoginActivity;
 import com.hjq.demo.ui.activity.RegisterActivity;
@@ -19,7 +19,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 项目界面跳转示例
  */
-public class TestFragmentD extends CommonLazyFragment
+public class TestFragmentD extends MyLazyFragment
         implements View.OnClickListener {
 
     @BindView(R.id.btn_test_login)

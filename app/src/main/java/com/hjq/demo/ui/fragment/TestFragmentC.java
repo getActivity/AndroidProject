@@ -4,12 +4,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonLazyFragment;
-import com.hjq.demo.common.UIActivity;
+import com.hjq.demo.base.MyLazyFragment;
+import com.hjq.demo.base.UIActivity;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.hjq.toast.ToastUtils;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 项目框架使用示例
  */
-public class TestFragmentC extends CommonLazyFragment
+public class TestFragmentC extends MyLazyFragment
         implements View.OnClickListener {
 
     @BindView(R.id.btn_test_toast)

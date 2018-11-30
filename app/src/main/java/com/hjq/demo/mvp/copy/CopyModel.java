@@ -18,11 +18,11 @@ public class CopyModel extends MvpModel<CopyOnListener> {
     }
 
     public void setAccount(String account) {
-        this.mAccount = mAccount;
+        this.mAccount = account;
     }
 
     public void setPassword(String password) {
-        this.mPassword = mPassword;
+        this.mPassword = password;
     }
 
     public void login() {

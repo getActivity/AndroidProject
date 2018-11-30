@@ -1,0 +1,23 @@
+<manifest package="com.hjq.umeng" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 友盟统计 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application>
+
+        <!-- 友盟统计 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="XXXXXXXXXXXXXXXXXXXXXXXX" /><!-- 要注意更换key -->
+
+        <!-- 友盟多渠道打包 -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
+
+    </application>
+
+</manifest>

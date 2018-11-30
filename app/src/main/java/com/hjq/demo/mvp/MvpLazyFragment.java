@@ -1,6 +1,6 @@
 package com.hjq.demo.mvp;
 
-import com.hjq.demo.common.CommonLazyFragment;
+import com.hjq.demo.base.MyLazyFragment;
 
 /**
  *    author : HJQ
@@ -8,7 +8,7 @@ import com.hjq.demo.common.CommonLazyFragment;
  *    time   : 2018/11/17
  *    desc   : MVP 懒加载 Fragment 基类
  */
-public abstract class MvpLazyFragment<P extends MvpPresenter> extends CommonLazyFragment {
+public abstract class MvpLazyFragment<P extends MvpPresenter> extends MyLazyFragment {
 
     private P mPresenter;
 

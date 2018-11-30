@@ -1,7 +1,7 @@
 package com.hjq.demo.ui.activity;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 
 /**
  *    author : HJQ
@@ -9,7 +9,7 @@ import com.hjq.demo.common.CommonActivity;
  *    time   : 2018/10/18
  *    desc   : 关于界面
  */
-public class AboutActivity extends CommonActivity {
+public class AboutActivity extends MyActivity {
 
     @Override
     protected int getLayoutId() {

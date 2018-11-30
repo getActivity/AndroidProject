@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingDefaultResource">
+
+    <color name="transparent">#00000000</color>
+
+    <color name="white5">#0cFFFFFF</color>
+    <color name="white10">#22FFFFFF</color>
+    <color name="white20">#33FFFFFF</color>
+    <color name="white30">#44FFFFFF</color>
+    <color name="white40">#66FFFFFF</color>
+    <color name="white50">#88FFFFFF</color>
+    <color name="white60">#99FFFFFF</color>
+    <color name="white70">#BBFFFFFF</color>
+    <color name="white80">#CCFFFFFF</color>
+    <color name="white90">#EEFFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="black90">#EE000000</color>
+    <color name="black80">#CC000000</color>
+    <color name="black70">#BB000000</color>
+    <color name="black60">#99000000</color>
+    <color name="black50">#88000000</color>
+    <color name="black40">#66000000</color>
+    <color name="black30">#44000000</color>
+    <color name="black20">#33000000</color>
+    <color name="black10">#22000000</color>
+    <color name="black5">#0c000000</color>
+
+    <!-- 灰色 -->
+    <color name="gray">#808080</color>
+    <!-- 红色 -->
+    <color name="red">#FF0000</color>
+    <!-- 金色 -->
+    <color name="gold">#FFD700</color>
+    <!-- 黄色 -->
+    <color name="yellow">#FFFF00</color>
+    <!-- 绿色 -->
+    <color name="green">#008000</color>
+    <!-- 蓝色 -->
+    <color name="blue">#0000FF</color>
+    <!-- 紫色 -->
+    <color name="purple">#800080</color>
+    <!-- 粉色 -->
+    <color name="pink">#FFC0CB</color>
+    <!-- 橙色 -->
+    <color name="orange">#FFA500</color>
+
+</resources>

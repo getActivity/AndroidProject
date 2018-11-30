@@ -8,7 +8,7 @@ import android.view.animation.ScaleAnimation;
 
 import com.gyf.barlibrary.BarHide;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -23,7 +23,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 启动界面
  */
-public class LauncherActivity extends CommonActivity
+public class LauncherActivity extends MyActivity
         implements OnPermission, Animation.AnimationListener {
 
     @BindView(R.id.iv_launcher_bg)

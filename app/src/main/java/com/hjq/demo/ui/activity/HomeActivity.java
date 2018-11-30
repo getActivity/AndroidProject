@@ -5,10 +5,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-import com.hjq.baselibrary.utils.ActivityStackManager;
-import com.hjq.baselibrary.utils.OnClickUtils;
+import com.hjq.demo.utils.ActivityStackManager;
+import com.hjq.demo.utils.OnClickUtils;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 import com.hjq.demo.ui.adapter.HomeFragmentAdapter;
 
 import butterknife.BindView;
@@ -19,7 +19,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 主页界面
  */
-public class HomeActivity extends CommonActivity implements
+public class HomeActivity extends MyActivity implements
         ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.vp_home_pager)

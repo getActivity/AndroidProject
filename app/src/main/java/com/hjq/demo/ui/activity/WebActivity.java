@@ -13,10 +13,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.hjq.baselibrary.utils.IntentExtraUtils;
-import com.hjq.baselibrary.utils.WebViewLifecycleUtils;
+import com.hjq.demo.utils.IntentExtraUtils;
+import com.hjq.demo.utils.WebViewLifecycleUtils;
 import com.hjq.demo.R;
-import com.hjq.demo.common.CommonActivity;
+import com.hjq.demo.base.MyActivity;
 
 import butterknife.BindView;
 
@@ -26,7 +26,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 浏览器界面
  */
-public class WebActivity extends CommonActivity {
+public class WebActivity extends MyActivity {
 
     @BindView(R.id.pb_web_progress)
     ProgressBar mProgressBar;

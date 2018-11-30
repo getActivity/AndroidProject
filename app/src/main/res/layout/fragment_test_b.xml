@@ -101,7 +101,7 @@
                     android:layout_weight="1"
                     android:hint="请输入验证码" />
 
-                <com.hjq.baselibrary.widget.CountdownView
+                <com.hjq.widget.CountdownView
                     android:id="@+id/cv_test_countdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
 
             </LinearLayout>
 
-            <com.hjq.baselibrary.widget.ClearEditText
+            <com.hjq.widget.ClearEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
 
             <View style="@style/HorizontalLineStyle" />
 
-            <com.hjq.baselibrary.widget.square.SquareFrameLayout
+            <com.hjq.widget.square.SquareFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_40"
@@ -142,9 +142,9 @@
                     android:text="这是一个正方形的FrameLayout"
                     android:textColor="@color/white" />
 
-            </com.hjq.baselibrary.widget.square.SquareFrameLayout>
+            </com.hjq.widget.square.SquareFrameLayout>
 
-            <com.hjq.baselibrary.widget.square.SquareLinearLayout
+            <com.hjq.widget.square.SquareLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
@@ -158,9 +158,9 @@
                     android:text="这是一个正方形的LinearLayout"
                     android:textColor="@color/white" />
 
-            </com.hjq.baselibrary.widget.square.SquareLinearLayout>
+            </com.hjq.widget.square.SquareLinearLayout>
 
-            <com.hjq.baselibrary.widget.square.SquareRelativeLayout
+            <com.hjq.widget.square.SquareRelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorButtonPressed">
@@ -172,9 +172,9 @@
                     android:text="这是一个正方形的RelativeLayout"
                     android:textColor="@color/white" />
 
-            </com.hjq.baselibrary.widget.square.SquareRelativeLayout>
+            </com.hjq.widget.square.SquareRelativeLayout>
 
-            <com.hjq.baselibrary.widget.square.SquareImageView
+            <com.hjq.widget.square.SquareImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
