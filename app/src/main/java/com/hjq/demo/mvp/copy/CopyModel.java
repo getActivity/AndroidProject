@@ -3,7 +3,7 @@ package com.hjq.demo.mvp.copy;
 import com.hjq.demo.mvp.MvpModel;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的接口实现类

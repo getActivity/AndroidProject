@@ -10,7 +10,7 @@
         android:id="@+id/tb_test_c_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:icon_back="false"
+        app:backButton="false"
         app:title="@string/home_nav_message" />
 
     <android.support.v4.widget.NestedScrollView

@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import java.lang.reflect.Field;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : Fragment 懒加载基类
@@ -28,10 +28,12 @@ public abstract class BaseLazyFragment extends Fragment {
     public FragmentActivity mActivity;
     // 根布局
     private View mRootView;
-    // 当前是否进行过懒加载
-    private boolean isLazyLoad = false;
-    // 当前 Fragment 是否可见
+    // 是否进行过懒加载
+    private boolean isLazyLoad;
+    // Fragment 是否可见
     private boolean isFragmentVisible;
+    // 是否是 replace Fragment 的形式
+    private boolean isReplaceFragment;
 
     /**
      * 获得全局的，防止使用getActivity()为空
@@ -51,7 +53,7 @@ public abstract class BaseLazyFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+        // super.onCreateView(inflater, container, savedInstanceState);
 
         if (mRootView == null && getLayoutId() > 0) {
             mRootView = inflater.inflate(getLayoutId(), null);
@@ -70,39 +72,11 @@ public abstract class BaseLazyFragment extends Fragment {
         return mRootView;
     }
 
+    /**
+     * 是否进行了懒加载
+     */
     protected boolean isLazyLoad() {
         return isLazyLoad;
-    }
-
-    /**
-     * 是否在Fragment使用沉浸式
-     */
-    protected boolean isStatusBarEnabled() {
-        return false;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (isFragmentVisible && !isLazyLoad && getView() != null) {
-            isLazyLoad = true;
-            init();
-        }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        this.isFragmentVisible = isVisibleToUser;
-        if (isVisibleToUser && getView() != null) {
-            if (!isLazyLoad) {
-                isLazyLoad = true;
-                init();
-            }else {
-                // 从不可见到可见
-                onRestart();
-            }
-        }
-        super.setUserVisibleHint(isVisibleToUser);
     }
 
     /**
@@ -112,8 +86,46 @@ public abstract class BaseLazyFragment extends Fragment {
         return isFragmentVisible;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (isReplaceFragment) {
+            if (isFragmentVisible) {
+                initLazyLoad();
+            }
+        }else {
+            initLazyLoad();
+        }
+    }
+
+    // replace Fragment时使用，ViewPager 切换时会回调此方法
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        this.isReplaceFragment = true;
+        this.isFragmentVisible = isVisibleToUser;
+        if (isVisibleToUser && getView() != null) {
+            if (!isLazyLoad) {
+                initLazyLoad();
+            }else {
+                // 从不可见到可见
+                onRestart();
+            }
+        }
+    }
+
     /**
-     * 跟 Activity 的同名方法一样
+     * 初始化懒加载
+     */
+    protected void initLazyLoad() {
+        if (!isLazyLoad) {
+            isLazyLoad = true;
+            initFragment();
+        }
+    }
+
+    /**
+     * 跟 Activity 的同名方法效果一样
      */
     protected void onRestart() {
         // 从可见的状态变成不可见状态，再从不可见状态变成可见状态时回调
@@ -134,7 +146,7 @@ public abstract class BaseLazyFragment extends Fragment {
         }
     }
 
-    protected void init() {
+    protected void initFragment() {
         initView();
         initData();
     }
@@ -152,14 +164,14 @@ public abstract class BaseLazyFragment extends Fragment {
     protected abstract void initData();
 
     /**
-     * 根据资源id获取一个View
+     * 根据资源 id 获取一个 View 对象
      */
     protected <T extends View> T findViewById(@IdRes int id) {
-        return (T) getView().findViewById(id);
+        return  getView().findViewById(id);
     }
 
     protected <T extends View> T findActivityViewById(@IdRes int id) {
-        return (T) mActivity.findViewById(id);
+        return mActivity.findViewById(id);
     }
 
     /**
@@ -172,12 +184,9 @@ public abstract class BaseLazyFragment extends Fragment {
     }
 
     /**
-     * 跳转到其他 Activity 并销毁当前 Activity
-     *
-     * @param cls       目标Activity的Class
+     * 销毁当前 Fragment 所在的 Activity
      */
-    public void startActivityFinish(Class<? extends Activity> cls) {
-        startActivity(cls);
+    public void finish() {
         mActivity.finish();
     }
 

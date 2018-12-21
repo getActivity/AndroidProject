@@ -1,9 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:descendantFocusability="beforeDescendants"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,7 +10,7 @@
         android:id="@+id/tb_test_b_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:icon_back="false"
+        app:backButton="false"
         app:title="@string/home_nav_found" />
 
     <android.support.v4.widget.NestedScrollView

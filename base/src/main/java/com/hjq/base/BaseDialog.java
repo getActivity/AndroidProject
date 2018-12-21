@@ -1,9 +1,12 @@
 package com.hjq.base;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialog;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -15,12 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/24
  *    desc   : Dialog 基类
  */
 public class BaseDialog extends AppCompatDialog {
+
+    private boolean mCancelable = true;
 
     public BaseDialog(Context context) {
         this(context, R.style.BaseDialogStyle);
@@ -30,7 +35,19 @@ public class BaseDialog extends AppCompatDialog {
         super(context, themeResId);
     }
 
-    public static class Builder {
+    @Override
+    public void setCancelable(boolean flag) {
+        super.setCancelable(flag);
+        mCancelable = flag;
+    }
+
+    public boolean isCancelable() {
+        return mCancelable;
+    }
+
+    public static class Builder<B extends Builder> {
+
+        private BaseDialog mDialog;
 
         // Context 对象
         private Context mContext;
@@ -63,6 +80,9 @@ public class BaseDialog extends AppCompatDialog {
         // 宽度和高度
         private int mWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
         private int mHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+        // 垂直和水平边距
+        private int mVerticalMargin;
+        private int mHorizontalMargin;
 
         public Builder(Context context) {
             this(context, -1);
@@ -74,25 +94,78 @@ public class BaseDialog extends AppCompatDialog {
         }
 
         /**
-         * 设置布局
+         * 获取上下文对象（仅供子类调用）
          */
-        public Builder setContentView(View view) {
-            mContentView = view;
-            return this;
+        protected Context getContext() {
+            return mContext;
+        }
+
+        /**
+         * 根据 id 查找 View（仅供子类调用）
+         */
+        protected <T extends View> T findViewById(@IdRes int id) {
+            return mContentView.findViewById(id);
+        }
+
+        /**
+         * 获取当前 Dialog 对象（仅供子类调用）
+         */
+        protected BaseDialog getDialog() {
+            return mDialog;
+        }
+
+        /**
+         * 销毁当前 Dialog（仅供子类调用）
+         */
+        protected void dismiss() {
+            mDialog.dismiss();
+        }
+
+        /**
+         * 是否设置了取消（仅供子类调用）
+         */
+        protected boolean isCancelable() {
+            return mCancelable;
+        }
+
+        /**
+         * 文本是否为空（仅供子类调用）
+         */
+        protected boolean isEmpty(CharSequence text) {
+            return text == null || "".equals(text.toString());
+        }
+
+        /**
+         * dp转px（仅供子类调用）
+         */
+        protected int dp2px(float dpValue) {
+            final float scale = mContext.getResources().getDisplayMetrics().density;
+            return (int) (dpValue * scale + 0.5f);
+        }
+
+        /**
+         * sp转px（仅供子类调用）
+         */
+        protected int sp2px(float spValue) {
+            final float fontScale = mContext.getResources().getDisplayMetrics().scaledDensity;
+            return (int) (spValue * fontScale + 0.5f);
         }
 
         /**
          * 设置布局
          */
-        public Builder setContentView(int layoutId) {
-            mContentView = LayoutInflater.from(mContext).inflate(layoutId, null);
-            return this;
+        public B setContentView(int layoutId) {
+            return setContentView(LayoutInflater.from(mContext).inflate(layoutId, null));
+        }
+        public B setContentView(@NonNull View view) {
+            mContentView = view;
+            return (B) this;
         }
 
         /**
          * 设置重心位置
          */
-        public Builder setGravity(int gravity) {
+        public B setGravity(int gravity) {
             // 适配 Android 4.2 新特性，布局反方向（开发者选项 - 强制使用从右到左的布局方向）
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 gravity = Gravity.getAbsoluteGravity(gravity, mContext.getResources().getConfiguration().getLayoutDirection());
@@ -114,140 +187,156 @@ public class BaseDialog extends AppCompatDialog {
                         break;
                 }
             }
-            return this;
+            return (B) this;
         }
 
         /**
          * 设置宽度
          */
-        public Builder setWidth(int width) {
+        public B setWidth(int width) {
             mWidth = width;
-            return this;
+            return (B) this;
         }
 
         /**
          * 设置高度
          */
-        public Builder setHeight(int height) {
+        public B setHeight(int height) {
             mHeight = height;
-            return this;
+            return (B) this;
         }
 
         /**
          * 是否可以取消
          */
-        public Builder setCancelable(boolean cancelable) {
+        public B setCancelable(boolean cancelable) {
             mCancelable = cancelable;
-            return this;
+            return (B) this;
         }
 
         /**
          * 设置动画，已经封装好几种样式，具体可见{@link AnimStyle}类
          */
-        public Builder setAnimStyle(int resId) {
+        public B setAnimStyle(int resId) {
             mAnimations = resId;
-            return this;
+            return (B) this;
         }
 
         /**
          * 占满宽度
          */
-        public Builder fullWidth() {
+        public B fullWidth() {
             mWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-            return this;
+            return (B) this;
         }
 
         /**
          * 占满高度
          */
-        public Builder fullHeight() {
+        public B fullHeight() {
             mHeight = ViewGroup.LayoutParams.MATCH_PARENT;
-            return this;
+            return (B) this;
+        }
+
+        /**
+         * 设置垂直间距
+         */
+        public B setVerticalMargin(int verticalMargin) {
+            this.mVerticalMargin = verticalMargin;
+            return (B) this;
+        }
+
+        /**
+         * 设置水平间距
+         */
+        public B setHorizontalMargin(int horizontalMargin) {
+            this.mHorizontalMargin = horizontalMargin;
+            return (B) this;
         }
 
         /**
          * 设置取消监听
          */
-        public Builder setOnCancelListener(OnCancelListener onCancelListener) {
+        public B setOnCancelListener(OnCancelListener onCancelListener) {
             mOnCancelListener = onCancelListener;
-            return this;
+            return (B) this;
         }
 
         /**
          * 设置销毁监听
          */
-        public Builder setOnDismissListener(OnDismissListener onDismissListener) {
+        public B setOnDismissListener(OnDismissListener onDismissListener) {
             mOnDismissListener = onDismissListener;
-            return this;
+            return (B) this;
         }
 
         /**
          * 设置按键监听
          */
-        public Builder setOnKeyListener(OnKeyListener onKeyListener) {
+        public B setOnKeyListener(OnKeyListener onKeyListener) {
             mOnKeyListener = onKeyListener;
-            return this;
+            return (B) this;
         }
 
         /**
          * 设置文本
          */
-        public Builder setText(int viewId, int resId) {
-            return setText(viewId, mContext.getResources().getString(resId));
+        public B setText(@IdRes int id, int resId) {
+            return setText(id, mContext.getResources().getString(resId));
         }
 
         /**
          * 设置文本
          */
-        public Builder setText(int viewId, CharSequence text) {
-            mTextArray.put(viewId, text);
-            return this;
+        public B setText(@IdRes int id, CharSequence text) {
+            mTextArray.put(id, text);
+            return (B) this;
         }
 
         /**
          * 设置可见状态
          */
-        public Builder setVisibility(int viewId, int visibility) {
-            mVisibilityArray.put(viewId, visibility);
-            return this;
+        public B setVisibility(@IdRes int id, int visibility) {
+            mVisibilityArray.put(id, visibility);
+            return (B) this;
         }
 
         /**
          * 设置设置背景
          */
-        public Builder setBackground(int viewId, int resId) {
-            return setBackground(viewId, mContext.getResources().getDrawable(resId));
+        public B setBackground(@IdRes int id, int resId) {
+            return setBackground(id, mContext.getResources().getDrawable(resId));
         }
 
         /**
          * 设置背景
          */
-        public Builder setBackground(int viewId, Drawable drawable) {
-            mBackgroundArray.put(viewId, drawable);
-            return this;
+        public B setBackground(@IdRes int id, Drawable drawable) {
+            mBackgroundArray.put(id, drawable);
+            return (B) this;
         }
 
         /**
          * 设置设置背景
          */
-        public Builder setImageDrawable(int viewId, int resId) {
-            return setBackground(viewId, mContext.getResources().getDrawable(resId));
+        public B setImageDrawable(@IdRes int id, int resId) {
+            return setBackground(id, mContext.getResources().getDrawable(resId));
         }
 
         /**
          * 设置背景
          */
-        public Builder setImageDrawable(int viewId, Drawable drawable) {
-            mImageArray.put(viewId, drawable);
-            return this;
+        public B setImageDrawable(@IdRes int id, Drawable drawable) {
+            mImageArray.put(id, drawable);
+            return (B) this;
         }
 
         /**
          * 设置点击事件
          */
-        public Builder setOnClickListener(int view, BaseDialog.OnClickListener listener) {
-            mClickArray.put(view, listener);
-            return this;
+        public B setOnClickListener(@IdRes int id, BaseDialog.OnClickListener listener) {
+            mClickArray.put(id, listener);
+            return (B) this;
         }
 
         /**
@@ -260,32 +349,41 @@ public class BaseDialog extends AppCompatDialog {
                 throw new IllegalArgumentException("Dialog layout cannot be empty");
             }
 
-            final BaseDialog dialog;
+            ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
+            if (layoutParams != null) {
+
+                if (mWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    mWidth = layoutParams.width;
+                }
+                if (mHeight == ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    mHeight = layoutParams.height;
+                }
+            }
 
             // 判断有没有设置主题
             if (mThemeResId == -1) {
-                dialog = new BaseDialog(mContext);
+                mDialog = new BaseDialog(mContext);
             } else {
-                dialog = new BaseDialog(mContext, mThemeResId);
+                mDialog = new BaseDialog(mContext, mThemeResId);
             }
 
-            dialog.setContentView(mContentView);
+            mDialog.setContentView(mContentView);
 
-            dialog.setCancelable(mCancelable);
+            mDialog.setCancelable(mCancelable);
             if (mCancelable) {
-                dialog.setCanceledOnTouchOutside(true);
+                mDialog.setCanceledOnTouchOutside(true);
             }
 
             if (mOnCancelListener != null) {
-                dialog.setOnCancelListener(mOnCancelListener);
+                mDialog.setOnCancelListener(mOnCancelListener);
             }
 
             if (mOnDismissListener != null) {
-                dialog.setOnDismissListener(mOnDismissListener);
+                mDialog.setOnDismissListener(mOnDismissListener);
             }
 
             if (mOnKeyListener != null) {
-                dialog.setOnKeyListener(mOnKeyListener);
+                mDialog.setOnKeyListener(mOnKeyListener);
             }
 
             // 判断有没有设置动画
@@ -295,12 +393,14 @@ public class BaseDialog extends AppCompatDialog {
             }
 
             // 设置参数
-            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            WindowManager.LayoutParams params = mDialog.getWindow().getAttributes();
             params.width = mWidth;
             params.height = mHeight;
             params.gravity = mGravity;
             params.windowAnimations = mAnimations;
-            dialog.getWindow().setAttributes(params);
+            params.horizontalMargin = mHorizontalMargin;
+            params.verticalMargin = mVerticalMargin;
+            mDialog.getWindow().setAttributes(params);
 
             // 设置文本
             for (int i = 0; i < mTextArray.size(); i++) {
@@ -328,10 +428,10 @@ public class BaseDialog extends AppCompatDialog {
 
             // 设置点击事件
             for (int i = 0; i < mClickArray.size(); i++) {
-                new ViewClickHandler(dialog, mContentView.findViewById(mClickArray.keyAt(i)), mClickArray.valueAt(i));
+                new ViewClickHandler(mDialog, mContentView.findViewById(mClickArray.keyAt(i)), mClickArray.valueAt(i));
             }
 
-            return dialog;
+            return mDialog;
         }
 
         /**
@@ -366,7 +466,7 @@ public class BaseDialog extends AppCompatDialog {
     }
 
     public interface OnClickListener<V extends View> {
-        void onClick(BaseDialog dialog, V view);
+        void onClick(Dialog dialog, V view);
     }
 
     public static final class AnimStyle {
@@ -376,6 +476,9 @@ public class BaseDialog extends AppCompatDialog {
 
         // 缩放动画
         public static final int SCALE = R.style.DialogScaleAnim;
+
+        // IOS 动画
+        public static final int IOS = R.style.DialogIOSAnim;
 
         // 吐司动画
         public static final int TOAST = android.R.style.Animation_Toast;

@@ -7,7 +7,7 @@ import com.hjq.demo.mvp.MvpActivity;
 import java.util.List;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的MVP Activity 类
@@ -15,7 +15,7 @@ import java.util.List;
 public class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyContract.View {
 
     @Override
-    protected CopyPresenter initPresenter() {
+    protected CopyPresenter createPresenter() {
         return new CopyPresenter();
     }
 
@@ -56,5 +56,25 @@ public class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyC
     @Override
     public void loginSuccess(List<String> data) {
         toast("登录成功了");
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void loadingComplete() {
+
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showError() {
+
     }
 }

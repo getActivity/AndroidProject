@@ -7,13 +7,13 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyLazyFragment;
+import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.widget.XCollapsingToolbarLayout;
 
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 项目炫酷效果示例

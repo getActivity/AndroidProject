@@ -41,8 +41,8 @@
                 android:id="@+id/tb_test_a_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                app:bar_style="transparent"
-                app:icon_back="false"
+                app:backButton="false"
+                app:barStyle="transparent"
                 app:layout_collapseMode="pin">
 
                 <LinearLayout

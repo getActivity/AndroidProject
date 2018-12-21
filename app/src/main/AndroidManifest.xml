@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.hjq.demo.base.MyApplication"
+        android:name=".common.MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -22,7 +22,7 @@
 
         <!-- 启动页面（因为使用了LauncherTheme，所以不要给这个Activity设置screenOrientation属性，会导致崩溃） -->
         <activity
-            android:name="com.hjq.demo.ui.activity.LauncherActivity"
+            android:name=".ui.activity.LauncherActivity"
             android:theme="@style/LauncherTheme">
 
             <!-- 程序入口 -->
@@ -37,30 +37,33 @@
 
         <!-- 主页界面 -->
         <activity
-            android:name="com.hjq.demo.ui.activity.HomeActivity"
+            android:name=".ui.activity.HomeActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTop" />
 
         <!-- 登录界面 -->
         <activity
-            android:name="com.hjq.demo.ui.activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTop" />
 
         <!-- 注册界面 -->
         <activity
-            android:name="com.hjq.demo.ui.activity.RegisterActivity"
+            android:name=".ui.activity.RegisterActivity"
             android:launchMode="singleTop" />
 
         <!-- 关于界面 -->
         <activity
-            android:name="com.hjq.demo.ui.activity.AboutActivity"
+            android:name=".ui.activity.AboutActivity"
             android:label="@string/about_text"
             android:launchMode="singleTop" />
 
         <!-- 浏览器界面 -->
         <activity
-            android:name="com.hjq.demo.ui.activity.WebActivity"
+            android:name=".ui.activity.WebActivity"
             android:launchMode="singleTop" />
+
+        <!-- 对话框使用案例界面 -->
+        <activity android:name=".ui.activity.DialogActivity" />
 
     </application>
 

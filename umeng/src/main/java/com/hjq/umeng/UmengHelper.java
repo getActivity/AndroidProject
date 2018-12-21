@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/30
  *    desc   : 友盟辅助类

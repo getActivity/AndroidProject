@@ -221,7 +221,7 @@
 
 ########################################################
 
-#友盟统计
+# 友盟统计
 -keep class com.umeng.** {*;}
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);

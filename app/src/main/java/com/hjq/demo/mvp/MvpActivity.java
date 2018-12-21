@@ -1,23 +1,23 @@
 package com.hjq.demo.mvp;
 
-import com.hjq.demo.base.MyActivity;
+import com.hjq.demo.common.MyActivity;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/17
  *    desc   : MVP Activity 基类
  */
-public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity {
+public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity implements IMvpView {
 
     private P mPresenter;
 
     @Override
-    public void init() {
-        mPresenter = initPresenter();
+    public void initActivity() {
+        mPresenter = createPresenter();
         mPresenter.attach(this);
         mPresenter.start();
-        super.init();
+        super.initActivity();
     }
 
     @Override
@@ -30,5 +30,5 @@ public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity {
         return mPresenter;
     }
 
-    protected abstract P initPresenter();
+    protected abstract P createPresenter();
 }

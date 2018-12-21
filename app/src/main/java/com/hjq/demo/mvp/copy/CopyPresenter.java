@@ -5,12 +5,12 @@ import com.hjq.demo.mvp.MvpPresenter;
 import java.util.List;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的业务处理类
  */
-public class CopyPresenter extends MvpPresenter<CopyMvpActivity> implements CopyContract.Presenter {
+public class CopyPresenter extends MvpPresenter<CopyContract.View> implements CopyContract.Presenter {
 
     private CopyModel mModel;
 

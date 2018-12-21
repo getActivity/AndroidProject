@@ -5,16 +5,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-import com.hjq.demo.utils.ActivityStackManager;
-import com.hjq.demo.utils.OnClickUtils;
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyActivity;
+import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.helper.ActivityStackManager;
+import com.hjq.demo.helper.DoubleClickHelper;
 import com.hjq.demo.ui.adapter.HomeFragmentAdapter;
 
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 主页界面
@@ -110,10 +110,10 @@ public class HomeActivity extends MyActivity implements
 
     @Override
     public void onBackPressed() {
-        if (OnClickUtils.isOnDoubleClick()) {
+        if (DoubleClickHelper.isOnDoubleClick()) {
             //移动到上一个任务栈，避免侧滑引起的不良反应
             moveTaskToBack(false);
-            getWindow().getDecorView().postDelayed(new Runnable() {
+            getHandler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {

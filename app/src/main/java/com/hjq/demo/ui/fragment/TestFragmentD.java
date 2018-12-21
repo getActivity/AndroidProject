@@ -3,18 +3,19 @@ package com.hjq.demo.ui.fragment;
 import android.view.View;
 import android.widget.Button;
 
-import com.hjq.demo.utils.IntentExtraUtils;
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyLazyFragment;
+import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.ui.activity.AboutActivity;
+import com.hjq.demo.ui.activity.DialogActivity;
 import com.hjq.demo.ui.activity.LoginActivity;
 import com.hjq.demo.ui.activity.RegisterActivity;
 import com.hjq.demo.ui.activity.WebActivity;
+import com.hjq.demo.helper.IntentExtraUtils;
 
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 项目界面跳转示例
@@ -22,6 +23,8 @@ import butterknife.BindView;
 public class TestFragmentD extends MyLazyFragment
         implements View.OnClickListener {
 
+    @BindView(R.id.btn_test_dialog)
+    Button mDialogView;
     @BindView(R.id.btn_test_login)
     Button mLoginView;
     @BindView(R.id.btn_test_register)
@@ -47,6 +50,7 @@ public class TestFragmentD extends MyLazyFragment
 
     @Override
     protected void initView() {
+        mDialogView.setOnClickListener(this);
         mLoginView.setOnClickListener(this);
         mRegisterView.setOnClickListener(this);
         mAboutView.setOnClickListener(this);
@@ -63,7 +67,9 @@ public class TestFragmentD extends MyLazyFragment
      */
     @Override
     public void onClick(View v) {
-        if (v == mLoginView) {
+        if (v == mDialogView) {
+            startActivity(DialogActivity.class);
+        }else if (v == mLoginView) {
             startActivity(LoginActivity.class);
         }else if (v == mRegisterView) {
             startActivity(RegisterActivity.class);

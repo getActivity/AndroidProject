@@ -1,0 +1,6 @@
+<resources>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_cancel">取消</string>
+
+    <string name="dialog_pay_title">请输入支付密码</string>
+</resources>

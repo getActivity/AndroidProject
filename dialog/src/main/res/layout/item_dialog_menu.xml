@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialog_menu_item_height"
+    tools:ignore="ResourceName">
+
+    <TextView
+        android:id="@+id/tv_dialog_menu_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:singleLine="true"
+        android:textColor="@color/dialog_confirm"
+        android:textSize="16sp"
+        tools:text="条目" />
+
+    <View
+        android:id="@+id/v_dialog_menu_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_line_size"
+        android:layout_gravity="bottom"
+        android:background="@color/dialog_line" />
+
+</FrameLayout>

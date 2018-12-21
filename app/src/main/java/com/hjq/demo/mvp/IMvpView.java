@@ -1,7 +1,7 @@
 package com.hjq.demo.mvp;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/17
  *    desc   : MVP 通用性接口
@@ -14,6 +14,11 @@ public interface IMvpView {
     void showLoading();
 
     /**
+     * 用于请求数据完成
+     */
+    void loadingComplete();
+
+    /**
      * 用于请求的数据为空的状态
      */
     void showEmpty();
@@ -22,9 +27,4 @@ public interface IMvpView {
      * 用于请求数据出错
      */
     void showError();
-
-    /**
-     * 用于请求数据完成
-     */
-    void loadingComplete();
 }

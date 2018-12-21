@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CircularProgressDrawable">
+        <attr name="cpd_padding" format="reference|dimension"/>
+        <attr name="cpd_initialAngle" format="reference|integer"/>
+        <attr name="cpd_maxSweepAngle" format="reference|integer"/>
+        <attr name="cpd_minSweepAngle" format="reference|integer"/>
+        <attr name="cpd_strokeSize" format="reference|dimension"/>
+        <attr name="cpd_strokeColor" format="reference|color"/>
+        <attr name="cpd_strokeSecondaryColor" format="reference|color"/>
+        <attr name="cpd_strokeColors" format="reference"/>
+        <attr name="cpd_reverse" format="boolean"/>
+        <attr name="cpd_rotateDuration" format="reference|integer"/>
+        <attr name="cpd_transformDuration" format="reference|integer"/>
+        <attr name="cpd_keepDuration" format="reference|integer"/>
+        <attr name="cpd_transformInterpolator" format="reference"/>
+        <attr name="cpd_inAnimDuration" format="reference|integer"/>
+        <attr name="cpd_outAnimDuration" format="reference|integer"/>
+        <attr name="cpd_inStepColors" format="reference"/>
+        <attr name="cpd_inStepPercent" format="float"/>
+        <attr name="pv_progressMode"/>
+    </declare-styleable>
+
+</resources>

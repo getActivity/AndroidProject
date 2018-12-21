@@ -13,11 +13,11 @@
         android:id="@+id/tb_login_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_100"
-        app:bar_style="transparent"
-        app:color_right="@color/colorAccent"
-        app:icon_back="false"
-        app:title=""
-        app:title_right="@string/login_register" />
+        app:backButton="false"
+        app:barStyle="transparent"
+        app:rightColor="@color/colorAccent"
+        app:rightTitle="@string/login_register"
+        app:title="" />
 
     <ImageView
         android:layout_width="@dimen/space_200"

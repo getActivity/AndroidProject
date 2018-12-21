@@ -4,15 +4,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hjq.demo.utils.EditTextInputHelper;
-import com.hjq.widget.CountdownView;
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyActivity;
+import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.helper.EditTextInputHelper;
+import com.hjq.widget.CountdownView;
 
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 注册界面
@@ -53,13 +53,18 @@ public class RegisterActivity extends MyActivity
         mCountdownView.setOnClickListener(this);
         mCommitView.setOnClickListener(this);
 
-        mEditTextInputHelper = new EditTextInputHelper(mCommitView, false);
+        mEditTextInputHelper = new EditTextInputHelper(mCommitView);
         mEditTextInputHelper.addViews(mPhoneView, mCodeView, mPasswordView1, mPasswordView2);
     }
 
     @Override
     protected void initData() {
-
+//        getHandler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                finishResult(RESULT_OK);
+//            }
+//        }, 2000);
     }
 
     /**

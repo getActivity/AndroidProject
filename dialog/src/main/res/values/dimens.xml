@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="dialog_line_size">1px</dimen>
+
+    <dimen name="dialog_message_width">280dp</dimen>
+    <dimen name="dialog_message_round_size">15dp</dimen>
+
+    <dimen name="dialog_menu_item_height">48dp</dimen>
+    <dimen name="dialog_menu_round_size">12dp</dimen>
+
+</resources>

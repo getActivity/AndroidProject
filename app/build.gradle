@@ -89,6 +89,8 @@ dependencies {
     implementation project(':widget')
     // 友盟
     implementation project(':umeng')
+    // Dialog
+    implementation project(':dialog')
 
     // 示例：添加一个 aar 包
     // implementation(name: 'password_dialog', ext: 'aar')
@@ -102,24 +104,31 @@ dependencies {
     // Dex分包，解决 65k 问题
     implementation 'com.android.support:multidex:1.0.3'
 
+    // ButterKnife注解库：https://github.com/JakeWharton/butterknife
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+
     // 状态栏沉浸：https://github.com/gyf-dev/ImmersionBar
-    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta09'
     // 侧滑功能：https://github.com/bingoogolapple/BGASwipeBackLayout-Android
-    implementation 'cn.bingoogolapple:bga-swipebacklayout:1.1.9@aar'
+    implementation 'cn.bingoogolapple:bga-swipebacklayout:1.2.0'
 
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation 'com.hjq:xxpermissions:5.2'
     // 标题栏：https://github.com/getActivity/TitleBar
-    implementation 'com.hjq:titlebar:3.5'
+    implementation 'com.hjq:titlebar:5.0'
     // 吐司工具类：https://github.com/getActivity/ToastUtils
-    implementation 'com.hjq:toast:5.0'
+    implementation 'com.hjq:toast:5.2'
 
     // 圆形的ImageView：https://github.com/hdodenhof/CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    // ButterKnife注解库：https://github.com/JakeWharton/butterknife
-    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
+    // RecyclerView：https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    // 工具类集合：https://github.com/Blankj/AndroidUtilCode
+    // 图片选择：https://github.com/zhihu/Matisse
+    // 上拉下拉：https://github.com/bingoogolapple/BGARefreshLayout-Android
+    // 轮播图：https://github.com/bingoogolapple/BGABanner-Android
+    // 二维码：https://github.com/bingoogolapple/BGAQRCode-Android
 }
 
 repositories {

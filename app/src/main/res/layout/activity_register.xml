@@ -12,11 +12,11 @@
         android:id="@+id/tb_register_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_100"
-        app:bar_style="transparent"
-        app:color_left="@color/colorAccent"
-        app:icon_back="false"
-        app:title=""
-        app:title_left="@string/register_login" />
+        app:backButton="false"
+        app:barStyle="transparent"
+        app:leftColor="@color/colorAccent"
+        app:leftTitle="@string/register_login"
+        app:title="" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

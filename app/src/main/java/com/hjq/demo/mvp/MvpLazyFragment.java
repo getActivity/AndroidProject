@@ -1,23 +1,23 @@
 package com.hjq.demo.mvp;
 
-import com.hjq.demo.base.MyLazyFragment;
+import com.hjq.demo.common.MyLazyFragment;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/17
  *    desc   : MVP 懒加载 Fragment 基类
  */
-public abstract class MvpLazyFragment<P extends MvpPresenter> extends MyLazyFragment {
+public abstract class MvpLazyFragment<P extends MvpPresenter> extends MyLazyFragment implements IMvpView {
 
     private P mPresenter;
 
     @Override
-    protected void init() {
-        mPresenter = initPresenter();
+    protected void initFragment() {
+        mPresenter = createPresenter();
         mPresenter.attach(this);
         mPresenter.start();
-        super.init();
+        super.initFragment();
     }
 
     @Override
@@ -30,5 +30,5 @@ public abstract class MvpLazyFragment<P extends MvpPresenter> extends MyLazyFrag
         return mPresenter;
     }
 
-    protected abstract P initPresenter();
+    protected abstract P createPresenter();
 }

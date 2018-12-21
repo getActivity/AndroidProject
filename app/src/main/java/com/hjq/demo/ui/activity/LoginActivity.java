@@ -4,15 +4,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hjq.demo.utils.EditTextInputHelper;
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyActivity;
+import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.helper.EditTextInputHelper;
 import com.hjq.toast.ToastUtils;
 
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 登录界面
@@ -42,7 +42,7 @@ public class LoginActivity extends MyActivity
     @Override
     protected void initView() {
         mCommitView.setOnClickListener(this);
-        mEditTextInputHelper = new EditTextInputHelper(mCommitView, false);
+        mEditTextInputHelper = new EditTextInputHelper(mCommitView);
         mEditTextInputHelper.addViews(mPhoneView, mPasswordView);
     }
 
@@ -55,6 +55,14 @@ public class LoginActivity extends MyActivity
     public void onRightClick(View v) {
         // 跳转到注册界面
         startActivity(RegisterActivity.class);
+
+//        startActivityForResult(new Intent(this, RegisterActivity.class), new ActivityCallback() {
+//
+//            @Override
+//            public void onActivityResult(int resultCode, @Nullable Intent data) {
+//                toast(String.valueOf(resultCode));
+//            }
+//        });
     }
 
     @Override

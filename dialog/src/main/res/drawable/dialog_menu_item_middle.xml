@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按压状态 -->
+    <item android:drawable="@color/dialog_bg_press" android:state_pressed="true" />
+
+    <!-- 焦点状态 -->
+    <item android:drawable="@color/dialog_bg_press" android:state_focused="true" />
+
+    <!-- 默认状态 -->
+    <item android:drawable="@color/dialog_bg" />
+</selector>

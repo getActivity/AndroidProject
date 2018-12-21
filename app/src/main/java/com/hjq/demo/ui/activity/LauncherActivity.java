@@ -8,7 +8,7 @@ import android.view.animation.ScaleAnimation;
 
 import com.gyf.barlibrary.BarHide;
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyActivity;
+import com.hjq.demo.common.MyActivity;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 启动界面
@@ -148,11 +148,13 @@ public class LauncherActivity extends MyActivity
     @Override
     public void onAnimationRepeat(Animation animation) {}
 
-
+    /**
+     * Android 8.0踩坑记录：Only fullscreen opaque activities can request orientation
+     * https://www.jianshu.com/p/d0d907754603
+     */
     @Override
     protected void initOrientation() {
-        //Android 8.0踩坑记录：Only fullscreen opaque activities can request orientation
-        // https://www.jianshu.com/p/d0d907754603
-        //super.initOrientation();
+        // 注释父类的固定屏幕方向方法
+        // super.initOrientation();
     }
 }

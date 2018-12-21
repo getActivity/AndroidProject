@@ -1,7 +1,7 @@
 package com.hjq.demo.mvp;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/30
  *    desc   : 占位

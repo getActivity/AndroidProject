@@ -4,8 +4,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hjq.demo.R;
-import com.hjq.demo.base.MyLazyFragment;
-import com.hjq.demo.base.UIActivity;
+import com.hjq.demo.common.MyLazyFragment;
+import com.hjq.demo.common.UIActivity;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -15,7 +15,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- *    author : HJQ
+ *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
  *    desc   : 项目框架使用示例
