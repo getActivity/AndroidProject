@@ -1,6 +1,7 @@
 package com.hjq.base;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -21,8 +22,39 @@ public class BaseDialogFragment extends DialogFragment {
 
     private BaseDialog mDialog;
 
+    private DialogInterface.OnCancelListener mOnCancelListener;
+    private DialogInterface.OnDismissListener mOnDismissListener;
+
     private static String sShowTag;
     private static long sLastTime;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        // 解决 DialogFragment 占用 Dialog 原有监听的问题
+        if (mDialog != null) {
+            mOnCancelListener = mDialog.getOnCancelListener();
+            mOnDismissListener = mDialog.getOnDismissListener();
+        }
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        // 回调原有 Dialog 的监听
+        if (mOnDismissListener != null) {
+            mOnDismissListener.onDismiss(dialog);
+        }
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        // 回调原有 Dialog 的监听
+        if (mOnCancelListener != null) {
+            mOnCancelListener.onCancel(dialog);
+        }
+    }
 
     /**
      * 父类同名方法简化
@@ -124,11 +156,19 @@ public class BaseDialogFragment extends DialogFragment {
             return getClass().getName();
         }
 
+        /*
         // 重写父类的方法（仅供子类调用）
         @Override
         protected void dismiss() {
-            mDialogFragment.dismiss();
+            try {
+                mDialogFragment.dismiss();
+            } catch (IllegalStateException e) {
+                // java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
+                // 这里不能调用 DialogFragment 的 dismiss 方法，因为在前台 show 之后却在后台 dismiss 会导致崩溃
+                // 使用 Dialog 的 dismiss 方法却不会出现这种情况，除此之外没有更好的解决方案，故此这句 API 被注释
+            }
         }
+        */
 
         @Override
         public BaseDialog show() {

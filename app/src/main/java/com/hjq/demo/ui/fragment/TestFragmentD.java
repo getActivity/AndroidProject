@@ -1,18 +1,24 @@
 package com.hjq.demo.ui.fragment;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
-import android.widget.Button;
 
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.ui.activity.AboutActivity;
 import com.hjq.demo.ui.activity.DialogActivity;
 import com.hjq.demo.ui.activity.LoginActivity;
+import com.hjq.demo.ui.activity.PasswordForgetActivity;
+import com.hjq.demo.ui.activity.PasswordResetActivity;
 import com.hjq.demo.ui.activity.RegisterActivity;
+import com.hjq.demo.ui.activity.SettingActivity;
 import com.hjq.demo.ui.activity.WebActivity;
-import com.hjq.demo.helper.IntentExtraUtils;
+import com.hjq.dialog.MessageDialog;
+import com.hjq.toast.ToastUtils;
 
-import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -20,19 +26,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 项目界面跳转示例
  */
-public class TestFragmentD extends MyLazyFragment
-        implements View.OnClickListener {
-
-    @BindView(R.id.btn_test_dialog)
-    Button mDialogView;
-    @BindView(R.id.btn_test_login)
-    Button mLoginView;
-    @BindView(R.id.btn_test_register)
-    Button mRegisterView;
-    @BindView(R.id.btn_test_about)
-    Button mAboutView;
-    @BindView(R.id.btn_test_browser)
-    Button mBrowserView;
+public class TestFragmentD extends MyLazyFragment {
 
     public static TestFragmentD newInstance() {
         return new TestFragmentD();
@@ -50,11 +44,7 @@ public class TestFragmentD extends MyLazyFragment
 
     @Override
     protected void initView() {
-        mDialogView.setOnClickListener(this);
-        mLoginView.setOnClickListener(this);
-        mRegisterView.setOnClickListener(this);
-        mAboutView.setOnClickListener(this);
-        mBrowserView.setOnClickListener(this);
+
     }
 
     @Override
@@ -62,23 +52,62 @@ public class TestFragmentD extends MyLazyFragment
 
     }
 
-    /**
-     * {@link View.OnClickListener}
-     */
-    @Override
+    @OnClick({R.id.btn_test_dialog, R.id.btn_test_login, R.id.btn_test_register, R.id.btn_test_forget, R.id.btn_test_reset,
+            R.id.btn_test_setting, R.id.btn_test_about, R.id.btn_test_browser, R.id.btn_test_pay})
     public void onClick(View v) {
-        if (v == mDialogView) {
-            startActivity(DialogActivity.class);
-        }else if (v == mLoginView) {
-            startActivity(LoginActivity.class);
-        }else if (v == mRegisterView) {
-            startActivity(RegisterActivity.class);
-        }else if (v == mAboutView) {
-            startActivity(AboutActivity.class);
-        }else if (v == mBrowserView) {
-            IntentExtraUtils.getInstance(WebActivity.class)
-                    .putString("https://github.com/getActivity/")
-                    .startActivity(getActivity());
+        switch (v.getId()) {
+            case R.id.btn_test_dialog:
+                startActivity(DialogActivity.class);
+                break;
+            case R.id.btn_test_login:
+                startActivity(LoginActivity.class);
+                break;
+            case R.id.btn_test_register:
+                startActivity(RegisterActivity.class);
+                break;
+            case R.id.btn_test_forget:
+                startActivity(PasswordForgetActivity.class);
+                break;
+            case R.id.btn_test_reset:
+                startActivity(PasswordResetActivity.class);
+                break;
+            case R.id.btn_test_setting:
+                startActivity(SettingActivity.class);
+                break;
+            case R.id.btn_test_about:
+                startActivity(AboutActivity.class);
+                break;
+            case R.id.btn_test_browser:
+                startActivity(WebActivity.class);
+                break;
+            case R.id.btn_test_pay:
+                new MessageDialog.Builder(getFragmentActivity())
+                        .setTitle("捐赠") // 标题可以不用填写
+                        .setMessage("如果您觉得这个开源项目很棒，希望它能更好地坚持开发下去，可否愿意花一点点钱（推荐 10.24 元）作为对于开发者的激励")
+                        .setConfirm("支付宝")
+                        .setCancel(null) // 设置 null 表示不显示取消按钮
+                        //.setAutoDismiss(false) // 设置点击按钮后不关闭对话框
+                        .setListener(new MessageDialog.OnListener() {
+
+                            @Override
+                            public void onConfirm(Dialog dialog) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2FFKX04202G4K6AVCF5GIY66%3F_s%3Dweb-other"));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    ToastUtils.show("这个开源项目因为您的支持而能够不断更新、完善，非常感谢您的支持");
+                                } catch (Exception e) {
+                                    ToastUtils.show("打开支付宝失败");
+                                }
+                            }
+
+                            @Override
+                            public void onCancel(Dialog dialog) {}
+                        })
+                        .show();
+                break;
+            default:
+                break;
         }
     }
 

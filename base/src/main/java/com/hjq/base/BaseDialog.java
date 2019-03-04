@@ -3,10 +3,15 @@ package com.hjq.base;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatDialog;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -25,7 +30,10 @@ import android.widget.TextView;
  */
 public class BaseDialog extends AppCompatDialog {
 
-    private boolean mCancelable = true;
+    // Dialog Cancel 监听
+    private DialogInterface.OnCancelListener mOnCancelListener;
+    // Dialog Dismiss 监听
+    private DialogInterface.OnDismissListener mOnDismissListener;
 
     public BaseDialog(Context context) {
         this(context, R.style.BaseDialogStyle);
@@ -36,13 +44,21 @@ public class BaseDialog extends AppCompatDialog {
     }
 
     @Override
-    public void setCancelable(boolean flag) {
-        super.setCancelable(flag);
-        mCancelable = flag;
+    public void setOnCancelListener(@Nullable OnCancelListener listener) {
+        super.setOnCancelListener(mOnCancelListener = listener);
     }
 
-    public boolean isCancelable() {
-        return mCancelable;
+    @Override
+    public void setOnDismissListener(@Nullable OnDismissListener listener) {
+        super.setOnDismissListener(mOnDismissListener = listener);
+    }
+
+    public OnCancelListener getOnCancelListener() {
+        return mOnCancelListener;
+    }
+
+    public OnDismissListener getOnDismissListener() {
+        return mOnDismissListener;
     }
 
     public static class Builder<B extends Builder> {
@@ -94,10 +110,55 @@ public class BaseDialog extends AppCompatDialog {
         }
 
         /**
+         * 是否设置了取消（仅供子类调用）
+         */
+        protected boolean isCancelable() {
+            return mCancelable;
+        }
+
+        /**
          * 获取上下文对象（仅供子类调用）
          */
         protected Context getContext() {
             return mContext;
+        }
+
+
+        /**
+         * 获取资源对象（仅供子类调用）
+         */
+        protected Resources getResources() {
+            return mContext.getResources();
+        }
+
+        /**
+         * 根据 id 获取一个文本（仅供子类调用）
+         */
+        public String getString(@StringRes int resId) {
+            return mContext.getString(resId);
+        }
+
+        /**
+         * 根据 id 获取一个颜色（仅供子类调用）
+         */
+        protected int getColor(@ColorRes int id) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return mContext.getColor(id);
+            }else {
+                return mContext.getResources().getColor(id);
+            }
+        }
+
+        /**
+         * 根据 id 获取一个 Drawable（仅供子类调用）
+         */
+        protected Drawable getDrawable(@DrawableRes int id) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                return mContext.getDrawable(id);
+            }else {
+                return mContext.getResources().getDrawable(id);
+            }
         }
 
         /**
@@ -119,36 +180,6 @@ public class BaseDialog extends AppCompatDialog {
          */
         protected void dismiss() {
             mDialog.dismiss();
-        }
-
-        /**
-         * 是否设置了取消（仅供子类调用）
-         */
-        protected boolean isCancelable() {
-            return mCancelable;
-        }
-
-        /**
-         * 文本是否为空（仅供子类调用）
-         */
-        protected boolean isEmpty(CharSequence text) {
-            return text == null || "".equals(text.toString());
-        }
-
-        /**
-         * dp转px（仅供子类调用）
-         */
-        protected int dp2px(float dpValue) {
-            final float scale = mContext.getResources().getDisplayMetrics().density;
-            return (int) (dpValue * scale + 0.5f);
-        }
-
-        /**
-         * sp转px（仅供子类调用）
-         */
-        protected int sp2px(float spValue) {
-            final float fontScale = mContext.getResources().getDisplayMetrics().scaledDensity;
-            return (int) (spValue * fontScale + 0.5f);
         }
 
         /**
@@ -223,22 +254,6 @@ public class BaseDialog extends AppCompatDialog {
         }
 
         /**
-         * 占满宽度
-         */
-        public B fullWidth() {
-            mWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-            return (B) this;
-        }
-
-        /**
-         * 占满高度
-         */
-        public B fullHeight() {
-            mHeight = ViewGroup.LayoutParams.MATCH_PARENT;
-            return (B) this;
-        }
-
-        /**
          * 设置垂直间距
          */
         public B setVerticalMargin(int verticalMargin) {
@@ -284,10 +299,6 @@ public class BaseDialog extends AppCompatDialog {
         public B setText(@IdRes int id, int resId) {
             return setText(id, mContext.getResources().getString(resId));
         }
-
-        /**
-         * 设置文本
-         */
         public B setText(@IdRes int id, CharSequence text) {
             mTextArray.put(id, text);
             return (B) this;
@@ -302,30 +313,22 @@ public class BaseDialog extends AppCompatDialog {
         }
 
         /**
-         * 设置设置背景
+         * 设置背景
          */
         public B setBackground(@IdRes int id, int resId) {
             return setBackground(id, mContext.getResources().getDrawable(resId));
         }
-
-        /**
-         * 设置背景
-         */
         public B setBackground(@IdRes int id, Drawable drawable) {
             mBackgroundArray.put(id, drawable);
             return (B) this;
         }
 
         /**
-         * 设置设置背景
+         * 设置图片
          */
         public B setImageDrawable(@IdRes int id, int resId) {
             return setBackground(id, mContext.getResources().getDrawable(resId));
         }
-
-        /**
-         * 设置背景
-         */
         public B setImageDrawable(@IdRes int id, Drawable drawable) {
             mImageArray.put(id, drawable);
             return (B) this;

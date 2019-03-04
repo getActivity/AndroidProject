@@ -24,6 +24,19 @@
             android:layout_marginRight="@dimen/space_60"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/iv_test_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_test_image"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="加载图片" />
+
             <Button
                 android:id="@+id/btn_test_toast"
                 style="@style/ButtonStyle"
@@ -70,6 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
+                android:layout_marginBottom="@dimen/space_30"
                 android:text="关闭界面侧滑" />
         </LinearLayout>
 

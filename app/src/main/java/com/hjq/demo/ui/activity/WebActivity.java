@@ -13,10 +13,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.hjq.demo.helper.IntentExtraUtils;
-import com.hjq.demo.helper.WebViewLifecycleUtils;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.helper.WebViewLifecycleUtils;
 
 import butterknife.BindView;
 
@@ -59,12 +58,7 @@ public class WebActivity extends MyActivity {
         // 允许保存密码
         settings.setSavePassword(true);
 
-        // 支持播放gif动画
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-
-        // 解决Android 5.0上Webview默认不允许加载Http与Https混合内容
+        // 解决Android 5.0上WebView默认不允许加载Http与Https混合内容
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //两者都可以
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
@@ -83,8 +77,9 @@ public class WebActivity extends MyActivity {
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.setWebChromeClient(new MyWebChromeClient());
 
-        String url = IntentExtraUtils.getInstance(WebActivity.class).getString();
+        String url = "https://github.com/getActivity/";
         mWebView.loadUrl(url);
+        setTitle("加载中...");
     }
 
     @Override
@@ -122,7 +117,7 @@ public class WebActivity extends MyActivity {
 
     private class MyWebViewClient extends WebViewClient {
 
-        // 网页加载错误时回调，这个方法会在onPageFinished之前调用
+        // 网页加载错误时回调，这个方法会在 onPageFinished 之前调用
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, final String failingUrl) {
 

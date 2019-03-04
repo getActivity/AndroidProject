@@ -34,17 +34,19 @@ public class SimpleLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int maxHeight = 0;
         int maxWidth = 0;
         int childState = 0;
+
+        // 测量子 View
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
+            // 被测量的子 View 不能是隐藏的
             if (child.getVisibility() != GONE) {
                 measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
-                final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
-                maxWidth = Math.max(maxWidth, child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin);
-                maxHeight = Math.max(maxHeight, child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
+                final MarginLayoutParams params = (MarginLayoutParams) child.getLayoutParams();
+                maxWidth = Math.max(maxWidth, child.getMeasuredWidth() + params.leftMargin + params.rightMargin);
+                maxHeight = Math.max(maxHeight, child.getMeasuredHeight() + params.topMargin + params.bottomMargin);
                 childState = combineMeasuredStates(childState, child.getMeasuredState());
             }
         }
@@ -52,9 +54,10 @@ public class SimpleLayout extends ViewGroup {
         maxWidth += getPaddingLeft() + getPaddingRight();
         maxHeight += getPaddingTop() + getPaddingBottom();
 
-        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
         maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
+        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
 
+        // 测量自身
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
                 resolveSizeAndState(maxHeight, heightMeasureSpec,
                         childState << MEASURED_HEIGHT_STATE_SHIFT));
@@ -62,9 +65,11 @@ public class SimpleLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // 遍历子 View
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
             final MarginLayoutParams params = (MarginLayoutParams) child.getLayoutParams();
+            // 将子 View 放置到左上角的位置
             child.layout(getPaddingLeft() + params.leftMargin,
                     getPaddingTop() + params.topMargin,
                     getPaddingRight() + child.getMeasuredWidth() + params.rightMargin,

@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_40"
-                android:text="@string/register_text"
+                android:text="@string/register_title"
                 android:textColor="@color/black60"
                 android:textSize="@dimen/font_size_46px" />
 
@@ -60,7 +60,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/register_phone_input_hint"
+                    android:hint="@string/register_phone_hint"
                     android:inputType="phone"
                     android:maxLength="11"
                     android:maxLines="1" />
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_40"
-                android:hint="@string/register_code_input_hint"
+                android:hint="@string/register_code_hint"
                 android:inputType="number"
                 android:maxLength="8"
                 android:maxLines="1" />
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_40"
-                android:hint="@string/register_password_input_hint1"
+                android:hint="@string/register_password_hint1"
                 android:inputType="textPassword"
                 android:maxLength="20"
                 android:maxLines="1" />
@@ -108,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_40"
-                android:hint="@string/register_password_input_hint2"
+                android:hint="@string/register_password_hint2"
                 android:inputType="textPassword"
                 android:maxLength="20"
                 android:maxLines="1" />
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
-                android:text="@string/register_text" />
+                android:text="@string/register_title" />
 
         </LinearLayout>
 

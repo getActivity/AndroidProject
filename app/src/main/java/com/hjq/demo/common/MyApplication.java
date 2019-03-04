@@ -3,10 +3,6 @@ package com.hjq.demo.common;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.hjq.demo.helper.ActivityStackManager;
-import com.hjq.toast.ToastUtils;
-import com.hjq.umeng.UmengHelper;
-
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -18,15 +14,7 @@ public class MyApplication extends UIApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // 初始化吐司工具类
-        ToastUtils.init(this);
-
-        // 友盟统计
-        UmengHelper.init(this);
-
-        // Activity 栈管理
-        ActivityStackManager.init(this);
+        // 为了优化启动速度，请将一些没必须一定要在 Application 初始化的第三方框架移步至 LauncherActivity 中的 initData 方法中
     }
 
     @Override

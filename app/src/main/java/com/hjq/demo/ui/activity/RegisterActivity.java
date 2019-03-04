@@ -6,10 +6,11 @@ import android.widget.EditText;
 
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.helper.EditTextInputHelper;
+import com.hjq.demo.helper.InputTextHelper;
 import com.hjq.widget.CountdownView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -17,8 +18,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 注册界面
  */
-public class RegisterActivity extends MyActivity
-        implements View.OnClickListener {
+public class RegisterActivity extends MyActivity {
 
     @BindView(R.id.et_register_phone)
     EditText mPhoneView;
@@ -36,7 +36,7 @@ public class RegisterActivity extends MyActivity
     @BindView(R.id.btn_register_commit)
     Button mCommitView;
 
-    private EditTextInputHelper mEditTextInputHelper;
+    private InputTextHelper mInputTextHelper;
 
     @Override
     protected int getLayoutId() {
@@ -50,11 +50,8 @@ public class RegisterActivity extends MyActivity
 
     @Override
     protected void initView() {
-        mCountdownView.setOnClickListener(this);
-        mCommitView.setOnClickListener(this);
-
-        mEditTextInputHelper = new EditTextInputHelper(mCommitView);
-        mEditTextInputHelper.addViews(mPhoneView, mCodeView, mPasswordView1, mPasswordView2);
+        mInputTextHelper = new InputTextHelper(mCommitView);
+        mInputTextHelper.addViews(mPhoneView, mCodeView, mPasswordView1, mPasswordView2);
     }
 
     @Override
@@ -67,39 +64,41 @@ public class RegisterActivity extends MyActivity
 //        }, 2000);
     }
 
-    /**
-     * {@link View.OnClickListener}
-     */
-    @Override
+    @OnClick({R.id.cv_register_countdown, R.id.btn_register_commit})
     public void onClick(View v) {
-        if (v == mCountdownView) { //获取验证码
+        switch (v.getId()) {
+            case R.id.cv_register_countdown: //获取验证码
 
-            if (mPhoneView.getText().toString().length() != 11) {
-                // 重置验证码倒计时控件
-                mCountdownView.resetState();
-                toast(getResources().getString(R.string.phone_input_error));
-                return;
-            }
+                if (mPhoneView.getText().toString().length() != 11) {
+                    // 重置验证码倒计时控件
+                    mCountdownView.resetState();
+                    toast(getResources().getString(R.string.phone_input_error));
+                    break;
+                }
 
-            toast(getResources().getString(R.string.countdown_code_send_succeed));
+                toast(getResources().getString(R.string.countdown_code_send_succeed));
 
-        }else if (v == mCommitView) { //提交注册
+                break;
+            case R.id.btn_register_commit: //提交注册
 
-            if (mPhoneView.getText().toString().length() != 11) {
-                toast(getResources().getString(R.string.phone_input_error));
-                return;
-            }
+                if (mPhoneView.getText().toString().length() != 11) {
+                    toast(getResources().getString(R.string.phone_input_error));
+                    break;
+                }
 
-            if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
-                toast(getResources().getString(R.string.two_password_input_error));
-                return;
-            }
+                if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
+                    toast(getResources().getString(R.string.two_password_input_error));
+                    break;
+                }
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     protected void onDestroy() {
-        mEditTextInputHelper.removeViews();
+        mInputTextHelper.removeViews();
         super.onDestroy();
     }
 }

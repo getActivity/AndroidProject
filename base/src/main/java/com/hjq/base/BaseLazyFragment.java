@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 
 /**
  *    author : Android 轮子哥
@@ -174,13 +175,59 @@ public abstract class BaseLazyFragment extends Fragment {
         return mActivity.findViewById(id);
     }
 
+
     /**
-     * 跳转到其他Activity
-     *
-     * @param cls          目标Activity的Class
+     * startActivity 方法优化
      */
+
     public void startActivity(Class<? extends Activity> cls) {
-        startActivity(new Intent(getContext(), cls));
+        startActivity(new Intent(mActivity, cls));
+    }
+
+    public void startActivityFinish(Class<? extends Activity> cls) {
+        startActivityFinish(new Intent(mActivity, cls));
+    }
+
+    public void startActivityFinish(Intent intent) {
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * startActivityForResult 方法优化
+     */
+
+    private BaseActivity.ActivityCallback mActivityCallback;
+    private int mActivityRequestCode;
+
+    public void startActivityForResult(Class<? extends Activity> cls, BaseActivity.ActivityCallback callback) {
+        startActivityForResult(new Intent(mActivity, cls), null, callback);
+    }
+
+    public void startActivityForResult(Intent intent, BaseActivity.ActivityCallback callback) {
+        startActivityForResult(intent, null, callback);
+    }
+
+    public void startActivityForResult(Intent intent, Bundle options, BaseActivity.ActivityCallback callback) {
+        if (mActivityCallback == null) {
+            mActivityCallback = callback;
+            // 随机生成请求码，这个请求码在 0 - 255 之间
+            mActivityRequestCode = new Random().nextInt(255);
+            startActivityForResult(intent, mActivityRequestCode, options);
+        }else {
+            // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
+            throw new IllegalArgumentException("Error, The callback is not over yet");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (mActivityCallback != null && mActivityRequestCode == requestCode) {
+            mActivityCallback.onActivityResult(resultCode, data);
+            mActivityCallback = null;
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     /**

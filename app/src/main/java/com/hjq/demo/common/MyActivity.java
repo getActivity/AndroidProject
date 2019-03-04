@@ -1,10 +1,13 @@
 package com.hjq.demo.common;
 
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.toast.ToastUtils;
 import com.hjq.umeng.UmengHelper;
 
@@ -20,13 +23,19 @@ import butterknife.Unbinder;
 public abstract class MyActivity extends UIActivity
         implements OnTitleBarListener {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActivityStackManager.getInstance().onActivityCreated(this);
+    }
+
     private Unbinder mButterKnife;//View注解
 
     @Override
     protected void initLayout() {
         super.initLayout();
 
-        //初始化标题栏的监听
+        // 初始化标题栏的监听
         if (getTitleBarId() > 0) {
             if (findViewById(getTitleBarId()) instanceof TitleBar) {
                 ((TitleBar) findViewById(getTitleBarId())).setOnTitleBarListener(this);
@@ -68,6 +77,7 @@ public abstract class MyActivity extends UIActivity
         }
     }
 
+    @Nullable
     public TitleBar getTitleBar() {
         if (getTitleBarId() > 0 && findViewById(getTitleBarId()) instanceof TitleBar) {
             return findViewById(getTitleBarId());
@@ -117,6 +127,7 @@ public abstract class MyActivity extends UIActivity
     protected void onDestroy() {
         super.onDestroy();
         if (mButterKnife != null) mButterKnife.unbind();
+        ActivityStackManager.getInstance().onActivityDestroyed(this);
     }
 
     /**

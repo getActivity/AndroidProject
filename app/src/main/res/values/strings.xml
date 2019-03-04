@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">模板工程</string>
+    <string name="app_name">架构工程</string>
 
     <!-- 通用 -->
     <string name="countdown_code_send_succeed">验证码已发送，请注意查收</string>
@@ -15,23 +15,55 @@
 
     <!-- 登录 -->
     <string name="login_register">注册</string>
-    <string name="login_phone_input_hint">请输入手机号</string>
-    <string name="login_password_input_hint">请输入密码</string>
+    <string name="login_phone_hint">请输入手机号</string>
+    <string name="login_password_hint">请输入密码</string>
     <string name="login_forget">忘记密码？</string>
     <string name="login_text">登录</string>
 
     <!-- 注册 -->
-    <string name="register_text">注册</string>
+    <string name="register_title">注册</string>
     <string name="register_hint">手机号仅用于登录和保护账号安全</string>
     <string name="register_login">登录</string>
-    <string name="register_phone_input_hint">输入手机号码</string>
-    <string name="register_code_input_hint">输入验证码</string>
+    <string name="register_phone_hint">输入手机号码</string>
+    <string name="register_code_hint">输入验证码</string>
     <string name="register_send_code">发送验证码</string>
-    <string name="register_password_input_hint1">设置密码</string>
-    <string name="register_password_input_hint2">再次输入密码</string>
+    <string name="register_password_hint1">设置密码</string>
+    <string name="register_password_hint2">再次输入密码</string>
+
+    <!-- 设置 -->
+    <string name="setting_title">设置</string>
+
+    <string name="setting_language">语言切换</string>
+    <string name="setting_language_simple">简体中文</string>
+    <string name="setting_language_complex">繁体中文</string>
+
+    <string name="setting_update">检查更新</string>
+
+    <string name="setting_cache">清空缓存</string>
+
+    <string name="setting_auto">自动登录</string>
+
+    <string name="setting_agreement">隐私协议</string>
+
+    <string name="setting_about">关于我们</string>
+
+    <string name="setting_exit">退出登录</string>
+
+    <!-- 忘记密码 -->
+    <string name="password_forget_title">忘记密码</string>
+    <string name="password_forget_phone_hint">输入手机号码</string>
+    <string name="password_forget_code_hint">输入验证码</string>
+    <string name="password_forget_send_code">发送验证码</string>
+    <string name="password_forget_commit">下一步</string>
+
+    <!-- 重置密码 -->
+    <string name="password_reset_title">设置登录密码</string>
+    <string name="password_reset_phone_hint1">设置6-18位登录密码</string>
+    <string name="password_reset_phone_hint2">重新输入一次密码</string>
+    <string name="password_reset_commit">完成</string>
 
     <!-- 关于 -->
-    <string name="about_text">关于我们</string>
+    <string name="about_title">关于我们</string>
     <string name="about_copyright">Copyright © 2018</string>
 
 </resources>

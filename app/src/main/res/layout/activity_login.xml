@@ -33,7 +33,7 @@
         android:layout_marginLeft="@dimen/space_80"
         android:layout_marginTop="@dimen/space_20"
         android:layout_marginRight="@dimen/space_80"
-        android:hint="@string/login_phone_input_hint"
+        android:hint="@string/login_phone_hint"
         android:inputType="phone"
         android:maxLength="11"
         android:maxLines="1" />
@@ -51,7 +51,7 @@
         android:layout_marginLeft="@dimen/space_80"
         android:layout_marginTop="@dimen/space_40"
         android:layout_marginRight="@dimen/space_80"
-        android:hint="@string/login_password_input_hint"
+        android:hint="@string/login_password_hint"
         android:inputType="textPassword"
         android:maxLength="20"
         android:maxLines="1" />

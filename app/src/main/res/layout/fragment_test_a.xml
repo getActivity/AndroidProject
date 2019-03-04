@@ -20,7 +20,7 @@
             android:layout_height="@dimen/space_512"
             app:contentScrim="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimVisibleHeightTrigger="@dimen/space_240">
+            app:scrimVisibleHeightTrigger="@dimen/space_200">
 
             <ImageView
                 android:layout_width="match_parent"

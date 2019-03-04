@@ -1,8 +1,6 @@
 package com.hjq.demo.helper;
 
 import android.app.Activity;
-import android.app.Application;
-import android.os.Bundle;
 
 import java.util.HashMap;
 
@@ -12,25 +10,26 @@ import java.util.HashMap;
  *    time   : 2018/11/18
  *    desc   : Activity 栈管理
  */
-public class ActivityStackManager implements Application.ActivityLifecycleCallbacks {
+public class ActivityStackManager {
 
-    private static ActivityStackManager sInstance;
+    private static volatile ActivityStackManager sInstance;
 
-    private HashMap<String, Activity> mActivitySet;
+    private HashMap<String, Activity> mActivitySet = new HashMap<>();
 
     // 当前 Activity 对象标记
     private String mCurrentTag;
 
-    private ActivityStackManager(Application application) {
-        mActivitySet = new HashMap<>();
-        application.registerActivityLifecycleCallbacks(this);
-    }
-
-    public static void init(Application application) {
-        sInstance = new ActivityStackManager(application);
-    }
+    private ActivityStackManager() {}
 
     public static ActivityStackManager getInstance() {
+        // 加入双重校验锁
+        if(sInstance == null) {
+            synchronized (ActivityStackManager.class) {
+                if(sInstance == null){
+                    sInstance = new ActivityStackManager();
+                }
+            }
+        }
         return sInstance;
     }
 
@@ -63,36 +62,11 @@ public class ActivityStackManager implements Application.ActivityLifecycleCallba
         }
     }
 
-    /**
-     * {@link Application.ActivityLifecycleCallbacks}
-     */
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    public void onActivityCreated(Activity activity) {
         mCurrentTag = getObjectTag(activity);
         mActivitySet.put(getObjectTag(activity), activity);
     }
 
-    @Override
-    public void onActivityStarted(Activity activity) {
-        mCurrentTag = getObjectTag(activity);
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-        mCurrentTag = getObjectTag(activity);
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {}
-
-    @Override
-    public void onActivityStopped(Activity activity) {}
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
-
-    @Override
     public void onActivityDestroyed(Activity activity) {
         mActivitySet.remove(getObjectTag(activity));
         // 如果当前的 Activity 是最后一个的话

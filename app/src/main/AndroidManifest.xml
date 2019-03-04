@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hjq.demo">
 
     <!-- 外部存储读写权限 -->
@@ -18,7 +19,8 @@
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:targetApi="n">
 
         <!-- 启动页面（因为使用了LauncherTheme，所以不要给这个Activity设置screenOrientation属性，会导致崩溃） -->
         <activity
@@ -42,27 +44,35 @@
             android:launchMode="singleTop" />
 
         <!-- 登录界面 -->
-        <activity
-            android:name=".ui.activity.LoginActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".ui.activity.LoginActivity" />
 
         <!-- 注册界面 -->
+        <activity android:name=".ui.activity.RegisterActivity" />
+
+        <!-- 设置界面 -->
         <activity
-            android:name=".ui.activity.RegisterActivity"
-            android:launchMode="singleTop" />
+            android:name=".ui.activity.SettingActivity"
+            android:label="@string/setting_title" />
+
+        <!-- 忘记密码 -->
+        <activity
+            android:name=".ui.activity.PasswordForgetActivity"
+            android:label="@string/password_forget_title" />
+
+        <!-- 重置密码 -->
+        <activity
+            android:name=".ui.activity.PasswordResetActivity"
+            android:label="@string/password_reset_title" />
 
         <!-- 关于界面 -->
         <activity
             android:name=".ui.activity.AboutActivity"
-            android:label="@string/about_text"
-            android:launchMode="singleTop" />
+            android:label="@string/about_title" />
 
         <!-- 浏览器界面 -->
-        <activity
-            android:name=".ui.activity.WebActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".ui.activity.WebActivity" />
 
-        <!-- 对话框使用案例界面 -->
+        <!-- 对话框界面 -->
         <activity android:name=".ui.activity.DialogActivity" />
 
     </application>

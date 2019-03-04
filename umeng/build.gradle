@@ -4,6 +4,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    resourcePrefix "umeng_"
+
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -12,8 +14,7 @@ android {
 
 dependencies {
     // 依赖 libs 目录下所有 Jar 包
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-//    implementation 'com.umeng.sdk:common:latest.integration'
-//    implementation 'com.umeng.sdk:analytics:latest.integration'
+    implementation 'com.umeng.sdk:common:latest.integration'
+    implementation 'com.umeng.sdk:analytics:latest.integration'
 }

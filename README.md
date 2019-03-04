@@ -26,6 +26,40 @@
 
 ![](picture/8.png)
 
+![](picture/9.png)
+
+![](picture/10.png)
+
+![](picture/11.png)
+
+![](picture/12.png)
+
+![](picture/13.png)
+
+![](picture/14.png)
+
+![](picture/15.png)
+
+![](picture/16.png)
+
+![](picture/17.png)
+
+![](picture/18.png)
+
+![](picture/19.png)
+
+![](picture/20.png)
+
+![](picture/21.png)
+
+![](picture/22.png)
+
+![](picture/23.png)
+
+![](picture/24.png)
+
+![](picture/25.png)
+
 #### 集成框架
 
 * 权限请求框架：[https://github.com/getActivity/XXPermissions](https://github.com/getActivity/XXPermissions)
@@ -72,18 +106,26 @@
 
 * 修正 Android 9.0 限制 Http 明文请求的问题
 
+#### 作者的其他开源项目
+
+* 权限框架：[XXPermissions](https://github.com/getActivity/XXPermissions)
+
+* 吐司框架：[ToastUtils](https://github.com/getActivity/ToastUtils)
+
+* 悬浮窗框架：[XToast](https://github.com/getActivity/XToast)
+
+* 标题栏框架：[TitleBar](https://github.com/getActivity/TitleBar)
+
 #### Android技术讨论Q群：78797078
 
 #### 如果您觉得我的开源库帮你节省了大量的开发时间，请扫描下方的二维码随意打赏，要是能打赏个 10.24 :monkey_face:就太:thumbsup:了。您的支持将鼓励我继续创作:octocat:
 
 ![](picture/pay_ali.png) ![](picture/pay_wechat.png)
 
-![](picture/pay_bonus.png)
-
 ## License
 
 ```text
-Copyright 2018 Huang Jinqun
+Copyright 2018 Huang JinQun
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

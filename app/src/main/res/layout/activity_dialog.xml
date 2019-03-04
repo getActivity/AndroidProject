@@ -33,6 +33,14 @@
                 android:text="弹出消息对话框" />
 
             <Button
+                android:id="@+id/btn_dialog_input"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="弹出输入对话框" />
+
+            <Button
                 android:id="@+id/btn_dialog_bottom_menu"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
@@ -89,11 +97,28 @@
                 android:text="弹出支付对话框" />
 
             <Button
+                android:id="@+id/btn_dialog_address"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="弹出地区对话框" />
+
+            <Button
+                android:id="@+id/btn_dialog_date"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="弹出日期对话框" />
+
+            <Button
                 android:id="@+id/btn_dialog_custom"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
+                android:layout_marginBottom="@dimen/space_60"
                 android:text="弹出自定义对话框" />
 
         </LinearLayout>

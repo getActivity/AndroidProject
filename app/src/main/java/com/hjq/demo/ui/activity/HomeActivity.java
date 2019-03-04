@@ -5,11 +5,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
+import com.hjq.base.BaseFragmentAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.demo.helper.DoubleClickHelper;
-import com.hjq.demo.ui.adapter.HomeFragmentAdapter;
+import com.hjq.demo.ui.fragment.TestFragmentA;
+import com.hjq.demo.ui.fragment.TestFragmentB;
+import com.hjq.demo.ui.fragment.TestFragmentC;
+import com.hjq.demo.ui.fragment.TestFragmentD;
 
 import butterknife.BindView;
 
@@ -19,15 +24,16 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 主页界面
  */
-public class HomeActivity extends MyActivity implements
-        ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends MyActivity
+        implements ViewPager.OnPageChangeListener,
+        BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.vp_home_pager)
     ViewPager mViewPager;
     @BindView(R.id.bv_home_navigation)
     BottomNavigationView mBottomNavigationView;
 
-    private HomeFragmentAdapter mPagerAdapter;
+    private BaseFragmentAdapter<MyLazyFragment> mPagerAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -42,6 +48,7 @@ public class HomeActivity extends MyActivity implements
     @Override
     protected void initView() {
         mViewPager.addOnPageChangeListener(this);
+//        mViewPager.setPageTransformer(true, new ZoomFadePageTransformer());
 
         // 不使用图标默认变色
         mBottomNavigationView.setItemIconTintList(null);
@@ -50,7 +57,12 @@ public class HomeActivity extends MyActivity implements
 
     @Override
     protected void initData() {
-        mPagerAdapter = new HomeFragmentAdapter(this);
+        mPagerAdapter = new BaseFragmentAdapter<>(this);
+        mPagerAdapter.addFragment(TestFragmentA.newInstance());
+        mPagerAdapter.addFragment(TestFragmentB.newInstance());
+        mPagerAdapter.addFragment(TestFragmentC.newInstance());
+        mPagerAdapter.addFragment(TestFragmentD.newInstance());
+
         mViewPager.setAdapter(mPagerAdapter);
 
         // 限制页面数量
@@ -93,16 +105,25 @@ public class HomeActivity extends MyActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_home:
-                mViewPager.setCurrentItem(0);
+                //mViewPager.setCurrentItem(0);
+                //mViewPager.setCurrentItem(0, false);
+                // 如果切换的是相邻之间的 Item 就显示切换动画，如果不是则不要动画
+                mViewPager.setCurrentItem(0, mViewPager.getCurrentItem() == 1);
                 return true;
             case R.id.home_found:
-                mViewPager.setCurrentItem(1);
+                //mViewPager.setCurrentItem(1);
+                //mViewPager.setCurrentItem(1, false);
+                mViewPager.setCurrentItem(1, mViewPager.getCurrentItem() == 0 || mViewPager.getCurrentItem() == 2);
                 return true;
             case R.id.home_message:
-                mViewPager.setCurrentItem(2);
+                //mViewPager.setCurrentItem(2);
+                //mViewPager.setCurrentItem(2, false);
+                mViewPager.setCurrentItem(2, mViewPager.getCurrentItem() == 1 || mViewPager.getCurrentItem() == 3);
                 return true;
             case R.id.home_me:
-                mViewPager.setCurrentItem(3);
+                //mViewPager.setCurrentItem(3);
+                //mViewPager.setCurrentItem(3, false);
+                mViewPager.setCurrentItem(3, mViewPager.getCurrentItem() == 2);
                 return true;
         }
         return false;

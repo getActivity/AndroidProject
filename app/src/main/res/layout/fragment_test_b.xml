@@ -53,6 +53,15 @@
 
             </LinearLayout>
 
+            <com.hjq.demo.widget.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:bar_leftText="左文本"
+                app:bar_rightIcon="@mipmap/ico_go_black"
+                app:bar_rightText="右文本" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,6 +95,34 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_30"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.hjq.widget.SwitchButton
+                    android:id="@+id/sb_test_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_20"
+                    android:checked="true" />
+
+                <com.hjq.widget.SwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_20"
+                    android:checked="false" />
+
+                <com.hjq.widget.SwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_20"
+                    android:enabled="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_80"
                 android:layout_marginTop="@dimen/space_40"
                 android:layout_marginRight="@dimen/space_80"
@@ -93,7 +130,7 @@
 
                 <EditText
                     style="@style/EditTextStyle"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="请输入验证码" />

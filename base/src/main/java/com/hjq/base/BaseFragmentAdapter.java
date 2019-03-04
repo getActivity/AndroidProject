@@ -16,36 +16,26 @@ import java.util.List;
  *    time   : 2018/10/18
  *    desc   : FragmentPagerAdapter 基类
  */
-public abstract class BaseFragmentAdapter<T extends Fragment> extends FragmentPagerAdapter {
+public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapter {
 
-    private List<T> mFragmentSet = new ArrayList<>(); // Fragment集合
+    private List<F> mFragmentSet = new ArrayList<>(); // Fragment集合
 
-    private T mCurrentFragment; // 当前显示的Fragment
+    private F mCurrentFragment; // 当前显示的Fragment
 
-    /**
-     * 在Activity中使用ViewPager适配器
-     */
     public BaseFragmentAdapter(FragmentActivity activity) {
         this(activity.getSupportFragmentManager());
     }
 
-    /**
-     * 在Fragment中使用ViewPager适配器
-     */
     public BaseFragmentAdapter(Fragment fragment) {
         this(fragment.getChildFragmentManager());
     }
 
     public BaseFragmentAdapter(FragmentManager manager) {
         super(manager);
-        init(manager, mFragmentSet);
     }
 
-    //初始化Fragment
-    protected abstract void init(FragmentManager manager, List<T> list);
-
     @Override
-    public T getItem(int position) {
+    public F getItem(int position) {
         return mFragmentSet.get(position);
     }
 
@@ -58,22 +48,26 @@ public abstract class BaseFragmentAdapter<T extends Fragment> extends FragmentPa
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         if (getCurrentFragment() != object) {
             // 记录当前的Fragment对象
-            mCurrentFragment = (T) object;
+            mCurrentFragment = (F) object;
         }
         super.setPrimaryItem(container, position, object);
+    }
+
+    public void addFragment(F fragment) {
+        mFragmentSet.add(fragment);
     }
 
     /**
      * 获取Fragment集合
      */
-    public List<T> getAllFragment() {
+    public List<F> getAllFragment() {
         return mFragmentSet;
     }
 
     /**
      * 获取当前的Fragment
      */
-    public T getCurrentFragment() {
+    public F getCurrentFragment() {
         return mCurrentFragment;
     }
 }

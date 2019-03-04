@@ -6,10 +6,11 @@ import android.widget.EditText;
 
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.helper.EditTextInputHelper;
+import com.hjq.demo.helper.InputTextHelper;
 import com.hjq.toast.ToastUtils;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -17,17 +18,17 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 登录界面
  */
-public class LoginActivity extends MyActivity
-        implements View.OnClickListener {
+public class LoginActivity extends MyActivity {
 
     @BindView(R.id.et_login_phone)
     EditText mPhoneView;
     @BindView(R.id.et_login_password)
     EditText mPasswordView;
+
     @BindView(R.id.btn_login_commit)
     Button mCommitView;
 
-    private EditTextInputHelper mEditTextInputHelper;
+    private InputTextHelper mInputTextHelper;
 
     @Override
     protected int getLayoutId() {
@@ -41,9 +42,8 @@ public class LoginActivity extends MyActivity
 
     @Override
     protected void initView() {
-        mCommitView.setOnClickListener(this);
-        mEditTextInputHelper = new EditTextInputHelper(mCommitView);
-        mEditTextInputHelper.addViews(mPhoneView, mPasswordView);
+        mInputTextHelper = new InputTextHelper(mCommitView);
+        mInputTextHelper.addViews(mPhoneView, mPasswordView);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class LoginActivity extends MyActivity
 
     @Override
     protected void onDestroy() {
-        mEditTextInputHelper.removeViews();
+        mInputTextHelper.removeViews();
         super.onDestroy();
     }
 
@@ -77,15 +77,21 @@ public class LoginActivity extends MyActivity
         return !super.isSupportSwipeBack();
     }
 
-    /**
-     * {@link View.OnClickListener}
-     */
-    @Override
+    @OnClick({R.id.tv_login_forget, R.id.btn_login_commit})
     public void onClick(View v) {
-        if (v == mCommitView) {
-            if (mPhoneView.getText().toString().length() != 11) {
-                ToastUtils.show(getResources().getString(R.string.phone_input_error));
-            }
+        switch (v.getId()) {
+            case R.id.tv_login_forget:
+                startActivity(PasswordForgetActivity.class);
+                break;
+            case R.id.btn_login_commit:
+                if (mPhoneView.getText().toString().length() != 11) {
+                    ToastUtils.show(getResources().getString(R.string.phone_input_error));
+                    break;
+                }
+                startActivityFinish(HomeActivity.class);
+                break;
+            default:
+                break;
         }
     }
 }

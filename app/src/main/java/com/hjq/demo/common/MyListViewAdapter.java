@@ -7,13 +7,14 @@ import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hjq.base.BaseListViewAdapter;
+import com.hjq.image.ImageLoader;
 
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.ButterKnife;
 
 /**
  *    author : Android 轮子哥
@@ -21,10 +22,7 @@ import java.util.List;
  *    time   : 2018/10/18
  *    desc   : 项目中 ListView 适配器基类
  */
-public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHolder> extends BaseListViewAdapter<VH> {
-
-    // 列表数据
-    private List<T> mDataSet;
+public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHolder> extends BaseListViewAdapter<T, VH> {
 
     //当前列表的页码，默认为第一页，用于分页加载功能
     private int mPageNumber = 1;
@@ -35,109 +33,6 @@ public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHold
 
     public MyListViewAdapter(Context context) {
         super(context);
-    }
-
-    @Override
-    public int getCount() {
-        return mDataSet == null ? 0 : mDataSet.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    /**
-     * 设置新的数据
-     */
-    public void setData(List<T> data) {
-        mDataSet = data;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 获取当前数据
-     */
-    public List<T> getData() {
-        return mDataSet;
-    }
-
-    /**
-     * 追加一些数据
-     */
-    public void addData(List<T> data) {
-        if (mDataSet != null) {
-            mDataSet.addAll(data);
-        } else {
-            mDataSet = data;
-        }
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 清空当前数据
-     */
-    public void clearData() {
-        //当前的数据不能为空
-        if (mDataSet == null || mDataSet.size() == 0) return;
-
-        mDataSet.clear();
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 获取某个位置上的数据
-     */
-    @Override
-    public T getItem(int position) {
-        return mDataSet.get(position);
-    }
-
-    /**
-     * 更新某个位置上的数据
-     */
-    public void setItem(int position, T item) {
-        if (mDataSet == null) mDataSet = new ArrayList<>();
-        mDataSet.set(position, item);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 添加单条数据
-     */
-    public void addItem(T item) {
-        addItem(mDataSet.size() - 1, item);
-    }
-
-    /**
-     * 添加单条数据
-     */
-    public void addItem(int position, T item) {
-        if (mDataSet == null) mDataSet = new ArrayList<>();
-
-        //如果是在for循环添加后要记得position++
-        if (position < mDataSet.size()) {
-            mDataSet.add(position, item);
-        } else {
-            mDataSet.add(item);
-        }
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 删除单条数据
-     */
-    public void removeItem(T item) {
-        int index = mDataSet.indexOf(item);
-        if (index != -1) {
-            removeItem(index);
-        }
-    }
-
-    public void removeItem(int position) {
-        //如果是在for循环删除后要记得i--
-        mDataSet.remove(position);
-        notifyDataSetChanged();
     }
 
     /**
@@ -190,6 +85,7 @@ public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(itemView);
         }
 
         public final ViewHolder setText(@IdRes int viewId, @StringRes int resId) {
@@ -225,6 +121,22 @@ public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHold
             View view = findViewById(viewId);
             if (view instanceof ImageView) {
                 ((ImageView) view).setImageResource(resId);
+            }
+            return this;
+        }
+
+        public final ViewHolder setImage(@IdRes int viewId, String url) {
+            View view = findViewById(viewId);
+            if (view instanceof ImageView) {
+                ImageLoader.loadImage((ImageView) view, url);
+            }
+            return this;
+        }
+
+        public final ViewHolder setChecked(@IdRes int viewId, boolean checked) {
+            View view = findViewById(viewId);
+            if (view instanceof CompoundButton) {
+                ((CompoundButton) view).setChecked(checked);
             }
             return this;
         }

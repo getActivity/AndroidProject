@@ -19,7 +19,6 @@ import com.hjq.dialog.widget.PasswordView;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  *    author : Android 轮子哥
@@ -27,9 +26,9 @@ import java.util.List;
  *    time   : 2018/12/2
  *    desc   : 支付密码对话框
  */
-public class PayPasswordDialog {
+public final class PayPasswordDialog {
 
-    public static class Builder
+    public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
             implements BaseRecyclerViewAdapter.OnItemClickListener, View.OnClickListener {
 
@@ -47,22 +46,13 @@ public class PayPasswordDialog {
         private TextView mMoneyView;
         private ImageView mCloseView;
 
-
         public Builder(FragmentActivity activity) {
             super(activity);
-            initialize();
-        }
 
-        public Builder(FragmentActivity activity, int themeResId) {
-            super(activity, themeResId);
-            initialize();
-        }
-
-        private void initialize() {
             setContentView(R.layout.dialog_pay_password);
             setGravity(Gravity.BOTTOM);
             setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
-            fullWidth();
+            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
             setCancelable(false);
 
             mRecyclerView = findViewById(R.id.rv_dialog_pay_list);
@@ -75,10 +65,10 @@ public class PayPasswordDialog {
             mCloseView.setOnClickListener(this);
 
             mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            keyboardAdapter keyBoardAdapter = new keyboardAdapter(getContext());
-            keyBoardAdapter.setData(Arrays.asList(KEYBOARD_TEXT));
-            keyBoardAdapter.setOnItemClickListener(this);
-            mRecyclerView.setAdapter(keyBoardAdapter);
+            keyboardAdapter adapter = new keyboardAdapter(getContext());
+            adapter.setData(Arrays.asList(KEYBOARD_TEXT));
+            adapter.setOnItemClickListener(this);
+            mRecyclerView.setAdapter(adapter);
         }
 
         public Builder setTitle(int resId) {
@@ -169,7 +159,7 @@ public class PayPasswordDialog {
                                     for (String s : mRecordList) {
                                         password.append(s);
                                     }
-                                    mListener.complete(getDialog(), password.toString());
+                                    mListener.onCompleted(getDialog(), password.toString());
                                 }
                             }, 300);
                         }
@@ -187,7 +177,7 @@ public class PayPasswordDialog {
                 default:
                     break;
             }
-            mPasswordView.setPassWord(mRecordList.size());
+            mPasswordView.setPassWordLength(mRecordList.size());
         }
 
         @Override
@@ -199,17 +189,15 @@ public class PayPasswordDialog {
                 }
 
                 if (mListener != null) {
-                    mListener.cancel(getDialog());
+                    mListener.onCancel(getDialog());
                 }
             }
         }
     }
 
-    private static class keyboardAdapter extends BaseRecyclerViewAdapter<keyboardAdapter.ViewHolder> {
+    private static final class keyboardAdapter extends BaseRecyclerViewAdapter<String, keyboardAdapter.ViewHolder> {
 
-        private List<String> mDataSet;
-
-        keyboardAdapter(Context context) {
+        private keyboardAdapter(Context context) {
             super(context);
         }
 
@@ -241,26 +229,12 @@ public class PayPasswordDialog {
             }
         }
 
-        @Override
-        public int getItemCount() {
-            return mDataSet == null ? 0 : mDataSet.size();
-        }
-
-        public void setData(List<String> data) {
-            mDataSet = data;
-            notifyDataSetChanged();
-        }
-
-        public String getItem(int position) {
-            return mDataSet.get(position);
-        }
-
-        class ViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+        final class ViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
 
             private TextView mTextView;
             private ImageView mImageView;
 
-            ViewHolder(ViewGroup parent, int layoutId) {
+            private ViewHolder(ViewGroup parent, int layoutId) {
                 super(parent, layoutId);
                 mTextView = (TextView) findViewById(R.id.tv_dialog_pay_key);
                 mImageView = (ImageView) findViewById(R.id.iv_dialog_pay_delete);
@@ -275,11 +249,11 @@ public class PayPasswordDialog {
          *
          * @param password 六位支付密码
          */
-        void complete(Dialog dialog, String password);
+        void onCompleted(Dialog dialog, String password);
 
         /**
          * 点击取消时回调
          */
-        void cancel(Dialog dialog);
+        void onCancel(Dialog dialog);
     }
 }

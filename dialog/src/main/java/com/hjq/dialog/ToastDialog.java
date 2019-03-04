@@ -1,5 +1,7 @@
 package com.hjq.dialog;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -14,28 +16,22 @@ import com.hjq.base.BaseDialogFragment;
  *    time   : 2018/12/2
  *    desc   : Toast 效果对话框
  */
-public class ToastDialog {
+public final class ToastDialog {
 
-    public static class Builder
+    public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
             implements Runnable {
 
+        private static final Handler HANDLER = new Handler(Looper.getMainLooper());
         private TextView mMessageView;
         private ImageView mIconView;
 
-        private Type mType;
+        private Type mType = Type.WARN;
+        private int mDuration = 2000;
 
         public Builder(FragmentActivity activity) {
             super(activity);
-            initialize();
-        }
 
-        public Builder(FragmentActivity activity, int themeResId) {
-            super(activity, themeResId);
-            initialize();
-        }
-
-        private void initialize() {
             setContentView(R.layout.dialog_toast);
             setGravity(Gravity.CENTER);
             setAnimStyle(BaseDialog.AnimStyle.TOAST);
@@ -49,15 +45,20 @@ public class ToastDialog {
             mType = type;
             switch (type) {
                 case FINISH:
-                    mIconView.setImageResource(R.mipmap.ic_dialog_tip_finish);
+                    mIconView.setImageResource(R.mipmap.ic_dialog_finish);
                     break;
                 case ERROR:
-                    mIconView.setImageResource(R.mipmap.ic_dialog_tip_error);
+                    mIconView.setImageResource(R.mipmap.ic_dialog_error);
                     break;
                 case WARN:
-                    mIconView.setImageResource(R.mipmap.ic_dialog_tip_warning);
+                    mIconView.setImageResource(R.mipmap.ic_dialog_warning);
                     break;
             }
+            return this;
+        }
+
+        public Builder setDuration(int duration) {
+            mDuration = duration;
             return this;
         }
 
@@ -80,13 +81,16 @@ public class ToastDialog {
                 throw new IllegalArgumentException("Dialog message not null");
             }
             // 延迟自动关闭
-            mMessageView.postDelayed(this, 3000);
+            HANDLER.postDelayed(this, mDuration);
             return super.show();
         }
 
         @Override
         public void run() {
-            if (getDialog() != null && getDialog().isShowing()) {
+            if (getDialogFragment() != null &&
+                    getDialogFragment().isAdded() &&
+                    getDialog() != null &&
+                    getDialog().isShowing()) {
                 dismiss();
             }
         }

@@ -1,8 +1,14 @@
 package com.hjq.base;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -11,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *    author : Android 轮子哥
@@ -18,8 +26,13 @@ import java.lang.ref.WeakReference;
  *    time   : 2018/10/18
  *    desc   : RecyclerView 适配器基类
  */
-public abstract class BaseRecyclerViewAdapter<VH extends BaseRecyclerViewAdapter.ViewHolder>
+public abstract class BaseRecyclerViewAdapter
+        <T, VH extends BaseRecyclerViewAdapter.ViewHolder>
                         extends RecyclerView.Adapter<VH> {
+
+    // 列表数据
+    private List<T> mDataSet;
+
     // RecyclerView 对象
     private RecyclerView mRecyclerView;
     // 上下文对象，注意不要在构造函数中使用
@@ -41,6 +54,107 @@ public abstract class BaseRecyclerViewAdapter<VH extends BaseRecyclerViewAdapter
         mContext = context;
     }
 
+    @Override
+    public int getItemCount() {
+        return mDataSet == null ? 0 : mDataSet.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * 设置新的数据
+     */
+    public void setData(List<T> data) {
+        mDataSet = data;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 获取当前数据
+     */
+    public List<T> getData() {
+        return mDataSet;
+    }
+
+    /**
+     * 追加一些数据
+     */
+    public void addData(List<T> data) {
+        if (data == null || data.size() == 0) return;
+
+        if (mDataSet == null || mDataSet.size() == 0) {
+            setData(data);
+        }else {
+            mDataSet.addAll(data);
+            notifyItemRangeInserted(mDataSet.size() - data.size(), data.size());
+        }
+    }
+
+    /**
+     * 清空当前数据
+     */
+    public void clearData() {
+        if (mDataSet == null || mDataSet.size() == 0) return;
+
+        mDataSet.clear();
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 获取某个位置上的数据
+     */
+    public T getItem(int position) {
+        return mDataSet.get(position);
+    }
+
+    /**
+     * 更新某个位置上的数据
+     */
+    public void setItem(int position, T item) {
+        if (mDataSet == null) mDataSet = new ArrayList<>();
+        mDataSet.set(position, item);
+        notifyItemChanged(position);
+    }
+
+    /**
+     * 添加单条数据
+     */
+    public void addItem(T item) {
+        addItem(mDataSet.size() - 1, item);
+    }
+
+    public void addItem(int position, T item) {
+        if (mDataSet == null) mDataSet = new ArrayList<>();
+
+        if (position < mDataSet.size()) {
+            mDataSet.add(position, item);
+        }else {
+            mDataSet.add(item);
+            position = mDataSet.size() - 1;
+        }
+        notifyItemInserted(position);
+    }
+
+    /**
+     * 删除单条数据
+     */
+    public void removeItem(T item) {
+        int index = mDataSet.indexOf(item);
+        if (index != -1) {
+            removeItem(index);
+        }
+    }
+
+    public void removeItem(int position) {
+        //如果是在for循环删除后要记得i--
+        mDataSet.remove(position);
+        //告诉适配器删除数据的位置，会有动画效果
+        notifyItemRemoved(position);
+    }
+
     /**
      * 获取RecyclerView对象，需要在setAdapter之后绑定
      */
@@ -53,6 +167,43 @@ public abstract class BaseRecyclerViewAdapter<VH extends BaseRecyclerViewAdapter
      */
     public Context getContext() {
         return mContext;
+    }
+
+    /**
+     * 获取资源对象
+     */
+    protected Resources getResources() {
+        return mContext.getResources();
+    }
+
+    /**
+     * 获取资源文本
+     */
+    public String getString(@StringRes int resId) {
+        return mContext.getString(resId);
+    }
+
+    /**
+     * 获取资源颜色
+     */
+    protected int getColor(@ColorRes int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return mContext.getColor(id);
+        }else {
+            return mContext.getResources().getColor(id);
+        }
+    }
+
+    /**
+     * 获取资源图像
+     */
+    protected Drawable getDrawable(@DrawableRes int id) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return mContext.getDrawable(id);
+        }else {
+            return mContext.getResources().getDrawable(id);
+        }
     }
 
     /**
@@ -105,6 +256,10 @@ public abstract class BaseRecyclerViewAdapter<VH extends BaseRecyclerViewAdapter
             }
         }
 
+        /**
+         * {@link View.OnClickListener}
+         */
+
         @Override
         public void onClick(View v) {
             if (v == getItemView()) {
@@ -120,6 +275,10 @@ public abstract class BaseRecyclerViewAdapter<VH extends BaseRecyclerViewAdapter
                 }
             }
         }
+
+        /**
+         * {@link View.OnLongClickListener}
+         */
 
         @Override
         public boolean onLongClick(View v) {

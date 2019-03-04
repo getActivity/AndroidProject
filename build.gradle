@@ -15,6 +15,7 @@ allprojects {
         jcenter()
         google()
         maven {url "https://jitpack.io"}
+        maven {url 'https://maven.google.com'}
     }
 
     //解决app:mockableAndroidJar错误的问题

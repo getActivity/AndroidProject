@@ -1,6 +1,7 @@
 package com.hjq.demo.helper;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 
@@ -23,7 +24,7 @@ public final class IntentExtraUtils {
 
     private IntentExtraUtils() {}
 
-    public static IntentExtraUtils getInstance(Class<? extends Activity> cls) {
+    public static IntentExtraUtils getInstance(Class cls) {
         if (sInstance == null) sInstance = new IntentExtraUtils();
         if (sMap == null) sMap = new HashMap<>();
         sCurrentClass = cls;
@@ -35,8 +36,8 @@ public final class IntentExtraUtils {
      *
      * @param context       context对象
      */
-    public void startActivity(Context context) {
-        startActivity(context, false);
+    public IntentExtraUtils startActivity(Context context) {
+        return startActivity(context, false);
     }
 
     /**
@@ -44,9 +45,10 @@ public final class IntentExtraUtils {
      *
      * @param activity       activity对象
      */
-    public void startActivityFinish(Activity activity) {
+    public IntentExtraUtils startActivityFinish(Activity activity) {
         startActivity(activity, false);
         activity.finish();
+        return this;
     }
 
     /**
@@ -55,12 +57,13 @@ public final class IntentExtraUtils {
      * @param context       context对象
      * @param newTask       是否开启新的任务栈
      */
-    public void startActivity(Context context, boolean newTask) {
+    public IntentExtraUtils startActivity(Context context, boolean newTask) {
         Intent intent = new Intent(context, sCurrentClass);
         if (newTask) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);
+        return this;
     }
 
     /**
@@ -69,8 +72,19 @@ public final class IntentExtraUtils {
      * @param activity          activity对象
      * @param requestCode       请求码
      */
-    public void startActivity(Activity activity, int requestCode) {
+    public IntentExtraUtils startActivity(Activity activity, int requestCode) {
         activity.startActivityForResult(new Intent(activity, sCurrentClass), requestCode);
+        return this;
+    }
+
+    public IntentExtraUtils startActivity(Fragment fragment, int requestCode) {
+        fragment.startActivityForResult(new Intent(fragment.getActivity(), sCurrentClass), requestCode);
+        return this;
+    }
+
+    public IntentExtraUtils startActivity(android.support.v4.app.Fragment fragment, int requestCode) {
+        fragment.startActivityForResult(new Intent(fragment.getActivity(), sCurrentClass), requestCode);
+        return this;
     }
 
     /**
@@ -79,8 +93,9 @@ public final class IntentExtraUtils {
      * @param activity          activity对象
      * @param resultCode        结果码
      */
-    public void setResult(Activity activity, int resultCode) {
+    public IntentExtraUtils setResult(Activity activity, int resultCode) {
         activity.setResult(resultCode);
+        return this;
     }
 
     /**

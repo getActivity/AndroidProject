@@ -2,7 +2,11 @@ package com.hjq.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewCompat;
@@ -29,8 +33,7 @@ public class ClearEditText extends EditText
     private OnFocusChangeListener mOnFocusChangeListener;
 
     public ClearEditText(Context context) {
-        super(context);
-        initialize(context);
+        super(context, null);
     }
 
     public ClearEditText(Context context, AttributeSet attrs) {
@@ -43,9 +46,15 @@ public class ClearEditText extends EditText
         initialize(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public ClearEditText(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initialize(context);
+    }
+
     private void initialize(final Context context) {
 
-        final Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.icon_input_del);
+        final Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.widget_input_delete);
 
         final Drawable wrappedDrawable = DrawableCompat.wrap(drawable); //Wrap the drawable so that it can be tinted pre Lollipop
         //DrawableCompat.setTint(wrappedDrawable, getCurrentHintTextColor());
@@ -55,7 +64,8 @@ public class ClearEditText extends EditText
         super.setOnTouchListener(this);
         super.setOnFocusChangeListener(this);
         super.addTextChangedListener(this);
-        ViewCompat.setBackgroundTintList(this, ContextCompat.getColorStateList(context, R.color.black60));
+
+        ViewCompat.setBackgroundTintList(this, ColorStateList.valueOf(0x99000000));
     }
 
     private void setClearIconVisible(final boolean visible) {

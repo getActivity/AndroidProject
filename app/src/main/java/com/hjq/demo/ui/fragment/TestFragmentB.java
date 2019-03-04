@@ -2,11 +2,13 @@ package com.hjq.demo.ui.fragment;
 
 import android.view.View;
 
-import com.hjq.widget.CountdownView;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyLazyFragment;
+import com.hjq.widget.CountdownView;
+import com.hjq.widget.SwitchButton;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -15,7 +17,10 @@ import butterknife.BindView;
  *    desc   : 项目自定义控件展示
  */
 public class TestFragmentB extends MyLazyFragment
-        implements View.OnClickListener {
+        implements SwitchButton.OnCheckedChangeListener {
+
+    @BindView(R.id.sb_test_switch)
+    SwitchButton mSwitchButton;
 
     @BindView(R.id.cv_test_countdown)
     CountdownView mCountdownView;
@@ -36,7 +41,7 @@ public class TestFragmentB extends MyLazyFragment
 
     @Override
     protected void initView() {
-        mCountdownView.setOnClickListener(this);
+        mSwitchButton.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -44,13 +49,14 @@ public class TestFragmentB extends MyLazyFragment
 
     }
 
-    /**
-     * {@link View.OnClickListener}
-     */
-    @Override
+    @OnClick(R.id.cv_test_countdown)
     public void onClick(View v) {
-        if (v == mCountdownView) {
-            toast(getResources().getString(R.string.countdown_code_send_succeed));
+        switch (v.getId()) {
+            case R.id.cv_test_countdown:
+                toast(getResources().getString(R.string.countdown_code_send_succeed));
+                break;
+            default:
+                break;
         }
     }
 
@@ -58,5 +64,14 @@ public class TestFragmentB extends MyLazyFragment
     public boolean isStatusBarEnabled() {
         // 使用沉浸式状态栏
         return !super.isStatusBarEnabled();
+    }
+
+    /**
+     * {@link SwitchButton.OnCheckedChangeListener}
+     */
+
+    @Override
+    public void onCheckedChanged(SwitchButton button, boolean isChecked) {
+        toast(isChecked);
     }
 }

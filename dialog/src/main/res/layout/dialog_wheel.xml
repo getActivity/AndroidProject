@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_address_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_dialog_wheel_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="@dimen/space_20"
+            android:paddingTop="@dimen/space_10"
+            android:paddingRight="@dimen/space_20"
+            android:paddingBottom="@dimen/space_10"
+            android:text="@string/dialog_cancel"
+            android:textColor="@color/dialog_cancel"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_wheel_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="@dimen/space_20"
+            android:paddingTop="@dimen/space_10"
+            android:paddingRight="@dimen/space_20"
+            android:paddingBottom="@dimen/space_10"
+            android:text="@string/dialog_select_hint"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_wheel_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="@dimen/space_20"
+            android:paddingTop="@dimen/space_10"
+            android:paddingRight="@dimen/space_20"
+            android:paddingBottom="@dimen/space_10"
+            android:text="@string/dialog_confirm"
+            android:textColor="@color/dialog_confirm"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#ececec" />
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_wheel_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/space_30"
+        android:paddingBottom="@dimen/space_30">
+
+
+    </LinearLayout>
+
+</LinearLayout>

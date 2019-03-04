@@ -15,9 +15,9 @@ import com.hjq.base.BaseDialogFragment;
  *    time   : 2018/12/2
  *    desc   : 消息对话框
  */
-public class MessageDialog {
+public final class MessageDialog {
 
-    public static class Builder
+    public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
             implements View.OnClickListener {
 
@@ -33,15 +33,7 @@ public class MessageDialog {
 
         public Builder(FragmentActivity activity) {
             super(activity);
-            initialize();
-        }
 
-        public Builder(FragmentActivity activity, int themeResId) {
-            super(activity, themeResId);
-            initialize();
-        }
-
-        private void initialize() {
             setContentView(R.layout.dialog_message);
             setAnimStyle(BaseDialog.AnimStyle.IOS);
             setGravity(Gravity.CENTER);
@@ -58,7 +50,7 @@ public class MessageDialog {
         }
 
         public Builder setTitle(int resId) {
-            return setTitle(getContext().getResources().getText(resId));
+            return setTitle(getString(resId));
         }
         public Builder setTitle(CharSequence text) {
             mTitleView.setText(text);
@@ -79,9 +71,9 @@ public class MessageDialog {
         public Builder setCancel(CharSequence text) {
             mCancelView.setText(text);
 
-            mCancelView.setVisibility(isEmpty(text) ? View.GONE : View.VISIBLE);
-            mLineView.setVisibility(isEmpty(text) ? View.GONE : View.VISIBLE);
-            mConfirmView.setBackgroundResource(isEmpty(text) ?
+            mCancelView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
+            mLineView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
+            mConfirmView.setBackgroundResource((text == null || "".equals(text.toString())) ?
                     R.drawable.dialog_message_one_button : R.drawable.dialog_message_right_button);
             return this;
         }
@@ -129,9 +121,9 @@ public class MessageDialog {
             if (mListener == null) return;
 
             if (v == mConfirmView) {
-                mListener.confirm(getDialog());
+                mListener.onConfirm(getDialog());
             }else if (v == mCancelView) {
-                mListener.cancel(getDialog());
+                mListener.onCancel(getDialog());
             }
         }
     }
@@ -141,11 +133,11 @@ public class MessageDialog {
         /**
          * 点击确定时回调
          */
-        void confirm(Dialog dialog);
+        void onConfirm(Dialog dialog);
 
         /**
          * 点击取消时回调
          */
-        void cancel(Dialog dialog);
+        void onCancel(Dialog dialog);
     }
 }

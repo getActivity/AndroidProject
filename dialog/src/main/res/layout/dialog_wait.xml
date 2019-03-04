@@ -12,7 +12,7 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <com.hjq.dialog.widget.ProgressView
+    <com.hjq.dialog.widget.CircleProgressView
         android:id="@+id/pv_dialog_wait_progress"
         android:layout_width="68dp"
         android:layout_height="68dp" />

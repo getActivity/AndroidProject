@@ -12,7 +12,7 @@
         android:id="@+id/tb_about_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="@string/about_text" />
+        app:title="@string/about_title" />
 
     <ImageView
         android:layout_width="@dimen/space_200"

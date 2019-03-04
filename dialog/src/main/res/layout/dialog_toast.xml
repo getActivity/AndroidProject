@@ -16,7 +16,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginTop="14dp"
-        android:src="@mipmap/ic_dialog_tip_warning" />
+        android:src="@mipmap/ic_dialog_warning" />
 
     <TextView
         android:id="@+id/tv_dialog_toast_message"

@@ -24,9 +24,9 @@ import java.util.List;
  *    time   : 2018/12/2
  *    desc   : 菜单选择框
  */
-public class MenuDialog {
+public final class MenuDialog {
 
-    public static class Builder
+    public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
             implements View.OnClickListener, BaseRecyclerViewAdapter.OnItemClickListener {
 
@@ -39,19 +39,11 @@ public class MenuDialog {
 
         public Builder(FragmentActivity activity) {
             super(activity);
-            initialize();
-        }
 
-        public Builder(FragmentActivity activity, int themeResId) {
-            super(activity, themeResId);
-            initialize();
-        }
-
-        private void initialize() {
             setContentView(R.layout.dialog_menu);
             setGravity(Gravity.BOTTOM);
             setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
-            fullWidth();
+            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
             mRecyclerView = findViewById(R.id.rv_dialog_menu_list);
             mCancelView  = findViewById(R.id.tv_dialog_menu_cancel);
@@ -78,7 +70,7 @@ public class MenuDialog {
         }
         public Builder setCancel(CharSequence text) {
             mCancelView.setText(text);
-            mCancelView.setVisibility(isEmpty(text) ? View.GONE : View.VISIBLE);
+            mCancelView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
             return this;
         }
 
@@ -103,7 +95,7 @@ public class MenuDialog {
 
             if (v == mCancelView) {
                 if (mListener != null) {
-                    mListener.cancel(getDialog());
+                    mListener.onCancel(getDialog());
                 }
             }
         }
@@ -118,14 +110,12 @@ public class MenuDialog {
             }
 
             if (mListener != null) {
-                mListener.select(getDialog(), position, mAdapter.getItem(position));
+                mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
             }
         }
     }
 
-    private static class MenuAdapter extends BaseRecyclerViewAdapter<MenuAdapter.ViewHolder> {
-
-        private List<String> mDataSet;
+    private static final class MenuAdapter extends BaseRecyclerViewAdapter<String, MenuAdapter.ViewHolder> {
 
         MenuAdapter(Context context) {
             super(context);
@@ -159,26 +149,12 @@ public class MenuDialog {
             }
         }
 
-        @Override
-        public int getItemCount() {
-            return mDataSet == null ? 0 : mDataSet.size();
-        }
-
-        public void setData(List<String> data) {
-            mDataSet = data;
-            notifyDataSetChanged();
-        }
-
-        public String getItem(int position) {
-            return mDataSet.get(position);
-        }
-
-        class ViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+        final class ViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
 
             private TextView mTextView;
             private View mView;
 
-            ViewHolder(ViewGroup parent, int layoutId) {
+            private ViewHolder(ViewGroup parent, int layoutId) {
                 super(parent, layoutId);
                 mTextView = (TextView) findViewById(R.id.tv_dialog_menu_name);
                 mView = findViewById(R.id.v_dialog_menu_line);
@@ -191,11 +167,11 @@ public class MenuDialog {
         /**
          * 选择条目时回调
          */
-        void select(Dialog dialog, int position, String text);
+        void onSelected(Dialog dialog, int position, String text);
 
         /**
          * 点击取消时回调
          */
-        void cancel(Dialog dialog);
+        void onCancel(Dialog dialog);
     }
 }

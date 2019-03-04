@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.base.BaseDialogFragment;
-import com.hjq.dialog.widget.ProgressView;
 
 /**
  *    author : Android 轮子哥
@@ -15,32 +14,24 @@ import com.hjq.dialog.widget.ProgressView;
  *    time   : 2018/12/2
  *    desc   : 等待加载对话框
  */
-public class WaitDialog {
+public final class WaitDialog {
 
-    public static class Builder
+    public static final class Builder
             extends BaseDialogFragment.Builder<Builder> {
 
         private TextView mMessageView;
-        private ProgressView mProgressView;
+        //private CircleProgressView mProgressView;
 
         public Builder(FragmentActivity activity) {
             super(activity);
-            initialize();
-        }
 
-        public Builder(FragmentActivity activity, int themeResId) {
-            super(activity, themeResId);
-            initialize();
-        }
-
-        private void initialize() {
             setContentView(R.layout.dialog_wait);
             setGravity(Gravity.CENTER);
             setAnimStyle(BaseDialog.AnimStyle.TOAST);
             setCancelable(false);
 
             mMessageView = findViewById(R.id.tv_dialog_wait_message);
-            mProgressView = findViewById(R.id.pv_dialog_wait_progress);
+            //mProgressView = findViewById(R.id.pv_dialog_wait_progress);
         }
 
         public Builder setMessage(int resId) {

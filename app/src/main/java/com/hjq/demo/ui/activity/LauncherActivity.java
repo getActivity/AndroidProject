@@ -9,9 +9,12 @@ import android.view.animation.ScaleAnimation;
 import com.gyf.barlibrary.BarHide;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
+import com.hjq.image.ImageLoader;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.hjq.toast.ToastUtils;
+import com.hjq.umeng.UmengHelper;
 
 import java.util.List;
 
@@ -56,7 +59,17 @@ public class LauncherActivity extends MyActivity
     }
 
     @Override
-    protected void initData() {}
+    protected void initData() {
+
+        // 初始化图片加载器
+        ImageLoader.init(getApplication());
+
+        // 初始化吐司工具类
+        ToastUtils.init(getApplication());
+
+        // 友盟统计
+        UmengHelper.init(getApplication());
+    }
 
     private static final int ANIM_TIME = 1000;
 

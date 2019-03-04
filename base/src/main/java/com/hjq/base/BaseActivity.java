@@ -63,12 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        // 隐藏软键盘，避免软键盘引发的内存泄露
-        View view = getCurrentFocus();
-        if (view != null) {
-            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (manager != null) manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+        hideSoftKeyboard();
         super.finish();
     }
 
@@ -125,11 +120,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     private ActivityCallback mActivityCallback;
     private int mActivityRequestCode;
 
+    public void startActivityForResult(Class<? extends Activity> cls, ActivityCallback callback) {
+        startActivityForResult(new Intent(this, cls), null, callback);
+    }
+
     public void startActivityForResult(Intent intent, ActivityCallback callback) {
         startActivityForResult(intent, null, callback);
     }
 
-    public void startActivityForResult(Intent intent, @Nullable Bundle options, ActivityCallback callback) {
+    public void startActivityForResult(Intent intent, Bundle options, ActivityCallback callback) {
         if (mActivityCallback == null) {
             mActivityCallback = callback;
             // 随机生成请求码，这个请求码在 0 - 255 之间
@@ -158,6 +157,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         if (startActivitySelfCheck(intent)) {
+            hideSoftKeyboard();
             // 查看源码得知 startActivity 最终也会调用 startActivityForResult
             super.startActivityForResult(intent, requestCode, options);
         }
@@ -193,6 +193,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         mStartActivityTag = tag;
         mStartActivityTime = SystemClock.uptimeMillis();
         return result;
+    }
+
+    /**
+     * 隐藏软键盘
+     */
+    private void hideSoftKeyboard() {
+        // 隐藏软键盘，避免软键盘引发的内存泄露
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (manager != null) manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**

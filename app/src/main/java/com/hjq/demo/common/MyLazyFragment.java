@@ -2,10 +2,12 @@ package com.hjq.demo.common;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hjq.bar.TitleBar;
 import com.hjq.toast.ToastUtils;
 import com.hjq.umeng.UmengHelper;
 
@@ -20,7 +22,7 @@ import butterknife.Unbinder;
  */
 public abstract class MyLazyFragment extends UILazyFragment {
 
-    private Unbinder mButterKnife;// View注解
+    private Unbinder mButterKnife; // View注解
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +49,14 @@ public abstract class MyLazyFragment extends UILazyFragment {
     public void onDestroy() {
         super.onDestroy();
         mButterKnife.unbind();
+    }
+
+    @Nullable
+    public TitleBar getTitleBar() {
+        if (getTitleBarId() > 0 && findViewById(getTitleBarId()) instanceof TitleBar) {
+            return findViewById(getTitleBarId());
+        }
+        return null;
     }
 
     /**

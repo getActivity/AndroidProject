@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dialog_menu_item_height"
+    android:focusable="true"
     tools:ignore="ResourceName">
 
     <TextView

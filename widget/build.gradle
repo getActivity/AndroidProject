@@ -4,6 +4,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    resourcePrefix "widget_"
+
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion rootProject.ext.targetSdkVersion
