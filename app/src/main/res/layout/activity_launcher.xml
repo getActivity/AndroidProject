@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@mipmap/bg_launcher" />
+        android:src="@drawable/bg_launcher" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
             android:id="@+id/iv_launcher_icon"
             android:layout_width="@dimen/space_400"
             android:layout_height="@dimen/space_400"
-            android:src="@mipmap/ic_logo" />
+            android:src="@drawable/ic_logo" />
 
         <TextView
             android:id="@+id/iv_launcher_name"

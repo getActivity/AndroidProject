@@ -10,7 +10,7 @@ import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.ui.activity.AboutActivity;
 import com.hjq.demo.ui.activity.DialogActivity;
 import com.hjq.demo.ui.activity.HomeActivity;
-import com.hjq.demo.ui.activity.ImageActivity;
+import com.hjq.demo.ui.activity.PhotoActivity;
 import com.hjq.demo.ui.activity.LoginActivity;
 import com.hjq.demo.ui.activity.PasswordForgetActivity;
 import com.hjq.demo.ui.activity.PasswordResetActivity;
@@ -99,7 +99,7 @@ public final class TestFragmentD extends MyLazyFragment<HomeActivity> {
                 startActivity(WebActivity.class);
                 break;
             case R.id.btn_test_image:
-                startActivity(ImageActivity.class);
+                startActivity(PhotoActivity.class);
                 break;
             case R.id.btn_test_pay:
                 new MessageDialog.Builder(getBindingActivity())

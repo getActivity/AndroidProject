@@ -2,7 +2,6 @@ package com.hjq.demo.ui.fragment;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;

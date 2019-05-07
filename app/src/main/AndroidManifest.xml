@@ -107,7 +107,7 @@
             android:label="@string/web_title" />
 
         <!-- 查看大图界面 -->
-        <activity android:name=".ui.activity.ImageActivity" />
+        <activity android:name=".ui.activity.PhotoActivity" />
 
         <!-- 对话框界面 -->
         <activity android:name=".ui.activity.DialogActivity" />

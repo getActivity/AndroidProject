@@ -2,7 +2,6 @@ package com.hjq.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.View;

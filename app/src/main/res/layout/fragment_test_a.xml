@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/space_300"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/bg_launcher"
+                android:src="@drawable/bg_launcher"
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar

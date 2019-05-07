@@ -30,7 +30,8 @@ public final class PayPasswordDialog {
 
     public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
-            implements BaseRecyclerViewAdapter.OnItemClickListener, View.OnClickListener {
+            implements BaseRecyclerViewAdapter.OnItemClickListener,
+            View.OnClickListener {
 
         // 输入键盘文本
         private static final String[] KEYBOARD_TEXT = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", ""};

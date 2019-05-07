@@ -19,7 +19,7 @@
         android:layout_height="@dimen/space_200"
         android:layout_marginTop="@dimen/space_80"
         android:layout_marginBottom="@dimen/space_80"
-        android:src="@mipmap/ic_logo" />
+        android:src="@drawable/ic_logo" />
 
     <LinearLayout
         android:layout_width="match_parent"

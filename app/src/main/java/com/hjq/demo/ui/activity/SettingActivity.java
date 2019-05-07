@@ -6,8 +6,8 @@ import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.demo.helper.CacheDataManager;
-import com.hjq.widget.SettingBar;
 import com.hjq.image.ImageLoader;
+import com.hjq.widget.SettingBar;
 import com.hjq.widget.SwitchButton;
 
 import butterknife.BindView;

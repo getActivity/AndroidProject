@@ -67,7 +67,7 @@ public final class WebActivity extends MyActivity {
         }
 
         // 加快HTML网页加载完成的速度，等页面finish再加载图片
-        if(Build.VERSION.SDK_INT >= 19) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             settings.setLoadsImagesAutomatically(true);
         } else {
             settings.setLoadsImagesAutomatically(false);

@@ -81,7 +81,7 @@ public final class LauncherActivity extends MyActivity
         mTextView.startAnimation(ra);
     }
 
-    private void requestFilePermission() {
+    private void requestPermission() {
         XXPermissions.with(this)
                 .permission(Permission.Group.STORAGE)
                 .request(this);
@@ -102,14 +102,14 @@ public final class LauncherActivity extends MyActivity
         if (quick) {
             toast("没有权限访问文件，请手动授予权限");
             XXPermissions.gotoPermissionSettings(LauncherActivity.this, true);
-        }else {
+        } else {
             toast("请先授予文件读写权限");
-            getWindow().getDecorView().postDelayed(new Runnable() {
+            postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    requestFilePermission();
+                    requestPermission();
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 
@@ -125,7 +125,7 @@ public final class LauncherActivity extends MyActivity
         if (XXPermissions.isHasPermission(LauncherActivity.this, Permission.Group.STORAGE)) {
             hasPermission(null, true);
         }else {
-            requestFilePermission();
+            requestPermission();
         }
     }
 
@@ -144,7 +144,7 @@ public final class LauncherActivity extends MyActivity
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        requestFilePermission();
+        requestPermission();
     }
 
     @Override

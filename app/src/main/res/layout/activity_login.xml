@@ -24,7 +24,7 @@
         android:layout_width="@dimen/space_200"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space_60"
-        android:src="@mipmap/ic_logo" />
+        android:src="@drawable/ic_logo" />
 
     <com.hjq.widget.ClearEditText
         android:id="@+id/et_login_phone"

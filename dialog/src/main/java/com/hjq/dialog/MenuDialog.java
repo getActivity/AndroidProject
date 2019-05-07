@@ -29,7 +29,8 @@ public final class MenuDialog {
 
     public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
-            implements View.OnClickListener, BaseRecyclerViewAdapter.OnItemClickListener {
+            implements View.OnClickListener,
+            BaseRecyclerViewAdapter.OnItemClickListener {
 
         private OnListener mListener;
         private boolean mAutoDismiss = true;
