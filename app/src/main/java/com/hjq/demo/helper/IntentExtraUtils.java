@@ -82,7 +82,7 @@ public final class IntentExtraUtils {
         return this;
     }
 
-    public IntentExtraUtils startActivity(android.support.v4.app.Fragment fragment, int requestCode) {
+    public IntentExtraUtils startActivity(androidx.fragment.app.Fragment fragment, int requestCode) {
         fragment.startActivityForResult(new Intent(fragment.getActivity(), sCurrentClass), requestCode);
         return this;
     }

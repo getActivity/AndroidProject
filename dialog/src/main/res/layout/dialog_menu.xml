@@ -9,14 +9,14 @@
     android:paddingLeft="30dp"
     android:paddingRight="30dp">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_dialog_menu_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/dialog_message_bg"
         android:overScrollMode="never"
-        tools:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_dialog_menu" />
 
     <TextView

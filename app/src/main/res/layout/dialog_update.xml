@@ -51,7 +51,7 @@
             </LinearLayout>
 
             <!--这个地方需要设置可以滚动-->
-            <android.support.v4.widget.NestedScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"
@@ -73,7 +73,7 @@
                     android:textSize="13sp"
                     tools:text="更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n" />
 
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
 
             <com.hjq.widget.NumberProgressBar
                 android:id="@+id/pb_dialog_update_progress"

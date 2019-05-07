@@ -2,9 +2,9 @@ package com.hjq.demo.common;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import android.util.Log;
 import android.view.View;
 

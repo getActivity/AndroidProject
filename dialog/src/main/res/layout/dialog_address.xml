@@ -38,7 +38,7 @@
         android:layout_height="1px"
         android:background="#ececec" />
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tb_dialog_address_tab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,25 +57,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_dialog_address_list1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_dialog_address_list2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_dialog_address_list3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_dialog_address_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

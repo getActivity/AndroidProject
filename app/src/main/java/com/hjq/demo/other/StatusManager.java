@@ -4,10 +4,10 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.RequiresPermission;
-import android.support.annotation.StringRes;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.RequiresPermission;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 

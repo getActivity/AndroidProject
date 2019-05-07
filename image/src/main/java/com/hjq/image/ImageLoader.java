@@ -3,8 +3,8 @@ package com.hjq.image;
 import android.app.Application;
 import android.app.Fragment;
 import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import android.widget.ImageView;
 
 /**
@@ -55,7 +55,7 @@ public final class ImageLoader {
     public static void loadImage(Fragment fragment, @NonNull ImageView imageView, String url) {
         sImageHandler.loadImage(fragment, imageView, url);
     }
-    public static void loadImage(android.support.v4.app.Fragment fragment, @NonNull ImageView imageView, String url) {
+    public static void loadImage(androidx.fragment.app.Fragment fragment, @NonNull ImageView imageView, String url) {
         sImageHandler.loadImage(fragment, imageView, url);
     }
 
@@ -68,7 +68,7 @@ public final class ImageLoader {
     public static void loadImage(Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId) {
         sImageHandler.loadImage(fragment, imageView, resourceId);
     }
-    public static void loadImage(android.support.v4.app.Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId) {
+    public static void loadImage(androidx.fragment.app.Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId) {
         sImageHandler.loadImage(fragment, imageView, resourceId);
     }
 
@@ -85,7 +85,7 @@ public final class ImageLoader {
     public static void loadCircleImage(Fragment fragment, @NonNull ImageView imageView, String url) {
         sImageHandler.loadCircleImage(fragment, imageView, url);
     }
-    public static void loadCircleImage(android.support.v4.app.Fragment fragment, @NonNull ImageView imageView, String url) {
+    public static void loadCircleImage(androidx.fragment.app.Fragment fragment, @NonNull ImageView imageView, String url) {
         sImageHandler.loadCircleImage(fragment, imageView, url);
     }
 
@@ -98,7 +98,7 @@ public final class ImageLoader {
     public static void loadCircleImage(Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId) {
         sImageHandler.loadCircleImage(fragment, imageView, resourceId);
     }
-    public static void loadCircleImage(android.support.v4.app.Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId) {
+    public static void loadCircleImage(androidx.fragment.app.Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId) {
         sImageHandler.loadCircleImage(fragment, imageView, resourceId);
     }
 
@@ -115,7 +115,7 @@ public final class ImageLoader {
     public static void loadRoundImage(Fragment fragment, @NonNull ImageView imageView, String url, float radius) {
         sImageHandler.loadRoundImage(fragment, imageView, url, radius);
     }
-    public static void loadRoundImage(android.support.v4.app.Fragment fragment, @NonNull ImageView imageView, String url, float radius) {
+    public static void loadRoundImage(androidx.fragment.app.Fragment fragment, @NonNull ImageView imageView, String url, float radius) {
         sImageHandler.loadRoundImage(fragment, imageView, url, radius);
     }
 
@@ -128,7 +128,7 @@ public final class ImageLoader {
     public static void loadRoundImage(Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId, float radius) {
         sImageHandler.loadRoundImage(fragment, imageView, resourceId, radius);
     }
-    public static void loadRoundImage(android.support.v4.app.Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId, float radius) {
+    public static void loadRoundImage(androidx.fragment.app.Fragment fragment, @NonNull ImageView imageView, @DrawableRes int resourceId, float radius) {
         sImageHandler.loadRoundImage(fragment, imageView, resourceId, radius);
     }
 }

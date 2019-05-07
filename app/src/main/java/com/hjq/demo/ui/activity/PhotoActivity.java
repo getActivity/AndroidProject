@@ -1,6 +1,6 @@
 package com.hjq.demo.ui.activity;
 
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;

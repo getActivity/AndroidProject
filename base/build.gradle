@@ -13,6 +13,6 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-    implementation "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
 }

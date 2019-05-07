@@ -9,8 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -112,8 +112,8 @@ final class GlideHandler implements ImageHandler {
             }
         } else if (object instanceof Fragment) {
             return Glide.with((Fragment) object);
-        }else if (object instanceof android.support.v4.app.Fragment) {
-            return Glide.with((android.support.v4.app.Fragment) object);
+        }else if (object instanceof androidx.fragment.app.Fragment) {
+            return Glide.with((androidx.fragment.app.Fragment) object);
         }
         // 直接抛出异常
         throw new IllegalArgumentException("This object is illegal");

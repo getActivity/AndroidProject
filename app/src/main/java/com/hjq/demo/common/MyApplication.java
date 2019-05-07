@@ -2,7 +2,7 @@ package com.hjq.demo.common;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 
 import com.hjq.demo.other.EventBusManager;
 import com.hjq.image.ImageLoader;

@@ -17,7 +17,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 10
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // 混淆配置
         proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-app.pro'
@@ -139,14 +139,14 @@ dependencies {
     // 友盟隔离
     implementation project(':umeng')
 
-    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-    implementation "com.android.support:design:$rootProject.ext.supportLibraryVersion"
-    implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
 
     // Dex分包，解决 64k 问题
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     // ButterKnife 注解库：https://github.com/JakeWharton/butterknife
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'

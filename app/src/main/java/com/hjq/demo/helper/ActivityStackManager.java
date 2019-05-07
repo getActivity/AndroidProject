@@ -1,7 +1,7 @@
 package com.hjq.demo.helper;
 
 import android.app.Activity;
-import android.support.v4.util.ArrayMap;
+import androidx.collection.ArrayMap;
 
 /**
  *    author : Android 轮子哥

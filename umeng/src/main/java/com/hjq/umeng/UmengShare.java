@@ -1,7 +1,7 @@
 package com.hjq.umeng;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;

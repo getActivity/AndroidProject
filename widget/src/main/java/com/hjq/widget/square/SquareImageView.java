@@ -1,7 +1,7 @@
 package com.hjq.widget.square;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 /**

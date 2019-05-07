@@ -3,7 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;

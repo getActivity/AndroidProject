@@ -1,6 +1,6 @@
 package com.hjq.demo.other;
 
-import android.support.v4.util.ArrayMap;
+import androidx.collection.ArrayMap;
 
 import com.hjq.demo.MyEventBusIndex;
 

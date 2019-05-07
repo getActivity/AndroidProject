@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:fitsSystemWindows="false" />
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bv_home_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
