@@ -8,7 +8,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +22,10 @@ import java.util.Random;
  *    time   : 2018/10/18
  *    desc   : Fragment 懒加载基类
  */
-public abstract class BaseLazyFragment extends Fragment {
+public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment {
 
     // Activity对象
-    public FragmentActivity mActivity;
+    public A mActivity;
     // 根布局
     private View mRootView;
     // 是否进行过懒加载
@@ -39,22 +38,22 @@ public abstract class BaseLazyFragment extends Fragment {
     /**
      * 获得全局的，防止使用getActivity()为空
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.mActivity = (FragmentActivity) context;
+        mActivity = (A) requireActivity();
     }
 
     /**
-     * 获取Activity，防止出现 getActivity() 为空
+     * 获取绑定的Activity，防止出现 getActivity() 为空
      */
-    public FragmentActivity getFragmentActivity() {
+    public A getBindingActivity() {
         return mActivity;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // super.onCreateView(inflater, container, savedInstanceState);
 
         if (mRootView == null && getLayoutId() > 0) {
             mRootView = inflater.inflate(getLayoutId(), null);
@@ -105,7 +104,7 @@ public abstract class BaseLazyFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         this.isReplaceFragment = true;
         this.isFragmentVisible = isVisibleToUser;
-        if (isVisibleToUser && getView() != null) {
+        if (isVisibleToUser && mRootView != null) {
             if (!isLazyLoad) {
                 initLazyLoad();
             }else {
@@ -126,16 +125,14 @@ public abstract class BaseLazyFragment extends Fragment {
     }
 
     /**
-     * 跟 Activity 的同名方法效果一样
+     * 从可见的状态变成不可见状态，再从不可见状态变成可见状态时回调
      */
-    protected void onRestart() {
-        // 从可见的状态变成不可见状态，再从不可见状态变成可见状态时回调
-    }
+    protected void onRestart() {}
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //解决java.lang.IllegalStateException: Activity has been destroyed 的错误
+        // 解决java.lang.IllegalStateException: Activity has been destroyed 的错误
         try {
             Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
             childFragmentManager.setAccessible(true);
@@ -156,7 +153,7 @@ public abstract class BaseLazyFragment extends Fragment {
     protected abstract int getLayoutId();
 
     //标题栏id
-    protected abstract int getTitleBarId();
+    protected abstract int getTitleId();
 
     //初始化控件
     protected abstract void initView();
@@ -167,11 +164,11 @@ public abstract class BaseLazyFragment extends Fragment {
     /**
      * 根据资源 id 获取一个 View 对象
      */
-    protected <T extends View> T findViewById(@IdRes int id) {
-        return  getView().findViewById(id);
+    protected <V extends View> V findViewById(@IdRes int id) {
+        return mRootView.findViewById(id);
     }
 
-    protected <T extends View> T findActivityViewById(@IdRes int id) {
+    protected <V extends View> V findActivityViewById(@IdRes int id) {
         return mActivity.findViewById(id);
     }
 
@@ -225,7 +222,7 @@ public abstract class BaseLazyFragment extends Fragment {
         if (mActivityCallback != null && mActivityRequestCode == requestCode) {
             mActivityCallback.onActivityResult(resultCode, data);
             mActivityCallback = null;
-        }else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -235,13 +232,15 @@ public abstract class BaseLazyFragment extends Fragment {
      */
     public void finish() {
         mActivity.finish();
+        mActivity = null;
     }
 
     /**
      * 获取系统服务
      */
-    public Object getSystemService(@NonNull String name) {
-        return mActivity.getSystemService(name);
+    @SuppressWarnings("unchecked")
+    public <S extends Object> S getSystemService(@NonNull String name) {
+        return (S) mActivity.getSystemService(name);
     }
 
     /**

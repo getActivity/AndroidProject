@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
  *    time   : 2018/10/18
  *    desc   : 正方形的LinearLayout
  */
-public class SquareLinearLayout extends LinearLayout {
+public final class SquareLinearLayout extends LinearLayout {
 
     public SquareLinearLayout(Context context) {
         super(context);

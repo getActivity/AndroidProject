@@ -12,7 +12,7 @@ import java.util.List;
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的MVP Activity 类
  */
-public class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyContract.View {
+public final class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyContract.View {
 
     @Override
     protected CopyPresenter createPresenter() {
@@ -25,7 +25,7 @@ public class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyC
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return 0;
     }
 
@@ -56,25 +56,5 @@ public class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyC
     @Override
     public void loginSuccess(List<String> data) {
         toast("登录成功了");
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void loadingComplete() {
-
-    }
-
-    @Override
-    public void showEmpty() {
-
-    }
-
-    @Override
-    public void showError() {
-
     }
 }

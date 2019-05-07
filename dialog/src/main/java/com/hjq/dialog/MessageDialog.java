@@ -50,7 +50,7 @@ public final class MessageDialog {
         }
 
         public Builder setTitle(int resId) {
-            return setTitle(getString(resId));
+            return setTitle(getText(resId));
         }
         public Builder setTitle(CharSequence text) {
             mTitleView.setText(text);
@@ -58,7 +58,7 @@ public final class MessageDialog {
         }
 
         public Builder setMessage(int resId) {
-            return setMessage(getContext().getText(resId));
+            return setMessage(getText(resId));
         }
         public Builder setMessage(CharSequence text) {
             mMessageView.setText(text);
@@ -66,7 +66,7 @@ public final class MessageDialog {
         }
 
         public Builder setCancel(int resId) {
-            return setCancel(getContext().getText(resId));
+            return setCancel(getText(resId));
         }
         public Builder setCancel(CharSequence text) {
             mCancelView.setText(text);
@@ -79,7 +79,7 @@ public final class MessageDialog {
         }
 
         public Builder setConfirm(int resId) {
-            return setConfirm(getContext().getText(resId));
+            return setConfirm(getText(resId));
         }
         public Builder setConfirm(CharSequence text) {
             mConfirmView.setText(text);

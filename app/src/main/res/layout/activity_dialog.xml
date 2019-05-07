@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.CopyActivity">
+    tools:context=".ui.activity.DialogActivity">
 
     <com.hjq.bar.TitleBar
         android:id="@+id/tb_dialog_title"
@@ -111,6 +111,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
                 android:text="弹出日期对话框" />
+
+            <Button
+                android:id="@+id/btn_dialog_update"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="弹出更新对话框" />
+
+            <Button
+                android:id="@+id/btn_dialog_share"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="弹出分享对话框" />
 
             <Button
                 android:id="@+id/btn_dialog_custom"

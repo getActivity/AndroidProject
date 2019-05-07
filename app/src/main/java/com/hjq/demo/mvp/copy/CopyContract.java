@@ -10,7 +10,7 @@ import java.util.List;
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的契约类
  */
-public class CopyContract {
+public final class CopyContract {
 
     public interface View extends IMvpView {
 

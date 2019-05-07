@@ -1,7 +1,5 @@
 package com.hjq.dialog;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -20,9 +18,8 @@ public final class ToastDialog {
 
     public static final class Builder
             extends BaseDialogFragment.Builder<Builder>
-            implements Runnable {
+            implements Runnable, BaseDialog.OnShowListener {
 
-        private static final Handler HANDLER = new Handler(Looper.getMainLooper());
         private TextView mMessageView;
         private ImageView mIconView;
 
@@ -32,9 +29,10 @@ public final class ToastDialog {
         public Builder(FragmentActivity activity) {
             super(activity);
 
+            setThemeStyle(R.style.TransparentDialogStyle);
             setContentView(R.layout.dialog_toast);
-            setGravity(Gravity.CENTER);
             setAnimStyle(BaseDialog.AnimStyle.TOAST);
+            setGravity(Gravity.CENTER);
             setCancelable(false);
 
             mMessageView = findViewById(R.id.tv_dialog_toast_message);
@@ -63,7 +61,7 @@ public final class ToastDialog {
         }
 
         public Builder setMessage(int resId) {
-            return setMessage(getContext().getText(resId));
+            return setMessage(getText(resId));
         }
         public Builder setMessage(CharSequence text) {
             mMessageView.setText(text);
@@ -71,7 +69,7 @@ public final class ToastDialog {
         }
 
         @Override
-        public BaseDialog show() {
+        public BaseDialog create() {
             // 如果显示的类型为空就抛出异常
             if (mType == null) {
                 throw new IllegalArgumentException("The display type must be specified");
@@ -80,9 +78,17 @@ public final class ToastDialog {
             if ("".equals(mMessageView.getText().toString())) {
                 throw new IllegalArgumentException("Dialog message not null");
             }
+            addOnShowListener(this);
+            return super.create();
+        }
+
+        /**
+         * {@link BaseDialog.OnShowListener}
+         */
+        @Override
+        public void onShow(BaseDialog dialog) {
             // 延迟自动关闭
-            HANDLER.postDelayed(this, mDuration);
-            return super.show();
+            postDelayed(this, mDuration);
         }
 
         @Override

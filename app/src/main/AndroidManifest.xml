@@ -12,6 +12,11 @@
 
     <!-- 联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 访问当前网络状态权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 安装包的权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".common.MyApplication"
@@ -20,7 +25,19 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:targetApi="n">
+
+        <!-- 适配Android 7.0文件意图 -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- 启动页面（因为使用了LauncherTheme，所以不要给这个Activity设置screenOrientation属性，会导致崩溃） -->
         <activity
@@ -41,7 +58,7 @@
         <activity
             android:name=".ui.activity.HomeActivity"
             android:alwaysRetainTaskState="true"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
 
         <!-- 登录界面 -->
         <activity android:name=".ui.activity.LoginActivity" />
@@ -64,16 +81,39 @@
             android:name=".ui.activity.PasswordResetActivity"
             android:label="@string/password_reset_title" />
 
+        <!-- 手机号校验 -->
+        <activity
+            android:name=".ui.activity.PhoneVerifyActivity"
+            android:label="@string/phone_verify_title" />
+
+        <!-- 手机号更换 -->
+        <activity
+            android:name=".ui.activity.PhoneResetActivity"
+            android:label="@string/phone_reset_title" />
+
         <!-- 关于界面 -->
         <activity
             android:name=".ui.activity.AboutActivity"
             android:label="@string/about_title" />
 
+        <!-- 个人资料 -->
+        <activity
+            android:name=".ui.activity.PersonalDataActivity"
+            android:label="@string/personal_data_title" />
+
         <!-- 浏览器界面 -->
-        <activity android:name=".ui.activity.WebActivity" />
+        <activity
+            android:name=".ui.activity.WebActivity"
+            android:label="@string/web_title" />
+
+        <!-- 查看大图界面 -->
+        <activity android:name=".ui.activity.ImageActivity" />
 
         <!-- 对话框界面 -->
         <activity android:name=".ui.activity.DialogActivity" />
+
+        <!-- 状态界面 -->
+        <activity android:name=".ui.activity.StatusActivity" />
 
     </application>
 

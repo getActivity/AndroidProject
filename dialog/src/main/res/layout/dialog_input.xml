@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textColor="#333333"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             tools:text="标题" />
 
@@ -38,7 +38,7 @@
             android:paddingBottom="@dimen/space_10"
             android:singleLine="true"
             android:textColor="#333333"
-            android:textSize="17sp" />
+            android:textSize="14sp" />
 
         <View
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:orientation="horizontal">
 
             <TextView
@@ -61,7 +61,7 @@
                 android:gravity="center"
                 android:text="@string/dialog_cancel"
                 android:textColor="@color/dialog_cancel"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/v_dialog_input_line"
@@ -79,7 +79,7 @@
                 android:gravity="center"
                 android:text="@string/dialog_confirm"
                 android:textColor="@color/dialog_confirm"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>

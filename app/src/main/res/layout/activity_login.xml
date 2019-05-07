@@ -19,9 +19,10 @@
         app:rightTitle="@string/login_register"
         app:title="" />
 
-    <ImageView
+    <com.hjq.widget.square.SquareImageView
+        android:id="@+id/iv_login_logo"
         android:layout_width="@dimen/space_200"
-        android:layout_height="@dimen/space_200"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/space_60"
         android:src="@mipmap/ic_logo" />
 
@@ -81,4 +82,70 @@
         android:layout_marginTop="@dimen/space_60"
         android:layout_marginRight="@dimen/space_80"
         android:text="@string/login_text" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space_100"
+        android:layout_marginRight="@dimen/space_100"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            style="@style/HorizontalLineStyle"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_30"
+            android:layout_marginRight="@dimen/space_30"
+            android:text="@string/login_other"
+            android:textColor="@color/black50" />
+
+        <View
+            style="@style/HorizontalLineStyle"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space_100"
+        android:layout_marginTop="@dimen/space_40"
+        android:layout_marginRight="@dimen/space_100"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_login_qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_login_qq" />
+
+        <ImageView
+            android:id="@+id/iv_login_wx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_login_wx" />
+
+        <ImageView
+            android:id="@+id/iv_login_wb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_login_weibo" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.hjq.demo.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -25,7 +26,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 浏览器界面
  */
-public class WebActivity extends MyActivity {
+public final class WebActivity extends MyActivity {
 
     @BindView(R.id.pb_web_progress)
     ProgressBar mProgressBar;
@@ -38,10 +39,11 @@ public class WebActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_web_title;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void initView() {
         // 不显示滚动条
@@ -79,7 +81,6 @@ public class WebActivity extends MyActivity {
 
         String url = "https://github.com/getActivity/";
         mWebView.loadUrl(url);
-        setTitle("加载中...");
     }
 
     @Override
@@ -120,7 +121,7 @@ public class WebActivity extends MyActivity {
         // 网页加载错误时回调，这个方法会在 onPageFinished 之前调用
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, final String failingUrl) {
-
+            showError();
         }
 
         // 开始加载网页
@@ -133,6 +134,7 @@ public class WebActivity extends MyActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             mProgressBar.setVisibility(View.GONE);
+            showComplete();
         }
 
         @Override

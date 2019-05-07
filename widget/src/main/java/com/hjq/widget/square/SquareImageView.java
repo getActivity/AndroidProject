@@ -10,7 +10,7 @@ import android.util.AttributeSet;
  *    time   : 2018/10/18
  *    desc   : 正方形的ImageView
  */
-public class SquareImageView extends AppCompatImageView {
+public final class SquareImageView extends AppCompatImageView {
 
     public SquareImageView(Context context) {
         super(context);

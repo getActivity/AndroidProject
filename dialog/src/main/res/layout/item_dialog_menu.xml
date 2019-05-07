@@ -15,7 +15,7 @@
         android:paddingRight="15dp"
         android:singleLine="true"
         android:textColor="@color/dialog_confirm"
-        android:textSize="16sp"
+        android:textSize="14sp"
         tools:text="条目" />
 
     <View

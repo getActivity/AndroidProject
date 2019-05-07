@@ -10,7 +10,7 @@ import android.util.AttributeSet;
  *    time   : 2018/10/18
  *    desc   : 支持监听渐变的CollapsingToolbarLayout
  */
-public class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
+public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
     private OnScrimsListener mListener; // 渐变监听
     private boolean isScrimsShown;  // 当前渐变状态

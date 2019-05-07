@@ -9,7 +9,7 @@ import com.hjq.demo.common.MyActivity;
  *    time   : 2018/10/18
  *    desc   : 关于界面
  */
-public class AboutActivity extends MyActivity {
+public final class AboutActivity extends MyActivity {
 
     @Override
     protected int getLayoutId() {
@@ -17,7 +17,7 @@ public class AboutActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_about_title;
     }
 

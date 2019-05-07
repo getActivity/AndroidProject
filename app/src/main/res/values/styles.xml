@@ -32,7 +32,9 @@
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:paddingLeft">@dimen/space_30</item>
         <item name="android:paddingRight">@dimen/space_30</item>
-        <item name="android:textSize">@dimen/font_size_30px</item>
+        <item name="android:paddingTop">@dimen/space_20</item>
+        <item name="android:paddingBottom">@dimen/space_20</item>
+        <item name="android:textSize">@dimen/font_size_28px</item>
         <item name="android:textColor">@color/white90</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/selector_button</item>
@@ -68,6 +70,16 @@
         <item name="android:layout_width">1px</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/colorLine</item>
+    </style>
+
+    <!-- 获取验证码样式 -->
+    <style name="CountdownViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:minWidth">@dimen/space_240</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/common_send_get_code</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
 </resources>

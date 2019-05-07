@@ -2,12 +2,14 @@ package com.hjq.demo.ui.fragment;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyLazyFragment;
+import com.hjq.demo.ui.activity.HomeActivity;
 import com.hjq.demo.widget.XCollapsingToolbarLayout;
 
 import butterknife.BindView;
@@ -18,7 +20,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 项目炫酷效果示例
  */
-public class TestFragmentA extends MyLazyFragment
+public final class TestFragmentA extends MyLazyFragment<HomeActivity>
         implements XCollapsingToolbarLayout.OnScrimsListener {
 
     @BindView(R.id.abl_test_bar)
@@ -45,14 +47,14 @@ public class TestFragmentA extends MyLazyFragment
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_test_a_bar;
     }
 
     @Override
     protected void initView() {
         // 给这个ToolBar设置顶部内边距，才能和TitleBar进行对齐
-        ImmersionBar.setTitleBar(getFragmentActivity(), mToolbar);
+        ImmersionBar.setTitleBar(getBindingActivity(), mToolbar);
 
         //设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);
@@ -75,11 +77,12 @@ public class TestFragmentA extends MyLazyFragment
     }
 
     /**
+     * CollapsingToolbarLayout 渐变回调
+     *
      * {@link XCollapsingToolbarLayout.OnScrimsListener}
      */
     @Override
     public void onScrimsStateChange(boolean shown) {
-        // CollapsingToolbarLayout 发生了渐变
         if (shown) {
             mAddressView.setTextColor(getResources().getColor(R.color.black));
             mSearchView.setBackgroundResource(R.drawable.bg_home_search_bar_gray);

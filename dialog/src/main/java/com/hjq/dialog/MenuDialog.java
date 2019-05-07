@@ -15,6 +15,7 @@ import com.hjq.base.BaseDialog;
 import com.hjq.base.BaseDialogFragment;
 import com.hjq.base.BaseRecyclerViewAdapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,9 +42,9 @@ public final class MenuDialog {
             super(activity);
 
             setContentView(R.layout.dialog_menu);
-            setGravity(Gravity.BOTTOM);
             setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
-            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+            setGravity(Gravity.BOTTOM);
+            setWidth(MATCH_PARENT);
 
             mRecyclerView = findViewById(R.id.rv_dialog_menu_list);
             mCancelView  = findViewById(R.id.tv_dialog_menu_cancel);
@@ -56,6 +57,14 @@ public final class MenuDialog {
             mCancelView.setOnClickListener(this);
         }
 
+        public Builder setList(int... resIds) {
+            List<String> data = new ArrayList<>(resIds.length);
+            for (int resId : resIds) {
+                data.add(getString(resId));
+            }
+            return setList(data);
+        }
+
         public Builder setList(String... data) {
             return setList(Arrays.asList(data));
         }
@@ -66,8 +75,9 @@ public final class MenuDialog {
         }
 
         public Builder setCancel(int resId) {
-            return setCancel(getContext().getText(resId));
+            return setCancel(getText(resId));
         }
+
         public Builder setCancel(CharSequence text) {
             mCancelView.setText(text);
             mCancelView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
@@ -113,11 +123,19 @@ public final class MenuDialog {
                 mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
             }
         }
+
+//        @Override
+//        protected BaseDialog createDialog(Context context, int themeResId) {
+//            if (getGravity() == Gravity.BOTTOM) {
+//                return new BaseBottomDialog(context, themeResId);
+//            }
+//            return super.createDialog(context, themeResId);
+//        }
     }
 
     private static final class MenuAdapter extends BaseRecyclerViewAdapter<String, MenuAdapter.ViewHolder> {
 
-        MenuAdapter(Context context) {
+        private MenuAdapter(Context context) {
             super(context);
         }
 

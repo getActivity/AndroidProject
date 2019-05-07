@@ -22,7 +22,8 @@ import butterknife.ButterKnife;
  *    time   : 2018/12/19
  *    desc   : 项目中 RecyclerView 适配器基类
  */
-public abstract class MyRecyclerViewAdapter<T, VH extends MyRecyclerViewAdapter.ViewHolder> extends BaseRecyclerViewAdapter<T, VH> {
+public abstract class MyRecyclerViewAdapter<T, VH extends MyRecyclerViewAdapter.ViewHolder>
+        extends BaseRecyclerViewAdapter<T, VH> {
 
     // 当前列表的页码，默认为第一页，用于分页加载功能
     private int mPageNumber = 1;
@@ -81,11 +82,12 @@ public abstract class MyRecyclerViewAdapter<T, VH extends MyRecyclerViewAdapter.
 
         public ViewHolder(ViewGroup parent, int layoutId) {
             super(parent, layoutId);
+            ButterKnife.bind(this, itemView);
         }
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         public final ViewHolder setText(@IdRes int viewId, @StringRes int resId) {

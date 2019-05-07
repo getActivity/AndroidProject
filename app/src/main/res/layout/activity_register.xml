@@ -60,18 +60,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/register_phone_hint"
+                    android:hint="@string/common_phone_input_hint"
                     android:inputType="phone"
                     android:maxLength="11"
                     android:maxLines="1" />
 
                 <com.hjq.widget.CountdownView
                     android:id="@+id/cv_register_countdown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/space_20"
-                    android:text="@string/register_send_code"
-                    android:textColor="@color/colorAccent" />
+                    style="@style/CountdownViewStyle" />
             </LinearLayout>
 
             <View style="@style/HorizontalLineStyle" />
@@ -82,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_40"
-                android:hint="@string/register_code_hint"
+                android:hint="@string/common_code_input_hint"
                 android:inputType="number"
                 android:maxLength="8"
                 android:maxLines="1" />
@@ -121,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
+                android:layout_marginBottom="@dimen/space_40"
                 android:text="@string/register_title" />
 
         </LinearLayout>

@@ -8,6 +8,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -82,6 +83,7 @@ public abstract class BaseListViewAdapter
     /**
      * 获取当前数据
      */
+    @Nullable
     public List<T> getData() {
         return mDataSet;
     }
@@ -130,7 +132,9 @@ public abstract class BaseListViewAdapter
      * 添加单条数据
      */
     public void addItem(T item) {
-        addItem(mDataSet.size() - 1, item);
+        if (mDataSet == null) mDataSet = new ArrayList<>();
+
+        addItem(mDataSet.size(), item);
     }
 
     /**
@@ -227,6 +231,7 @@ public abstract class BaseListViewAdapter
             return itemView;
         }
 
+        @SuppressWarnings("unchecked")
         public final <V extends View> V findViewById(@IdRes int id) {
             WeakReference<View> reference = mViews.get(id);
             if (reference != null && reference.get() != null) {

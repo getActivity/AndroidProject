@@ -1,6 +1,5 @@
 package com.hjq.image;
 
-import android.content.Context;
 import android.widget.ImageView;
 
 /**
@@ -9,35 +8,35 @@ import android.widget.ImageView;
  *    time   : 2018/12/26
  *    desc   : 图片加载通用性接口
  */
-public interface LoadHandler {
+public interface ImageHandler {
 
     /**
      * 通过 url 加载普通图片
      */
-    void loadImage(Context context, ImageView imageView, String url);
+    void loadImage(Object object, ImageView imageView, String url);
 
     /**
      * 通过资源 id 加载普通图片
      */
-    void loadImage(Context context, ImageView imageView, int resourceId);
+    void loadImage(Object object, ImageView imageView, int resourceId);
 
     /**
      * 通过 url 加载圆形图片
      */
-    void loadCircleImage(Context context, ImageView imageView, String url);
+    void loadCircleImage(Object object, ImageView imageView, String url);
 
     /**
      * 通过资源 id 加载圆形图片
      */
-    void loadCircleImage(Context context, ImageView imageView, int resourceId);
+    void loadCircleImage(Object object, ImageView imageView, int resourceId);
 
     /**
      * 通过 url 加载圆角图片
      */
-    void loadRoundImage(Context context, ImageView imageView, String url, float cornerRadius);
+    void loadRoundImage(Object object, ImageView imageView, String url, float radius);
 
     /**
      * 通过资源 id 加载圆角图片
      */
-    void loadRoundImage(Context context, ImageView imageView, int resourceId, float cornerRadius);
+    void loadRoundImage(Object object, ImageView imageView, int resourceId, float radius);
 }

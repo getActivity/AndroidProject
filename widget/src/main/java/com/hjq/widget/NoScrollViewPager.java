@@ -14,7 +14,7 @@ import android.view.MotionEvent;
  *    time   : 2018/10/18
  *    desc   : 禁用水平滑动的ViewPager（一般用于APP主页的 ViewPager + Fragment）
  */
-public class NoScrollViewPager extends ViewPager {
+public final class NoScrollViewPager extends ViewPager {
 
     public NoScrollViewPager(Context context) {
         super(context);

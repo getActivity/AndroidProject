@@ -13,7 +13,7 @@ import com.hjq.copy.R;
  *    time   : 2018/12/27
  *    desc   : Glide 加工厂
  */
-class GlideFactory implements ImageFactory<GlideHandler> {
+public final class GlideFactory implements ImageFactory<GlideHandler> {
 
     @Override
     public GlideHandler create() {

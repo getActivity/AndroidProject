@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:title="@string/setting_title" />
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,14 +22,14 @@
         app:bar_rightIcon="@mipmap/ico_go_black"
         tools:bar_rightHint="@string/setting_language_simple" />
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:bar_leftText="@string/setting_update"
         app:bar_rightIcon="@mipmap/ico_go_black" />
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_agreement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,14 +37,14 @@
         app:bar_leftText="@string/setting_agreement"
         app:bar_rightIcon="@mipmap/ico_go_black" />
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:bar_leftText="@string/setting_about"
         app:bar_rightIcon="@mipmap/ico_go_black" />
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,9 +59,9 @@
             android:layout_marginLeft="@dimen/space_30"
             android:layout_marginRight="@dimen/space_30" />
 
-    </com.hjq.demo.widget.SettingBar>
+    </com.hjq.widget.SettingBar>
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_cache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         app:bar_leftText="@string/setting_cache"
         app:bar_rightIcon="@mipmap/ico_go_black" />
 
-    <com.hjq.demo.widget.SettingBar
+    <com.hjq.widget.SettingBar
         android:id="@+id/sb_setting_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

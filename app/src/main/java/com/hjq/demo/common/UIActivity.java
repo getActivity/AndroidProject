@@ -46,8 +46,8 @@ public abstract class UIActivity extends BaseActivity
             statusBarConfig().init();
 
             //设置标题栏
-            if (getTitleBarId() > 0) {
-                ImmersionBar.setTitleBar(this, findViewById(getTitleBarId()));
+            if (getTitleId() > 0) {
+                ImmersionBar.setTitleBar(this, findViewById(getTitleId()));
             }
         }
     }
@@ -92,7 +92,8 @@ public abstract class UIActivity extends BaseActivity
      */
     @Override
     public boolean isSupportSwipeBack() {
-        return true;
+        // android 9.0系统滑动返回上一级时闪屏：https://github.com/bingoogolapple/BGASwipeBackLayout-Android/issues/154
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.P;
     }
 
     /**
@@ -144,7 +145,7 @@ public abstract class UIActivity extends BaseActivity
     /**
      * 初始化沉浸式状态栏
      */
-    private ImmersionBar statusBarConfig() {
+    protected ImmersionBar statusBarConfig() {
         //在BaseActivity里初始化
         mImmersionBar = ImmersionBar.with(this)
                 .statusBarDarkFont(statusBarDarkFont())    //默认状态栏字体颜色为黑色

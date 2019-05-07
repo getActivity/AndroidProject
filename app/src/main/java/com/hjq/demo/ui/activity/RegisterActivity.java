@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.InputTextHelper;
@@ -18,7 +19,7 @@ import butterknife.OnClick;
  *    time   : 2018/10/18
  *    desc   : 注册界面
  */
-public class RegisterActivity extends MyActivity {
+public final class RegisterActivity extends MyActivity {
 
     @BindView(R.id.et_register_phone)
     EditText mPhoneView;
@@ -36,22 +37,25 @@ public class RegisterActivity extends MyActivity {
     @BindView(R.id.btn_register_commit)
     Button mCommitView;
 
-    private InputTextHelper mInputTextHelper;
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_register;
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_register_title;
     }
 
     @Override
     protected void initView() {
-        mInputTextHelper = new InputTextHelper(mCommitView);
-        mInputTextHelper.addViews(mPhoneView, mCodeView, mPasswordView1, mPasswordView2);
+        new InputTextHelper.Builder(this)
+                .setMain(mCommitView)
+                .addView(mPhoneView)
+                .addView(mCodeView)
+                .addView(mPasswordView1)
+                .addView(mPasswordView2)
+                .build();
     }
 
     @Override
@@ -64,6 +68,12 @@ public class RegisterActivity extends MyActivity {
 //        }, 2000);
     }
 
+    @Override
+    protected ImmersionBar statusBarConfig() {
+        // 不要把整个布局顶上去
+        return super.statusBarConfig().keyboardEnable(true);
+    }
+
     @OnClick({R.id.cv_register_countdown, R.id.btn_register_commit})
     public void onClick(View v) {
         switch (v.getId()) {
@@ -72,33 +82,25 @@ public class RegisterActivity extends MyActivity {
                 if (mPhoneView.getText().toString().length() != 11) {
                     // 重置验证码倒计时控件
                     mCountdownView.resetState();
-                    toast(getResources().getString(R.string.phone_input_error));
-                    break;
+                    toast(getString(R.string.common_phone_input_error));
+                } else {
+                    // 获取验证码
+                    toast(getString(R.string.common_send_code_succeed));
                 }
-
-                toast(getResources().getString(R.string.countdown_code_send_succeed));
 
                 break;
             case R.id.btn_register_commit: //提交注册
 
                 if (mPhoneView.getText().toString().length() != 11) {
-                    toast(getResources().getString(R.string.phone_input_error));
-                    break;
-                }
-
-                if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
-                    toast(getResources().getString(R.string.two_password_input_error));
-                    break;
+                    toast(getString(R.string.common_phone_input_error));
+                } else if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
+                    toast(getString(R.string.register_password_input_error));
+                } else {
+                    startActivity(LoginActivity.class);
                 }
                 break;
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mInputTextHelper.removeViews();
-        super.onDestroy();
     }
 }

@@ -1,15 +1,21 @@
 package com.hjq.demo.common;
 
 import android.content.pm.ActivityInfo;
-import android.os.Bundle;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.View;
 
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.helper.ActivityStackManager;
+import com.hjq.demo.helper.DebugUtils;
+import com.hjq.demo.other.EventBusManager;
+import com.hjq.demo.other.StatusManager;
 import com.hjq.toast.ToastUtils;
-import com.hjq.umeng.UmengHelper;
+import com.hjq.umeng.UmengClient;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,26 +30,27 @@ public abstract class MyActivity extends UIActivity
         implements OnTitleBarListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initActivity() {
+        super.initActivity();
         ActivityStackManager.getInstance().onActivityCreated(this);
     }
 
-    private Unbinder mButterKnife;//View注解
+    // ButterKnife 注解
+    private Unbinder mButterKnife;
 
     @Override
     protected void initLayout() {
         super.initLayout();
 
         // 初始化标题栏的监听
-        if (getTitleBarId() > 0) {
-            if (findViewById(getTitleBarId()) instanceof TitleBar) {
-                ((TitleBar) findViewById(getTitleBarId())).setOnTitleBarListener(this);
+        if (getTitleId() > 0) {
+            if (findViewById(getTitleId()) instanceof TitleBar) {
+                ((TitleBar) findViewById(getTitleId())).setOnTitleBarListener(this);
             }
         }
 
         mButterKnife = ButterKnife.bind(this);
-
+        EventBusManager.register(this);
         initOrientation();
     }
 
@@ -79,8 +86,8 @@ public abstract class MyActivity extends UIActivity
 
     @Nullable
     public TitleBar getTitleBar() {
-        if (getTitleBarId() > 0 && findViewById(getTitleBarId()) instanceof TitleBar) {
-            return findViewById(getTitleBarId());
+        if (getTitleId() > 0 && findViewById(getTitleId()) instanceof TitleBar) {
+            return findViewById(getTitleId());
         }
         return null;
     }
@@ -95,38 +102,37 @@ public abstract class MyActivity extends UIActivity
      * {@link OnTitleBarListener}
      */
 
-    // 标题栏左边的View被点击了
+    // TitleBar 左边的View被点击了
     @Override
     public void onLeftClick(View v) {
         onBackPressed();
     }
 
-    // 标题栏中间的View被点击了
+    // TitleBar 中间的View被点击了
     @Override
     public void onTitleClick(View v) {}
 
-    // 标题栏右边的View被点击了
+    // TitleBar 右边的View被点击了
     @Override
     public void onRightClick(View v) {}
 
     @Override
     protected void onResume() {
         super.onResume();
-        // 友盟统计
-        UmengHelper.onResume(this);
+        UmengClient.onResume(this);
     }
 
     @Override
     protected void onPause() {
+        UmengClient.onPause(this);
         super.onPause();
-        // 友盟统计
-        UmengHelper.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mButterKnife != null) mButterKnife.unbind();
+        EventBusManager.unregister(this);
         ActivityStackManager.getInstance().onActivityDestroyed(this);
     }
 
@@ -137,11 +143,68 @@ public abstract class MyActivity extends UIActivity
         ToastUtils.show(s);
     }
 
-    public void toast(int id) {
-        ToastUtils.show(id);
+    public void toast(@StringRes int id) {
+        ToastUtils.show(getString(id));
     }
 
     public void toast(Object object) {
         ToastUtils.show(object);
+    }
+
+    /**
+     * 打印日志
+     */
+    public void log(Object object) {
+        if (DebugUtils.isDebug(this)) {
+            Log.v(getClass().getSimpleName(), object != null ? object.toString() : "null");
+        }
+    }
+
+    /**
+     * 获取当前的 Application 对象
+     */
+    public final MyApplication getMyApplication() {
+        return (MyApplication) getApplication();
+    }
+
+    private final StatusManager mStatusManager = new StatusManager();
+
+    /**
+     * 显示加载中
+     */
+    public void showLoading() {
+        mStatusManager.showLoading(this);
+    }
+
+    /**
+     * 显示加载完成
+     */
+    public void showComplete() {
+        mStatusManager.showComplete();
+    }
+
+    /**
+     * 显示空提示
+     */
+    public void showEmpty() {
+        mStatusManager.showEmpty(getContentView());
+    }
+
+    /**
+     * 显示错误提示
+     */
+    public void showError() {
+        mStatusManager.showError(getContentView());
+    }
+
+    /**
+     * 显示自定义提示
+     */
+    public void showLayout(@DrawableRes int iconId, @StringRes int textId) {
+        mStatusManager.showLayout(getContentView(), iconId, textId);
+    }
+
+    public void showLayout(Drawable drawable, CharSequence hint) {
+        mStatusManager.showLayout(getContentView(), drawable, hint);
     }
 }

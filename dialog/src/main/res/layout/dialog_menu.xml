@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_dialog_menu_list"
@@ -32,6 +32,6 @@
         android:singleLine="true"
         android:text="@string/dialog_cancel"
         android:textColor="@color/dialog_cancel"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
 </LinearLayout>

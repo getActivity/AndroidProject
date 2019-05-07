@@ -10,7 +10,8 @@ import java.util.List;
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的业务处理类
  */
-public class CopyPresenter extends MvpPresenter<CopyContract.View> implements CopyContract.Presenter {
+public final class CopyPresenter extends MvpPresenter<CopyContract.View>
+        implements CopyContract.Presenter, CopyOnListener {
 
     private CopyModel mModel;
 
@@ -19,22 +20,29 @@ public class CopyPresenter extends MvpPresenter<CopyContract.View> implements Co
         mModel = new CopyModel();
     }
 
+    /**
+     * {@link CopyContract.Presenter}
+     */
+
     @Override
     public void login(String account, String password) {
         mModel.setAccount(account);
         mModel.setPassword(password);
-        mModel.setListener(new CopyOnListener() {
-
-            @Override
-            public void onSucceed(List<String> data) {
-                getView().loginSuccess(data);
-            }
-
-            @Override
-            public void onFail(String msg) {
-                getView().loginError(msg);
-            }
-        });
+        mModel.setListener(this);
         mModel.login();
+    }
+
+    /**
+     * {@link CopyOnListener}
+     */
+
+    @Override
+    public void onSucceed(List<String> data) {
+        getView().loginSuccess(data);
+    }
+
+    @Override
+    public void onFail(String msg) {
+        getView().loginError(msg);
     }
 }

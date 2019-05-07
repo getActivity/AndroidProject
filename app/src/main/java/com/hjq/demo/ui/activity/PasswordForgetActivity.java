@@ -18,7 +18,7 @@ import butterknife.OnClick;
  *    time   : 2019/02/27
  *    desc   : 忘记密码
  */
-public class PasswordForgetActivity extends MyActivity {
+public final class PasswordForgetActivity extends MyActivity {
 
     @BindView(R.id.et_password_forget_phone)
     EditText mPhoneView;
@@ -29,22 +29,23 @@ public class PasswordForgetActivity extends MyActivity {
     @BindView(R.id.btn_password_forget_commit)
     Button mCommitView;
 
-    private InputTextHelper mInputTextHelper;
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_password_forget;
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_password_forget_title;
     }
 
     @Override
     protected void initView() {
-        mInputTextHelper = new InputTextHelper(mCommitView);
-        mInputTextHelper.addViews(mPhoneView, mCodeView);
+        new InputTextHelper.Builder(this)
+                .setMain(mCommitView)
+                .addView(mPhoneView)
+                .addView(mCodeView)
+                .build();
     }
 
     @Override
@@ -52,34 +53,29 @@ public class PasswordForgetActivity extends MyActivity {
 
     }
 
-
     @OnClick({R.id.cv_password_forget_countdown, R.id.btn_password_forget_commit})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cv_password_forget_countdown: // 获取验证码
+            case R.id.cv_password_forget_countdown:
                 if (mPhoneView.getText().toString().length() != 11) {
                     // 重置验证码倒计时控件
                     mCountdownView.resetState();
-                    toast(getResources().getString(R.string.phone_input_error));
-                    break;
+                    toast(getString(R.string.common_phone_input_error));
+                } else {
+                    // 获取验证码
+                    toast(getString(R.string.common_send_code_succeed));
                 }
-                toast(getResources().getString(R.string.countdown_code_send_succeed));
                 break;
-            case R.id.btn_password_forget_commit: //提交注册
+            case R.id.btn_password_forget_commit:
                 if (mPhoneView.getText().toString().length() != 11) {
-                    toast(getResources().getString(R.string.phone_input_error));
-                    break;
+                    toast(getString(R.string.common_phone_input_error));
+                } else {
+                    // 重置密码
+                    startActivityFinish(PasswordResetActivity.class);
                 }
-                startActivityFinish(PasswordResetActivity.class);
                 break;
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mInputTextHelper.removeViews();
-        super.onDestroy();
     }
 }

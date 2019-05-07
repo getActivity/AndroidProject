@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 仿 ios 开关按钮 -->
     <declare-styleable name="SwitchButton" tools:ignore="ResourceName">
         <!-- 是否选中 -->
         <attr name="android:checked" />
         <!-- 是否禁用 -->
         <attr name="android:enabled" />
+    </declare-styleable>
+
+    <!-- 设置栏 -->
+    <declare-styleable name="SettingBar" tools:ignore="ResourceName">
+        <!-- 左边 -->
+        <attr name="bar_leftText" format="string"/>
+        <attr name="bar_leftHint" format="string"/>
+        <attr name="bar_leftIcon" format="reference" />
+        <attr name="bar_leftColor" format="color" />
+        <attr name="bar_leftSize" format="dimension" />
+        <!-- 右边 -->
+        <attr name="bar_rightText" format="string" />
+        <attr name="bar_rightHint" format="string"/>
+        <attr name="bar_rightIcon" format="reference" />
+        <attr name="bar_rightColor" format="color" />
+        <attr name="bar_rightSize" format="dimension" />
+        <!-- 分割线 -->
+        <attr name="bar_lineVisible" format="boolean" />
+        <attr name="bar_lineColor" format="reference|color" />
+        <attr name="bar_lineSize" format="dimension" />
+        <attr name="bar_lineMargin" format="dimension" />
+    </declare-styleable>
+
+    <!-- 自定义数字进度条 -->
+    <declare-styleable name="NumberProgressBar" tools:ignore="ResourceName">
+        <attr name="pb_progress" format="integer"/>
+        <attr name="pb_maxProgress" format="integer"/>
+
+        <attr name="pb_textSize" format="dimension"/>
+        <attr name="pb_textColor" format="color"/>
+
+        <attr name="pb_textOffset" format="dimension"/>
+
+        <attr name="pb_unreachedColor" format="color"/>
+        <attr name="pb_reachedColor" format="color"/>
+
+        <attr name="pb_reachedHeight" format="dimension"/>
+        <attr name="pb_unreachedHeight" format="dimension"/>
+
     </declare-styleable>
 
 </resources>

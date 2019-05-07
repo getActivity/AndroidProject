@@ -5,7 +5,7 @@ import android.widget.ImageView;
 
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyLazyFragment;
-import com.hjq.demo.common.UIActivity;
+import com.hjq.demo.ui.activity.HomeActivity;
 import com.hjq.image.ImageLoader;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
@@ -22,7 +22,7 @@ import butterknife.OnClick;
  *    time   : 2018/10/18
  *    desc   : 项目框架使用示例
  */
-public class TestFragmentC extends MyLazyFragment {
+public final class TestFragmentC extends MyLazyFragment<HomeActivity> {
 
     @BindView(R.id.iv_test_image)
     ImageView mImageView;
@@ -37,7 +37,7 @@ public class TestFragmentC extends MyLazyFragment {
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_test_c_title;
     }
 
@@ -57,19 +57,26 @@ public class TestFragmentC extends MyLazyFragment {
         return !super.isStatusBarEnabled();
     }
 
-    @OnClick({R.id.btn_test_image, R.id.btn_test_toast, R.id.btn_test_permission,
+    @OnClick({R.id.btn_test_image1, R.id.btn_test_image2, R.id.btn_test_image3,
+            R.id.btn_test_toast, R.id.btn_test_permission,
             R.id.btn_test_state_black, R.id.btn_test_state_white,
             R.id.btn_test_swipe_enabled, R.id.btn_test_swipe_disable})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_test_image:
+            case R.id.btn_test_image1:
                 ImageLoader.loadImage(mImageView, "https://www.baidu.com/img/bd_logo.png");
+                break;
+            case R.id.btn_test_image2:
+                ImageLoader.loadCircleImage(mImageView, "https://www.baidu.com/img/bd_logo.png");
+                break;
+            case R.id.btn_test_image3:
+                ImageLoader.loadRoundImage(mImageView, "https://www.baidu.com/img/bd_logo.png", 20);
                 break;
             case R.id.btn_test_toast:
                 toast("我是吐司");
                 break;
             case R.id.btn_test_permission:
-                XXPermissions.with(getFragmentActivity())
+                XXPermissions.with(getBindingActivity())
                         //.constantRequest() //可设置被拒绝后继续申请，直到用户授权或者永久拒绝
                         //.permission(Permission.SYSTEM_ALERT_WINDOW, Permission.REQUEST_INSTALL_PACKAGES) //支持请求6.0悬浮窗权限8.0请求安装权限
                         .permission(Permission.CAMERA) //不指定权限则自动获取清单中的危险权限
@@ -89,7 +96,7 @@ public class TestFragmentC extends MyLazyFragment {
                                 if(quick) {
                                     toast("被永久拒绝授权，请手动授予权限");
                                     //如果是被永久拒绝就跳转到应用权限系统设置页面
-                                    XXPermissions.gotoPermissionSettings(getFragmentActivity());
+                                    XXPermissions.gotoPermissionSettings(getBindingActivity());
                                 }else {
                                     toast("获取权限失败");
                                 }
@@ -97,17 +104,17 @@ public class TestFragmentC extends MyLazyFragment {
                         });
                 break;
             case R.id.btn_test_state_black:
-                ((UIActivity) getFragmentActivity()).getStatusBarConfig().statusBarDarkFont(true).init();
+                getBindingActivity().getStatusBarConfig().statusBarDarkFont(true).init();
                 break;
             case R.id.btn_test_state_white:
-                ((UIActivity) getFragmentActivity()).getStatusBarConfig().statusBarDarkFont(false).init();
+                getBindingActivity().getStatusBarConfig().statusBarDarkFont(false).init();
                 break;
             case R.id.btn_test_swipe_enabled:
-                ((UIActivity) getFragmentActivity()).getSwipeBackHelper().setSwipeBackEnable(true);
+                getBindingActivity().getSwipeBackHelper().setSwipeBackEnable(true);
                 toast("当前界面不会生效，其他界面调用才会有效果");
                 break;
             case R.id.btn_test_swipe_disable:
-                ((UIActivity) getFragmentActivity()).getSwipeBackHelper().setSwipeBackEnable(false);
+                getBindingActivity().getSwipeBackHelper().setSwipeBackEnable(false);
                 toast("当前界面不会生效，其他界面调用才会有效果");
                 break;
             default:

@@ -88,13 +88,13 @@ public final class LoopView extends View {
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.LoopView);
         if (array != null) {
-            mTopBottomTextColor = array.getColor(R.styleable.LoopView_topBottomTextColor, 0xffafafaf);
-            mCenterTextColor = array.getColor(R.styleable.LoopView_centerTextColor, 0xff313131);
-            mCenterLineColor = array.getColor(R.styleable.LoopView_lineColor, 0xffc5c5c5);
-            mCanLoop = array.getBoolean(R.styleable.LoopView_canLoop, true);
-            mInitPosition = array.getInt(R.styleable.LoopView_initPosition, -1);
-            mTextSize = array.getDimensionPixelSize(R.styleable.LoopView_textSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getContext().getResources().getDisplayMetrics()));
-            mDrawItemsCount = array.getInt(R.styleable.LoopView_drawItemCount, 7);
+            mTopBottomTextColor = array.getColor(R.styleable.LoopView_lv_topBottomTextColor, 0xffafafaf);
+            mCenterTextColor = array.getColor(R.styleable.LoopView_lv_centerTextColor, 0xff313131);
+            mCenterLineColor = array.getColor(R.styleable.LoopView_lv_lineColor, 0xffc5c5c5);
+            mCanLoop = array.getBoolean(R.styleable.LoopView_lv_canLoop, true);
+            mInitPosition = array.getInt(R.styleable.LoopView_lv_initPosition, -1);
+            mTextSize = array.getDimensionPixelSize(R.styleable.LoopView_lv_textSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getContext().getResources().getDisplayMetrics()));
+            mDrawItemsCount = array.getInt(R.styleable.LoopView_lv_drawItemCount, 7);
             mItemTempArray = new String[mDrawItemsCount];
             array.recycle();
         }

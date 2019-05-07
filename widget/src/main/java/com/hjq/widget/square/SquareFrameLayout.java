@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
  *    time   : 2018/10/18
  *    desc   : 正方形的FrameLayout
  */
-public class SquareFrameLayout extends FrameLayout {
+public final class SquareFrameLayout extends FrameLayout {
 
     public SquareFrameLayout(Context context) {
         super(context);

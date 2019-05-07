@@ -1,4 +1,4 @@
-apply from: "config.gradle"
+apply from: 'versions.gradle'
 
 buildscript {
     repositories {
@@ -16,15 +16,6 @@ allprojects {
         google()
         maven {url "https://jitpack.io"}
         maven {url 'https://maven.google.com'}
-    }
-
-    //解决app:mockableAndroidJar错误的问题
-    gradle.taskGraph.whenReady {
-        tasks.each { task ->
-            if (task.name.equals('mockableAndroidJar')) {
-                task.enabled = false
-            }
-        }
     }
 }
 

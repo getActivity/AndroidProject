@@ -3,7 +3,7 @@
     android:id="@+id/dialog_address_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/dialog_rounded_corner_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -24,7 +24,7 @@
             android:paddingBottom="@dimen/space_10"
             android:text="@string/dialog_cancel"
             android:textColor="@color/dialog_cancel"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_dialog_wheel_title"
@@ -39,7 +39,7 @@
             android:paddingBottom="@dimen/space_10"
             android:text="@string/dialog_select_hint"
             android:textColor="#333333"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_dialog_wheel_confirm"
@@ -53,7 +53,7 @@
             android:paddingBottom="@dimen/space_10"
             android:text="@string/dialog_confirm"
             android:textColor="@color/dialog_confirm"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

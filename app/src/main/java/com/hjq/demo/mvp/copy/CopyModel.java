@@ -8,7 +8,7 @@ import com.hjq.demo.mvp.MvpModel;
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的接口实现类
  */
-public class CopyModel extends MvpModel<CopyOnListener> {
+public final class CopyModel extends MvpModel<CopyOnListener> {
 
     private String mAccount;
     private String mPassword;

@@ -6,7 +6,7 @@ import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.demo.helper.CacheDataManager;
-import com.hjq.demo.widget.SettingBar;
+import com.hjq.widget.SettingBar;
 import com.hjq.image.ImageLoader;
 import com.hjq.widget.SwitchButton;
 
@@ -19,7 +19,7 @@ import butterknife.OnClick;
  *    time   : 2019/03/01
  *    desc   : 设置界面
  */
-public class SettingActivity extends MyActivity
+public final class SettingActivity extends MyActivity
         implements SwitchButton.OnCheckedChangeListener {
 
     @BindView(R.id.sb_setting_cache)
@@ -36,22 +36,20 @@ public class SettingActivity extends MyActivity
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_setting_title;
     }
 
     @Override
     protected void initView() {
-
+        // 设置切换按钮的监听
+        mAutoSwitchView.setOnCheckedChangeListener(this);
     }
 
     @Override
     protected void initData() {
         // 获取应用缓存大小
         mCleanCacheView.setRightText(CacheDataManager.getTotalCacheSize(this));
-
-        // 设置切换按钮的监听
-        mAutoSwitchView.setOnCheckedChangeListener(this);
     }
 
     @OnClick({R.id.sb_setting_language, R.id.sb_setting_update, R.id.sb_setting_agreement, R.id.sb_setting_about,

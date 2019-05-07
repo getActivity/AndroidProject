@@ -22,7 +22,8 @@ import butterknife.ButterKnife;
  *    time   : 2018/10/18
  *    desc   : 项目中 ListView 适配器基类
  */
-public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHolder> extends BaseListViewAdapter<T, VH> {
+public abstract class MyListViewAdapter<T, VH extends MyListViewAdapter.ViewHolder>
+        extends BaseListViewAdapter<T, VH> {
 
     //当前列表的页码，默认为第一页，用于分页加载功能
     private int mPageNumber = 1;

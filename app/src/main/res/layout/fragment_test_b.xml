@@ -53,7 +53,7 @@
 
             </LinearLayout>
 
-            <com.hjq.demo.widget.SettingBar
+            <com.hjq.widget.SettingBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -137,9 +137,7 @@
 
                 <com.hjq.widget.CountdownView
                     android:id="@+id/cv_test_countdown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="获取验证码" />
+                    style="@style/CountdownViewStyle" />
 
             </LinearLayout>
 

@@ -9,7 +9,7 @@ import com.hjq.base.BaseLazyFragment;
  *    time   : 2018/10/18
  *    desc   : 支持沉浸式Fragment懒加载基类（默认不开启沉浸式）
  */
-public abstract class UILazyFragment extends BaseLazyFragment {
+public abstract class UILazyFragment<A extends UIActivity> extends BaseLazyFragment<A> {
 
     private ImmersionBar mImmersionBar; // 状态栏沉浸
 
@@ -29,8 +29,8 @@ public abstract class UILazyFragment extends BaseLazyFragment {
             statusBarConfig().init();
 
             // 设置标题栏
-            if (getTitleBarId() > 0) {
-                ImmersionBar.setTitleBar(mActivity, findViewById(getTitleBarId()));
+            if (getTitleId() > 0) {
+                ImmersionBar.setTitleBar(mActivity, findViewById(getTitleId()));
             }
         }
     }

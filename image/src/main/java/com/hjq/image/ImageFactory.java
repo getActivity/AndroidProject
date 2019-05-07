@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable;
  *    time   : 2018/12/27
  *    desc   : 图片加载器生产机器
  */
-public interface ImageFactory<T extends LoadHandler> {
+public interface ImageFactory<T extends ImageHandler> {
 
     /**
      * 创建一个图片加载器

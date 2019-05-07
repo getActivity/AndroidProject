@@ -16,13 +16,16 @@ public abstract class MvpLazyFragment<P extends MvpPresenter> extends MyLazyFrag
     protected void initFragment() {
         mPresenter = createPresenter();
         mPresenter.attach(this);
-        mPresenter.start();
         super.initFragment();
+        mPresenter.start();
     }
 
     @Override
     public void onDestroy() {
-        mPresenter.detach();
+        if (mPresenter != null) {
+            mPresenter.detach();
+            mPresenter = null;
+        }
         super.onDestroy();
     }
 

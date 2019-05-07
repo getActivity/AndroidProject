@@ -33,6 +33,14 @@
                 android:text="点我进入对话框案例" />
 
             <Button
+                android:id="@+id/btn_test_hint"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="点我进入界面状态案例" />
+
+            <Button
                 android:id="@+id/btn_test_login"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
@@ -65,6 +73,30 @@
                 android:text="点我进入重置密码" />
 
             <Button
+                android:id="@+id/btn_test_verify"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="点我进入校验手机" />
+
+            <Button
+                android:id="@+id/btn_test_change"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="点我进入重置手机" />
+
+            <Button
+                android:id="@+id/btn_test_personal"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="点我进入个人界面" />
+
+            <Button
                 android:id="@+id/btn_test_setting"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
@@ -87,6 +119,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
                 android:text="点我进入浏览器界面" />
+
+            <Button
+                android:id="@+id/btn_test_image"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="点我进入查看大图界面" />
 
             <Button
                 android:id="@+id/btn_test_pay"

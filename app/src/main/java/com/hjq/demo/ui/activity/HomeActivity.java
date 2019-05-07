@@ -3,6 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.hjq.base.BaseFragmentAdapter;
@@ -24,7 +25,7 @@ import butterknife.BindView;
  *    time   : 2018/10/18
  *    desc   : 主页界面
  */
-public class HomeActivity extends MyActivity
+public final class HomeActivity extends MyActivity
         implements ViewPager.OnPageChangeListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -41,14 +42,13 @@ public class HomeActivity extends MyActivity
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return 0;
     }
 
     @Override
     protected void initView() {
         mViewPager.addOnPageChangeListener(this);
-//        mViewPager.setPageTransformer(true, new ZoomFadePageTransformer());
 
         // 不使用图标默认变色
         mBottomNavigationView.setItemIconTintList(null);
@@ -130,16 +130,27 @@ public class HomeActivity extends MyActivity
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 回调当前 Fragment 的 onKeyDown 方法
+        if (mPagerAdapter.getCurrentFragment().onKeyDown(keyCode, event)) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public void onBackPressed() {
         if (DoubleClickHelper.isOnDoubleClick()) {
             //移动到上一个任务栈，避免侧滑引起的不良反应
             moveTaskToBack(false);
-            getHandler().postDelayed(new Runnable() {
+            postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
                     // 进行内存优化，销毁掉所有的界面
                     ActivityStackManager.getInstance().finishAllActivities();
+                    // 销毁进程
+                    System.exit(0);
                 }
             }, 300);
         } else {
@@ -158,6 +169,6 @@ public class HomeActivity extends MyActivity
     @Override
     public boolean isSupportSwipeBack() {
         // 不使用侧滑功能
-        return !super.isSupportSwipeBack();
+        return false;
     }
 }

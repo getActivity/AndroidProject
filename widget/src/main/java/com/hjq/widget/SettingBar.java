@@ -1,4 +1,4 @@
-package com.hjq.demo.widget;
+package com.hjq.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.hjq.demo.R;
-
 
 /**
  *    author : Android 轮子哥
@@ -22,7 +20,7 @@ import com.hjq.demo.R;
  *    time   : 2019/01/23
  *    desc   : 设置条自定义控件
  */
-public class SettingBar extends FrameLayout {
+public final class SettingBar extends FrameLayout {
 
     private TextView mLeftView;
     private TextView mRightView;
@@ -39,7 +37,7 @@ public class SettingBar extends FrameLayout {
     public SettingBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        LayoutInflater.from(context).inflate(R.layout.view_setting_bar, this);
+        LayoutInflater.from(context).inflate(R.layout.widget_setting_bar, this);
         mLeftView = (TextView) findViewById(R.id.tv_setting_bar_left);
         mRightView = (TextView) findViewById(R.id.tv_setting_bar_right);
         mLineView  = (View) findViewById(R.id.v_setting_bar_line);
@@ -110,7 +108,7 @@ public class SettingBar extends FrameLayout {
 
         // 设置默认背景选择器
         if (getBackground() == null) {
-            Drawable drawable = getContext().getResources().getDrawable(R.drawable.selector_selectable_white);
+            Drawable drawable = getContext().getResources().getDrawable(R.drawable.widget_bg_settting_bar_selector);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 setBackground(drawable);
             }else {
@@ -125,139 +123,172 @@ public class SettingBar extends FrameLayout {
     /**
      * 设置左边的标题
      */
-    public void setLeftText(int stringId) {
-        setLeftText(getResources().getString(stringId));
+    public SettingBar setLeftText(int stringId) {
+        return setLeftText(getResources().getString(stringId));
     }
 
-    public void setLeftText(CharSequence text) {
+    public SettingBar setLeftText(CharSequence text) {
         mLeftView.setText(text);
+        return this;
+    }
+
+    public CharSequence getLeftText() {
+        return mLeftView.getText();
     }
 
     /**
      * 设置左边的提示
      */
-    public void setLeftHint(int stringId) {
-        setLeftHint(getResources().getString(stringId));
+    public SettingBar setLeftHint(int stringId) {
+        return setLeftHint(getResources().getString(stringId));
     }
 
-    public void setLeftHint(CharSequence hint) {
+    public SettingBar setLeftHint(CharSequence hint) {
         mLeftView.setHint(hint);
+        return this;
     }
 
     /**
      * 设置右边的标题
      */
-    public void setRightText(int stringId) {
+    public SettingBar setRightText(int stringId) {
         setRightText(getResources().getString(stringId));
+        return this;
     }
 
-    public void setRightText(CharSequence text) {
+    public SettingBar setRightText(CharSequence text) {
         mRightView.setText(text);
+        return this;
+    }
+
+    public CharSequence getRightText() {
+        return mRightView.getText();
     }
 
     /**
      * 设置右边的提示
      */
-    public void setRightHint(int stringId) {
-        setRightHint(getResources().getString(stringId));
+    public SettingBar setRightHint(int stringId) {
+        return setRightHint(getResources().getString(stringId));
     }
 
-    public void setRightHint(CharSequence hint) {
+    public SettingBar setRightHint(CharSequence hint) {
         mRightView.setHint(hint);
+        return this;
     }
 
     /**
      * 设置左边的图标
      */
-    public void setLeftIcon(int iconId) {
+    public SettingBar setLeftIcon(int iconId) {
         if (iconId > 0) {
             setLeftIcon(getContext().getResources().getDrawable(iconId));
         }
+        return this;
     }
 
-    public void setLeftIcon(Drawable drawable) {
+    public SettingBar setLeftIcon(Drawable drawable) {
         mLeftView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        return this;
+    }
+
+    public Drawable getLeftIcon() {
+        return mLeftView.getCompoundDrawables()[0];
     }
 
     /**
      * 设置右边的图标
      */
-    public void setRightIcon(int iconId) {
+    public SettingBar setRightIcon(int iconId) {
         if (iconId > 0) {
             setRightIcon(getContext().getResources().getDrawable(iconId));
         }
+        return this;
     }
 
-    public void setRightIcon(Drawable drawable) {
+    public SettingBar setRightIcon(Drawable drawable) {
         mRightView.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
+        return this;
+    }
+
+    public Drawable getRightIcon() {
+        return mRightView.getCompoundDrawables()[2];
     }
 
     /**
      * 设置左标题颜色
      */
-    public void setLeftColor(int color) {
+    public SettingBar setLeftColor(int color) {
         mLeftView.setTextColor(color);
+        return this;
     }
 
     /**
      * 设置右标题颜色
      */
-    public void setRightColor(int color) {
+    public SettingBar setRightColor(int color) {
         mRightView.setTextColor(color);
+        return this;
     }
 
     /**
      * 设置左标题的文本大小
      */
-    public void setLeftSize(int unit, float size) {
+    public SettingBar setLeftSize(int unit, float size) {
         mLeftView.setTextSize(unit, size);
+        return this;
     }
 
     /**
      * 设置右标题的文本大小
      */
-    public void setRightSize(int unit, float size) {
+    public SettingBar setRightSize(int unit, float size) {
         mRightView.setTextSize(unit, size);
+        return this;
     }
 
     /**
      * 设置分割线是否显示
      */
-    public void setLineVisible(boolean visible) {
+    public SettingBar setLineVisible(boolean visible) {
         mLineView.setVisibility(visible ? VISIBLE : GONE);
+        return this;
     }
 
     /**
      * 设置分割线的颜色
      */
-    public void setLineColor(int color) {
-        setLineDrawable(new ColorDrawable(color));
+    public SettingBar setLineColor(int color) {
+        return setLineDrawable(new ColorDrawable(color));
     }
-    public void setLineDrawable(Drawable drawable) {
+    public SettingBar setLineDrawable(Drawable drawable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             mLineView.setBackground(drawable);
         }else {
             mLineView.setBackgroundDrawable(drawable);
         }
+        return this;
     }
 
     /**
      * 设置分割线的大小
      */
-    public void setLineSize(int size) {
+    public SettingBar setLineSize(int size) {
         ViewGroup.LayoutParams layoutParams = mLineView.getLayoutParams();
         layoutParams.height = size;
         mLineView.setLayoutParams(layoutParams);
+        return this;
     }
 
     /**
      * 设置分割线边界
      */
-    public void setLineMargin(int margin) {
+    public SettingBar setLineMargin(int margin) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mLineView.getLayoutParams();
         params.leftMargin = margin;
         params.rightMargin = margin;
         mLineView.setLayoutParams(params);
+        return this;
     }
 
     /**

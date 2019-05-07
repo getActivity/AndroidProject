@@ -24,13 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
 
-    /**
-     * 获取一个 Handler 对象
-     */
-    public static Handler getHandler() {
-        return HANDLER;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +45,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     // 引入布局
     protected abstract int getLayoutId();
 
-    // 标题栏id
-    protected abstract int getTitleBarId();
+    // 标题栏
+    protected abstract int getTitleId();
 
     // 初始化控件
     protected abstract void initView();
@@ -68,20 +61,60 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 获取一个 Context 对象
+     * 延迟执行
      */
-    public Context getContext() {
-        return getBaseContext();
+    public final boolean post(Runnable r) {
+        return postDelayed(r, 0);
     }
 
+    /**
+     * 延迟一段时间执行
+     */
+    public final boolean postDelayed(Runnable r, long delayMillis) {
+        if (delayMillis < 0) {
+            delayMillis = 0;
+        }
+        return postAtTime(r, SystemClock.uptimeMillis() + delayMillis);
+    }
+
+    /**
+     * 在指定的时间执行
+     */
+    public final boolean postAtTime(Runnable r, long uptimeMillis) {
+        return HANDLER.postAtTime(r, this, uptimeMillis);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 移除和这个 Activity 相关的消息回调
+        HANDLER.removeCallbacksAndMessages(this);
+    }
+
+    /**
+     * 如果当前的 Activity（singleTop 启动模式） 被复用时会回调
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // 设置为当前的 Intent，避免 Activity 被杀死后重启 Intent 还是最原先的那个
+        setIntent(intent);
+    }
 
     /**
      * 获取当前 Activity 对象
      */
+    @SuppressWarnings("unchecked")
     public <A extends BaseActivity> A getActivity() {
         return (A) this;
     }
 
+    /**
+     * 和 setContentView 对应的方法
+     */
+    public View getContentView() {
+        return getWindow().getDecorView();
+    }
 
     /**
      * startActivity 方法优化
@@ -103,6 +136,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * setResult 方法优化
      */
+
+    public void finishResult() {
+        finishResult(RESULT_OK, null);
+    }
 
     public void finishResult(int resultCode) {
         finishResult(resultCode, null);
@@ -128,7 +165,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivityForResult(intent, null, callback);
     }
 
-    public void startActivityForResult(Intent intent, Bundle options, ActivityCallback callback) {
+    public void startActivityForResult(Intent intent, @Nullable Bundle options, ActivityCallback callback) {
         if (mActivityCallback == null) {
             mActivityCallback = callback;
             // 随机生成请求码，这个请求码在 0 - 255 之间
@@ -151,7 +188,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 防 Activity 多重跳转：https://www.jianshu.com/p/579f1f118161
+     * 处理 Activity 多重跳转：https://www.jianshu.com/p/579f1f118161
      */
 
     @Override
@@ -182,7 +219,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }else if (intent.getAction() != null) { // 隐式跳转
             tag = intent.getAction();
         }else { // 其他方式
-            return result;
+            return true;
         }
 
         if (tag.equals(mStartActivityTag) && mStartActivityTime >= SystemClock.uptimeMillis() - 500) {

@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- 对话框默认样式 -->
     <style name="BaseDialogStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert"><!-- @android:style/Theme.Dialog -->
         <!-- 无边框 -->
         <item name="android:windowFrame">@null</item>
@@ -25,40 +26,48 @@
         <!-- ActionMode覆盖Actionbar，不顶下来 -->
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <!-- Dialog 全屏显示 -->
+        <!--<item name="android:windowFullscreen">true</item>-->
+    </style>
+
+    <!-- 对话框无遮盖层样式 -->
+    <style name="TransparentDialogStyle" parent="BaseDialogStyle">
+        <!-- 遮盖层 -->
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <!-- 缩放动画 -->
-    <style name="DialogScaleAnim" parent="android:Animation">
+    <style name="ScaleAnimStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_scale_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_scale_out</item>
     </style>
 
     <!-- ios 动画 -->
-    <style name="DialogIOSAnim" parent="android:Animation">
+    <style name="IOSAnimStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_ios_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_ios_out</item>
     </style>
 
     <!-- 顶部弹出动画 -->
-    <style name="DialogTopAnim" parent="android:Animation">
+    <style name="TopAnimStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_top_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_top_out</item>
     </style>
 
     <!-- 底部弹出动画 -->
-    <style name="DialogBottomAnim" parent="android:Animation">
+    <style name="BottomAnimStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_bottom_out</item>
     </style>
 
     <!-- 左边弹出动画 -->
-    <style name="DialogLeftAnim" parent="android:Animation">
+    <style name="LeftAnimStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_left_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_left_out</item>
     </style>
 
     <!-- 右边弹出动画 -->
-    <style name="DialogRightAnim" parent="android:Animation">
+    <style name="RightAnimStyle" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_right_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_right_out</item>
     </style>

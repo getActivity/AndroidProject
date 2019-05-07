@@ -4,7 +4,7 @@
     android:id="@+id/dialog_address_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/dialog_rounded_corner_bg"
     android:orientation="vertical">
 
     <FrameLayout
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-            android:padding="8dp"
+            android:padding="10dp"
             android:src="@mipmap/ic_dialog_close" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:gravity="center"
             android:text="@string/dialog_address_title"
             android:textColor="#333333"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
     </FrameLayout>
 
     <View
@@ -45,9 +45,11 @@
         android:layout_marginLeft="@dimen/space_20"
         android:layout_marginRight="@dimen/space_20"
         app:tabIndicatorColor="@color/dialog_confirm"
+        app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
         app:tabPaddingEnd="@dimen/space_20"
         app:tabPaddingStart="@dimen/space_20"
+        app:tabRippleColor="@null"
         app:tabSelectedTextColor="@color/dialog_confirm"
         app:tabTextColor="#333333" />
 
@@ -79,8 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@mipmap/ic_dialog_finish"
-            app:tint="@color/dialog_confirm"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:tint="@color/dialog_confirm" />
 
     </FrameLayout>
 

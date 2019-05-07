@@ -20,7 +20,7 @@ public final class DateDialog extends AbsLooperDialog {
     private static final int START_YEAR = 2012;
     private static final int EDN_YEAR = 2022;
 
-    public final static class Builder
+    public static final class Builder
             extends AbsLooperDialog.Builder<Builder>
             implements LoopView.LoopScrollListener {
 
@@ -36,13 +36,13 @@ public final class DateDialog extends AbsLooperDialog {
             // 生产年份
             ArrayList<String> yearList = new ArrayList<>(10);
             for (int i = START_YEAR; i <= EDN_YEAR; i++) {
-                yearList.add(i + " " + getString(R.string.dialog_date_year));
+                yearList.add(i + " " + getText(R.string.dialog_date_year));
             }
 
             // 生产月份
             ArrayList<String> monthList = new ArrayList<>(12);
             for (int i = 1; i <= 12; i++) {
-                monthList.add(i + " " + getString(R.string.dialog_date_month));
+                monthList.add(i + " " + getText(R.string.dialog_date_month));
             }
 
             mYearView = createLoopView();
@@ -75,7 +75,7 @@ public final class DateDialog extends AbsLooperDialog {
 
             ArrayList<String> dayList = new ArrayList<>(day);
             for (int i = 1; i <= day; i++) {
-                dayList.add(i + " " + getString(R.string.dialog_date_day));
+                dayList.add(i + " " + getText(R.string.dialog_date_day));
             }
 
             mDayView.setData(dayList);

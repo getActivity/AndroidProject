@@ -26,16 +26,32 @@
 
             <ImageView
                 android:id="@+id/iv_test_image"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/btn_test_image"
+                android:id="@+id/btn_test_image1"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
-                android:text="加载图片" />
+                android:text="加载普通图片" />
+
+            <Button
+                android:id="@+id/btn_test_image2"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="加载圆形图片" />
+
+            <Button
+                android:id="@+id/btn_test_image3"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_60"
+                android:text="加载圆角图片" />
 
             <Button
                 android:id="@+id/btn_test_toast"
@@ -43,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
-                android:text="显示吐司" />
+                android:text="弹一个吐司" />
 
             <Button
                 android:id="@+id/btn_test_permission"
@@ -51,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_60"
-                android:text="请求权限" />
+                android:text="请求一次权限" />
 
             <Button
                 android:id="@+id/btn_test_state_black"

@@ -1,8 +1,7 @@
 package com.hjq.demo.helper;
 
 import android.app.Activity;
-
-import java.util.HashMap;
+import android.support.v4.util.ArrayMap;
 
 /**
  *    author : Android 轮子哥
@@ -10,11 +9,11 @@ import java.util.HashMap;
  *    time   : 2018/11/18
  *    desc   : Activity 栈管理
  */
-public class ActivityStackManager {
+public final class ActivityStackManager {
 
     private static volatile ActivityStackManager sInstance;
 
-    private HashMap<String, Activity> mActivitySet = new HashMap<>();
+    private ArrayMap<String, Activity> mActivitySet = new ArrayMap<>();
 
     // 当前 Activity 对象标记
     private String mCurrentTag;
@@ -44,20 +43,31 @@ public class ActivityStackManager {
      * 销毁所有的 Activity
      */
     public void finishAllActivities() {
-        finishAllActivities(null);
+        finishAllActivities((Class<? extends Activity>) null);
     }
 
     /**
-     * 销毁所有的 Activity，除这个 Class 之外的 Activity
+     * 销毁所有的 Activity，除这些 Class 之外的 Activity
      */
-    public void finishAllActivities(Class<? extends Activity> clazz) {
+    @SafeVarargs
+    public final void finishAllActivities(Class<? extends Activity>... classArray) {
         String[] keys = mActivitySet.keySet().toArray(new String[]{});
         for (String key : keys) {
             Activity activity = mActivitySet.get(key);
-            if (activity != null && !activity.isFinishing() &&
-                    !(activity.getClass() == clazz)) {
-                activity.finish();
-                mActivitySet.remove(key);
+            if (activity != null && !activity.isFinishing()) {
+                boolean whiteClazz = false;
+                if (classArray != null) {
+                    for (Class<? extends Activity> clazz : classArray) {
+                        if (activity.getClass() == clazz) {
+                            whiteClazz = true;
+                        }
+                    }
+                }
+                // 如果不是白名单上面的 Activity 就销毁掉
+                if (!whiteClazz) {
+                    activity.finish();
+                    mActivitySet.remove(key);
+                }
             }
         }
     }

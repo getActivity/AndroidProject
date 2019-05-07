@@ -60,6 +60,18 @@
 
 ![](picture/25.png)
 
+![](picture/26.png)
+
+![](picture/27.png)
+
+![](picture/28.png)
+
+![](picture/29.png)
+
+![](picture/30.png)
+
+![](picture/31.png)
+
 #### 集成框架
 
 * 权限请求框架：[https://github.com/getActivity/XXPermissions](https://github.com/getActivity/XXPermissions)
@@ -73,6 +85,8 @@
 * 界面侧滑功能：[https://github.com/bingoogolapple/BGASwipeBackLayout-Android](https://github.com/bingoogolapple/BGASwipeBackLayout-Android)
 
 * 圆形ImageView：[https://github.com/hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
+
+* 缩放ImageView：[https://github.com/chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
 
 * ButterKnife注解：[https://github.com/JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 

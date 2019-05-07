@@ -1,7 +1,6 @@
 package com.hjq.base;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -22,39 +21,8 @@ public class BaseDialogFragment extends DialogFragment {
 
     private BaseDialog mDialog;
 
-    private DialogInterface.OnCancelListener mOnCancelListener;
-    private DialogInterface.OnDismissListener mOnDismissListener;
-
     private static String sShowTag;
     private static long sLastTime;
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        // 解决 DialogFragment 占用 Dialog 原有监听的问题
-        if (mDialog != null) {
-            mOnCancelListener = mDialog.getOnCancelListener();
-            mOnDismissListener = mDialog.getOnDismissListener();
-        }
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        // 回调原有 Dialog 的监听
-        if (mOnDismissListener != null) {
-            mOnDismissListener.onDismiss(dialog);
-        }
-    }
-
-    @Override
-    public void onCancel(DialogInterface dialog) {
-        super.onCancel(dialog);
-        // 回调原有 Dialog 的监听
-        if (mOnCancelListener != null) {
-            mOnCancelListener.onCancel(dialog);
-        }
-    }
 
     /**
      * 父类同名方法简化
@@ -130,11 +98,6 @@ public class BaseDialogFragment extends DialogFragment {
             mActivity = activity;
         }
 
-        public Builder(FragmentActivity activity, int themeResId) {
-            super(activity, themeResId);
-            mActivity = activity;
-        }
-
         /**
          * 获取当前 Activity 对象（仅供子类调用）
          */
@@ -172,7 +135,7 @@ public class BaseDialogFragment extends DialogFragment {
 
         @Override
         public BaseDialog show() {
-            BaseDialog dialog = create();
+            final BaseDialog dialog = create();
             mDialogFragment = new BaseDialogFragment();
             mDialogFragment.setDialog(dialog);
             mDialogFragment.show(mActivity.getSupportFragmentManager(), getFragmentTag());

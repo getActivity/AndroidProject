@@ -3,6 +3,13 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+
+    // 使用 JDK 1.8
+//    compileOptions {
+//        targetCompatibility JavaVersion.VERSION_1_8
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//    }
+
     defaultConfig {
         // 无痛修改包名：https://www.jianshu.com/p/17327e191d2e
         applicationId "com.hjq.demo"
@@ -11,6 +18,16 @@ android {
         versionCode 10
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // 混淆配置
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-app.pro'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                // EventBus Apt 索引类生成位置
+                arguments = [ eventBusIndex : applicationId + '.MyEventBusIndex' ]
+            }
+        }
     }
 
     //APK 签名的那些事：https://www.jianshu.com/p/a1f8e5896aa2
@@ -39,33 +56,29 @@ android {
             zipAlignEnabled true
             // 设置混淆
             minifyEnabled true
-            //加载默认混淆配置涵
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // 正式环境签名
             //signingConfig signingConfigs.release
         }
 
         debug {
-            //ZipAlign优化
+            // ZipAlign优化
             zipAlignEnabled false
-            //设置混淆
+            // 设置混淆
             minifyEnabled false
-            //加载默认混淆配置涵
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // 开发环境签名
             //signingConfig signingConfigs.debug
         }
     }
 
-    flavorDimensions "default"//这个名字貌似随便取，也可以有多个，总之一定要有
-    //多渠道打包
+    flavorDimensions "default" // 这个名字貌似随便取，也可以有多个，总之一定要有
+    // 友盟多渠道打包
     productFlavors {
-        kuan {}     //酷安
-        tencent {}  //应用宝
-        baidu {}    //百度
-        xiaomi {}   //小米
-        huawei {}   //华为
-        google {}   //谷歌
+        kuan {}     // 酷安
+        tencent {}  // 应用宝
+        baidu {}    // 百度
+        xiaomi {}   // 小米
+        huawei {}   // 华为
+        google {}   // 谷歌
 
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
@@ -78,25 +91,53 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    // 执行配置
+    applicationVariants.all { variant ->
+
+        // Apk 输出配置
+        variant.outputs.all { output ->
+            def appName = "AndroidProject"
+            if (variant.buildType.name == 'debug') {
+                outputFileName = appName + '_v' + versionName + '_' + variant.buildType.name + '.apk'
+            } else {
+                outputFileName = appName + '_v' + versionName + '_' + new Date().format("yyyyMMdd") + '_' + variant.productFlavors[0].name + '_' + variant.buildType.name + '.apk'
+            }
+        }
+
+        // AndroidManifest 输出配置
+        variant.outputs[0].processManifest.doLast {
+            def manifestFile = "${manifestOutputDirectory}/AndroidManifest.xml"
+            def updatedContent = new File(manifestFile).getText('UTF-8')
+                    .replaceAll("UMENG_APPKEY_VALUE", "5cb16d93570df399fd0014e2") // 友盟 AppKey
+                    .replaceAll("QQ_APPID_VALUE", "100424468") // QQ AppId
+                    .replaceAll("QQ_APPKEY_VALUE", "c7394704798a158208a74ab60104f0ba") // QQ Key
+                    .replaceAll("WX_APPID_VALUE", "wxdc1e388c3822c80b") // 微信 AppId
+                    .replaceAll("WX_APPKEY_VALUE", "3baf1193c85774b3fd9d18447d76cab0") // 微信 Key
+                    .replaceAll("SN_APPID_VALUE", "3921700954") // 新浪 AppId
+                    .replaceAll("SN_APPKEY_VALUE", "04b48b094faeb16683c32669824ebdad") // 新浪 Key
+            new File(manifestFile).write(updatedContent, 'UTF-8')
+        }
+    }
 }
 
-// api 与 implementation的区别：https://www.jianshu.com/p/8962d6ba936e
+// api 与 implementation 的区别：https://www.jianshu.com/p/8962d6ba936e
 dependencies {
-    // 依赖 libs 目录下所有 Jar 包
+    // 依赖 libs 目录下所有 jar 包
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // 依赖 libs 目录下所有 aar 包
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+
     // 基础库（不包任何第三方框架）
     implementation project(':base')
     // 自定义 View
     implementation project(':widget')
-    // 图片加载封装
-    implementation project(':image')
-    // 友盟
-    implementation project(':umeng')
-    // Dialog
+    // Dialog 封装
     implementation project(':dialog')
-
-    // 示例：添加一个 aar 包
-    // implementation(name: 'library', ext: 'aar')
+    // Glide 隔离
+    implementation project(':image')
+    // 友盟隔离
+    implementation project(':umeng')
 
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support:design:$rootProject.ext.supportLibraryVersion"
@@ -104,12 +145,16 @@ dependencies {
     implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
 
-    // Dex分包，解决 65k 问题
+    // Dex分包，解决 64k 问题
     implementation 'com.android.support:multidex:1.0.3'
 
-    // ButterKnife注解库：https://github.com/JakeWharton/butterknife
+    // ButterKnife 注解库：https://github.com/JakeWharton/butterknife
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+
+    // EventBus 事件总线
+    implementation "org.greenrobot:eventbus:3.1.1"
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
 
     // 状态栏沉浸：https://github.com/gyf-dev/ImmersionBar
     implementation 'com.gyf.immersionbar:immersionbar:2.3.3'
@@ -117,30 +162,31 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-swipebacklayout:1.2.0'
 
     // 权限请求框架：https://github.com/getActivity/XXPermissions
-    implementation 'com.hjq:xxpermissions:latest.integration'
+    implementation 'com.hjq:xxpermissions:5.5'
     // 标题栏：https://github.com/getActivity/TitleBar
-    implementation 'com.hjq:titlebar:latest.integration'
+    implementation 'com.hjq:titlebar:5.0'
     // 吐司工具类：https://github.com/getActivity/ToastUtils
-    implementation 'com.hjq:toast:latest.integration'
+    implementation 'com.hjq:toast:6.0'
 
     // 圆形的ImageView：https://github.com/hdodenhof/CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // 支持放大缩放的ImageView：https://github.com/chrisbanes/PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
+    // 布局优化：https://github.com/getActivity/Layouts
+    // 分割线：https://github.com/getActivity/RecyclerItemDecoration
+    // 国际化：https://github.com/getActivity/MultiLanguages
     // 悬浮窗：https://github.com/getActivity/XToast
     // 网络请求：https://github.com/zhou-you/RxEasyHttp
     // RxJava: https://github.com/ReactiveX/RxAndroid
     // RecyclerView：https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    // 上拉刷新下拉加载：https://github.com/scwang90/SmartRefreshLayout
     // 工具类：https://github.com/Blankj/AndroidUtilCode
     // 图片选择：https://github.com/zhihu/Matisse
-    // 上拉下拉：https://github.com/bingoogolapple/BGARefreshLayout-Android
     // 轮播图：https://github.com/bingoogolapple/BGABanner-Android
     // 二维码：https://github.com/bingoogolapple/BGAQRCode-Android
     // 第三方支付：https://github.com/getActivity/RxPay
     // Log 打印：https://github.com/JakeWharton/timber
-}
-
-repositories {
-    flatDir {
-        dirs 'libs' //就是你放aar的目录地址
-    }
+    // 重要数据存储：https://github.com/Tencent/MMKV
 }

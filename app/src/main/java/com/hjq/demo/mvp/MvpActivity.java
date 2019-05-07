@@ -16,13 +16,16 @@ public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity imp
     public void initActivity() {
         mPresenter = createPresenter();
         mPresenter.attach(this);
-        mPresenter.start();
         super.initActivity();
+        mPresenter.start();
     }
 
     @Override
     protected void onDestroy() {
-        mPresenter.detach();
+        if (mPresenter != null) {
+            mPresenter.detach();
+            mPresenter = null;
+        }
         super.onDestroy();
     }
 
@@ -31,4 +34,24 @@ public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity imp
     }
 
     protected abstract P createPresenter();
+
+    @Override
+    public void onLoading() {
+        showLoading();
+    }
+
+    @Override
+    public void onComplete() {
+        showComplete();
+    }
+
+    @Override
+    public void onEmpty() {
+        showEmpty();
+    }
+
+    @Override
+    public void onError() {
+        showError();
+    }
 }

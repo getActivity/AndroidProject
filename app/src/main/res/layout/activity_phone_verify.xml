@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.PhoneVerifyActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/tb_phone_verify_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/phone_verify_title" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:src="@mipmap/bg_phone_verify" />
+
+    <TextView
+        android:id="@+id/tv_phone_verify_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/space_40"
+        android:paddingBottom="@dimen/space_40"
+        android:text="@string/phone_verify_current_phone"
+        android:textColor="#666666"
+        android:textSize="@dimen/font_size_30px" />
+
+    <View style="@style/HorizontalLineStyle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_phone_verify_code"
+            style="@style/EditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/ic_small_safe"
+            android:drawablePadding="@dimen/space_30"
+            android:hint="@string/common_code_input_hint"
+            android:maxLength="8"
+            android:paddingLeft="@dimen/space_40"
+            android:paddingTop="@dimen/space_36"
+            android:paddingRight="@dimen/space_40"
+            android:paddingBottom="@dimen/space_36" />
+
+        <View
+            style="@style/VerticalLineStyle"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginBottom="@dimen/space_20" />
+
+        <com.hjq.widget.CountdownView
+            android:id="@+id/cv_phone_verify_countdown"
+            style="@style/CountdownViewStyle" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_phone_verify_commit"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_80"
+        android:layout_marginTop="@dimen/space_80"
+        android:layout_marginEnd="@dimen/space_80"
+        android:layout_marginBottom="@dimen/space_40"
+        android:text="@string/common_step_next" />
+
+</LinearLayout>

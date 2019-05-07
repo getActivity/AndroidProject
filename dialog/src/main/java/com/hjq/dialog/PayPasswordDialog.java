@@ -50,10 +50,9 @@ public final class PayPasswordDialog {
             super(activity);
 
             setContentView(R.layout.dialog_pay_password);
-            setGravity(Gravity.BOTTOM);
             setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
-            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-            setCancelable(false);
+            setGravity(Gravity.BOTTOM);
+            setWidth(MATCH_PARENT);
 
             mRecyclerView = findViewById(R.id.rv_dialog_pay_list);
             mPasswordView = findViewById(R.id.pw_dialog_pay_view);
@@ -72,7 +71,7 @@ public final class PayPasswordDialog {
         }
 
         public Builder setTitle(int resId) {
-            return setTitle(getContext().getText(resId));
+            return setTitle(getText(resId));
         }
 
         public Builder setTitle(CharSequence title) {
@@ -86,7 +85,7 @@ public final class PayPasswordDialog {
         }
 
         public Builder setSubTitle(int resId) {
-            return setSubTitle(getContext().getText(resId));
+            return setSubTitle(getText(resId));
         }
 
         public Builder setSubTitle(CharSequence subTitle) {
@@ -100,7 +99,7 @@ public final class PayPasswordDialog {
         }
 
         public Builder setMoney(int resId) {
-            return setSubTitle(getContext().getText(resId));
+            return setSubTitle(getText(resId));
         }
 
         public Builder setMoney(CharSequence money) {
@@ -148,7 +147,8 @@ public final class PayPasswordDialog {
                     // 判断密码是否已经输入完毕
                     if (mRecordList.size() == PasswordView.PASSWORD_COUNT) {
                         if (mListener != null) {
-                            mPasswordView.postDelayed(new Runnable() {
+                            postDelayed(new Runnable() {
+
                                 @Override
                                 public void run() {
                                     if (mAutoDismiss) {
@@ -193,6 +193,14 @@ public final class PayPasswordDialog {
                 }
             }
         }
+
+//        @Override
+//        protected BaseDialog createDialog(Context context, int themeResId) {
+//            if (getGravity() == Gravity.BOTTOM) {
+//                return new BaseBottomDialog(context, themeResId);
+//            }
+//            return super.createDialog(context, themeResId);
+//        }
     }
 
     private static final class keyboardAdapter extends BaseRecyclerViewAdapter<String, keyboardAdapter.ViewHolder> {

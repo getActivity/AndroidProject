@@ -27,7 +27,7 @@ import android.view.animation.AccelerateInterpolator;
  *    time   : 2019/02/20
  *    desc   : 开关按钮
  */
-public class SwitchButton extends View {
+public final class SwitchButton extends View {
 
     private static final int STATE_SWITCH_OFF = 1;
     private static final int STATE_SWITCH_OFF2 = 2;

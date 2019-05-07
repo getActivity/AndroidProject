@@ -13,7 +13,7 @@ import com.hjq.demo.common.MyRecyclerViewAdapter;
  *    time   : 2018/11/05
  *    desc   : 可进行拷贝的副本
  */
-public class CopyAdapter extends MyRecyclerViewAdapter<String, CopyAdapter.ViewHolder> {
+public final class CopyAdapter extends MyRecyclerViewAdapter<String, CopyAdapter.ViewHolder> {
 
     public CopyAdapter(Context context) {
         super(context);
@@ -35,7 +35,7 @@ public class CopyAdapter extends MyRecyclerViewAdapter<String, CopyAdapter.ViewH
 
     }
 
-    class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
+    final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
 
         ViewHolder(ViewGroup parent, int layoutId) {
             super(parent, layoutId);

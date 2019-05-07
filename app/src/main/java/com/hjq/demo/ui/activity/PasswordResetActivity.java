@@ -17,7 +17,7 @@ import butterknife.OnClick;
  *    time   : 2019/02/27
  *    desc   : 重置密码
  */
-public class PasswordResetActivity extends MyActivity {
+public final class PasswordResetActivity extends MyActivity {
 
     @BindView(R.id.et_password_reset_password1)
     EditText mPasswordView1;
@@ -26,22 +26,23 @@ public class PasswordResetActivity extends MyActivity {
     @BindView(R.id.btn_password_reset_commit)
     Button mCommitView;
 
-    private InputTextHelper mInputTextHelper;
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_password_reset;
     }
 
     @Override
-    protected int getTitleBarId() {
+    protected int getTitleId() {
         return R.id.tb_password_reset_title;
     }
 
     @Override
     protected void initView() {
-        mInputTextHelper = new InputTextHelper(mCommitView);
-        mInputTextHelper.addViews(mPasswordView1, mPasswordView2);
+        new InputTextHelper.Builder(this)
+                .setMain(mCommitView)
+                .addView(mPasswordView1)
+                .addView(mPasswordView2)
+                .build();
     }
 
     @Override
@@ -52,18 +53,13 @@ public class PasswordResetActivity extends MyActivity {
     @OnClick({R.id.btn_password_reset_commit})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_password_reset_commit: //提交注册
+            case R.id.btn_password_reset_commit:
                 if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
-                    toast(getResources().getString(R.string.two_password_input_error));
-                    break;
+                    toast(getString(R.string.password_reset_input_error));
+                } else {
+                    // 重置密码
                 }
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mInputTextHelper.removeViews();
-        super.onDestroy();
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.PersonalDataActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/tb_personal_data_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/personal_data_title" />
+
+    <FrameLayout
+        android:id="@+id/fl_person_data_head"
+        android:background="@drawable/selector_selectable_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_40"
+        android:paddingTop="@dimen/space_40"
+        android:paddingEnd="@dimen/space_40"
+        android:paddingBottom="@dimen/space_40">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/personal_data_head"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_32px" />
+
+        <ImageView
+            android:id="@+id/iv_person_data_head"
+            android:layout_width="@dimen/space_220"
+            android:layout_height="@dimen/space_220"
+            android:layout_gravity="end|center_vertical"
+            android:src="@mipmap/ic_head_placeholder" />
+
+    </FrameLayout>
+
+    <com.hjq.widget.SettingBar
+        android:id="@+id/sb_person_data_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_20"
+        app:bar_leftText="@string/personal_data_id" />
+
+    <com.hjq.widget.SettingBar
+        android:id="@+id/sb_person_data_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/personal_data_name"
+        app:bar_rightHint="@string/personal_data_name_hint" />
+
+    <com.hjq.widget.SettingBar
+        android:id="@+id/sb_person_data_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/personal_data_address"
+        app:bar_rightHint="@string/personal_data_address_hint"
+        app:bar_rightIcon="@mipmap/ico_go_black" />
+
+    <com.hjq.widget.SettingBar
+        android:id="@+id/sb_person_data_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_20"
+        app:bar_leftText="@string/personal_data_phone"
+        app:bar_rightHint="@string/personal_data_phone_hint"
+        app:bar_rightIcon="@mipmap/ico_go_black" />
+
+</LinearLayout>

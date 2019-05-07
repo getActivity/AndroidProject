@@ -9,22 +9,22 @@ package com.hjq.demo.mvp;
 public interface IMvpView {
 
     /**
-     * 用于页面请求数据时显示加载状态
+     * 加载中
      */
-    void showLoading();
+    void onLoading();
 
     /**
-     * 用于请求数据完成
+     * 加载完成
      */
-    void loadingComplete();
+    void onComplete();
 
     /**
      * 用于请求的数据为空的状态
      */
-    void showEmpty();
+    void onEmpty();
 
     /**
      * 用于请求数据出错
      */
-    void showError();
+    void onError();
 }

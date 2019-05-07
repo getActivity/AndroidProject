@@ -25,9 +25,10 @@ public final class WaitDialog {
         public Builder(FragmentActivity activity) {
             super(activity);
 
+            setThemeStyle(R.style.TransparentDialogStyle);
             setContentView(R.layout.dialog_wait);
-            setGravity(Gravity.CENTER);
             setAnimStyle(BaseDialog.AnimStyle.TOAST);
+            setGravity(Gravity.CENTER);
             setCancelable(false);
 
             mMessageView = findViewById(R.id.tv_dialog_wait_message);
@@ -35,7 +36,7 @@ public final class WaitDialog {
         }
 
         public Builder setMessage(int resId) {
-            return setMessage(getContext().getText(resId));
+            return setMessage(getText(resId));
         }
         public Builder setMessage(CharSequence text) {
             mMessageView.setText(text);
@@ -44,12 +45,12 @@ public final class WaitDialog {
         }
 
         @Override
-        public BaseDialog show() {
+        public BaseDialog create() {
             // 如果内容为空就设置隐藏
             if ("".equals(mMessageView.getText().toString())) {
                 mMessageView.setVisibility(View.GONE);
             }
-            return super.show();
+            return super.create();
         }
     }
 }

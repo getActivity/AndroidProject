@@ -10,8 +10,6 @@
 
 * widget：自定义一些精品的 View，不集成任何框架
 
-* umeng：集成友盟 SDK 相关文件，不集成任何框架
-
 > 本项目基于最新的 Android SDK 28 编译，[点击此处查看配置](build.gradle)，最低安装要求为 Android 4.0
 
 > 其中 Android Studio 的版本为3.2，Gradle的版本为 4.4

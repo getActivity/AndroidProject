@@ -18,18 +18,23 @@ public abstract class MvpPresenter<V extends IMvpView> implements InvocationHand
     // 代理对象
     private V mProxyView;
 
-    public void attach(V view){
+    @SuppressWarnings("unchecked")
+    public void attach(V view) {
         mView = view;
-        // 使用动态代理，解决 getView 为空的问题
+        // 使用动态代理，解决 getView 方法可能为空的问题
         mProxyView = (V) Proxy.newProxyInstance(view.getClass().getClassLoader(), view.getClass().getInterfaces(), this);
+        // V 层解绑了 P 层，那么 getView 就为空，调用 V 层就会发生空指针异常
+        // 如果在 P 层的每个子类中都进行 getView() != null 防空判断会导致开发成本非常高，并且容易出现遗漏
     }
 
     /**
+     *  动态代理接口，每次调用了代理对象的方法最终也会回到到这里
+     *
      * {@link InvocationHandler}
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // 如果当前还是绑定状态就执行 View 的方法
+        // 如果当前还是绑定状态就执行 View 的方法，否则就不执行
         return isAttached() ? method.invoke(mView, args) : null;
     }
 
@@ -47,5 +52,8 @@ public abstract class MvpPresenter<V extends IMvpView> implements InvocationHand
         return mProxyView;
     }
 
+    /**
+     * P 层初始化方法
+     */
     public abstract void start();
 }

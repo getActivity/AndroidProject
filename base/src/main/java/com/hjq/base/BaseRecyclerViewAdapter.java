@@ -8,6 +8,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +76,7 @@ public abstract class BaseRecyclerViewAdapter
     /**
      * 获取当前数据
      */
+    @Nullable
     public List<T> getData() {
         return mDataSet;
     }
@@ -123,7 +125,9 @@ public abstract class BaseRecyclerViewAdapter
      * 添加单条数据
      */
     public void addItem(T item) {
-        addItem(mDataSet.size() - 1, item);
+        if (mDataSet == null) mDataSet = new ArrayList<>();
+
+        addItem(mDataSet.size(), item);
     }
 
     public void addItem(int position, T item) {
@@ -131,7 +135,7 @@ public abstract class BaseRecyclerViewAdapter
 
         if (position < mDataSet.size()) {
             mDataSet.add(position, item);
-        }else {
+        } else {
             mDataSet.add(item);
             position = mDataSet.size() - 1;
         }
@@ -227,7 +231,7 @@ public abstract class BaseRecyclerViewAdapter
         /**
          * 初始化 View 的监听
          */
-        protected void initViewListener() {
+        private void initViewListener() {
 
             // 设置条目的点击和长按事件
             if (mItemClickListener != null) {
@@ -300,6 +304,7 @@ public abstract class BaseRecyclerViewAdapter
             return itemView;
         }
 
+        @SuppressWarnings("unchecked")
         public final <V extends View> V findViewById(@IdRes int viewId) {
             WeakReference<View> reference = mViews.get(viewId);
             if (reference != null && reference.get() != null) {
@@ -443,16 +448,22 @@ public abstract class BaseRecyclerViewAdapter
 
         /**
          * 列表滚动到最顶部
+         *
+         * @param recyclerView      RecyclerView对象
          */
         void onScrollTop(RecyclerView recyclerView);
 
         /**
          * 列表滚动到最底部
+         *
+         * @param recyclerView      RecyclerView对象
          */
         void onScrollDown(RecyclerView recyclerView);
 
         /**
          * 列表滚动中
+         *
+         * @param recyclerView      RecyclerView对象
          */
         void onScrolling(RecyclerView recyclerView);
     }
@@ -465,8 +476,9 @@ public abstract class BaseRecyclerViewAdapter
         /**
          * 当 RecyclerView 某个条目被点击时回调
          *
-         * @param itemView      被点击的条目对象
-         * @param position      被点击的条目位置
+         * @param recyclerView      RecyclerView对象
+         * @param itemView          被点击的条目对象
+         * @param position          被点击的条目位置
          */
         void onItemClick(RecyclerView recyclerView, View itemView, int position);
     }
@@ -479,9 +491,10 @@ public abstract class BaseRecyclerViewAdapter
         /**
          * 当 RecyclerView 某个条目被长按时回调
          *
-         * @param itemView      被点击的条目对象
-         * @param position      被点击的条目位置
-         * @return              是否拦截事件
+         * @param recyclerView      RecyclerView对象
+         * @param itemView          被点击的条目对象
+         * @param position          被点击的条目位置
+         * @return                  是否拦截事件
          */
         boolean onItemLongClick(RecyclerView recyclerView, View itemView, int position);
     }
@@ -494,8 +507,9 @@ public abstract class BaseRecyclerViewAdapter
         /**
          * 当 RecyclerView 某个条目 子 View 被点击时回调
          *
-         * @param childView        被点击的条目子 View Id
-         * @param position      被点击的条目位置
+         * @param recyclerView      RecyclerView对象
+         * @param childView         被点击的条目子 View Id
+         * @param position          被点击的条目位置
          */
         void onChildClick(RecyclerView recyclerView, View childView, int position);
     }
@@ -508,8 +522,9 @@ public abstract class BaseRecyclerViewAdapter
         /**
          * 当 RecyclerView 某个条目子 View 被长按时回调
          *
-         * @param childView        被点击的条目子 View Id
-         * @param position      被点击的条目位置
+         * @param recyclerView      RecyclerView对象
+         * @param childView         被点击的条目子 View Id
+         * @param position          被点击的条目位置
          */
         void onChildLongClick(RecyclerView recyclerView, View childView, int position);
     }

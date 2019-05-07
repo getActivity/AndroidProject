@@ -35,13 +35,13 @@ public class AbsLooperDialog {
             super(activity);
 
             setContentView(R.layout.dialog_wheel);
-            setGravity(Gravity.BOTTOM);
             setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
+            setGravity(Gravity.BOTTOM);
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
             ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
-            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-            setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            setWidth(MATCH_PARENT);
+            setHeight(WRAP_CONTENT);
 
             mCancelView = findViewById(R.id.tv_dialog_wheel_cancel);
             mTitleView = findViewById(R.id.tv_dialog_wheel_title);
@@ -61,7 +61,7 @@ public class AbsLooperDialog {
         }
 
         public B setCancel(int resId) {
-            return setCancel(getContext().getText(resId));
+            return setCancel(getText(resId));
         }
         public B setCancel(CharSequence text) {
             mCancelView.setText(text);
@@ -69,7 +69,7 @@ public class AbsLooperDialog {
         }
 
         public B setConfirm(int resId) {
-            return setConfirm(getContext().getText(resId));
+            return setConfirm(getText(resId));
         }
         public B setConfirm(CharSequence text) {
             mConfirmView.setText(text);
