@@ -10,8 +10,8 @@ public abstract class MvpModel<L> {
 
     private L mListener;
 
-    public void setListener(L l) {
-        mListener = l;
+    public void setListener(L listener) {
+        mListener = listener;
     }
 
     public L getListener() {

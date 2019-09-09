@@ -1,6 +1,8 @@
 package com.hjq.demo.helper;
 
 import android.app.Activity;
+import android.app.Application;
+
 import androidx.collection.ArrayMap;
 
 /**
@@ -13,9 +15,9 @@ public final class ActivityStackManager {
 
     private static volatile ActivityStackManager sInstance;
 
-    private ArrayMap<String, Activity> mActivitySet = new ArrayMap<>();
+    private final ArrayMap<String, Activity> mActivitySet = new ArrayMap<>();
 
-    // 当前 Activity 对象标记
+    /** 当前 Activity 对象标记 */
     private String mCurrentTag;
 
     private ActivityStackManager() {}
@@ -30,6 +32,13 @@ public final class ActivityStackManager {
             }
         }
         return sInstance;
+    }
+
+    /**
+     * 获取 Application 对象
+     */
+    public Application getApplication() {
+        return getTopActivity().getApplication();
     }
 
     /**
@@ -72,12 +81,18 @@ public final class ActivityStackManager {
         }
     }
 
-    public void onActivityCreated(Activity activity) {
+    /**
+     * Activity 同名方法回调
+     */
+    public void onCreated(Activity activity) {
         mCurrentTag = getObjectTag(activity);
         mActivitySet.put(getObjectTag(activity), activity);
     }
 
-    public void onActivityDestroyed(Activity activity) {
+    /**
+     * Activity 同名方法回调
+     */
+    public void onDestroyed(Activity activity) {
         mActivitySet.remove(getObjectTag(activity));
         // 如果当前的 Activity 是最后一个的话
         if (getObjectTag(activity).equals(mCurrentTag)) {

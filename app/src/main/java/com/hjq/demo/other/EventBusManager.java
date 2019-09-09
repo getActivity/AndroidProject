@@ -17,13 +17,13 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex;
  */
 public final class EventBusManager {
 
-    // EventBus 索引类
+    /** EventBus 索引类 */
     private static final SubscriberInfoIndex SUBSCRIBE_INDEX = new MyEventBusIndex();
 
-    // 这个类是否需要注册 EventBus
+    /** 这个类是否需要注册 EventBus */
     private static final ArrayMap<String, Boolean> SUBSCRIBE_EVENT = new ArrayMap<>();
 
-    // 不允许被外部实例化
+    /** 不允许被外部实例化 */
     private EventBusManager() {}
 
     /**
@@ -31,9 +31,12 @@ public final class EventBusManager {
      */
     public static void init() {
         EventBus.builder()
-                .ignoreGeneratedIndex(false) // 使用 Apt 插件
-                .addIndex(SUBSCRIBE_INDEX) // 添加索引类
-                .installDefaultEventBus(); // 作为默认配置
+                // 使用 Apt 插件
+                .ignoreGeneratedIndex(false)
+                // 添加索引类
+                .addIndex(SUBSCRIBE_INDEX)
+                // 作为默认配置
+                .installDefaultEventBus();
     }
 
     /**

@@ -1,5 +1,13 @@
 package com.hjq.demo.mvp;
 
+import android.content.Context;
+
+import androidx.annotation.StringRes;
+
+import com.hjq.demo.mvp.proxy.IMvpModelProxy;
+import com.hjq.demo.mvp.proxy.MvpModelProxyImpl;
+import com.hjq.toast.ToastUtils;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -12,19 +20,27 @@ import java.lang.reflect.Proxy;
  */
 public abstract class MvpPresenter<V extends IMvpView> implements InvocationHandler {
 
-    // 当前 View 对象
+    /** View 层 */
     private V mView;
 
-    // 代理对象
+    /** 代理对象 */
     private V mProxyView;
 
+    private IMvpModelProxy mMvpProxy;
+
+    protected IMvpModelProxy createModelProxyImpl() {
+        return new MvpModelProxyImpl(this);
+    }
+
     @SuppressWarnings("unchecked")
-    public void attach(V view) {
+    public void attachView(V view) {
         mView = view;
         // 使用动态代理，解决 getView 方法可能为空的问题
         mProxyView = (V) Proxy.newProxyInstance(view.getClass().getClassLoader(), view.getClass().getInterfaces(), this);
         // V 层解绑了 P 层，那么 getView 就为空，调用 V 层就会发生空指针异常
         // 如果在 P 层的每个子类中都进行 getView() != null 防空判断会导致开发成本非常高，并且容易出现遗漏
+        mMvpProxy = createModelProxyImpl();
+        mMvpProxy.bindModel();
     }
 
     /**
@@ -38,10 +54,11 @@ public abstract class MvpPresenter<V extends IMvpView> implements InvocationHand
         return isAttached() ? method.invoke(mView, args) : null;
     }
 
-    public void detach() {
+    public void detachView() {
         mView = null;
         // 这里注意不能把代理对象置空
         // mProxyView = null;
+        mMvpProxy.unbindModel();
     }
 
     public boolean isAttached() {
@@ -53,7 +70,24 @@ public abstract class MvpPresenter<V extends IMvpView> implements InvocationHand
     }
 
     /**
-     * P 层初始化方法
+     * 获取上下文
      */
-    public abstract void start();
+    public Context getContext() {
+        return getView().getContext();
+    }
+
+    /**
+     * 显示吐司
+     */
+    public void toast(CharSequence text) {
+        ToastUtils.show(text);
+    }
+
+    public void toast(@StringRes int id) {
+        ToastUtils.show(id);
+    }
+
+    public void toast(Object object) {
+        ToastUtils.show(object);
+    }
 }

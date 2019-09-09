@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.InputTextHelper;
-import com.hjq.widget.CountdownView;
+import com.hjq.widget.view.CountdownView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,16 +37,18 @@ public final class PhoneResetActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_phone_reset_title;
-    }
-
-    @Override
     protected void initView() {
-        new InputTextHelper.Builder(this)
-                .setMain(mCommitView)
+        InputTextHelper.with(this)
                 .addView(mPhoneView)
                 .addView(mCodeView)
+                .setMain(mCommitView)
+                .setListener(new InputTextHelper.OnInputTextListener() {
+
+                    @Override
+                    public boolean onInputChange(InputTextHelper helper) {
+                        return mPhoneView.getText().toString().length() == 11 && mCodeView.getText().toString().length() == 4;
+                    }
+                })
                 .build();
     }
 
@@ -59,23 +61,21 @@ public final class PhoneResetActivity extends MyActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cv_phone_reset_countdown:
+                // 获取验证码
                 if (mPhoneView.getText().toString().length() != 11) {
                     // 重置验证码倒计时控件
                     mCountdownView.resetState();
-                    toast(getString(R.string.common_phone_input_error));
+                    toast(R.string.common_phone_input_error);
                 } else {
-                    // 获取验证码
-                    toast(getString(R.string.common_send_code_succeed));
+                    toast(R.string.common_code_send_hint);
                 }
                 break;
             case R.id.btn_phone_reset_commit:
-                if (mPhoneView.getText().toString().length() != 11) {
-                    toast(getString(R.string.common_phone_input_error));
-                } else {
-                    // 更换手机号
-                    toast(getString(R.string.phone_reset_commit_succeed));
-                    finish();
-                }
+                // 更换手机号
+                toast(R.string.phone_reset_commit_succeed);
+                finish();
+                break;
+            default:
                 break;
         }
     }

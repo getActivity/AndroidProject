@@ -3,6 +3,7 @@ package com.hjq.umeng;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 /**
@@ -15,23 +16,24 @@ public final class UmengLogin {
 
     public static final class LoginData {
 
-        // 昵称
-        private String mName;
-        // 性别
-        private String mSex;
-        // 头像
-        private String mIcon;
-        // id
-        private String mId;
-        // token
-        private String mToken;
+        /** 用户 id */
+        private final String mId;
+        /** 昵称 */
+        private final String mName;
+        /** 性别 */
+        private final String mSex;
+        /** 头像 */
+        private final String mIcon;
+        /** Token */
+        private final String mToken;
 
+        @SuppressWarnings("all")
         LoginData(Map<String, String> data) {
             // 第三方登录获取用户资料：https://developer.umeng.com/docs/66632/detail/66639#h3-u83B7u53D6u7528u6237u8D44u6599
+            mId = data.get("uid");
             mName =  data.get("name");
             mSex = data.get("gender");
             mIcon = data.get("iconurl");
-            mId = data.get("uid");
             mToken = data.get("accessToken");
         }
 
@@ -54,24 +56,30 @@ public final class UmengLogin {
         public String getToken() {
             return mToken;
         }
+
+        /**
+         * 判断当前的性别是否为男性
+         */
+        public boolean isMan() {
+            return "男".equals(mSex);
+        }
     }
 
-    public static final class LoginListenerWrapper implements UMAuthListener {
+    /**
+     * 为什么要用软引用，因为友盟会将监听回调（UMAuthListener）持有成静态的
+     */
+    public static final class LoginListenerWrapper extends WeakReference<OnLoginListener> implements UMAuthListener {
 
-        private OnLoginListener mListener;
-        private Platform mPlatform;
+        private final Platform mPlatform;
 
         LoginListenerWrapper(SHARE_MEDIA platform, OnLoginListener listener) {
-            mListener = listener;
+            super(listener);
             switch (platform) {
                 case QQ:
                     mPlatform = Platform.QQ;
                     break;
                 case WEIXIN:
-                    mPlatform = Platform.WEIXIN;
-                    break;
-                case SINA:
-                    mPlatform = Platform.SINA;
+                    mPlatform = Platform.WECHAT;
                     break;
                 default:
                     throw new IllegalStateException("are you ok?");
@@ -85,7 +93,9 @@ public final class UmengLogin {
          */
         @Override
         public void onStart(SHARE_MEDIA platform) {
-//            mListener.onStart(mPlatform);
+//            if (get() != null) {
+//                get().onStart(mPlatform);
+//            }
         }
 
         /**
@@ -97,7 +107,9 @@ public final class UmengLogin {
          */
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            mListener.onSucceed(mPlatform, new LoginData(data));
+            if (get() != null) {
+                get().onSucceed(mPlatform, new LoginData(data));
+            }
         }
 
         /**
@@ -109,7 +121,9 @@ public final class UmengLogin {
          */
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            mListener.onError(mPlatform, t);
+            if (get() != null) {
+                get().onError(mPlatform, t);
+            }
         }
 
         /**
@@ -120,7 +134,9 @@ public final class UmengLogin {
          */
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-            mListener.onCancel(mPlatform);
+            if (get() != null) {
+                get().onCancel(mPlatform);
+            }
         }
     }
 

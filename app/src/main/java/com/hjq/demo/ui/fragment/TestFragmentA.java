@@ -1,11 +1,12 @@
 package com.hjq.demo.ui.fragment;
 
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.appcompat.widget.Toolbar;
 import android.widget.TextView;
 
-import com.gyf.barlibrary.ImmersionBar;
-import com.hjq.bar.TitleBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.ui.activity.HomeActivity;
@@ -28,8 +29,6 @@ public final class TestFragmentA extends MyLazyFragment<HomeActivity>
     XCollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.t_test_title)
     Toolbar mToolbar;
-    @BindView(R.id.tb_test_a_bar)
-    TitleBar mTitleBar;
 
     @BindView(R.id.tv_test_address)
     TextView mAddressView;
@@ -46,14 +45,9 @@ public final class TestFragmentA extends MyLazyFragment<HomeActivity>
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_test_a_bar;
-    }
-
-    @Override
     protected void initView() {
         // 给这个ToolBar设置顶部内边距，才能和TitleBar进行对齐
-        ImmersionBar.setTitleBar(getBindingActivity(), mToolbar);
+        ImmersionBar.setTitleBar(getAttachActivity(), mToolbar);
 
         //设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);
@@ -81,13 +75,13 @@ public final class TestFragmentA extends MyLazyFragment<HomeActivity>
      * {@link XCollapsingToolbarLayout.OnScrimsListener}
      */
     @Override
-    public void onScrimsStateChange(boolean shown) {
+    public void onScrimsStateChange(XCollapsingToolbarLayout layout, boolean shown) {
         if (shown) {
-            mAddressView.setTextColor(getResources().getColor(R.color.black));
+            mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.black));
             mSearchView.setBackgroundResource(R.drawable.bg_home_search_bar_gray);
             getStatusBarConfig().statusBarDarkFont(true).init();
-        }else {
-            mAddressView.setTextColor(getResources().getColor(R.color.white));
+        } else {
+            mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.white));
             mSearchView.setBackgroundResource(R.drawable.bg_home_search_bar_transparent);
             getStatusBarConfig().statusBarDarkFont(false).init();
         }

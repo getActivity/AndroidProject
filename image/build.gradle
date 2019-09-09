@@ -1,22 +1,23 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileVersion
 
     resourcePrefix "image_"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.ext.targetVersion
         // 混淆配置
         consumerProguardFiles 'proguard-glide.pro'
     }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
+    //implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
+
+    // 图片加载框架：https://github.com/bumptech/glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 }

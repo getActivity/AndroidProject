@@ -29,7 +29,7 @@ public final class CopyModel extends MvpModel<CopyOnListener> {
         // 为了省事，这里直接回调成功
         if ("账户".equals(mAccount) && "密码".equals(mPassword)) {
             getListener().onSucceed(null);
-        }else {
+        } else {
             getListener().onFail("账户或密码不对哦");
         }
     }

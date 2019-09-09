@@ -169,29 +169,29 @@
 
 	public final View  getItemView()
 
-	public final <V extends View> V findViewById(@IdRes int viewId)
+	public final <V extends View> V findViewById(@IdRes int id)
 
-	public final ViewHolder setText(@IdRes int viewId, @StringRes int resId)
+	public final ViewHolder setText(@IdRes int id, @StringRes int id)
 
-	public final ViewHolder setText(@IdRes int viewId, String text)
+	public final ViewHolder setText(@IdRes int id, String text)
 	
-	public final ViewHolder setVisibility(@IdRes int viewId, int visibility)
+	public final ViewHolder setVisibility(@IdRes int id, int visibility)
 	
-	public final ViewHolder setColor(@IdRes int viewId, @ColorInt int color)
+	public final ViewHolder setColor(@IdRes int id, @ColorInt int color)
 	
-	public final ViewHolder setImage(@IdRes int viewId, @DrawableRes int resId)
+	public final ViewHolder setImage(@IdRes int id, @DrawableRes int drawableId)
 
 > 监听方法（必须在 RecyclerView.setAdapter 之前调用）
 
-	public void setOnItemClickListener(OnItemClickListener l)
+	public void setOnItemClickListener(OnItemClickListener listener)
 
-	public void setOnChildClickListener(@IdRes int childId, OnChildClickListener l)
+	public void setOnChildClickListener(@IdRes int id, OnChildClickListener listener)
 
-	public void setOnItemLongClickListener(OnItemLongClickListener l)
+	public void setOnItemLongClickListener(OnItemLongClickListener listener)
 	
-	public void setOnChildLongClickListener(@IdRes int childId, OnChildLongClickListener l)
+	public void setOnChildLongClickListener(@IdRes int id, OnChildLongClickListener listener)
 
-	public void setOnScrollingListener(OnScrollingListener l)
+	public void setOnScrollingListener(OnScrollingListener listener)
 
 > MyListViewAdapter 和 MyRecyclerViewAdapter 差不多，只不过没有上面这些监听方法，因为 ListView 本身已经自带这些了
 

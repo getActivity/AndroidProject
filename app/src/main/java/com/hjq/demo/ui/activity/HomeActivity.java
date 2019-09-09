@@ -1,17 +1,20 @@
 package com.hjq.demo.ui.activity;
 
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.viewpager.widget.ViewPager;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hjq.base.BaseFragmentAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.demo.helper.DoubleClickHelper;
+import com.hjq.demo.other.KeyboardWatcher;
 import com.hjq.demo.ui.fragment.TestFragmentA;
 import com.hjq.demo.ui.fragment.TestFragmentB;
 import com.hjq.demo.ui.fragment.TestFragmentC;
@@ -27,23 +30,20 @@ import butterknife.BindView;
  */
 public final class HomeActivity extends MyActivity
         implements ViewPager.OnPageChangeListener,
-        BottomNavigationView.OnNavigationItemSelectedListener {
+        BottomNavigationView.OnNavigationItemSelectedListener,
+        KeyboardWatcher.SoftKeyboardStateListener {
 
     @BindView(R.id.vp_home_pager)
     ViewPager mViewPager;
     @BindView(R.id.bv_home_navigation)
     BottomNavigationView mBottomNavigationView;
 
+    /** ViewPager 适配器 */
     private BaseFragmentAdapter<MyLazyFragment> mPagerAdapter;
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_home;
-    }
-
-    @Override
-    protected int getTitleId() {
-        return 0;
     }
 
     @Override
@@ -53,6 +53,9 @@ public final class HomeActivity extends MyActivity
         // 不使用图标默认变色
         mBottomNavigationView.setItemIconTintList(null);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        KeyboardWatcher.with(this)
+                .setListener(this);
     }
 
     @Override
@@ -91,6 +94,8 @@ public final class HomeActivity extends MyActivity
             case 3:
                 mBottomNavigationView.setSelectedItemId(R.id.home_me);
                 break;
+            default:
+                break;
         }
     }
 
@@ -105,28 +110,34 @@ public final class HomeActivity extends MyActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_home:
-                //mViewPager.setCurrentItem(0);
-                //mViewPager.setCurrentItem(0, false);
-                // 如果切换的是相邻之间的 Item 就显示切换动画，如果不是则不要动画
-                mViewPager.setCurrentItem(0, mViewPager.getCurrentItem() == 1);
+                mViewPager.setCurrentItem(0);
                 return true;
             case R.id.home_found:
-                //mViewPager.setCurrentItem(1);
-                //mViewPager.setCurrentItem(1, false);
-                mViewPager.setCurrentItem(1, mViewPager.getCurrentItem() == 0 || mViewPager.getCurrentItem() == 2);
+                mViewPager.setCurrentItem(1);
                 return true;
             case R.id.home_message:
-                //mViewPager.setCurrentItem(2);
-                //mViewPager.setCurrentItem(2, false);
-                mViewPager.setCurrentItem(2, mViewPager.getCurrentItem() == 1 || mViewPager.getCurrentItem() == 3);
+                mViewPager.setCurrentItem(2);
                 return true;
             case R.id.home_me:
-                //mViewPager.setCurrentItem(3);
-                //mViewPager.setCurrentItem(3, false);
-                mViewPager.setCurrentItem(3, mViewPager.getCurrentItem() == 2);
+                mViewPager.setCurrentItem(3);
                 return true;
+            default:
+                break;
         }
         return false;
+    }
+
+    /**
+     * {@link KeyboardWatcher.SoftKeyboardStateListener}
+     */
+    @Override
+    public void onSoftKeyboardOpened(int keyboardHeight) {
+        mBottomNavigationView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSoftKeyboardClosed() {
+        mBottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -149,12 +160,12 @@ public final class HomeActivity extends MyActivity
                 public void run() {
                     // 进行内存优化，销毁掉所有的界面
                     ActivityStackManager.getInstance().finishAllActivities();
-                    // 销毁进程
-                    System.exit(0);
+                    // 销毁进程（请注意：调用此 API 可能导致当前 Activity onDestroy 方法无法正常回调）
+                    // System.exit(0);
                 }
             }, 300);
         } else {
-            toast(getResources().getString(R.string.home_exit_hint));
+            toast(R.string.home_exit_hint);
         }
     }
 
@@ -164,11 +175,5 @@ public final class HomeActivity extends MyActivity
         mViewPager.setAdapter(null);
         mBottomNavigationView.setOnNavigationItemSelectedListener(null);
         super.onDestroy();
-    }
-
-    @Override
-    public boolean isSupportSwipeBack() {
-        // 不使用侧滑功能
-        return false;
     }
 }

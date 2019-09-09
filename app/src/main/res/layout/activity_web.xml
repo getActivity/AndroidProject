@@ -7,7 +7,6 @@
     tools:context=".ui.activity.WebActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_web_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -15,11 +14,11 @@
         android:id="@+id/pb_web_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="3dip"
-        android:progressDrawable="@drawable/bg_web_progress_bar"
+        android:layout_height="3dp"
+        android:progressDrawable="@drawable/bg_webview_progress_bar"
         android:visibility="gone" />
 
-    <com.hjq.widget.HintLayout
+    <com.hjq.widget.layout.HintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -28,6 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.hjq.widget.HintLayout>
+    </com.hjq.widget.layout.HintLayout>
 
 </LinearLayout>

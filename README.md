@@ -1,76 +1,48 @@
-# 模板工程
+# 安卓架构
 
 > 博客地址：[但愿人长久，搬砖不再有](https://www.jianshu.com/p/77dd326f21dc)
 
 > 当我们日复一日年复一年的搬砖的时候，你是否曾想过提升一下开发效率，如果一个模板的项目摆在你的面前，你还会选择自己搭架构么
 
-> 但是做出一个好的模板项目并非易事，有多少人愿意选择去做，还有多少人选择努力去做好，可能寥寥无几，但是你今天看到的，正是你所想要的，一个真正能解决你开发新项目时最大痛点的模板工程，你不需要再麻木 Copy 原有旧项目的代码，只需改动少量代码就能得到想要的效果，你会发现开发新项目其实是一件很快乐的事
+> 但是搭建出一个好的架构并非易事，有多少人愿意选择去做，还有多少人选择努力去做好，可能寥寥无几，但是你今天看到的，正是你所想要的，一个真正能解决你开发新项目时最大痛点的架构工程，你不需要再麻木 Copy 原有旧项目的代码，只需改动少量代码就能得到想要的效果，你会发现开发新项目其实是一件很快乐的事
 
-> 已经正式投入公司新项目开发多时，暂时没有发现毛病，[点击此处下载Demo](https://raw.githubusercontent.com/getActivity/AndroidProject/master/AndroidProject.apk)，如果有问题随时欢迎你提交 [issues](https://github.com/getActivity/AndroidProject/issues/new) 给我反馈
+> 已经正式投入多个公司项目实践，暂时没有发现任何问题，[点击此处下载Demo](https://raw.githubusercontent.com/getActivity/AndroidProject/master/AndroidProject.apk)
 
-![](picture/0.png)
+![](picture/demo_code.png)
 
-![](picture/1.gif)
+#### 常用界面
 
-![](picture/2.png)
+![](picture/activity/1.png) ![](picture/activity/2.png) ![](picture/activity/3.png)
 
-![](picture/3.png)
+![](picture/activity/4.png) ![](picture/activity/5.png) ![](picture/activity/6.png)
 
-![](picture/4.png)
+![](picture/activity/7.png) ![](picture/activity/8.png) ![](picture/activity/9.png)
 
-![](picture/5.png)
+![](picture/activity/11.png) ![](picture/activity/12.png) ![](picture/activity/13.png)
 
-![](picture/6.png)
+![](picture/activity/14.png) ![](picture/activity/15.png) ![](picture/activity/16.png)
 
-![](picture/7.png)
+![](picture/activity/17.png) ![](picture/activity/18.png) ![](picture/activity/19.png)
 
-![](picture/8.png)
+![](picture/activity/20.png) ![](picture/activity/21.png) ![](picture/activity/22.png)
 
-![](picture/9.png)
+#### 常用对话框
 
-![](picture/10.png)
+![](picture/dialog/1.png) ![](picture/dialog/2.png) ![](picture/dialog/3.png)
 
-![](picture/11.png)
+![](picture/dialog/4.png) ![](picture/dialog/5.png) ![](picture/dialog/6.png)
 
-![](picture/12.png)
+![](picture/dialog/7.png) ![](picture/dialog/8.png) ![](picture/dialog/9.png)
 
-![](picture/13.png)
+![](picture/dialog/10.png) ![](picture/dialog/11.png) ![](picture/dialog/12.png)
 
-![](picture/14.png)
+![](picture/dialog/13.png) ![](picture/dialog/14.png) ![](picture/dialog/15.png)
 
-![](picture/15.png)
+#### 动图欣赏
 
-![](picture/16.png)
+![](picture/gif/1.gif) ![](picture/gif/2.gif) ![](picture/gif/3.gif)
 
-![](picture/17.png)
-
-![](picture/18.png)
-
-![](picture/19.png)
-
-![](picture/20.png)
-
-![](picture/21.png)
-
-![](picture/22.png)
-
-![](picture/23.png)
-
-![](picture/24.png)
-
-![](picture/25.png)
-
-![](picture/26.png)
-
-![](picture/27.png)
-
-![](picture/28.png)
-
-![](picture/29.png)
-
-![](picture/30.png)
-
-![](picture/31.png)
+![](picture/gif/4.gif) ![](picture/gif/5.gif) ![](picture/gif/6.gif)
 
 #### 集成框架
 
@@ -82,17 +54,19 @@
 
 * 状态栏沉浸：[https://github.com/gyf-dev/ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
 
-* 界面侧滑功能：[https://github.com/bingoogolapple/BGASwipeBackLayout-Android](https://github.com/bingoogolapple/BGASwipeBackLayout-Android)
+* 缩放 ImageView：[https://github.com/chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
 
-* 圆形ImageView：[https://github.com/hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
+* ViewPager 指示器：[https://github.com/romandanylyk/PageIndicatorView](https://github.com/romandanylyk/PageIndicatorView)
 
-* 缩放ImageView：[https://github.com/chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
+* ButterKnife 注解：[https://github.com/JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 
-* ButterKnife注解：[https://github.com/JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
+* EventBus 事件：[https://github.com/greenrobot/EventBus](https://github.com/greenrobot/EventBus)
+
+* 内存泄漏捕捉：[https://github.com/square/leakcanary](https://github.com/square/leakcanary)
+
+* 本地异常捕捉：[https://github.com/Ereza/CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash)
 
 #### 模板项目亮点，[查看详细](ProjectDetails.md)
-
-* APP用户体验：已经集成界面侧滑以及状态栏沉浸框架
 
 * 必备优秀框架：危险权限处理，标题栏控件，吐司工具类，圆形ImageView
 
@@ -126,15 +100,19 @@
 
 * 吐司框架：[ToastUtils](https://github.com/getActivity/ToastUtils)
 
-* 悬浮窗框架：[XToast](https://github.com/getActivity/XToast)
+* 国际化框架：[MultiLanguages](https://github.com/getActivity/MultiLanguages)
 
 * 标题栏框架：[TitleBar](https://github.com/getActivity/TitleBar)
+
+* 悬浮窗框架：[XToast](https://github.com/getActivity/XToast)
 
 #### Android技术讨论Q群：78797078
 
 #### 如果您觉得我的开源库帮你节省了大量的开发时间，请扫描下方的二维码随意打赏，要是能打赏个 10.24 :monkey_face:就太:thumbsup:了。您的支持将鼓励我继续创作:octocat:
 
-![](picture/pay_ali.png) ![](picture/pay_wechat.png)
+![](https://raw.githubusercontent.com/getActivity/Donate/master/picture/pay_ali.png) ![](https://raw.githubusercontent.com/getActivity/Donate/master/picture/pay_wechat.png)
+ 
+#### [点击查看捐赠列表](https://github.com/getActivity/Donate)
 
 ## License
 

@@ -10,7 +10,8 @@ import android.os.SystemClock;
  */
 public final class DoubleClickHelper {
 
-    private static final long[] TIME_ARRAY = new long[2]; // 数组的长度为2代表只记录双击操作
+    /** 数组的长度为2代表只记录双击操作 */
+    private static final long[] TIME_ARRAY = new long[2];
 
     /**
      * 是否在短时间内进行了双击操作

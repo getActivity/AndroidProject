@@ -5,8 +5,8 @@ import android.view.View;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyLazyFragment;
 import com.hjq.demo.ui.activity.HomeActivity;
-import com.hjq.widget.CountdownView;
-import com.hjq.widget.SwitchButton;
+import com.hjq.widget.view.CountdownView;
+import com.hjq.widget.view.SwitchButton;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,11 +36,6 @@ public final class TestFragmentB extends MyLazyFragment<HomeActivity>
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_test_b_title;
-    }
-
-    @Override
     protected void initView() {
         mSwitchButton.setOnCheckedChangeListener(this);
     }
@@ -54,7 +49,7 @@ public final class TestFragmentB extends MyLazyFragment<HomeActivity>
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cv_test_countdown:
-                toast(getResources().getString(R.string.common_send_code_succeed));
+                toast(R.string.common_code_send_hint);
                 break;
             default:
                 break;

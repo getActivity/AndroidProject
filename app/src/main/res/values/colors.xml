@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#000000</color>
+    <!-- App 样式中引用的颜色 -->
+    <color name="colorPrimary">@color/white</color>
+    <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">#5A8DDF</color>
     <color name="windowBackground">#F4F4F4</color>
     <color name="textColor">#333333</color>
     <color name="textColorHint">#757575</color>
 
     <!-- 按钮按压时的颜色 -->
-    <color name="colorButtonPressed">#1976d2</color>
+    <color name="colorButtonPressed">#1976D2</color>
     <!-- 按钮禁用时的颜色 -->
-    <color name="colorButtonDisable">#DDDDDD</color>
+    <color name="colorButtonDisable">#BBBBBB</color>
     <!-- 分割线的颜色 -->
     <color name="colorLine">#ECECEC</color>
+
+    <!-- 对话框确认按钮文本颜色 -->
+    <color name="colorConfirm">#007AFF</color>
+    <!-- 对话框取消按钮文本颜色 -->
+    <color name="colorCancel">#F44336</color>
+
 </resources>

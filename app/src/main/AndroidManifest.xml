@@ -12,14 +12,16 @@
 
     <!-- 联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 访问当前网络状态权限 -->
+    <!-- 访问网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!-- 安装包的权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".common.MyApplication"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -39,10 +41,18 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- 崩溃界面 -->
+        <activity
+            android:name=".ui.activity.CrashActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:process=":crash"
+            android:screenOrientation="portrait" />
+
         <!-- 启动页面（因为使用了LauncherTheme，所以不要给这个Activity设置screenOrientation属性，会导致崩溃） -->
         <activity
-            android:name=".ui.activity.LauncherActivity"
-            android:theme="@style/LauncherTheme">
+            android:name=".ui.activity.SplashActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/SplashTheme">
 
             <!-- 程序入口 -->
             <intent-filter>
@@ -54,66 +64,106 @@
 
         </activity>
 
-        <!-- 主页界面 -->
+        <!-- App 首页 -->
         <activity
             android:name=".ui.activity.HomeActivity"
             android:alwaysRetainTaskState="true"
-            android:launchMode="singleTask" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <!-- 登录界面 -->
-        <activity android:name=".ui.activity.LoginActivity" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <!-- 注册界面 -->
-        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <!-- 设置界面 -->
         <activity
             android:name=".ui.activity.SettingActivity"
-            android:label="@string/setting_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/setting_title"
+            android:screenOrientation="portrait" />
 
         <!-- 忘记密码 -->
         <activity
             android:name=".ui.activity.PasswordForgetActivity"
-            android:label="@string/password_forget_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/password_forget_title"
+            android:screenOrientation="portrait" />
 
         <!-- 重置密码 -->
         <activity
             android:name=".ui.activity.PasswordResetActivity"
-            android:label="@string/password_reset_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/password_reset_title"
+            android:screenOrientation="portrait" />
 
         <!-- 手机号校验 -->
         <activity
             android:name=".ui.activity.PhoneVerifyActivity"
-            android:label="@string/phone_verify_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/phone_verify_title"
+            android:screenOrientation="portrait" />
 
         <!-- 手机号更换 -->
         <activity
             android:name=".ui.activity.PhoneResetActivity"
-            android:label="@string/phone_reset_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/phone_reset_title"
+            android:screenOrientation="portrait" />
 
-        <!-- 关于界面 -->
+        <!-- 关于我们 -->
         <activity
             android:name=".ui.activity.AboutActivity"
-            android:label="@string/about_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/about_title"
+            android:screenOrientation="portrait" />
 
         <!-- 个人资料 -->
         <activity
             android:name=".ui.activity.PersonalDataActivity"
-            android:label="@string/personal_data_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/personal_data_title"
+            android:screenOrientation="portrait" />
 
-        <!-- 浏览器界面 -->
+        <!-- 浏览器 -->
         <activity
             android:name=".ui.activity.WebActivity"
-            android:label="@string/web_title" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/web_title"
+            android:screenOrientation="portrait" />
 
-        <!-- 查看大图界面 -->
-        <activity android:name=".ui.activity.PhotoActivity" />
+        <!-- 图片选择 -->
+        <activity
+            android:name=".ui.activity.PhotoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/photo_title"
+            android:screenOrientation="portrait" />
 
-        <!-- 对话框界面 -->
-        <activity android:name=".ui.activity.DialogActivity" />
+        <!-- 查看大图 -->
+        <activity
+            android:name=".ui.activity.ImageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
-        <!-- 状态界面 -->
-        <activity android:name=".ui.activity.StatusActivity" />
+        <!-- 对话框案例 -->
+        <activity
+            android:name=".ui.activity.DialogActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <!-- 状态案例 -->
+        <activity
+            android:name=".ui.activity.StatusActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
     </application>
 

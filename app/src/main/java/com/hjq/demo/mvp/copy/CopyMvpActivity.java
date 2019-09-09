@@ -2,7 +2,9 @@ package com.hjq.demo.mvp.copy;
 
 import android.view.View;
 
+import com.hjq.demo.R;
 import com.hjq.demo.mvp.MvpActivity;
+import com.hjq.demo.mvp.MvpInject;
 
 import java.util.List;
 
@@ -12,21 +14,14 @@ import java.util.List;
  *    time   : 2018/11/17
  *    desc   : 可进行拷贝的MVP Activity 类
  */
-public final class CopyMvpActivity extends MvpActivity<CopyPresenter> implements CopyContract.View {
+public final class CopyMvpActivity extends MvpActivity implements CopyContract.View {
 
-    @Override
-    protected CopyPresenter createPresenter() {
-        return new CopyPresenter();
-    }
+    @MvpInject
+    CopyPresenter mPresenter;
 
     @Override
     protected int getLayoutId() {
-        return 0;
-    }
-
-    @Override
-    protected int getTitleId() {
-        return 0;
+        return R.layout.activity_copy;
     }
 
     @Override
@@ -41,7 +36,7 @@ public final class CopyMvpActivity extends MvpActivity<CopyPresenter> implements
 
     public void onLogin(View view) {
         // 登录操作
-        getPresenter().login("账户", "密码");
+        mPresenter.login("账户", "密码");
     }
 
     /**

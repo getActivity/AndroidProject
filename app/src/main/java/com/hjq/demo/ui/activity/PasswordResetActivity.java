@@ -32,16 +32,19 @@ public final class PasswordResetActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_password_reset_title;
-    }
-
-    @Override
     protected void initView() {
-        new InputTextHelper.Builder(this)
-                .setMain(mCommitView)
+        InputTextHelper.with(this)
                 .addView(mPasswordView1)
                 .addView(mPasswordView2)
+                .setMain(mCommitView)
+                .setListener(new InputTextHelper.OnInputTextListener() {
+
+                    @Override
+                    public boolean onInputChange(InputTextHelper helper) {
+                        return mPasswordView1.getText().toString().length() >= 6 &&
+                                mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString());
+                    }
+                })
                 .build();
     }
 
@@ -54,11 +57,10 @@ public final class PasswordResetActivity extends MyActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_password_reset_commit:
-                if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
-                    toast(getString(R.string.password_reset_input_error));
-                } else {
-                    // 重置密码
-                }
+                toast(R.string.password_reset_success);
+                finish();
+                break;
+            default:
                 break;
         }
     }

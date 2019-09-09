@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.lang.reflect.Field;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import java.util.Random;
 
 /**
@@ -24,32 +25,25 @@ import java.util.Random;
  */
 public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment {
 
-    // Activity对象
-    public A mActivity;
-    // 根布局
+    /** Activity对象 */
+    private A mActivity;
+    /** 根布局 */
     private View mRootView;
-    // 是否进行过懒加载
+    /** 是否进行过懒加载 */
     private boolean isLazyLoad;
-    // Fragment 是否可见
+    /** Fragment 是否可见 */
     private boolean isFragmentVisible;
-    // 是否是 replace Fragment 的形式
+    /** 是否是 replace Fragment 的形式 */
     private boolean isReplaceFragment;
 
     /**
-     * 获得全局的，防止使用getActivity()为空
+     * 获得全局的 Activity
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (A) requireActivity();
-    }
-
-    /**
-     * 获取绑定的Activity，防止出现 getActivity() 为空
-     */
-    public A getBindingActivity() {
-        return mActivity;
     }
 
     @Override
@@ -73,6 +67,13 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
     }
 
     /**
+     * 获取绑定的 Activity，防止出现 getActivity 为空
+     */
+    public A getAttachActivity() {
+        return mActivity;
+    }
+
+    /**
      * 是否进行了懒加载
      */
     protected boolean isLazyLoad() {
@@ -93,12 +94,12 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
             if (isFragmentVisible) {
                 initLazyLoad();
             }
-        }else {
+        } else {
             initLazyLoad();
         }
     }
 
-    // replace Fragment时使用，ViewPager 切换时会回调此方法
+    /** replace Fragment时使用，ViewPager 切换时会回调此方法 */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -107,7 +108,7 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
         if (isVisibleToUser && mRootView != null) {
             if (!isLazyLoad) {
                 initLazyLoad();
-            }else {
+            } else {
                 // 从不可见到可见
                 onRestart();
             }
@@ -127,38 +128,21 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
     /**
      * 从可见的状态变成不可见状态，再从不可见状态变成可见状态时回调
      */
+    @SuppressWarnings("all")
     protected void onRestart() {}
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        // 解决java.lang.IllegalStateException: Activity has been destroyed 的错误
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     protected void initFragment() {
         initView();
         initData();
     }
 
-    //引入布局
+    /** 引入布局 */
     protected abstract int getLayoutId();
 
-    //标题栏id
-    protected abstract int getTitleId();
-
-    //初始化控件
+    /** 初始化控件 */
     protected abstract void initView();
 
-    //初始化数据
+    /** 初始化数据 */
     protected abstract void initData();
 
     /**
@@ -171,7 +155,6 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
     protected <V extends View> V findActivityViewById(@IdRes int id) {
         return mActivity.findViewById(id);
     }
-
 
     /**
      * startActivity 方法优化
@@ -206,14 +189,12 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
     }
 
     public void startActivityForResult(Intent intent, Bundle options, BaseActivity.ActivityCallback callback) {
+        // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
         if (mActivityCallback == null) {
             mActivityCallback = callback;
             // 随机生成请求码，这个请求码在 0 - 255 之间
             mActivityRequestCode = new Random().nextInt(255);
             startActivityForResult(intent, mActivityRequestCode, options);
-        }else {
-            // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
-            throw new IllegalArgumentException("Error, The callback is not over yet");
         }
     }
 
@@ -238,16 +219,15 @@ public abstract class BaseLazyFragment<A extends BaseActivity> extends Fragment 
     /**
      * 获取系统服务
      */
-    @SuppressWarnings("unchecked")
-    public <S extends Object> S getSystemService(@NonNull String name) {
-        return (S) mActivity.getSystemService(name);
+    public <T> T getSystemService(@NonNull Class<T> serviceClass) {
+        return ContextCompat.getSystemService(mActivity, serviceClass);
     }
 
     /**
-     * Fragment返回键被按下时回调
+     * Fragment 返回键被按下时回调
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //默认不拦截按键事件，传递给Activity
+        // 默认不拦截按键事件，回传给 Activity
         return false;
     }
 }

@@ -1,6 +1,10 @@
 package com.hjq.demo.mvp;
 
+import android.content.Context;
+
 import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.mvp.proxy.IMvpPresenterProxy;
+import com.hjq.demo.mvp.proxy.MvpPresenterProxyImpl;
 
 /**
  *    author : Android 轮子哥
@@ -8,32 +12,31 @@ import com.hjq.demo.common.MyActivity;
  *    time   : 2018/11/17
  *    desc   : MVP Activity 基类
  */
-public abstract class MvpActivity<P extends MvpPresenter> extends MyActivity implements IMvpView {
+public abstract class MvpActivity extends MyActivity implements IMvpView {
 
-    private P mPresenter;
+    private IMvpPresenterProxy mMvpProxy;
 
     @Override
     public void initActivity() {
-        mPresenter = createPresenter();
-        mPresenter.attach(this);
+        mMvpProxy = createPresenterProxy();
+        mMvpProxy.bindPresenter();
         super.initActivity();
-        mPresenter.start();
+    }
+
+    protected IMvpPresenterProxy createPresenterProxy() {
+        return new MvpPresenterProxyImpl(this);
     }
 
     @Override
     protected void onDestroy() {
-        if (mPresenter != null) {
-            mPresenter.detach();
-            mPresenter = null;
-        }
+        mMvpProxy.unbindPresenter();
         super.onDestroy();
     }
 
-    public P getPresenter() {
-        return mPresenter;
+    @Override
+    public Context getContext() {
+        return this;
     }
-
-    protected abstract P createPresenter();
 
     @Override
     public void onLoading() {

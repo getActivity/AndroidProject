@@ -2,133 +2,114 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#01000000"
-    android:gravity="center">
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context=".ui.dialog.UpdateDialog">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/update_app_top_bg" />
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/selector_update_bottom"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/update_app_top_bg" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_dialog_update_bottom"
-            android:orientation="vertical">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_update_name"
+                android:layout_width="0px"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                tools:text="版本号" />
 
-                <TextView
-                    android:id="@+id/tv_dialog_update_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    tools:text="版本号" />
-
-                <TextView
-                    android:id="@+id/tv_dialog_update_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#666666"
-                    android:textSize="13sp"
-                    tools:text="大小" />
-
-            </LinearLayout>
-
-            <!--这个地方需要设置可以滚动-->
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:scrollbars="none">
-
-                <TextView
-                    android:id="@+id/tv_dialog_update_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="@dimen/space_20"
-                    android:layout_marginRight="20dp"
-                    android:lineSpacingExtra="5dp"
-                    android:maxHeight="100dp"
-                    android:minHeight="100dp"
-                    android:textColor="#666666"
-                    android:textSize="13sp"
-                    tools:text="更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n更新内容\n" />
-
-            </androidx.core.widget.NestedScrollView>
-
-            <com.hjq.widget.NumberProgressBar
-                android:id="@+id/pb_dialog_update_progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="20dp"
-                android:visibility="gone"
-                app:pb_reachedColor="#e94339"
-                app:pb_reachedHeight="4dp"
-                app:pb_textColor="#e94339"
-                app:pb_textSize="@dimen/font_size_24px"
-                app:pb_unreachedColor="#CCCCCC"
-                app:pb_unreachedHeight="3dp" />
-
-            <TextView
-                android:id="@+id/tv_dialog_update_update"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/bg_dialog_update_button"
-                android:focusable="true"
-                android:gravity="center"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/dialog_update_button"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_dialog_update_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:background="#d8d8d8" />
-
-            <ImageView
-                android:id="@+id/iv_dialog_update_close"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_update_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/update_app_close" />
+                android:textColor="#666666"
+                android:textSize="13sp"
+                tools:text="大小" />
 
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_update_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:lineSpacingExtra="5dp"
+            android:minLines="5"
+            android:textColor="#666666"
+            android:textSize="13sp"
+            tools:text="更新内容" />
+
+        <com.hjq.demo.widget.NumberProgressBar
+            android:id="@+id/pb_update_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"
+            app:pb_reachedColor="#e94339"
+            app:pb_reachedHeight="4dp"
+            app:pb_textColor="#e94339"
+            app:pb_textSize="12sp"
+            app:pb_unreachedColor="#CCCCCC"
+            app:pb_unreachedHeight="3dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_update_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/selector_update_button"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/update_app"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_update_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:background="#d8d8d8" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_update_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/update_app_close" />
 
     </LinearLayout>
 

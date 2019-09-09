@@ -13,7 +13,7 @@ import com.hjq.demo.common.MyRecyclerViewAdapter;
  *    time   : 2018/11/05
  *    desc   : 可进行拷贝的副本
  */
-public final class CopyAdapter extends MyRecyclerViewAdapter<String, CopyAdapter.ViewHolder> {
+public final class CopyAdapter extends MyRecyclerViewAdapter<String> {
 
     public CopyAdapter(Context context) {
         super(context);
@@ -26,19 +26,19 @@ public final class CopyAdapter extends MyRecyclerViewAdapter<String, CopyAdapter
 
     @NonNull
     @Override
-    public CopyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(parent, R.layout.item_copy);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder();
     }
 
     final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
 
-        ViewHolder(ViewGroup parent, int layoutId) {
-            super(parent, layoutId);
+        ViewHolder() {
+            super(R.layout.item_copy);
+        }
+
+        @Override
+        public void onBindView(int position) {
+
         }
     }
 }

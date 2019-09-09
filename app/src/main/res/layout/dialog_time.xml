@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/dialog_message_round_size"
+    app:cardElevation="0px"
+    tools:context="com.hjq.demo.ui.dialog.TimeDialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.hjq.widget.view.SmartTextView
+            android:id="@+id/tv_time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:text="@string/time_title"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/ll_time_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp">
+
+            <com.hjq.demo.widget.LoopView
+                android:id="@+id/lv_time_hour"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:lv_textSize="18sp" />
+
+            <com.hjq.demo.widget.LoopView
+                android:id="@+id/lv_time_minute"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:lv_textSize="18sp" />
+
+            <com.hjq.demo.widget.LoopView
+                android:id="@+id/lv_time_second"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:lv_textSize="18sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_size"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <com.hjq.widget.view.SmartTextView
+                android:id="@+id/tv_time_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_transparent"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/common_cancel"
+                android:textColor="@color/colorCancel"
+                android:textSize="14sp" />
+
+            <View
+                android:id="@+id/v_time_line"
+                android:layout_width="@dimen/line_size"
+                android:layout_height="match_parent"
+                android:background="@color/colorLine" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_time_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_transparent"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/common_confirm"
+                android:textColor="@color/colorConfirm"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

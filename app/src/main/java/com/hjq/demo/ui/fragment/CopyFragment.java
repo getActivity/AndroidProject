@@ -22,11 +22,6 @@ public final class CopyFragment extends MyLazyFragment<CopyActivity> {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_copy_title;
-    }
-
-    @Override
     protected void initView() {
 
     }

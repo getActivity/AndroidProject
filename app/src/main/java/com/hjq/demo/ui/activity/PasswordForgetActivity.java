@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.InputTextHelper;
-import com.hjq.widget.CountdownView;
+import com.hjq.widget.view.CountdownView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,16 +35,18 @@ public final class PasswordForgetActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_password_forget_title;
-    }
-
-    @Override
     protected void initView() {
-        new InputTextHelper.Builder(this)
-                .setMain(mCommitView)
+        InputTextHelper.with(this)
                 .addView(mPhoneView)
                 .addView(mCodeView)
+                .setMain(mCommitView)
+                .setListener(new InputTextHelper.OnInputTextListener() {
+
+                    @Override
+                    public boolean onInputChange(InputTextHelper helper) {
+                        return mPhoneView.getText().toString().length() == 11 && mCodeView.getText().toString().length() == 4;
+                    }
+                })
                 .build();
     }
 
@@ -60,19 +62,15 @@ public final class PasswordForgetActivity extends MyActivity {
                 if (mPhoneView.getText().toString().length() != 11) {
                     // 重置验证码倒计时控件
                     mCountdownView.resetState();
-                    toast(getString(R.string.common_phone_input_error));
+                    toast(R.string.common_phone_input_error);
                 } else {
                     // 获取验证码
-                    toast(getString(R.string.common_send_code_succeed));
+                    toast(R.string.common_code_send_hint);
                 }
                 break;
             case R.id.btn_password_forget_commit:
-                if (mPhoneView.getText().toString().length() != 11) {
-                    toast(getString(R.string.common_phone_input_error));
-                } else {
-                    // 重置密码
-                    startActivityFinish(PasswordResetActivity.class);
-                }
+                // 重置密码
+                startActivityFinish(PasswordResetActivity.class);
                 break;
             default:
                 break;

@@ -39,16 +39,20 @@ public final class CacheDataManager {
      * 删除文件夹
      */
     private static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
+        if (dir != null) {
+            if (dir.isDirectory()) {
+                String[] children = dir.list();
+                for (String child : children) {
+                    boolean success = deleteDir(new File(dir, child));
+                    if (!success) {
+                        return false;
+                    }
                 }
+            } else {
+                return dir.delete();
             }
         }
-        return dir.delete();
+        return false;
     }
 
     // 获取文件大小
@@ -57,13 +61,13 @@ public final class CacheDataManager {
     private static long getFolderSize(File file) {
         long size = 0;
         try {
-            File[] fileList = file.listFiles();
-            for (int i = 0; i < fileList.length; i++) {
+            File[] list = file.listFiles();
+            for (File temp : list) {
                 // 如果下面还有文件
-                if (fileList[i].isDirectory()) {
-                    size = size + getFolderSize(fileList[i]);
+                if (temp.isDirectory()) {
+                    size = size + getFolderSize(temp);
                 } else {
-                    size = size + fileList[i].length();
+                    size = size + temp.length();
                 }
             }
         } catch (Exception e) {

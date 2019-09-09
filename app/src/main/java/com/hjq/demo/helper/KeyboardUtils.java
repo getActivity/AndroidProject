@@ -18,11 +18,12 @@ public final class KeyboardUtils {
      * @param view      依附的View
      */
     public static void showKeyboard(View view) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         InputMethodManager imm = (InputMethodManager) view.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            //view.requestFocus();
             imm.showSoftInput(view, 0);
         }
     }
@@ -33,7 +34,9 @@ public final class KeyboardUtils {
      * @param view      依附的View
      */
     public static void hideKeyboard(View view) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         InputMethodManager imm = (InputMethodManager) view.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -47,7 +50,9 @@ public final class KeyboardUtils {
      * @param view      依附的View
      */
     public static void toggleSoftInput(View view) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         InputMethodManager imm = (InputMethodManager) view.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {

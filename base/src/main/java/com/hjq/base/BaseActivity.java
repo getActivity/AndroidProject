@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.Random;
 
@@ -23,6 +26,7 @@ import java.util.Random;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
+    public final Object mHandlerToken = hashCode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +40,42 @@ public abstract class BaseActivity extends AppCompatActivity {
         initData();
     }
 
+    /**
+     * 初始化布局
+     */
     protected void initLayout() {
         if (getLayoutId() > 0) {
             setContentView(getLayoutId());
+            initSoftKeyboard();
         }
     }
 
-    // 引入布局
+    /**
+     * 初始化软键盘
+     */
+    protected void initSoftKeyboard() {
+        // 点击外部隐藏软键盘，提升用户体验
+        getContentView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSoftKeyboard();
+            }
+        });
+    }
+
+    /**
+     * 获取布局 ID
+     */
     protected abstract int getLayoutId();
 
-    // 标题栏
-    protected abstract int getTitleId();
-
-    // 初始化控件
+    /**
+     * 初始化控件
+     */
     protected abstract void initView();
 
-    // 初始化数据
+    /**
+     * 初始化数据
+     */
     protected abstract void initData();
 
     @Override
@@ -81,14 +105,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 在指定的时间执行
      */
     public final boolean postAtTime(Runnable r, long uptimeMillis) {
-        return HANDLER.postAtTime(r, this, uptimeMillis);
+        // 发送和这个 Activity 相关的消息回调
+        return HANDLER.postAtTime(r, mHandlerToken, uptimeMillis);
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         // 移除和这个 Activity 相关的消息回调
-        HANDLER.removeCallbacksAndMessages(this);
+        HANDLER.removeCallbacksAndMessages(mHandlerToken);
+        super.onDestroy();
     }
 
     /**
@@ -104,16 +129,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 获取当前 Activity 对象
      */
-    @SuppressWarnings("unchecked")
-    public <A extends BaseActivity> A getActivity() {
-        return (A) this;
+    public BaseActivity getActivity() {
+        return this;
     }
 
     /**
      * 和 setContentView 对应的方法
      */
-    public View getContentView() {
-        return getWindow().getDecorView();
+    public ViewGroup getContentView() {
+        return findViewById(Window.ID_ANDROID_CONTENT);
     }
 
     /**
@@ -134,23 +158,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * setResult 方法优化
-     */
-
-    public void finishResult() {
-        finishResult(RESULT_OK, null);
-    }
-
-    public void finishResult(int resultCode) {
-        finishResult(resultCode, null);
-    }
-
-    public void finishResult(int resultCode, Intent data) {
-        setResult(resultCode, data);
-        finish();
-    }
-
-    /**
      * startActivityForResult 方法优化
      */
 
@@ -166,14 +173,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void startActivityForResult(Intent intent, @Nullable Bundle options, ActivityCallback callback) {
+        // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
         if (mActivityCallback == null) {
             mActivityCallback = callback;
             // 随机生成请求码，这个请求码在 0 - 255 之间
             mActivityRequestCode = new Random().nextInt(255);
             startActivityForResult(intent, mActivityRequestCode, options);
-        }else {
-            // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
-            throw new IllegalArgumentException("Error, The callback is not over yet");
         }
     }
 
@@ -182,7 +187,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mActivityCallback != null && mActivityRequestCode == requestCode) {
             mActivityCallback.onActivityResult(resultCode, data);
             mActivityCallback = null;
-        }else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -214,11 +219,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         boolean result = true;
         // 标记对象
         String tag;
-        if (intent.getComponent() != null) { // 显式跳转
+        if (intent.getComponent() != null) {
+            // 显式跳转
             tag = intent.getComponent().getClassName();
-        }else if (intent.getAction() != null) { // 隐式跳转
+        } else if (intent.getAction() != null) {
+            // 隐式跳转
             tag = intent.getAction();
-        }else { // 其他方式
+        } else {
+            // 其他方式
             return true;
         }
 
@@ -227,6 +235,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             result = false;
         }
 
+        // 记录启动标记和时间
         mStartActivityTag = tag;
         mStartActivityTime = SystemClock.uptimeMillis();
         return result;
@@ -240,7 +249,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (manager != null) manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (manager != null) {
+                manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 

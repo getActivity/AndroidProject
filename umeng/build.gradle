@@ -1,21 +1,22 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileVersion
 
     resourcePrefix "umeng_"
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.ext.targetVersion
         // 混淆配置
         consumerProguardFiles 'proguard-umeng.pro'
     }
 }
 
 dependencies {
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
+    // implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
+
     // 依赖 libs 目录下所有 Jar 包
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
 }

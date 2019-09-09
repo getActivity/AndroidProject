@@ -1,19 +1,22 @@
 package com.hjq.demo.widget;
 
 import android.content.Context;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import android.util.AttributeSet;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 支持监听渐变的CollapsingToolbarLayout
+ *    desc   : 支持监听渐变的 CollapsingToolbarLayout
  */
 public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
-    private OnScrimsListener mListener; // 渐变监听
-    private boolean isScrimsShown;  // 当前渐变状态
+    /** 渐变监听 */
+    private OnScrimsListener mListener;
+    /** 当前渐变状态 */
+    private boolean isScrimsShown;
 
     public XCollapsingToolbarLayout(Context context) {
         super(context);
@@ -35,7 +38,7 @@ public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
             // 如果是就记录并且回调监听器
             isScrimsShown = shown;
             if (mListener != null) {
-                mListener.onScrimsStateChange(isScrimsShown);
+                mListener.onScrimsStateChange(this, isScrimsShown);
             }
         }
     }
@@ -50,8 +53,8 @@ public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
     /**
      * 设置CollapsingToolbarLayout渐变监听
      */
-    public void setOnScrimsListener(OnScrimsListener l) {
-        mListener = l;
+    public void setOnScrimsListener(OnScrimsListener listener) {
+        mListener = listener;
     }
 
     /**
@@ -64,6 +67,6 @@ public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
          *
          * @param shown         渐变开关
          */
-        void onScrimsStateChange(boolean shown);
+        void onScrimsStateChange(XCollapsingToolbarLayout layout, boolean shown);
     }
 }

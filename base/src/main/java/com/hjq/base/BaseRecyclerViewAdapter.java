@@ -3,23 +3,19 @@ package com.hjq.base;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  *    author : Android 轮子哥
@@ -27,28 +23,24 @@ import java.util.List;
  *    time   : 2018/10/18
  *    desc   : RecyclerView 适配器基类
  */
-public abstract class BaseRecyclerViewAdapter
-        <T, VH extends BaseRecyclerViewAdapter.ViewHolder>
-                        extends RecyclerView.Adapter<VH> {
+public abstract class BaseRecyclerViewAdapter<VH extends BaseRecyclerViewAdapter.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    // 列表数据
-    private List<T> mDataSet;
+    /** 上下文对象 */
+    private final Context mContext;
 
-    // RecyclerView 对象
+    /** RecyclerView 对象 */
     private RecyclerView mRecyclerView;
-    // 上下文对象，注意不要在构造函数中使用
-    private Context mContext;
 
-    // 条目点击事件
+    /** 条目点击事件 */
     private OnItemClickListener mItemClickListener;
-    // 条目长按事件
+    /** 条目长按事件 */
     private OnItemLongClickListener mItemLongClickListener;
-    // RecyclerView 滚动事件
+    /** RecyclerView 滚动事件 */
     private OnScrollingListener mScrollingListener;
 
-    // 条目子 View 点击事件
+    /** 条目子 View 点击事件 */
     private SparseArray<OnChildClickListener> mChildClickListeners;
-    // 条目子 View 长按事件
+    /** 条目子 View 长按事件 */
     private SparseArray<OnChildLongClickListener> mChildLongClickListeners;
 
     public BaseRecyclerViewAdapter(Context context) {
@@ -56,107 +48,13 @@ public abstract class BaseRecyclerViewAdapter
     }
 
     @Override
-    public int getItemCount() {
-        return mDataSet == null ? 0 : mDataSet.size();
-    }
-
-    @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /**
-     * 设置新的数据
-     */
-    public void setData(List<T> data) {
-        mDataSet = data;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 获取当前数据
-     */
-    @Nullable
-    public List<T> getData() {
-        return mDataSet;
-    }
-
-    /**
-     * 追加一些数据
-     */
-    public void addData(List<T> data) {
-        if (data == null || data.size() == 0) return;
-
-        if (mDataSet == null || mDataSet.size() == 0) {
-            setData(data);
-        }else {
-            mDataSet.addAll(data);
-            notifyItemRangeInserted(mDataSet.size() - data.size(), data.size());
-        }
-    }
-
-    /**
-     * 清空当前数据
-     */
-    public void clearData() {
-        if (mDataSet == null || mDataSet.size() == 0) return;
-
-        mDataSet.clear();
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 获取某个位置上的数据
-     */
-    public T getItem(int position) {
-        return mDataSet.get(position);
-    }
-
-    /**
-     * 更新某个位置上的数据
-     */
-    public void setItem(int position, T item) {
-        if (mDataSet == null) mDataSet = new ArrayList<>();
-        mDataSet.set(position, item);
-        notifyItemChanged(position);
-    }
-
-    /**
-     * 添加单条数据
-     */
-    public void addItem(T item) {
-        if (mDataSet == null) mDataSet = new ArrayList<>();
-
-        addItem(mDataSet.size(), item);
-    }
-
-    public void addItem(int position, T item) {
-        if (mDataSet == null) mDataSet = new ArrayList<>();
-
-        if (position < mDataSet.size()) {
-            mDataSet.add(position, item);
-        } else {
-            mDataSet.add(item);
-            position = mDataSet.size() - 1;
-        }
-        notifyItemInserted(position);
-    }
-
-    /**
-     * 删除单条数据
-     */
-    public void removeItem(T item) {
-        int index = mDataSet.indexOf(item);
-        if (index != -1) {
-            removeItem(index);
-        }
-    }
-
-    public void removeItem(int position) {
-        //如果是在for循环删除后要记得i--
-        mDataSet.remove(position);
-        //告诉适配器删除数据的位置，会有动画效果
-        notifyItemRemoved(position);
+    @Override
+    public void onBindViewHolder(@NonNull VH holder, int position) {
+        holder.onBindView(position);
     }
 
     /**
@@ -167,7 +65,7 @@ public abstract class BaseRecyclerViewAdapter
     }
 
     /**
-     * 获取上下文对象，注意不要在构造方法中调用
+     * 获取上下文对象
      */
     public Context getContext() {
         return mContext;
@@ -183,55 +81,36 @@ public abstract class BaseRecyclerViewAdapter
     /**
      * 获取资源文本
      */
-    public String getString(@StringRes int resId) {
-        return mContext.getString(resId);
+    public String getString(@StringRes int id) {
+        return mContext.getString(id);
     }
 
     /**
      * 获取资源颜色
      */
     protected int getColor(@ColorRes int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return mContext.getColor(id);
-        }else {
-            return mContext.getResources().getColor(id);
-        }
+        return ContextCompat.getColor(mContext, id);
     }
 
     /**
      * 获取资源图像
      */
     protected Drawable getDrawable(@DrawableRes int id) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return mContext.getDrawable(id);
-        }else {
-            return mContext.getResources().getDrawable(id);
-        }
+        return ContextCompat.getDrawable(mContext, id);
     }
 
     /**
-     * 条目ViewHolder，需要子类ViewHolder继承
+     * 条目 ViewHolder，需要子类 ViewHolder 继承
      */
-    public class ViewHolder extends RecyclerView.ViewHolder
+    public abstract class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
 
-        // 内存优化和防止泄露
-        private SparseArray<WeakReference<View>> mViews = new SparseArray<>();
-
-        public ViewHolder(ViewGroup parent, int layoutId) {
-            this(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
+        public ViewHolder(@LayoutRes int id) {
+            this(LayoutInflater.from(getContext()).inflate(id, getRecyclerView(), false));
         }
 
         public ViewHolder(View itemView) {
             super(itemView);
-            initViewListener();
-        }
-
-        /**
-         * 初始化 View 的监听
-         */
-        private void initViewListener() {
 
             // 设置条目的点击和长按事件
             if (mItemClickListener != null) {
@@ -259,6 +138,8 @@ public abstract class BaseRecyclerViewAdapter
                 }
             }
         }
+
+        public abstract void onBindView(int position);
 
         /**
          * {@link View.OnClickListener}
@@ -304,16 +185,8 @@ public abstract class BaseRecyclerViewAdapter
             return itemView;
         }
 
-        @SuppressWarnings("unchecked")
-        public final <V extends View> V findViewById(@IdRes int viewId) {
-            WeakReference<View> reference = mViews.get(viewId);
-            if (reference != null && reference.get() != null) {
-                return (V) reference.get();
-            }else {
-                View view = getItemView().findViewById(viewId);
-                mViews.put(viewId, new WeakReference<>(view));
-                return (V) view;
-            }
+        public final <V extends View> V findViewById(@IdRes int id) {
+            return getItemView().findViewById(id);
         }
     }
 
@@ -353,39 +226,39 @@ public abstract class BaseRecyclerViewAdapter
     /**
      * 设置RecyclerView条目点击监听
      */
-    public void setOnItemClickListener(OnItemClickListener l) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         checkRecyclerViewState();
-        mItemClickListener = l;
+        mItemClickListener = listener;
     }
 
     /**
      * 设置 RecyclerView 条目子 View 点击监听
      */
-    public void setOnChildClickListener(@IdRes int childId, OnChildClickListener l) {
+    public void setOnChildClickListener(@IdRes int id, OnChildClickListener listener) {
         checkRecyclerViewState();
         if (mChildClickListeners == null) {
             mChildClickListeners = new SparseArray<>();
         }
-        mChildClickListeners.put(childId, l);
+        mChildClickListeners.put(id, listener);
     }
 
     /**
      * 设置RecyclerView条目长按监听
      */
-    public void setOnItemLongClickListener(OnItemLongClickListener l) {
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         checkRecyclerViewState();
-        mItemLongClickListener = l;
+        mItemLongClickListener = listener;
     }
 
     /**
      * 设置 RecyclerView 条目子 View 长按监听
      */
-    public void setOnChildLongClickListener(@IdRes int childId, OnChildLongClickListener l) {
+    public void setOnChildLongClickListener(@IdRes int id, OnChildLongClickListener listener) {
         checkRecyclerViewState();
         if (mChildLongClickListeners == null) {
             mChildLongClickListeners = new SparseArray<>();
         }
-        mChildLongClickListeners.put(childId, l);
+        mChildLongClickListeners.put(id, listener);
     }
 
     private void checkRecyclerViewState() {
@@ -398,13 +271,13 @@ public abstract class BaseRecyclerViewAdapter
     /**
      * 设置RecyclerView条目滚动监听
      */
-    public void setOnScrollingListener(OnScrollingListener l) {
-        mScrollingListener = l;
+    public void setOnScrollingListener(OnScrollingListener listener) {
+        mScrollingListener = listener;
 
         //如果当前已经有设置滚动监听，再次设置需要移除原有的监听器
         if (mScrollListener == null) {
             mScrollListener = new ScrollListener();
-        }else {
+        } else {
             mRecyclerView.removeOnScrollListener(mScrollListener);
         }
         //用户设置了滚动监听，需要给RecyclerView设置监听
@@ -414,7 +287,7 @@ public abstract class BaseRecyclerViewAdapter
         }
     }
 
-    //自定义滚动监听器
+    /** 自定义滚动监听器 */
     private ScrollListener mScrollListener;
 
     private class ScrollListener extends RecyclerView.OnScrollListener {
@@ -422,19 +295,21 @@ public abstract class BaseRecyclerViewAdapter
         @Override
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
 
-            if (mScrollingListener == null) return;
+            if (mScrollingListener == null) {
+                return;
+            }
 
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
                 if (!recyclerView.canScrollVertically(1)) {
                     //是否能向下滚动，false表示已经滚动到底部
                     mScrollingListener.onScrollDown(recyclerView);
-                }else if (!recyclerView.canScrollVertically(-1)) {
+                } else if (!recyclerView.canScrollVertically(-1)) {
                     //是否能向上滚动，false表示已经滚动到顶部
                     mScrollingListener.onScrollTop(recyclerView);
                 }
 
-            }else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+            } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                 //正在滚动中
                 mScrollingListener.onScrolling(recyclerView);
             }
@@ -454,18 +329,18 @@ public abstract class BaseRecyclerViewAdapter
         void onScrollTop(RecyclerView recyclerView);
 
         /**
-         * 列表滚动到最底部
-         *
-         * @param recyclerView      RecyclerView对象
-         */
-        void onScrollDown(RecyclerView recyclerView);
-
-        /**
          * 列表滚动中
          *
          * @param recyclerView      RecyclerView对象
          */
         void onScrolling(RecyclerView recyclerView);
+
+        /**
+         * 列表滚动到最底部
+         *
+         * @param recyclerView      RecyclerView对象
+         */
+        void onScrollDown(RecyclerView recyclerView);
     }
 
     /**

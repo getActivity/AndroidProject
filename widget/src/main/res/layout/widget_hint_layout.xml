@@ -5,22 +5,23 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingTop="@dimen/space_120"
-    android:paddingBottom="@dimen/space_300">
+    android:paddingTop="60dp"
+    android:paddingBottom="150dp"
+    tools:context=".layout.HintLayout">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_hint_icon"
-        android:layout_width="@dimen/space_300"
-        android:layout_height="@dimen/space_300" />
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/iv_hint_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/space_80"
-        android:layout_marginTop="@dimen/space_60"
-        android:layout_marginRight="@dimen/space_80"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="40dp"
         android:textColor="#666666"
-        android:textSize="@dimen/font_size_28px" />
+        android:textSize="14sp" />
 
 </LinearLayout>

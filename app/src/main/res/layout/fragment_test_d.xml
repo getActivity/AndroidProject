@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragment.TestFragmentD">
+    tools:context=".ui.fragment.TestFragmentD"
+    tools:ignore="HardcodedText">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_test_d_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backButton="false"
@@ -20,121 +20,129 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/space_60"
-            android:layout_marginRight="@dimen/space_60"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:orientation="vertical">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_dialog"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入对话框案例" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_hint"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入界面状态案例" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_login"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入登录界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_register"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入注册界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_forget"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入忘记密码" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_reset"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入重置密码" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_verify"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入校验手机" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_change"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入重置手机" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_personal"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入个人界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_setting"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入设置界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_about"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入关于界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_browser"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入浏览器界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_image"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="点我进入查看大图界面" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_test_crash"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入崩溃捕捉界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_pay"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
-                android:layout_marginBottom="@dimen/space_60"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
                 android:text="丢包辣条给作者" />
 
         </LinearLayout>

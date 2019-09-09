@@ -1,23 +1,24 @@
 package com.hjq.demo.ui.dialog;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.hjq.base.BaseDialog;
-import com.hjq.base.BaseDialogFragment;
 import com.hjq.base.BaseRecyclerViewAdapter;
 import com.hjq.demo.R;
+import com.hjq.demo.common.MyDialogFragment;
+import com.hjq.demo.common.MyRecyclerViewAdapter;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengShare;
@@ -34,41 +35,36 @@ import java.util.List;
 public final class ShareDialog {
 
     public static final class Builder
-            extends BaseDialogFragment.Builder<Builder>
+            extends MyDialogFragment.Builder<Builder>
             implements BaseRecyclerViewAdapter.OnItemClickListener {
 
-        private ShareAdapter mAdapter;
-        private RecyclerView mRecyclerView;
+        private final ShareAdapter mAdapter;
+        private final RecyclerView mRecyclerView;
 
-        private UmengShare.ShareData mData;
+        private final UmengShare.ShareData mData;
 
         private UmengShare.OnShareListener mListener;
 
         public Builder(FragmentActivity activity) {
             super(activity);
 
-            mRecyclerView = new RecyclerView(activity);
-            mRecyclerView.setBackgroundColor(0xFFF7F7F7);
-            mRecyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            setContentView(mRecyclerView);
-            setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
-            setGravity(Gravity.BOTTOM);
-            setWidth(MATCH_PARENT);
-
-            mData = new UmengShare.ShareData(getActivity());
+            setContentView(R.layout.dialog_share);
 
             final List<ShareBean> data = new ArrayList<>();
-            data.add(new ShareBean(getDrawable(R.mipmap.icon_share_wx), getString(R.string.dialog_share_platform_wx), Platform.WEIXIN));
-            data.add(new ShareBean(getDrawable(R.mipmap.icon_share_pyq), getString(R.string.dialog_share_platform_wx_pyq), Platform.CIRCLE));
-            data.add(new ShareBean(getDrawable(R.mipmap.icon_share_qq), getString(R.string.dialog_share_platform_qq), Platform.QQ));
-            data.add(new ShareBean(getDrawable(R.mipmap.icon_share_qqkj), getString(R.string.dialog_share_platform_qq_kj), Platform.QZONE));
+            data.add(new ShareBean(getDrawable(R.drawable.ic_share_wechat), getString(R.string.share_platform_wechat), Platform.WECHAT));
+            data.add(new ShareBean(getDrawable(R.drawable.ic_share_moment), getString(R.string.share_platform_moment), Platform.CIRCLE));
+            data.add(new ShareBean(getDrawable(R.drawable.ic_share_qq), getString(R.string.share_platform_qq), Platform.QQ));
+            data.add(new ShareBean(getDrawable(R.drawable.ic_share_qzone), getString(R.string.share_platform_qzone), Platform.QZONE));
+            data.add(new ShareBean(getDrawable(R.drawable.ic_share_link), getString(R.string.share_platform_link), null));
 
+            mRecyclerView = findViewById(R.id.rv_share_list);
             mAdapter = new ShareAdapter(activity);
             mAdapter.setData(data);
             mAdapter.setOnItemClickListener(this);
             mRecyclerView.setLayoutManager(new GridLayoutManager(activity, data.size()));
             mRecyclerView.setAdapter(mAdapter);
+
+            mData = new UmengShare.ShareData(getActivity());
         }
 
         public Builder setShareTitle(String title) {
@@ -86,8 +82,8 @@ public final class ShareDialog {
             return this;
         }
 
-        public Builder setShareLogo(@DrawableRes int resId) {
-            mData.setShareLogo(resId);
+        public Builder setShareLogo(@DrawableRes int id) {
+            mData.setShareLogo(id);
             return this;
         }
 
@@ -96,8 +92,8 @@ public final class ShareDialog {
             return this;
         }
 
-        public Builder setListener(UmengShare.OnShareListener l) {
-            mListener = l;
+        public Builder setListener(UmengShare.OnShareListener listener) {
+            mListener = listener;
             return this;
         }
 
@@ -106,23 +102,19 @@ public final class ShareDialog {
          */
         @Override
         public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-            UmengClient.share(getActivity(), mAdapter.getItem(position).getSharePlatform(), mData, mListener);
+            Platform platform = mAdapter.getItem(position).getSharePlatform();
+            if (platform != null) {
+                UmengClient.share(getActivity(), platform, mData, mListener);
+            } else {
+                // 复制到剪贴板
+                getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("url", mData.getShareUrl()));
+                toast(R.string.share_platform_copy_hint);
+            }
             dismiss();
         }
-
-//        @Override
-//        protected BaseDialog createDialog(Context context, int themeResId) {
-//            if (getGravity() == Gravity.BOTTOM) {
-//                return new BaseBottomDialog(context, themeResId);
-//            }
-//            return super.createDialog(context, themeResId);
-//        }
     }
 
-    /**
-     * 适配器
-     */
-    private static class ShareAdapter extends BaseRecyclerViewAdapter<ShareBean, ShareAdapter.ViewHolder> {
+    private static class ShareAdapter extends MyRecyclerViewAdapter<ShareBean> {
 
         private ShareAdapter(Context context) {
             super(context);
@@ -131,65 +123,54 @@ public final class ShareDialog {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            TextView textView = new TextView(getContext());
-            textView.setGravity(Gravity.CENTER);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                textView.setBackground(getDrawable(R.drawable.selector_selectable_transparent));
-            }else {
-                textView.setBackgroundDrawable(getDrawable(R.drawable.selector_selectable_transparent));
-            }
-            textView.setTextColor(0xFF333333);
-            textView.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 5, getResources().getDisplayMetrics()));
-            textView.setPadding(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()),
-                    0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()));
-            textView.setCompoundDrawablePadding((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()));
-            return new ViewHolder(textView);
+            return new ViewHolder();
         }
 
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ShareBean bean = getItem(position);
+        final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
 
-            holder.mTextView.setText(bean.getShareName());
-
-            Drawable drawable = bean.getShareIcon();
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-            holder.mTextView.setCompoundDrawables(null, drawable, null, null);
-        }
-
-        final class ViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
-
+            private ImageView mImageView;
             private TextView mTextView;
 
-            private ViewHolder(View itemView) {
-                super(itemView);
-                mTextView = (TextView) itemView;
+            private ViewHolder() {
+                super(R.layout.item_share);
+                mImageView = (ImageView) findViewById(R.id.iv_share_image);
+                mTextView = (TextView) findViewById(R.id.tv_share_text);
+            }
+
+            @Override
+            public void onBindView(int position) {
+                ShareBean bean = getItem(position);
+                mImageView.setImageDrawable(bean.getShareIcon());
+                mTextView.setText(bean.getShareName());
             }
         }
     }
 
     private static class ShareBean {
 
-        private Drawable mShareIcon; // 分享图标
-        private String mShareName; // 分享名称
-        private Platform mSharePlatform; // 分享平台
+        /** 分享图标 */
+        private final Drawable shareIcon;
+        /** 分享名称 */
+        private final String shareName;
+        /** 分享平台 */
+        private final Platform sharePlatform;
 
         private ShareBean(Drawable icon, String name, Platform platform) {
-            mShareIcon = icon;
-            mShareName = name;
-            mSharePlatform = platform;
+            shareIcon = icon;
+            shareName = name;
+            sharePlatform = platform;
         }
 
         private Drawable getShareIcon() {
-            return mShareIcon;
+            return shareIcon;
         }
 
         private String getShareName() {
-            return mShareName;
+            return shareName;
         }
 
         private Platform getSharePlatform() {
-            return mSharePlatform;
+            return sharePlatform;
         }
     }
 }

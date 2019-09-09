@@ -4,17 +4,19 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.RequiresPermission;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.RequiresPermission;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.dialog.WaitDialog;
-import com.hjq.widget.HintLayout;
+import com.hjq.demo.ui.dialog.WaitDialog;
+import com.hjq.widget.layout.HintLayout;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 
@@ -26,19 +28,27 @@ import static android.Manifest.permission.ACCESS_NETWORK_STATE;
  */
 public final class StatusManager {
 
-    // 加载对话框
+    /** 加载对话框 */
     private BaseDialog mDialog;
 
-    // 提示布局
+    /** 提示布局 */
     private HintLayout mHintLayout;
 
     /**
      * 显示加载中
      */
     public void showLoading(FragmentActivity activity) {
+        showLoading(activity, activity.getString(R.string.common_loading));
+    }
+
+    public void showLoading(FragmentActivity activity, CharSequence text) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+
         if (mDialog == null) {
             mDialog = new WaitDialog.Builder(activity)
-                    .setMessage("加载中...") // 消息文本可以不用填写
+                    .setMessage(text)
                     .create();
         }
 
@@ -65,7 +75,7 @@ public final class StatusManager {
      * 显示空提示
      */
     public void showEmpty(View view) {
-        showLayout(view, R.mipmap.icon_hint_empty, R.string.hint_layout_no_data);
+        showLayout(view, R.drawable.icon_hint_empty, R.string.hint_layout_no_data);
     }
 
     /**
@@ -74,17 +84,17 @@ public final class StatusManager {
     public void showError(View view) {
         // 判断当前网络是否可用
         if (isNetworkAvailable(view.getContext())) {
-            showLayout(view, R.mipmap.icon_hint_request, R.string.hint_layout_error_request);
+            showLayout(view, R.drawable.icon_hint_request, R.string.hint_layout_error_request);
         } else {
-            showLayout(view, R.mipmap.icon_hint_nerwork, R.string.hint_layout_error_network);
+            showLayout(view, R.drawable.icon_hint_nerwork, R.string.hint_layout_error_network);
         }
     }
 
     /**
      * 显示自定义提示
      */
-    public void showLayout(View view, @DrawableRes int iconId, @StringRes int textId) {
-        showLayout(view, view.getResources().getDrawable(iconId), view.getResources().getString(textId));
+    public void showLayout(View view, @DrawableRes int drawableId, @StringRes int stringId) {
+        showLayout(view, ContextCompat.getDrawable(view.getContext(), drawableId), view.getResources().getString(stringId));
     }
 
     public void showLayout(View view, Drawable drawable, CharSequence hint) {
@@ -96,26 +106,18 @@ public final class StatusManager {
 
             if (view instanceof HintLayout) {
                 mHintLayout = (HintLayout) view;
-            }else if (view instanceof ViewGroup) {
+            } else if (view instanceof ViewGroup) {
                 mHintLayout = findHintLayout((ViewGroup) view);
             }
 
             if (mHintLayout == null) {
-                throw new IllegalStateException("You didn't add this HintLayout to your Activity layout");
+                // 必须在布局中定义一个 HintLayout
+                throw new IllegalStateException("You didn't add this HintLayout to your layout");
             }
         }
         mHintLayout.show();
         mHintLayout.setIcon(drawable);
         mHintLayout.setHint(hint);
-    }
-
-    /**
-     * 判断网络功能是否可用
-     */
-    @RequiresPermission(ACCESS_NETWORK_STATE)
-    private static boolean isNetworkAvailable(Context context){
-        NetworkInfo info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        return (info != null && info.isConnected());
     }
 
     /**
@@ -128,9 +130,20 @@ public final class StatusManager {
                 return (HintLayout) view;
             } else if (view instanceof ViewGroup) {
                 HintLayout layout = findHintLayout((ViewGroup) view);
-                if (layout != null) return layout;
+                if (layout != null) {
+                    return layout;
+                }
             }
         }
         return null;
+    }
+
+    /**
+     * 判断网络功能是否可用
+     */
+    @RequiresPermission(ACCESS_NETWORK_STATE)
+    private static boolean isNetworkAvailable(Context context){
+        NetworkInfo info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        return (info != null && info.isConnected());
     }
 }

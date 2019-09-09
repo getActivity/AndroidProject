@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hjq.demo.widget.PhotoViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vp_photo_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".ui.activity.PhotoActivity" />
+    android:orientation="vertical"
+    tools:context=".ui.activity.PhotoActivity">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rightTitle="@string/photo_all"
+        app:title="@string/photo_title" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_animation_from_bottom"
+        tools:layoutAnimation="@null">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_photo_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            tools:itemCount="20"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_photo"
+            tools:spanCount="3" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_photo_floating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_photo_camera"
+            app:borderWidth="0px"
+            app:elevation="1dp"
+            app:fabSize="normal" />
+    </FrameLayout>
+
+</LinearLayout>

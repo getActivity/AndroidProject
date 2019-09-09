@@ -1,9 +1,10 @@
 package com.hjq.demo.helper;
 
-import androidx.annotation.IdRes;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+
+import androidx.annotation.IdRes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,11 @@ import java.util.List;
  */
 public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedChangeListener {
 
-    private List<RadioButton> mViewSet;//RadioButton集合
+    /** RadioButton集合 */
+    private List<RadioButton> mViewSet;
 
-    private OnCheckedChangeListener mListener;//多个RadioButton监听对象
+    /** 多个RadioButton监听对象 */
+    private OnCheckedChangeListener mListener;
 
     public RadioButtonGroupHelper(RadioButton... groups) {
         mViewSet = new ArrayList<>(groups.length - 1);
@@ -35,14 +38,15 @@ public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedCha
 
     public RadioButtonGroupHelper(View rootView, @IdRes int... ids) {
         mViewSet = new ArrayList<>(ids.length - 1);
-        for (int id : ids) {
+        for (@IdRes int id : ids) {
             RadioButton view = rootView.findViewById(id);
             view.setOnCheckedChangeListener(this);
             mViewSet.add(view);
         }
     }
 
-    private boolean mTag; // 监听标记，避免重复回调
+    /** 监听标记，避免重复回调 */
+    private boolean mTag;
 
     /**
      * {@link CompoundButton.OnCheckedChangeListener}
@@ -68,7 +72,9 @@ public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedCha
      * 移除监听，避免内存泄露
      */
     public void removeViews() {
-        if (mViewSet == null) return;
+        if (mViewSet == null) {
+            return;
+        }
 
         for (CompoundButton view : mViewSet) {
             view.setOnCheckedChangeListener(null);
@@ -91,8 +97,8 @@ public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedCha
     /**
      * 设置多个RadioButton的监听
      */
-    public void setOnCheckedChangeListener(OnCheckedChangeListener l)  {
-        mListener = l;
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener)  {
+        mListener = listener;
     }
 
     /**

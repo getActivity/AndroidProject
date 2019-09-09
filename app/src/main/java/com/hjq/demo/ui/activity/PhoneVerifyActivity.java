@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.InputTextHelper;
-import com.hjq.widget.CountdownView;
+import com.hjq.widget.view.CountdownView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,21 +37,23 @@ public final class PhoneVerifyActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_phone_verify_title;
-    }
-
-    @Override
     protected void initView() {
-        new InputTextHelper.Builder(this)
-                .setMain(mCommitView)
+        InputTextHelper.with(this)
                 .addView(mCodeView)
+                .setMain(mCommitView)
+                .setListener(new InputTextHelper.OnInputTextListener() {
+
+                    @Override
+                    public boolean onInputChange(InputTextHelper helper) {
+                        return mCodeView.getText().toString().length() == 4;
+                    }
+                })
                 .build();
     }
 
     @Override
     protected void initData() {
-        mPhoneView.setText(String.format(getResources().getString(R.string.phone_verify_current_phone), "18888888888"));
+        mPhoneView.setText(String.format(getString(R.string.phone_verify_current_phone), "18888888888"));
     }
 
     @OnClick({R.id.cv_phone_verify_countdown, R.id.btn_phone_verify_commit})
@@ -59,7 +61,13 @@ public final class PhoneVerifyActivity extends MyActivity {
         switch (v.getId()) {
             case R.id.cv_phone_verify_countdown:
                 // 获取验证码
-                toast(getString(R.string.common_send_code_succeed));
+                if (mPhoneView.getText().toString().length() != 11) {
+                    // 重置验证码倒计时控件
+                    mCountdownView.resetState();
+                    toast(R.string.common_phone_input_error);
+                } else {
+                    toast(R.string.common_code_send_hint);
+                }
                 break;
             case R.id.btn_phone_verify_commit:
                 // 修改手机号

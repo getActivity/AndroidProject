@@ -8,36 +8,36 @@
     tools:context=".ui.activity.PhoneResetActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_phone_reset_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/phone_reset_title" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_40"
-        android:layout_marginBottom="@dimen/space_40"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:text="@string/phone_reset_change_hint"
         android:textColor="#A4A4A4"
-        android:textSize="@dimen/font_size_28px" />
+        android:textSize="14sp" />
 
-    <EditText
+    <com.hjq.widget.view.RegexEditText
         android:id="@+id/et_phone_reset_phone"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:drawableLeft="@mipmap/ic_small_phone"
-        android:drawablePadding="@dimen/space_30"
+        android:drawableLeft="@drawable/ic_small_phone"
+        android:drawablePadding="15dp"
         android:hint="@string/common_phone_input_hint"
-        android:inputType="phone"
-        android:maxLength="11"
-        android:paddingLeft="@dimen/space_40"
-        android:paddingTop="@dimen/space_36"
-        android:paddingRight="@dimen/space_40"
-        android:paddingBottom="@dimen/space_36" />
+        android:inputType="textVisiblePassword"
+        android:paddingLeft="20dp"
+        android:paddingTop="18dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="18dp"
+        android:singleLine="true"
+        app:regexType="mobile" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,42 +45,38 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_phone_reset_code"
             style="@style/EditTextStyle"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/white"
-            android:drawableLeft="@mipmap/ic_small_safe"
-            android:drawablePadding="@dimen/space_30"
+            android:drawableLeft="@drawable/ic_small_safe"
+            android:drawablePadding="15dp"
             android:hint="@string/common_code_input_hint"
-            android:maxLength="8"
-            android:paddingLeft="@dimen/space_40"
-            android:paddingTop="@dimen/space_36"
-            android:paddingRight="@dimen/space_40"
-            android:paddingBottom="@dimen/space_36" />
+            android:maxLength="4"
+            android:paddingLeft="20dp"
+            android:paddingTop="18dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="18dp"
+            android:singleLine="true" />
 
-        <View
-            style="@style/VerticalLineStyle"
-            android:layout_marginTop="@dimen/space_20"
-            android:layout_marginBottom="@dimen/space_20" />
-
-        <com.hjq.widget.CountdownView
+        <com.hjq.widget.view.CountdownView
             android:id="@+id/cv_phone_reset_countdown"
             style="@style/CountdownViewStyle" />
 
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_phone_reset_commit"
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_80"
-        android:layout_marginTop="@dimen/space_80"
-        android:layout_marginEnd="@dimen/space_80"
-        android:layout_marginBottom="@dimen/space_40"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/phone_reset_commit" />
 
 </LinearLayout>

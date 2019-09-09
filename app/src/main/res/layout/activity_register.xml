@@ -9,9 +9,8 @@
     tools:context=".ui.activity.RegisterActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_register_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/space_100"
+        android:layout_height="50dp"
         app:backButton="false"
         app:barStyle="transparent"
         app:leftColor="@color/colorAccent"
@@ -25,99 +24,108 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/space_80"
-            android:layout_marginRight="@dimen/space_80"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layoutAnimation="@anim/layout_animation_fall_down"
+            android:orientation="vertical"
+            tools:layoutAnimation="@null">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginTop="20dp"
                 android:text="@string/register_title"
                 android:textColor="@color/black60"
-                android:textSize="@dimen/font_size_46px" />
+                android:textSize="23sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginTop="20dp"
                 android:text="@string/register_hint"
                 android:textColor="@color/black20"
-                android:textSize="@dimen/font_size_28px" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/ll_register_edit1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_register_phone"
-                    style="@style/EditTextStyle"
-                    android:layout_width="0dp"
+                <FrameLayout
+                    android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/common_phone_input_hint"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:maxLines="1" />
+                    android:layout_weight="1">
 
-                <com.hjq.widget.CountdownView
+                    <com.hjq.widget.view.RegexEditText
+                        android:id="@+id/et_register_phone"
+                        style="@style/EditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/common_phone_input_hint"
+                        android:inputType="textVisiblePassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        app:regexType="mobile" />
+
+                    <View
+                        style="@style/HorizontalLineStyle"
+                        android:layout_gravity="bottom" />
+                </FrameLayout>
+
+                <com.hjq.widget.view.CountdownView
                     android:id="@+id/cv_register_countdown"
                     style="@style/CountdownViewStyle" />
             </LinearLayout>
 
-            <View style="@style/HorizontalLineStyle" />
-
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_register_code"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginTop="20dp"
                 android:hint="@string/common_code_input_hint"
                 android:inputType="number"
-                android:maxLength="8"
-                android:maxLines="1" />
+                android:maxLength="4"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <View style="@style/HorizontalLineStyle" />
 
-            <EditText
+            <com.hjq.widget.view.PasswordEditText
                 android:id="@+id/et_register_password1"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginTop="20dp"
                 android:hint="@string/register_password_hint1"
-                android:inputType="textPassword"
                 android:maxLength="20"
                 android:maxLines="1" />
 
             <View style="@style/HorizontalLineStyle" />
 
-            <EditText
+            <com.hjq.widget.view.PasswordEditText
                 android:id="@+id/et_register_password2"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_40"
+                android:layout_marginTop="20dp"
                 android:hint="@string/register_password_hint2"
-                android:inputType="textPassword"
                 android:maxLength="20"
                 android:maxLines="1" />
 
             <View style="@style/HorizontalLineStyle" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_register_commit"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
-                android:layout_marginBottom="@dimen/space_40"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:text="@string/register_title" />
 
         </LinearLayout>

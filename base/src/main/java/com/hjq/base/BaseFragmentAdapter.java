@@ -1,11 +1,12 @@
 package com.hjq.base;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,11 @@ import java.util.List;
  */
 public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapter {
 
-    private List<F> mFragmentSet = new ArrayList<>(); // Fragment集合
+    /** Fragment集合 */
+    private final List<F> mFragmentSet = new ArrayList<>();
 
-    private F mCurrentFragment; // 当前显示的Fragment
+    /** 当前显示的Fragment */
+    private F mCurrentFragment;
 
     public BaseFragmentAdapter(FragmentActivity activity) {
         this(activity.getSupportFragmentManager());
@@ -34,6 +37,7 @@ public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapte
         super(manager);
     }
 
+    @NonNull
     @Override
     public F getItem(int position) {
         return mFragmentSet.get(position);
@@ -44,6 +48,7 @@ public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapte
         return mFragmentSet.size();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         if (getCurrentFragment() != object) {

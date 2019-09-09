@@ -3,13 +3,14 @@ package com.hjq.demo.helper;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.PopupWindow;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  *    author : Android 轮子哥
@@ -19,16 +20,19 @@ import android.widget.PopupWindow;
  */
 public final class PopupWindowHelper implements PopupWindow.OnDismissListener {
 
-    private PopupWindow mPopupWindow; // PopupWindow对象
-    private final View mPopupView; //PopupWindow显示的View
-    private long mDismissTime; // 记录PopupWindow销毁时间
+    /** PopupWindow 对象 */
+    private PopupWindow mPopupWindow;
+    /** PopupWindow 显示的 View */
+    private final View mPopupView;
+    /** 记录PopupWindow销毁时间 */
+    private long mDismissTime;
 
     public PopupWindowHelper(View popupView) {
         mPopupView = popupView;
     }
 
-    public PopupWindowHelper(Context context, int layoutId) {
-        mPopupView = View.inflate(context, layoutId, null);
+    public PopupWindowHelper(Context context, int id) {
+        mPopupView = View.inflate(context, id, null);
     }
 
     /**
@@ -109,14 +113,16 @@ public final class PopupWindowHelper implements PopupWindow.OnDismissListener {
     /**
      * 获取当前的PopupWindow对象
      */
-    public @Nullable PopupWindow getPopupWindow() {
+    @Nullable
+    public PopupWindow getPopupWindow() {
         return mPopupWindow;
     }
 
     /**
      * 获取当前的PopupWindow的View对象
      */
-    public @NonNull View getPopupView() {
+    @NonNull
+    public View getPopupView() {
         return mPopupView;
     }
 }

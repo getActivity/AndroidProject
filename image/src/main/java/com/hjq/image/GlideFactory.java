@@ -1,8 +1,9 @@
 package com.hjq.image;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.hjq.copy.R;
@@ -13,33 +14,31 @@ import com.hjq.copy.R;
  *    time   : 2018/12/27
  *    desc   : Glide 加工厂
  */
-public final class GlideFactory implements ImageFactory<GlideHandler> {
+public final class GlideFactory implements ImageFactory<GlideStrategy> {
 
     @Override
-    public GlideHandler create() {
-        return new GlideHandler();
+    public GlideStrategy createImageStrategy() {
+        return new GlideStrategy();
     }
 
     @Override
-    public void init(Application application, GlideHandler handler) {
-        handler.setPlaceholder(getLoadingPic(application));
-        handler.setError(getErrorPic(application));
+    public Drawable createPlaceholder(Context context) {
+        return ContextCompat.getDrawable(context, R.drawable.image_loading);
     }
 
     @Override
-    public Drawable getLoadingPic(Context context) {
-        return context.getResources().getDrawable(R.mipmap.image_loading);
+    public Drawable createError(Context context) {
+        return ContextCompat.getDrawable(context, R.drawable.image_load_err);
     }
 
     @Override
-    public Drawable getErrorPic(Context context) {
-        return context.getResources().getDrawable(R.mipmap.image_load_err);
-    }
-
-    @Override
-    public void clear(final Context context) {
+    public void clearMemoryCache(Context context) {
         // 清除内存缓存（必须在主线程）
         Glide.get(context).clearMemory();
+    }
+
+    @Override
+    public void clearDiskCache(final Context context) {
         new Thread(new Runnable() {
             @Override
             public void run() {

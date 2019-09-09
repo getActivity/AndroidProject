@@ -1,6 +1,5 @@
 package com.hjq.image;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
@@ -10,30 +9,30 @@ import android.graphics.drawable.Drawable;
  *    time   : 2018/12/27
  *    desc   : 图片加载器生产机器
  */
-public interface ImageFactory<T extends ImageHandler> {
+public interface ImageFactory<T extends ImageStrategy> {
 
     /**
-     * 创建一个图片加载器
+     * 创建一个图片加载策略
      */
-    T create();
+    T createImageStrategy();
 
     /**
-     * 初始化图片加载器
+     * 创建加载占位图
      */
-    void init(Application application, T handler);
+    Drawable createPlaceholder(Context context);
 
     /**
-     * 获取图片加载占位图
+     * 创建加载错误占位图
      */
-    Drawable getLoadingPic(Context context);
+    Drawable createError(Context context);
 
     /**
-     * 获取图片加载失败占位图
+     * 清除内存缓存
      */
-    Drawable getErrorPic(Context context);
+    void clearMemoryCache(Context context);
 
     /**
-     * 清理缓存
+     * 清除磁盘缓存
      */
-    void clear(Context context);
+    void clearDiskCache(Context context);
 }

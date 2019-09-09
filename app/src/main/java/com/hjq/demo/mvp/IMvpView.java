@@ -1,5 +1,7 @@
 package com.hjq.demo.mvp;
 
+import android.content.Context;
+
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -7,6 +9,11 @@ package com.hjq.demo.mvp;
  *    desc   : MVP 通用性接口
  */
 public interface IMvpView {
+
+    /**
+     * 获取上下文对象
+     */
+    Context getContext();
 
     /**
      * 加载中

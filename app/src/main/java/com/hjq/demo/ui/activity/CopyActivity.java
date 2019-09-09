@@ -17,11 +17,6 @@ public final class CopyActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_copy_title;
-    }
-
-    @Override
     protected void initView() {
 
     }

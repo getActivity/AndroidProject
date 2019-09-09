@@ -17,11 +17,6 @@ public final class AboutActivity extends MyActivity {
     }
 
     @Override
-    protected int getTitleId() {
-        return R.id.tb_about_title;
-    }
-
-    @Override
     protected void initView() {
 
     }

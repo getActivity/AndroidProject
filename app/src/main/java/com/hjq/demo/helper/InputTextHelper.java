@@ -8,6 +8,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +22,16 @@ import java.util.List;
  */
 public final class InputTextHelper implements TextWatcher {
 
-    private View mView; // 操作按钮的View
-    private boolean isAlpha; // 是否禁用后设置半透明度
+    /** 操作按钮的View */
+    private View mView;
+    /** 是否禁用后设置半透明度 */
+    private boolean isAlpha;
 
-    private List<TextView> mViewSet; // TextView集合
+    /** TextView集合 */
+    private List<TextView> mViewSet;
 
-    public InputTextHelper(View view) {
-        this(view, false);
-    }
+    /** 输入监听器 */
+    private OnInputTextListener mListener;
 
     /**
      * 构造函数
@@ -35,10 +39,19 @@ public final class InputTextHelper implements TextWatcher {
      * @param view              跟随 TextView 输入为空来判断启动或者禁用这个 View
      * @param alpha             是否需要设置透明度
      */
-    public InputTextHelper(View view, boolean alpha) {
-        if (view == null) throw new IllegalArgumentException("The view is empty");
+    private InputTextHelper(View view, boolean alpha) {
+        if (view == null) {
+            throw new IllegalArgumentException("The view is empty");
+        }
         mView = view;
         isAlpha = alpha;
+    }
+
+    /**
+     * 创建 Builder
+     */
+    public static Builder with(Activity activity) {
+        return new Builder(activity);
     }
 
     /**
@@ -47,7 +60,9 @@ public final class InputTextHelper implements TextWatcher {
      * @param views     传入单个或者多个 TextView
      */
     public void addViews(List<TextView> views) {
-        if (views == null) return;
+        if (views == null) {
+            return;
+        }
 
         if (mViewSet == null) {
             mViewSet = views;
@@ -60,7 +75,7 @@ public final class InputTextHelper implements TextWatcher {
         }
 
         // 触发一次监听
-        afterTextChanged(null);
+        notifyChanged();
     }
 
     /**
@@ -69,31 +84,59 @@ public final class InputTextHelper implements TextWatcher {
      * @param views     传入单个或者多个 TextView
      */
     public void addViews(TextView... views) {
-        if (views == null) return;
+        if (views == null) {
+            return;
+        }
 
         if (mViewSet == null) {
-            mViewSet = new ArrayList<>(views.length - 1);
+            mViewSet = new ArrayList<>(views.length);
         }
 
         for (TextView view : views) {
-            view.addTextChangedListener(this);
-            mViewSet.add(view);
+            // 避免重复添加
+            if (!mViewSet.contains(view)) {
+                view.addTextChangedListener(this);
+                mViewSet.add(view);
+            }
         }
         // 触发一次监听
-        afterTextChanged(null);
+        notifyChanged();
     }
 
     /**
      * 移除 TextView 监听，避免内存泄露
      */
-    public void removeViews() {
-        if (mViewSet == null) return;
+    public void removeViews(TextView... views) {
+        if (mViewSet != null && mViewSet.size() > 0) {
+            for (TextView view : views) {
+                view.removeTextChangedListener(this);
+                mViewSet.remove(view);
+            }
+            // 触发一次监听
+            notifyChanged();
+        }
+    }
+
+    /**
+     * 移除所有 TextView 监听，避免内存泄露
+     */
+    public void removeAllViews() {
+        if (mViewSet == null) {
+            return;
+        }
 
         for (TextView view : mViewSet) {
             view.removeTextChangedListener(this);
         }
         mViewSet.clear();
         mViewSet = null;
+    }
+
+    /**
+     * 设置输入监听
+     */
+    public void setListener(OnInputTextListener listener) {
+        mListener = listener;
     }
 
     /**
@@ -108,8 +151,18 @@ public final class InputTextHelper implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (mViewSet == null) return;
+        notifyChanged();
+    }
 
+    /**
+     * 通知更新
+     */
+    public void notifyChanged() {
+        if (mViewSet == null) {
+            return;
+        }
+
+        // 重新遍历所有的输入
         for (TextView view : mViewSet) {
             if ("".equals(view.getText().toString())) {
                 setEnabled(false);
@@ -117,7 +170,11 @@ public final class InputTextHelper implements TextWatcher {
             }
         }
 
-        setEnabled(true);
+        if (mListener != null) {
+            setEnabled(mListener.onInputChange(this));
+        } else {
+            setEnabled(true);
+        }
     }
 
     /**
@@ -126,7 +183,9 @@ public final class InputTextHelper implements TextWatcher {
      * @param enabled               启用或者禁用 View 的事件
      */
     public void setEnabled(boolean enabled) {
-        if (enabled == mView.isEnabled()) return;
+        if (enabled == mView.isEnabled()) {
+            return;
+        }
 
         if (enabled) {
             //启用View的事件
@@ -135,7 +194,7 @@ public final class InputTextHelper implements TextWatcher {
                 //设置不透明
                 mView.setAlpha(1f);
             }
-        }else {
+        } else {
             //禁用View的事件
             mView.setEnabled(false);
             if (isAlpha) {
@@ -145,21 +204,28 @@ public final class InputTextHelper implements TextWatcher {
         }
     }
 
-    public static final class Builder implements Application.ActivityLifecycleCallbacks {
+    public static final class Builder {
 
-        private Activity mActivity; // 当前的Activity
-        private View mView; // 操作按钮的View
-        private boolean isAlpha; // 是否禁用后设置半透明度
-        private List<TextView> mViewSet = new ArrayList<>(); // TextView集合
+        /** 当前的 Activity */
+        private final Activity mActivity;
+        /** 操作按钮的 View */
+        private View mView;
+        /** 是否禁用后设置半透明度 */
+        private boolean isAlpha;
+        /**  TextView集合 */
+        private final List<TextView> mViewSet = new ArrayList<>();
+        /** 文本输入辅助类 */
+        private InputTextHelper mTextHelper;
+        /** 文本 */
+        private OnInputTextListener mListener;
 
-        InputTextHelper mTextHelper;
-
-        public Builder() {
-
+        private Builder(Activity activity) {
+            mActivity = activity;
         }
 
-        public Builder(Activity activity) {
-            mActivity = activity;
+        public Builder addView(TextView view) {
+            mViewSet.add(view);
+            return this;
         }
 
         public Builder setMain(View view) {
@@ -172,55 +238,68 @@ public final class InputTextHelper implements TextWatcher {
             return this;
         }
 
-        public Builder addView(TextView view) {
-            mViewSet.add(view);
+        public Builder setListener(OnInputTextListener listener) {
+            mListener = listener;
             return this;
         }
 
         public InputTextHelper build(){
-            if (mActivity != null) {
-                mActivity.getApplication().registerActivityLifecycleCallbacks(this);
-            }
             mTextHelper = new InputTextHelper(mView, isAlpha);
             mTextHelper.addViews(mViewSet);
+            mTextHelper.setListener(mListener);
+            mActivity.getApplication().registerActivityLifecycleCallbacks(new TextInputLifecycle(mActivity, mTextHelper));
             return mTextHelper;
         }
+    }
 
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    private static class TextInputLifecycle implements Application.ActivityLifecycleCallbacks {
 
+        private Activity mActivity;
+        private InputTextHelper mTextHelper;
+
+        private TextInputLifecycle(Activity activity, InputTextHelper helper) {
+            this.mActivity = activity;
+            this.mTextHelper = helper;
         }
 
         @Override
-        public void onActivityStarted(Activity activity) {
-
-        }
+        public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {}
 
         @Override
-        public void onActivityResumed(Activity activity) {
-
-        }
+        public void onActivityStarted(@NonNull Activity activity) {}
 
         @Override
-        public void onActivityPaused(Activity activity) {
-
-        }
+        public void onActivityResumed(@NonNull Activity activity) {}
 
         @Override
-        public void onActivityStopped(Activity activity) {
-
-        }
+        public void onActivityPaused(@NonNull Activity activity) {}
 
         @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-        }
+        public void onActivityStopped(@NonNull Activity activity) {}
 
         @Override
-        public void onActivityDestroyed(Activity activity) {
+        public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+
+        @Override
+        public void onActivityDestroyed(@NonNull Activity activity) {
             if (mActivity != null && mActivity == activity) {
-                mTextHelper.removeViews();
+                mTextHelper.removeAllViews();
+                mActivity.getApplication().registerActivityLifecycleCallbacks(this);
+                mTextHelper = null;
+                mActivity = null;
             }
         }
+    }
+
+    /**
+     * 文本变化监听器
+     */
+    public interface OnInputTextListener {
+
+        /**
+         * 输入发生了变化
+         * @return          返回按钮的 Enabled 状态
+         */
+        boolean onInputChange(InputTextHelper helper);
     }
 }

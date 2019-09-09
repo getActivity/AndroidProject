@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- 仿 ios 开关按钮 -->
-    <declare-styleable name="SwitchButton" tools:ignore="ResourceName">
+    <declare-styleable name="SwitchButton">
         <!-- 是否选中 -->
         <attr name="android:checked" />
         <!-- 是否禁用 -->
         <attr name="android:enabled" />
     </declare-styleable>
 
+    <!-- 正则表达式编辑框 -->
+    <declare-styleable name="RegexEditText">
+        <!-- 正则输入限制 -->
+        <attr name="inputRegex" format="string" />
+        <!-- 常用正则类型 -->
+        <attr name="regexType" >
+            <!-- 手机号（只能以 1 开头） -->
+            <enum name="mobile" value="0x01" />
+            <!-- 中文（普通的中文字符） -->
+            <enum name="chinese" value="0x02" />
+            <!-- 英文（大写和小写的英文） -->
+            <enum name="english" value="0x03" />
+            <!-- 整数（非 0 开头的数字） -->
+            <enum name="count" value="0x04" />
+            <!-- 用户名（中文、英文、数字） -->
+            <enum name="name" value="0x05" />
+            <!-- 非空格字符 -->
+            <enum name="nonnull" value="0x06" />
+        </attr>
+    </declare-styleable>
+
     <!-- 设置栏 -->
-    <declare-styleable name="SettingBar" tools:ignore="ResourceName">
+    <declare-styleable name="SettingBar">
         <!-- 左边 -->
         <attr name="bar_leftText" format="string"/>
         <attr name="bar_leftHint" format="string"/>
@@ -30,22 +51,22 @@
         <attr name="bar_lineMargin" format="dimension" />
     </declare-styleable>
 
-    <!-- 自定义数字进度条 -->
-    <declare-styleable name="NumberProgressBar" tools:ignore="ResourceName">
-        <attr name="pb_progress" format="integer"/>
-        <attr name="pb_maxProgress" format="integer"/>
+    <!-- 自定义 ViewStub -->
+    <declare-styleable name="CustomViewStub">
+        <!-- 布局 id -->
+        <attr name="android:layout" />
+    </declare-styleable>
 
-        <attr name="pb_textSize" format="dimension"/>
-        <attr name="pb_textColor" format="color"/>
+    <!-- 缩放的 ImageView -->
+    <declare-styleable name="ScaleImageView">
+        <!-- 缩放比例 -->
+        <attr name="scaleRatio" format="float" />
+    </declare-styleable>
 
-        <attr name="pb_textOffset" format="dimension"/>
-
-        <attr name="pb_unreachedColor" format="color"/>
-        <attr name="pb_reachedColor" format="color"/>
-
-        <attr name="pb_reachedHeight" format="dimension"/>
-        <attr name="pb_unreachedHeight" format="dimension"/>
-
+    <!-- 按照比例显示的 FrameLayout -->
+    <declare-styleable name="RatioFrameLayout">
+        <!-- 宽高比例 -->
+        <attr name="sizeRatio" format="float" />
     </declare-styleable>
 
 </resources>

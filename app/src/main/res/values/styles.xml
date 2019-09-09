@@ -20,21 +20,23 @@
         <item name="actionModeBackground">@color/colorPrimary</item>
         <!-- 解决 Android 5.1 及以上版本 Button 英文字符串自动变大写的问题 -->
         <item name="android:textAllCaps">false</item>
+        <!-- 默认隐藏输入法，开启这个选项后会导致输入对话框在关闭之后不能关闭软键盘   -->
+        <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
     </style>
 
     <!-- 解决启动页白屏的问题 -->
-    <style name="LauncherTheme" parent="AppTheme">
+    <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- 默认圆角按钮样式 -->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:paddingLeft">@dimen/space_30</item>
-        <item name="android:paddingRight">@dimen/space_30</item>
-        <item name="android:paddingTop">@dimen/space_20</item>
-        <item name="android:paddingBottom">@dimen/space_20</item>
-        <item name="android:textSize">@dimen/font_size_28px</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white90</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/selector_button</item>
@@ -49,25 +51,25 @@
     <!-- 默认文本框样式 -->
     <style name="EditTextStyle">
         <item name="android:background">@null</item>
-        <item name="android:textSize">@dimen/font_size_30px</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColorHint">#A4A4A4</item>
         <item name="android:textColor">#333333</item>
-        <item name="android:paddingTop">@dimen/space_20</item>
-        <item name="android:paddingBottom">@dimen/space_20</item>
-        <item name="android:paddingLeft">@dimen/space_20</item>
-        <item name="android:paddingRight">@dimen/space_20</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
     </style>
 
     <!-- 默认水平分割线样式 -->
     <style name="HorizontalLineStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1px</item>
+        <item name="android:layout_height">@dimen/line_size</item>
         <item name="android:background">@color/colorLine</item>
     </style>
 
     <!-- 默认垂直分割线样式 -->
     <style name="VerticalLineStyle">
-        <item name="android:layout_width">1px</item>
+        <item name="android:layout_width">@dimen/line_size</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/colorLine</item>
     </style>
@@ -75,11 +77,24 @@
     <!-- 获取验证码样式 -->
     <style name="CountdownViewStyle">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:minWidth">@dimen/space_240</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_countdown</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:minWidth">90dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:text">@string/common_send_get_code</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:text">@string/common_code_send</item>
+        <item name="android:textColor">@drawable/selector_countdown_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- 圆形 CardView 样式 -->
+    <style name="CircleCardViewStyle" parent="Base.CardView">
+        <item name="cardElevation">0px</item>
+        <item name="cardBackgroundColor">#00000000</item>
+        <item name="cardCornerRadius">999dp</item>
     </style>
 
 </resources>

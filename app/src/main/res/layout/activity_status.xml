@@ -8,12 +8,11 @@
     tools:context=".ui.activity.StatusActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_status_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="界面状态案例" />
 
-    <com.hjq.widget.HintLayout
+    <com.hjq.widget.layout.HintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -23,6 +22,6 @@
             tools:listCount="10"
             tools:listitem="@layout/item_copy" />
 
-    </com.hjq.widget.HintLayout>
+    </com.hjq.widget.layout.HintLayout>
 
 </LinearLayout>

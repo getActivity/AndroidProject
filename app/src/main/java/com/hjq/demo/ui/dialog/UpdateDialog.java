@@ -11,22 +11,21 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.FileProvider;
 import android.text.format.Formatter;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
+
 import com.hjq.base.BaseDialog;
-import com.hjq.base.BaseDialogFragment;
 import com.hjq.demo.R;
+import com.hjq.demo.common.MyDialogFragment;
+import com.hjq.demo.widget.NumberProgressBar;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.hjq.toast.ToastUtils;
-import com.hjq.widget.NumberProgressBar;
 
 import java.io.File;
 import java.util.List;
@@ -40,9 +39,9 @@ import java.util.List;
 public final class UpdateDialog {
 
     public static final class Builder
-            extends BaseDialogFragment.Builder<Builder>
-            implements OnDownloadListener,
-            View.OnClickListener, OnPermission {
+            extends MyDialogFragment.Builder<Builder>
+            implements OnDownloadListener, OnPermission,
+            View.OnClickListener {
 
         private TextView mNameView;
         private TextView mSizeView;
@@ -50,34 +49,33 @@ public final class UpdateDialog {
         private NumberProgressBar mProgressView;
 
         private TextView mUpdateView;
-
         private ViewGroup mCancelLayout;
         private View mCloseView;
 
-        // 下载地址
+        /** 下载地址 */
         private String mDownloadUrl;
 
-        // 当前下载状态
+        /** 当前下载状态 */
         private int mDownloadStatus = -1;
 
-        // 下载处理对象
+        /** 下载处理对象 */
         private DownloadHandler mDownloadHandler;
 
         public Builder(FragmentActivity activity) {
             super(activity);
 
             setContentView(R.layout.dialog_update);
-            setAnimStyle(BaseDialog.AnimStyle.TOAST);
-            setGravity(Gravity.CENTER);
+            setAnimStyle(BaseDialog.AnimStyle.BOTTOM);
+            setCancelable(false);
 
-            mNameView = findViewById(R.id.tv_dialog_update_name);
-            mSizeView = findViewById(R.id.tv_dialog_update_size);
-            mContentView = findViewById(R.id.tv_dialog_update_content);
-            mProgressView = findViewById(R.id.pb_dialog_update_progress);
+            mNameView = findViewById(R.id.tv_update_name);
+            mSizeView = findViewById(R.id.tv_update_size);
+            mContentView = findViewById(R.id.tv_update_content);
+            mProgressView = findViewById(R.id.pb_update_progress);
 
-            mUpdateView = findViewById(R.id.tv_dialog_update_update);
-            mCancelLayout = findViewById(R.id.ll_dialog_update_cancel);
-            mCloseView = findViewById(R.id.iv_dialog_update_close);
+            mUpdateView = findViewById(R.id.tv_update_update);
+            mCancelLayout = findViewById(R.id.ll_update_cancel);
+            mCloseView = findViewById(R.id.iv_update_close);
 
             mUpdateView.setOnClickListener(this);
             mCloseView.setOnClickListener(this);
@@ -117,7 +115,10 @@ public final class UpdateDialog {
          */
         public Builder setForceUpdate(boolean force) {
             mCancelLayout.setVisibility(force ? View.GONE : View.VISIBLE);
-            return setCancelable(!force);
+            if (force) {
+                setCancelable(true);
+            }
+            return this;
         }
 
         /**
@@ -144,52 +145,55 @@ public final class UpdateDialog {
 
             // 判断下载状态
             switch (state) {
-                case DownloadManager.STATUS_RUNNING: // 下载中
-                    mUpdateView.setText(R.string.dialog_update_status_running);
+                // 下载中
+                case DownloadManager.STATUS_RUNNING:
+                    mUpdateView.setText(R.string.update_status_running);
                     // 显示进度条
                     mProgressView.setVisibility(View.VISIBLE);
                     break;
-                case DownloadManager.STATUS_SUCCESSFUL: // 下载成功
-                    mUpdateView.setText(R.string.dialog_update_status_successful);
+                // 下载成功
+                case DownloadManager.STATUS_SUCCESSFUL:
+                    mUpdateView.setText(R.string.update_status_successful);
                     // 隐藏进度条
                     mProgressView.setVisibility(View.GONE);
                     // 安装 Apk
                     mDownloadHandler.openDownloadFile();
                     break;
-                case DownloadManager.STATUS_FAILED: // 下载失败
-                    mUpdateView.setText(R.string.dialog_update_status_failed);
+                // 下载失败
+                case DownloadManager.STATUS_FAILED:
+                    mUpdateView.setText(R.string.update_status_failed);
                     // 删除下载的文件
                     mDownloadHandler.deleteDownloadFile();
                     break;
-                case DownloadManager.STATUS_PAUSED: // 下载暂停
-                    mUpdateView.setText(R.string.dialog_update_status_paused);
+                // 下载暂停
+                case DownloadManager.STATUS_PAUSED:
+                    mUpdateView.setText(R.string.update_status_paused);
                     break;
-                case DownloadManager.STATUS_PENDING: // 等待下载
-                    mUpdateView.setText(R.string.dialog_update_status_pending);
+                // 等待下载
+                case DownloadManager.STATUS_PENDING:
+                    mUpdateView.setText(R.string.update_status_pending);
                     break;
                 default:
                     break;
             }
         }
 
-        /**
-         * {@link View.OnClickListener,}
-         */
-
         @Override
         public void onClick(View v) {
-            if (v == mCloseView) { // 点击了下次再说
+            if (v == mCloseView) {
                 dismiss();
-            }else if (v == mUpdateView) { // 点击了更新按钮
-
+            } else if (v == mUpdateView) {
                 // 判断下载状态
                 switch (mDownloadStatus) {
-                    case -1: // 没有任何状态
-                    case DownloadManager.STATUS_FAILED: // 下载失败
+                    // 没有任何状态
+                    case -1:
+                        // 下载失败
+                    case DownloadManager.STATUS_FAILED:
                         // 重新下载
                         requestPermission();
                         break;
-                    case DownloadManager.STATUS_SUCCESSFUL: // 下载成功
+                    // 下载成功
+                    case DownloadManager.STATUS_SUCCESSFUL:
                         // 安装 Apk
                         mDownloadHandler.openDownloadFile();
                         break;
@@ -204,9 +208,12 @@ public final class UpdateDialog {
          */
         private void requestPermission() {
             XXPermissions.with(getActivity())
-                    .constantRequest() // 可设置被拒绝后继续申请，直到用户授权或者永久拒绝
-                    .permission(Permission.REQUEST_INSTALL_PACKAGES) //安装包权限
-                    .permission(Permission.Group.STORAGE) // 存储权限
+                    // 可设置被拒绝后继续申请，直到用户授权或者永久拒绝
+                    .constantRequest()
+                    // 安装包权限
+                    .permission(Permission.REQUEST_INSTALL_PACKAGES)
+                    // 存储权限
+                    .permission(Permission.Group.STORAGE)
                     .request(this);
         }
 
@@ -221,7 +228,7 @@ public final class UpdateDialog {
                 mDownloadHandler.setDownloadListener(this);
                 if (!mDownloadHandler.createDownload(mDownloadUrl,  getString(R.string.app_name) +
                         " " + mNameView.getText().toString() + ".apk", null)) {
-                    mUpdateView.setText(R.string.dialog_update_download_fail);
+                    mUpdateView.setText(R.string.update_download_fail);
                 } else {
                     // 设置对话框不能被取消
                     setCancelable(false);
@@ -233,22 +240,27 @@ public final class UpdateDialog {
 
         @Override
         public void noPermission(List<String> denied, boolean quick) {
-            ToastUtils.show(R.string.dialog_update_permission_hint);
+            toast(R.string.update_permission_hint);
         }
     }
 
     private static final class DownloadHandler extends Handler {
 
-        private Context mContext;
+        private final Context mContext;
 
-        private DownloadManager mDownloadManager; // 下载管理器对象
-        private DownloadObserver mDownloadObserver; // 下载内容观察者
+        /** 下载管理器对象 */
+        private final DownloadManager mDownloadManager;
+        /** 下载内容观察者 */
+        private DownloadObserver mDownloadObserver;
 
-        private long mDownloadId; // 下载 id
+        /** 下载文件 id */
+        private long mDownloadId;
 
-        private OnDownloadListener mListener; // 下载监听
+        /** 下载监听 */
+        private OnDownloadListener mListener;
 
-        private File mDownloadFile; // 下载的文件
+        /** 下载的文件 */
+        private File mDownloadFile;
 
         private DownloadHandler(Context context) {
             super(Looper.getMainLooper());
@@ -256,23 +268,30 @@ public final class UpdateDialog {
             mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
         }
 
-        private void setDownloadListener(OnDownloadListener l) {
-            this.mListener = l;
+        private void setDownloadListener(OnDownloadListener listener) {
+            mListener = listener;
         }
 
         @Override
         public void handleMessage(Message msg) {
-            if (mListener == null) return;
+            if (mListener == null) {
+                return;
+            }
 
             // 判断下载状态
             switch (msg.what) {
-                case DownloadManager.STATUS_RUNNING: // 下载中
-                    // 计算下载百分比
-                    int progress = msg.arg2 * 100 / msg.arg1;
+                // 下载中
+                case DownloadManager.STATUS_RUNNING:
+                    // 计算下载百分比，这里踩了两个坑
+                    // 当 apk 文件很大的时候：下载字节数 * 100 会超过 int 最大值，计算结果会变成负数
+                    // 还有需要注意的是，int 除以 int 等于 int，这里的下载字节数除以总字节数应该要 double 类型的
+                    int progress = (int) (((double) msg.arg2 / msg.arg1) * 100);
                     mListener.downloadProgressChange(progress);
                     break;
-                case DownloadManager.STATUS_SUCCESSFUL: // 下载成功
-                case DownloadManager.STATUS_FAILED: // 下载失败
+                // 下载成功
+                case DownloadManager.STATUS_SUCCESSFUL:
+                // 下载失败
+                case DownloadManager.STATUS_FAILED:
                     // 移除内容观察者
                     if (mDownloadObserver != null) {
                         mContext.getContentResolver().unregisterContentObserver(mDownloadObserver);
@@ -293,6 +312,7 @@ public final class UpdateDialog {
          * @param notificationTitle     通知栏标题
          * @return                      下载 id
          */
+        @SuppressWarnings("ResultOfMethodCallIgnored")
         private boolean createDownload(String downloadUrl, String fileName, String notificationTitle) {
             if (fileName == null) {
                 throw new IllegalArgumentException("The filename cannot be empty");
@@ -362,9 +382,9 @@ public final class UpdateDialog {
 
     private static class DownloadObserver extends ContentObserver {
 
-        private Handler mHandler;
-        private DownloadManager mDownloadManager;
-        private DownloadManager.Query mQuery;
+        private final Handler mHandler;
+        private final DownloadManager mDownloadManager;
+        private final DownloadManager.Query mQuery;
 
         DownloadObserver(Handler handler, DownloadManager manager, DownloadManager.Query query) {
             super(handler);
@@ -388,7 +408,7 @@ public final class UpdateDialog {
             // 总需下载的字节数
             int totalBytes = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
             // 已经下载的字节数
-            int downloadedBytes = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+            int downloadBytes = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
             // 下载状态
             int downloadStatus = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS));
 
@@ -398,7 +418,7 @@ public final class UpdateDialog {
             // 发送更新消息
             Message msg = mHandler.obtainMessage();
             msg.arg1 = totalBytes;
-            msg.arg2 = downloadedBytes;
+            msg.arg2 = downloadBytes;
             msg.what = downloadStatus;
             mHandler.sendMessage(msg);
         }

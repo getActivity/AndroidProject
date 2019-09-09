@@ -1,6 +1,8 @@
 package com.hjq.demo.mvp;
 
 import com.hjq.demo.common.MyLazyFragment;
+import com.hjq.demo.mvp.proxy.IMvpPresenterProxy;
+import com.hjq.demo.mvp.proxy.MvpPresenterProxyImpl;
 
 /**
  *    author : Android 轮子哥
@@ -8,30 +10,26 @@ import com.hjq.demo.common.MyLazyFragment;
  *    time   : 2018/11/17
  *    desc   : MVP 懒加载 Fragment 基类
  */
-public abstract class MvpLazyFragment<P extends MvpPresenter> extends MyLazyFragment implements IMvpView {
+public abstract class MvpLazyFragment extends MyLazyFragment implements IMvpView {
 
-    private P mPresenter;
+    private IMvpPresenterProxy mMvpProxy;
 
     @Override
     protected void initFragment() {
-        mPresenter = createPresenter();
-        mPresenter.attach(this);
+        mMvpProxy = createPresenterProxy();
+        mMvpProxy.bindPresenter();
         super.initFragment();
-        mPresenter.start();
+    }
+
+    protected IMvpPresenterProxy createPresenterProxy() {
+        return new MvpPresenterProxyImpl(this);
     }
 
     @Override
     public void onDestroy() {
-        if (mPresenter != null) {
-            mPresenter.detach();
-            mPresenter = null;
+        if (mMvpProxy != null) {
+            mMvpProxy.unbindPresenter();
         }
         super.onDestroy();
     }
-
-    public P getPresenter() {
-        return mPresenter;
-    }
-
-    protected abstract P createPresenter();
 }

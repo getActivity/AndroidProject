@@ -1,5 +1,6 @@
 package com.hjq.demo.mvp.copy;
 
+import com.hjq.demo.mvp.MvpInject;
 import com.hjq.demo.mvp.MvpPresenter;
 
 import java.util.List;
@@ -13,12 +14,8 @@ import java.util.List;
 public final class CopyPresenter extends MvpPresenter<CopyContract.View>
         implements CopyContract.Presenter, CopyOnListener {
 
-    private CopyModel mModel;
-
-    @Override
-    public void start() {
-        mModel = new CopyModel();
-    }
+    @MvpInject
+    CopyModel mModel;
 
     /**
      * {@link CopyContract.Presenter}

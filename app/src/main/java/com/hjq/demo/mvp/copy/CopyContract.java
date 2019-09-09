@@ -14,12 +14,13 @@ public final class CopyContract {
 
     public interface View extends IMvpView {
 
-        void loginError(String msg);
-
         void loginSuccess(List<String> data);
+
+        void loginError(String msg);
     }
 
     public interface Presenter {
+
         void login(String account, String password);
     }
 }

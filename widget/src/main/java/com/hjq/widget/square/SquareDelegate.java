@@ -8,6 +8,7 @@ import android.view.View;
  *    time   : 2018/10/27
  *    desc   : 用于限定正方形大小的控件的算法
  */
+@SuppressWarnings("all")
 public final class SquareDelegate {
 
     /**
@@ -31,11 +32,11 @@ public final class SquareDelegate {
             if (heightSpecMode != View.MeasureSpec.EXACTLY) {
                 // 对比高度和宽度，返回最大值的那个
                 return View.MeasureSpec.makeMeasureSpec(Math.max(widthSpecSize, heightSpecSize), View.MeasureSpec.EXACTLY);
-            }else {
+            } else {
                 // 如果已经定死了高度，而宽度没有写死，则使用高度代替宽度
                 return heightMeasureSpec;
             }
-        }else {
+        } else {
             // 宽度和高度已经写死，这里不做任何处理
             return widthMeasureSpec;
         }
@@ -62,11 +63,11 @@ public final class SquareDelegate {
             if (widthSpecMode != View.MeasureSpec.EXACTLY) {
                 // 对比高度和宽度，返回最大值的那个
                 return View.MeasureSpec.makeMeasureSpec(Math.max(widthSpecSize, heightSpecSize), View.MeasureSpec.EXACTLY);
-            }else {
+            } else {
                 // 如果已经定死了宽度，而高度没有写死，则使用高度代替宽度
                 return widthMeasureSpec;
             }
-        }else {
+        } else {
             // 宽度和高度已经写死，这里不做任何处理
             return heightMeasureSpec;
         }

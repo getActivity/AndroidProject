@@ -1,9 +1,10 @@
 package com.hjq.demo.widget;
 
 import android.content.Context;
-import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  *    author : Android 轮子哥
@@ -23,7 +24,7 @@ public final class PhotoViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        // 当PhotoView 和 ViewPager 组合时 ，用双指进行放大时 是没有问题的，但是用双指进行缩小的时候，程序就会崩掉
+        // 当 PhotoView 和 ViewPager 组合时 ，用双指进行放大时 是没有问题的，但是用双指进行缩小的时候，程序就会崩掉
         // 并且抛出java.lang.IllegalArgumentException: pointerIndex out of range
         try {
             return super.onInterceptTouchEvent(ev);

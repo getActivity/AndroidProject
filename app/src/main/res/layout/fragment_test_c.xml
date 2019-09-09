@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragment.TestFragmentC">
+    tools:context=".ui.fragment.TestFragmentC"
+    tools:ignore="HardcodedText">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/tb_test_c_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backButton="false"
@@ -20,87 +20,84 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/space_60"
-            android:layout_marginRight="@dimen/space_60"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:orientation="vertical">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_test_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:adjustViewBounds="true"
+                android:visibility="gone" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_image1"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="加载普通图片" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_image2"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="加载圆形图片" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_image3"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="加载圆角图片" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_test_image4"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="选择一个图片" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_toast"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="弹一个吐司" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_permission"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="请求一次权限" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_state_black"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
                 android:text="状态栏黑色字体" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_test_state_white"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
                 android:text="状态栏白色字体" />
 
-            <Button
-                android:id="@+id/btn_test_swipe_enabled"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
-                android:text="开启界面侧滑" />
-
-            <Button
-                android:id="@+id/btn_test_swipe_disable"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_60"
-                android:layout_marginBottom="@dimen/space_30"
-                android:text="关闭界面侧滑" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

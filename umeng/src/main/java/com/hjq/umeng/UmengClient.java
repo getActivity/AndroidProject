@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,7 +39,7 @@ public final class UmengClient {
             PlatformConfig.setQQZone(String.valueOf(metaData.get("QQ_APPID")), String.valueOf(metaData.get("QQ_APPKEY")));
             PlatformConfig.setSinaWeibo(String.valueOf(metaData.get("SN_APPID")), String.valueOf(metaData.get("SN_APPKEY")),"http://sns.whalecloud.com");
 
-            //豆瓣RENREN平台目前只能在服务器端配置
+            // 豆瓣RENREN平台目前只能在服务器端配置
             //PlatformConfig.setYixin("yxc0614e80c9304c11b0391514d09f13bf");
             //PlatformConfig.setTwitter("3aIN7fuF685MuZ7jtXkQxalyi", "MK6FEYG63eWcpDFgRYw4w9puJhzDl0tyuqWjZ3M7XJuuG7mMbO");
             //PlatformConfig.setAlipay("2015111700822536");
@@ -58,7 +59,7 @@ public final class UmengClient {
      */
     public static void onResume(Activity activity) {
         // 手动统计页面
-        // MobclickAgent.onPageStart(activity.getClass().getSimpleName());
+         MobclickAgent.onPageStart(activity.getTitle().toString());
         // 友盟统计
         MobclickAgent.onResume(activity);
     }
@@ -68,7 +69,7 @@ public final class UmengClient {
      */
     public static void onPause(Activity activity) {
         // 手动统计页面，必须保证 onPageEnd 在 onPause 之前调用，因为SDK会在 onPause 中保存onPageEnd统计到的页面数据
-        // MobclickAgent.onPageEnd(activity.getClass().getSimpleName());
+        MobclickAgent.onPageStart(activity.getTitle().toString());
         // 友盟统计
         MobclickAgent.onPause(activity);
     }
@@ -120,7 +121,7 @@ public final class UmengClient {
      * @param listener              登录监听
      */
     public static void login(Activity activity, Platform platform, UmengLogin.OnLoginListener listener) {
-        if (isAppInstalled(activity, platform.getPackageName())) {
+        if (isAppInstalled(activity, platform)) {
 
             try {
                 // 删除旧的第三方登录授权
@@ -149,6 +150,10 @@ public final class UmengClient {
     /**
      * 判断 App 是否安装
      */
+    public static boolean isAppInstalled(Context context, Platform platform) {
+        return isAppInstalled(context, platform.getPackageName());
+    }
+
     private static boolean isAppInstalled(Context context, @NonNull final String packageName) {
         try {
             return context.getPackageManager().getApplicationInfo(packageName, 0) != null;
