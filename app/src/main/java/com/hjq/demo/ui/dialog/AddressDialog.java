@@ -1,7 +1,6 @@
 package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -13,15 +12,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.base.BaseDialog;
-import com.hjq.base.BaseRecyclerViewAdapter;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
-import com.hjq.demo.common.MyRecyclerViewAdapter;
+import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.common.MyAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +31,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
+
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -43,22 +45,18 @@ import java.util.List;
 public final class AddressDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements BaseRecyclerViewAdapter.OnItemClickListener,
-            View.OnClickListener, TabLayout.OnTabSelectedListener, Runnable {
+            extends BaseDialog.Builder<Builder>
+            implements TabLayout.OnTabSelectedListener,
+            Runnable, RecyclerViewAdapter.OnSelectListener,
+            BaseDialog.OnShowListener, BaseDialog.OnDismissListener {
 
         private final TextView mTitleView;
         private final ImageView mCloseView;
         private final TabLayout mTabLayout;
-        private final ImageView mHintView;
 
-        private final RecyclerView mProvinceView;
-        private final RecyclerView mCityView;
-        private final RecyclerView mAreaView;
-
-        private final AddressDialogAdapter mProvinceAdapter;
-        private final AddressDialogAdapter mCityAdapter;
-        private final AddressDialogAdapter mAreaAdapter;
+        private final ViewPager2 mViewPager;
+        private final RecyclerViewAdapter mAdapter;
+        private final ViewPager2.OnPageChangeCallback mCallback;
 
         private OnListener mListener;
 
@@ -68,42 +66,56 @@ public final class AddressDialog {
 
         private boolean mIgnoreArea;
 
-        public Builder(FragmentActivity activity) {
-            super(activity);
+        @SuppressWarnings("all")
+        public Builder(Context context) {
+            super(context);
             setContentView(R.layout.dialog_address);
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getSystemService(WindowManager.class).getDefaultDisplay().getMetrics(displayMetrics);
             setHeight(displayMetrics.heightPixels / 2);
 
+            mViewPager = findViewById(R.id.vp_address_province);
+            mAdapter = new RecyclerViewAdapter(context);
+            mAdapter.setOnSelectListener(this);
+            mViewPager.setAdapter(mAdapter);
+
             mTitleView = findViewById(R.id.tv_address_title);
             mCloseView = findViewById(R.id.iv_address_closer);
             mTabLayout = findViewById(R.id.tb_address_tab);
-            mHintView = findViewById(R.id.iv_address_hint);
-
-            mProvinceView = findViewById(R.id.rv_address_province);
-            mCityView = findViewById(R.id.rv_address_city);
-            mAreaView = findViewById(R.id.rv_address_area);
-
-            mProvinceAdapter = new AddressDialogAdapter(getContext());
-            mCityAdapter = new AddressDialogAdapter(getContext());
-            mAreaAdapter = new AddressDialogAdapter(getContext());
-
-            mCloseView.setOnClickListener(this);
-
-            mProvinceAdapter.setOnItemClickListener(this);
-            mCityAdapter.setOnItemClickListener(this);
-            mAreaAdapter.setOnItemClickListener(this);
-
-            mProvinceView.setAdapter(mProvinceAdapter);
-            mCityView.setAdapter(mCityAdapter);
-            mAreaView.setAdapter(mAreaAdapter);
 
             mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
             mTabLayout.addOnTabSelectedListener(this);
 
+            mCallback = new ViewPager2.OnPageChangeCallback() {
+
+                private int mPreviousScrollState, mScrollState = SCROLL_STATE_IDLE;
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    mPreviousScrollState = mScrollState;
+                    mScrollState = state;
+                    if (state == ViewPager2.SCROLL_STATE_IDLE && mTabLayout.getSelectedTabPosition() != mViewPager.getCurrentItem()) {
+                        final boolean updateIndicator = mScrollState == SCROLL_STATE_IDLE || (mScrollState == SCROLL_STATE_SETTLING && mPreviousScrollState == SCROLL_STATE_IDLE);
+                        mTabLayout.selectTab(mTabLayout.getTabAt(mViewPager.getCurrentItem()), updateIndicator);
+                    }
+                }
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    final boolean updateText = mScrollState != SCROLL_STATE_SETTLING || mPreviousScrollState == SCROLL_STATE_DRAGGING;
+                    final boolean updateIndicator = !(mScrollState == SCROLL_STATE_SETTLING && mPreviousScrollState == SCROLL_STATE_IDLE);
+                    mTabLayout.setScrollPosition(position, positionOffset, updateText, updateIndicator);
+                }
+            };
+
             // 显示省份列表
-            mProvinceAdapter.setData(AddressManager.getProvinceList(getContext()));
+            mAdapter.addItem(AddressManager.getProvinceList(getContext()));
+
+            setOnClickListener(R.id.iv_address_closer);
+
+            addOnShowListener(this);
+            addOnDismissListener(this);
         }
 
         public Builder setTitle(@StringRes int id) {
@@ -119,11 +131,11 @@ public final class AddressDialog {
          */
         public Builder setProvince(String province) {
             if (province != null && !"".equals(province)) {
-                List<AddressBean> data = mProvinceAdapter.getData();
+                List<AddressBean> data = mAdapter.getItem(0);
                 if (data != null && !data.isEmpty()) {
                     for (int i = 0; i < data.size(); i++) {
                         if (province.equals(data.get(i).getName())) {
-                            onItemClick(mProvinceView, null, i);
+                            onSelected(0, i);
                             break;
                         }
                     }
@@ -141,11 +153,14 @@ public final class AddressDialog {
                 throw new IllegalStateException("The selection of county-level regions has been ignored. The designated city cannot be selected");
             }
             if (city != null && !"".equals(city)) {
-                List<AddressBean> data = mCityAdapter.getData();
+                List<AddressBean> data = mAdapter.getItem(1);
                 if (data != null && !data.isEmpty()) {
                     for (int i = 0; i < data.size(); i++) {
                         if (city.equals(data.get(i).getName())) {
-                            onItemClick(mCityView, null, i);
+                            // 避开直辖市，因为选择省的时候已经自动跳过市区了
+                            if (mAdapter.getItem(1).size() > 1) {
+                                onSelected(1, i);
+                            }
                             break;
                         }
                     }
@@ -158,7 +173,7 @@ public final class AddressDialog {
          * 不选择县级区域
          */
         public Builder setIgnoreArea() {
-            List<AddressBean> data = mCityAdapter.getData();
+            List<AddressBean> data = mAdapter.getItem(1);
             if (data != null && !data.isEmpty()) {
                 // 已经指定了城市，不能再忽略县级区域
                 throw new IllegalStateException("Cities have been designated and county-level areas can no longer be ignored");
@@ -173,96 +188,73 @@ public final class AddressDialog {
         }
 
         /**
-         * {@link BaseRecyclerViewAdapter.OnItemClickListener}
+         * {@link RecyclerViewAdapter.OnSelectListener}
          */
 
         @SuppressWarnings("all")
         @Override
-        public synchronized void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-            if (recyclerView == mProvinceView) {
+        public void onSelected(int recyclerViewPosition, int clickItemPosition) {
+            switch (recyclerViewPosition) {
+                case 0:
+                    // 记录当前选择的省份
+                    mProvince = mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getName();
+                    mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mProvince);
 
-                // 记录当前选择的省份
-                mProvince = mProvinceAdapter.getItem(position).getName();
+                    mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
+                    mAdapter.addItem(AddressManager.getCityList(mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getNext()));
+                    mViewPager.setCurrentItem(recyclerViewPosition + 1);
 
-                mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mProvince);
-                mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
+                    // 如果当前选择的是直辖市，就直接跳过选择城市，直接选择区域
+                    if (mAdapter.getItem(recyclerViewPosition + 1).size() == 1) {
+                        onSelected(recyclerViewPosition + 1, 0);
+                    }
+                    break;
+                case 1:
+                    // 记录当前选择的城市
+                    mCity = mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getName();
+                    mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mCity);
 
-                mCityAdapter.setData(AddressManager.getCityList(mProvinceAdapter.getItem(position).getNext()));
+                    if (mIgnoreArea) {
 
-                mProvinceView.setVisibility(View.GONE);
-                mCityView.setVisibility(View.VISIBLE);
+                        if (mListener != null) {
+                            mListener.onSelected(getDialog(), mProvince, mCity, mArea);
+                        }
 
-                // 如果当前选择的是直辖市，就直接跳过选择城市，直接选择区域
-                if (mCityAdapter.getItemCount() == 1) {
-                    onItemClick(mCityView, null, 0);
-                }
+                        // 延迟关闭
+                        postDelayed(this::dismiss, 300);
 
-            } else if (recyclerView == mCityView) {
+                    } else {
+                        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
+                        mAdapter.addItem(AddressManager.getAreaList(mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getNext()));
+                        mViewPager.setCurrentItem(recyclerViewPosition + 1);
+                    }
 
-                // 记录当前选择的城市
-                mCity = mCityAdapter.getItem(position).getName();
-
-                mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mCity);
-
-                if (mIgnoreArea) {
+                    break;
+                case 2:
+                    // 记录当前选择的区域
+                    mArea = mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getName();
+                    mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mArea);
 
                     if (mListener != null) {
                         mListener.onSelected(getDialog(), mProvince, mCity, mArea);
                     }
 
                     // 延迟关闭
-                    postDelayed(this, 300);
-
-                } else {
-                    mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
-                    mAreaAdapter.setData(AddressManager.getAreaList(mCityAdapter.getItem(position).getNext()));
-                }
-
-                mCityView.setVisibility(View.GONE);
-
-                if (mIgnoreArea) {
-                    mHintView.setVisibility(View.VISIBLE);
-                } else {
-                    mAreaView.setVisibility(View.VISIBLE);
-                }
-
-            } else if (recyclerView == mAreaView) {
-
-                // 记录当前选择的区域
-                mArea = mAreaAdapter.getItem(position).getName();
-
-                mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mArea);
-
-                mAreaView.setVisibility(View.INVISIBLE);
-                mHintView.setVisibility(View.VISIBLE);
-
-                if (mListener != null) {
-                    mListener.onSelected(getDialog(), mProvince, mCity, mArea);
-                }
-
-                // 延迟关闭
-                postDelayed(this, 300);
+                    postDelayed(this::dismiss, 300);
+                    break;
+                default:
+                    break;
             }
         }
 
-        /**
-         * {@link Runnable}
-         */
-
         @Override
         public void run() {
-            if (getDialogFragment() != null &&
-                    getDialogFragment().isAdded() &&
-                    getDialog() != null &&
-                    getDialog().isShowing()) {
+            if (isShowing()) {
                 dismiss();
             }
         }
 
-        /**
-         * {@link View.OnClickListener}
-         */
-
+        @SingleClick
         @Override
         public void onClick(View v) {
             if (v == mCloseView) {
@@ -277,55 +269,122 @@ public final class AddressDialog {
          * {@link TabLayout.OnTabSelectedListener}
          */
 
-        /** Tab条目被选中 */
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
-            tab.setText(getString(R.string.address_hint));
-            switch (tab.getPosition()) {
-                case 0:
-                    mProvince = mCity = mArea = null;
-                    if (mTabLayout.getTabAt(2) != null) {
-                        mTabLayout.removeTabAt(2);
-                    }
-                    if (mTabLayout.getTabAt(1) != null) {
-                        mTabLayout.removeTabAt(1);
-                    }
-                    mProvinceView.setVisibility(View.VISIBLE);
-                    mCityView.setVisibility(View.GONE);
-                    mAreaView.setVisibility(View.GONE);
-                    break;
-                case 1:
-                    mCity = mArea = null;
-                    if (mTabLayout.getTabAt(2) != null) {
-                        mTabLayout.removeTabAt(2);
-                    }
-                    mProvinceView.setVisibility(View.GONE);
-                    mCityView.setVisibility(View.VISIBLE);
-                    mAreaView.setVisibility(View.GONE);
-                    break;
-                case 2:
-                    mArea = null;
-                    mProvinceView.setVisibility(View.GONE);
-                    mCityView.setVisibility(View.GONE);
-                    mAreaView.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    break;
+            synchronized (this) {
+                if (mViewPager.getCurrentItem() != tab.getPosition()) {
+                    mViewPager.setCurrentItem(tab.getPosition());
+                }
+
+                tab.setText(getString(R.string.address_hint));
+                switch (tab.getPosition()) {
+                    case 0:
+                        mProvince = mCity = mArea = null;
+                        if (mTabLayout.getTabAt(2) != null) {
+                            mTabLayout.removeTabAt(2);
+                            mAdapter.removeItem(2);
+                        }
+                        if (mTabLayout.getTabAt(1) != null) {
+                            mTabLayout.removeTabAt(1);
+                            mAdapter.removeItem(1);
+                        }
+                        break;
+                    case 1:
+                        mCity = mArea = null;
+                        if (mTabLayout.getTabAt(2) != null) {
+                            mTabLayout.removeTabAt(2);
+                            mAdapter.removeItem(2);
+                        }
+                        break;
+                    case 2:
+                        mArea = null;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        /** Tab条目被取消选中 */
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {}
 
-        /** Tab条目被重复点击 */
         @Override
         public void onTabReselected(TabLayout.Tab tab) {}
+
+        /**
+         * {@link BaseDialog.OnShowListener}
+         */
+
+        @Override
+        public void onShow(BaseDialog dialog) {
+            // 注册 ViewPager 滑动监听
+            mViewPager.registerOnPageChangeCallback(mCallback);
+        }
+
+        /**
+         * {@link BaseDialog.OnDismissListener}
+         */
+
+        @Override
+        public void onDismiss(BaseDialog dialog) {
+            // 反注册 ViewPager 滑动监听
+            mViewPager.unregisterOnPageChangeCallback(mCallback);
+        }
     }
 
-    private static final class AddressDialogAdapter extends MyRecyclerViewAdapter<AddressBean> {
+    private final static class RecyclerViewAdapter extends MyAdapter<List<AddressBean>> {
 
-        private AddressDialogAdapter(Context context) {
+        private OnSelectListener mListener;
+
+        private RecyclerViewAdapter(Context context) {
+            super(context);
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder();
+        }
+
+        final class ViewHolder extends MyAdapter.ViewHolder implements OnItemClickListener {
+
+            private final AddressAdapter mAdapter;
+
+            ViewHolder() {
+                super(new RecyclerView(getContext()));
+                RecyclerView recyclerView = (RecyclerView) getItemView();
+                recyclerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                mAdapter = new AddressAdapter(getContext());
+                mAdapter.setOnItemClickListener(this);
+                recyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onBindView(int position) {
+                mAdapter.setData(getItem(position));
+            }
+
+            @Override
+            public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+                if (mListener != null) {
+                    mListener.onSelected(getViewHolderPosition(), position);
+                }
+            }
+        }
+
+        private void setOnSelectListener(OnSelectListener listener) {
+            mListener = listener;
+        }
+
+        public interface OnSelectListener {
+
+            void onSelected(int recyclerViewPosition, int clickItemPosition);
+        }
+    }
+
+    private static final class AddressAdapter extends MyAdapter<AddressBean> {
+
+        private AddressAdapter(Context context) {
             super(context);
         }
 
@@ -334,14 +393,7 @@ public final class AddressDialog {
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
             TextView textView = new TextView(parent.getContext());
             textView.setGravity(Gravity.CENTER_VERTICAL);
-            TypedValue typedValue = new TypedValue();
-            if (getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    textView.setBackground(getDrawable(typedValue.resourceId));
-                } else {
-                    textView.setBackgroundDrawable(getDrawable(typedValue.resourceId));
-                }
-            }
+            textView.setBackgroundResource(R.drawable.selector_transparent);
             textView.setTextColor(0xFF222222);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -352,11 +404,11 @@ public final class AddressDialog {
             return new ViewHolder(textView);
         }
 
-        final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
+        final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final TextView mTextView;
 
-            public ViewHolder(View itemView) {
+            private ViewHolder(View itemView) {
                 super(itemView);
                 mTextView = (TextView) getItemView();
             }
@@ -371,9 +423,9 @@ public final class AddressDialog {
     private static final class AddressBean {
 
         /** （省\市\区）的名称 */
-        private String name;
+        private final String name;
         /** 下一级的 Json */
-        private JSONObject next;
+        private final JSONObject next;
 
         private AddressBean(String name, JSONObject next) {
             this.name = name;
@@ -471,7 +523,7 @@ public final class AddressDialog {
          */
         private static JSONArray getProvinceJson(Context context) {
             try {
-                InputStream inputStream = context.getAssets().open("province.json");
+                InputStream inputStream = context.getResources().openRawResource(R.raw.province);
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
                 byte[] buffer = new byte[512];
                 int length;
@@ -481,9 +533,7 @@ public final class AddressDialog {
                 outStream.close();
                 inputStream.close();
                 return new JSONArray(outStream.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return null;
@@ -504,6 +554,6 @@ public final class AddressDialog {
         /**
          * 点击取消时回调
          */
-        void onCancel(BaseDialog dialog);
+        default void onCancel(BaseDialog dialog) {}
     }
 }

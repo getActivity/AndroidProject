@@ -6,10 +6,13 @@ import android.content.Intent;
 import androidx.viewpager.widget.ViewPager;
 
 import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
+import com.hjq.demo.aop.CheckNet;
+import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.other.IntentKey;
-import com.hjq.demo.ui.adapter.ImagePagerAdapter;
+import com.hjq.demo.ui.pager.ImagePagerAdapter;
 import com.rd.PageIndicatorView;
 
 import java.util.ArrayList;
@@ -39,6 +42,8 @@ public final class ImageActivity extends MyActivity {
         start(context, urls, 0);
     }
 
+    @CheckNet
+    @DebugLog
     public static void start(Context context, ArrayList<String> urls, int index) {
         Intent intent = new Intent(context, ImageActivity.class);
         intent.putExtra(IntentKey.PICTURE, urls);
@@ -53,23 +58,24 @@ public final class ImageActivity extends MyActivity {
 
     @Override
     protected void initView() {
-        // 设置状态栏和导航栏参数
-        getStatusBarConfig()
+        mIndicatorView.setViewPager(mViewPager);
+    }
+
+    @Override
+    protected ImmersionBar createStatusBarConfig() {
+        return super.createStatusBarConfig()
                 // 有导航栏的情况下，activity全屏显示，也就是activity最下面被导航栏覆盖，不写默认非全屏
                 .fullScreen(true)
                 // 隐藏状态栏
                 .hideBar(BarHide.FLAG_HIDE_STATUS_BAR)
                 // 透明导航栏，不写默认黑色(设置此方法，fullScreen()方法自动为true)
-                .transparentNavigationBar()
-                .init();
-
-        mIndicatorView.setViewPager(mViewPager);
+                .transparentNavigationBar();
     }
 
     @Override
     protected void initData() {
-        ArrayList<String> images = getIntent().getStringArrayListExtra(IntentKey.PICTURE);
-        int index = getIntent().getIntExtra(IntentKey.INDEX, 0);
+        ArrayList<String> images = getStringArrayList(IntentKey.PICTURE);
+        int index = getInt(IntentKey.INDEX);
         if (images != null && images.size() > 0) {
             mViewPager.setAdapter(new ImagePagerAdapter(this, images));
             if (index != 0 && index <= images.size()) {
@@ -81,7 +87,12 @@ public final class ImageActivity extends MyActivity {
     }
 
     @Override
-    public boolean statusBarDarkFont() {
+    public boolean isStatusBarDarkFont() {
+        return false;
+    }
+
+    @Override
+    public boolean isSwipeEnable() {
         return false;
     }
 }

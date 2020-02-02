@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    app:cardBackgroundColor="#dc000000"
+    app:cardBackgroundColor="@color/black85"
     app:cardCornerRadius="15dp"
     app:cardElevation="0px"
     tools:context=".ui.dialog.WaitDialog">
@@ -22,7 +22,6 @@
         android:padding="10dp">
 
         <com.hjq.demo.widget.ProgressView
-            android:id="@+id/pw_progress"
             android:layout_width="60dp"
             android:layout_height="60dp"
             app:barColor="@android:color/white"
@@ -35,9 +34,9 @@
             android:id="@+id/tv_wait_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="6dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:maxLines="3"
             android:text="@string/common_loading"
             android:textColor="@color/white"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="center_horizontal"
-    android:layoutAnimation="@anim/layout_animation_from_bottom"
+    android:layoutAnimation="@anim/layout_from_bottom"
     android:orientation="vertical"
     tools:context=".ui.activity.LoginActivity"
     tools:layoutAnimation="@null">
@@ -39,9 +39,9 @@
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
             android:hint="@string/common_phone_input_hint"
             android:inputType="textVisiblePassword"
             android:singleLine="true"
@@ -49,34 +49,34 @@
 
         <View
             style="@style/HorizontalLineStyle"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
 
         <com.hjq.widget.view.PasswordEditText
             android:id="@+id/et_login_password"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
             android:hint="@string/common_password_input_error"
             android:maxLength="20"
             android:maxLines="1" />
 
         <View
             style="@style/HorizontalLineStyle"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_login_forget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="40dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginEnd="60dp"
             android:text="@string/login_forget"
             android:textColor="@color/colorAccent" />
 
@@ -85,9 +85,9 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="30dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
             android:text="@string/login_text" />
 
     </LinearLayout>
@@ -114,8 +114,8 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:text="@string/login_other"
             android:textColor="@color/black50" />
 

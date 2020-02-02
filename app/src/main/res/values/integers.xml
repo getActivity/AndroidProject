@@ -2,4 +2,7 @@
 <resources>
     <!-- Activity 转场动画时间 -->
     <integer name="activity_anim_duration">200</integer>
+
+    <!-- 短信验证码的长度 -->
+    <integer name="sms_code_length">4</integer>
 </resources>

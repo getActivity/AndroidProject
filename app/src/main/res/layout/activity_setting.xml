@@ -25,8 +25,23 @@
         android:id="@+id/sb_setting_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:bar_leftText="@string/setting_update"
-        app:bar_rightIcon="@drawable/ico_go_black" />
+        app:bar_leftText="@string/setting_update">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_setting_update"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="3dp"
+            android:text="new"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+
+    </com.hjq.widget.layout.SettingBar>
 
     <com.hjq.widget.layout.SettingBar
         android:id="@+id/sb_setting_agreement"
@@ -55,8 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp" />
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp" />
 
     </com.hjq.widget.layout.SettingBar>
 

@@ -26,7 +26,6 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="150dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/bg_launcher"
                 app:layout_collapseMode="parallax" />
@@ -35,7 +34,7 @@
                 android:id="@+id/t_test_title"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 app:layout_collapseMode="pin" />
 
             <com.hjq.bar.TitleBar
@@ -55,23 +54,31 @@
                         android:id="@+id/tv_test_address"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="地区"
+                        android:text="广州"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_test_search"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_test_hint"
+                        android:layout_width="0px"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_home_search_bar_transparent"
                         android:gravity="center"
-                        android:text="请输入搜索关键字"
-                        android:textColor="#a4a4a4"
+                        android:text="完善细节，追求完美"
+                        android:textColor="@color/white60"
                         android:textSize="14sp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_test_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_search_white" />
 
                 </LinearLayout>
 
@@ -81,6 +88,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--suppress AndroidDomInspection -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -89,8 +97,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:orientation="vertical">
 
         </LinearLayout>

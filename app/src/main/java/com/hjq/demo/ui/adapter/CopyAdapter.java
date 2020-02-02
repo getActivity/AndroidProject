@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import android.view.ViewGroup;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyRecyclerViewAdapter;
+import com.hjq.demo.common.MyAdapter;
 
 /**
  *    author : Android 轮子哥
@@ -13,7 +13,7 @@ import com.hjq.demo.common.MyRecyclerViewAdapter;
  *    time   : 2018/11/05
  *    desc   : 可进行拷贝的副本
  */
-public final class CopyAdapter extends MyRecyclerViewAdapter<String> {
+public final class CopyAdapter extends MyAdapter<String> {
 
     public CopyAdapter(Context context) {
         super(context);
@@ -30,7 +30,7 @@ public final class CopyAdapter extends MyRecyclerViewAdapter<String> {
         return new ViewHolder();
     }
 
-    final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
+    final class ViewHolder extends MyAdapter.ViewHolder {
 
         ViewHolder() {
             super(R.layout.item_copy);

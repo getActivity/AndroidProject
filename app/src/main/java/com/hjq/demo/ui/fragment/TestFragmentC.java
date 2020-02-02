@@ -4,11 +4,13 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyLazyFragment;
+import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.common.MyFragment;
+import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.ui.activity.HomeActivity;
 import com.hjq.demo.ui.activity.PhotoActivity;
-import com.hjq.image.ImageLoader;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -16,7 +18,6 @@ import com.hjq.permissions.XXPermissions;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -24,7 +25,7 @@ import butterknife.OnClick;
  *    time   : 2018/10/18
  *    desc   : 项目框架使用示例
  */
-public final class TestFragmentC extends MyLazyFragment<HomeActivity> {
+public final class TestFragmentC extends MyFragment<HomeActivity> {
 
     @BindView(R.id.iv_test_image)
     ImageView mImageView;
@@ -40,7 +41,8 @@ public final class TestFragmentC extends MyLazyFragment<HomeActivity> {
 
     @Override
     protected void initView() {
-
+        setOnClickListener(R.id.btn_test_image1, R.id.btn_test_image2, R.id.btn_test_image3, R.id.btn_test_image4, R.id.btn_test_toast,
+                R.id.btn_test_permission, R.id.btn_test_setting, R.id.btn_test_state_black, R.id.btn_test_state_white);
     }
 
     @Override
@@ -54,37 +56,37 @@ public final class TestFragmentC extends MyLazyFragment<HomeActivity> {
         return !super.isStatusBarEnabled();
     }
 
-    @OnClick({R.id.btn_test_image1, R.id.btn_test_image2, R.id.btn_test_image3, R.id.btn_test_image4,
-            R.id.btn_test_toast, R.id.btn_test_permission, R.id.btn_test_state_black, R.id.btn_test_state_white})
+    @SingleClick
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test_image1:
                 mImageView.setVisibility(View.VISIBLE);
-                ImageLoader.with(this)
+                GlideApp.with(this)
                         .load("https://www.baidu.com/img/bd_logo.png")
                         .into(mImageView);
                 break;
             case R.id.btn_test_image2:
                 mImageView.setVisibility(View.VISIBLE);
-                ImageLoader.with(this)
-                        .circle()
+                GlideApp.with(this)
                         .load("https://www.baidu.com/img/bd_logo.png")
+                        .circleCrop()
                         .into(mImageView);
                 break;
             case R.id.btn_test_image3:
                 mImageView.setVisibility(View.VISIBLE);
-                ImageLoader.with(this)
-                        .circle((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, this.getResources().getDisplayMetrics()))
+                GlideApp.with(this)
                         .load("https://www.baidu.com/img/bd_logo.png")
+                        .transform(new RoundedCorners((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, this.getResources().getDisplayMetrics())))
                         .into(mImageView);
                 break;
             case R.id.btn_test_image4:
                 PhotoActivity.start(getAttachActivity(), new PhotoActivity.OnPhotoSelectListener() {
 
                     @Override
-                    public void onSelect(List<String> data) {
+                    public void onSelected(List<String> data) {
                         mImageView.setVisibility(View.VISIBLE);
-                        ImageLoader.with(getAttachActivity())
+                        GlideApp.with(getAttachActivity())
                                 .load(data.get(0))
                                 .into(mImageView);
                     }
@@ -129,11 +131,18 @@ public final class TestFragmentC extends MyLazyFragment<HomeActivity> {
                             }
                         });
                 break;
+            case R.id.btn_test_setting:
+                XXPermissions.gotoPermissionSettings(getAttachActivity());
+                break;
             case R.id.btn_test_state_black:
-                getAttachActivity().getStatusBarConfig().statusBarDarkFont(true).init();
+                if (getAttachActivity().getStatusBarConfig() != null) {
+                    getAttachActivity().getStatusBarConfig().statusBarDarkFont(true).init();
+                }
                 break;
             case R.id.btn_test_state_white:
-                getAttachActivity().getStatusBarConfig().statusBarDarkFont(false).init();
+                if (getAttachActivity().getStatusBarConfig() != null) {
+                    getAttachActivity().getStatusBarConfig().statusBarDarkFont(false).init();
+                }
                 break;
             default:
                 break;

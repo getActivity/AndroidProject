@@ -12,9 +12,9 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="25dp"
+        android:paddingStart="25dp"
         android:paddingTop="15dp"
-        android:paddingRight="25dp"
+        android:paddingEnd="25dp"
         android:paddingBottom="5dp"
         android:text="@string/share_title"
         android:textColor="#666666"
@@ -24,8 +24,10 @@
         android:id="@+id/rv_share_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/layout_from_bottom"
         tools:itemCount="5"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:layoutAnimation="@null"
+        tools:layoutManager="GridLayoutManager"
         tools:listitem="@layout/item_share"
         tools:spanCount="5" />
 

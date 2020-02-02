@@ -1,15 +1,18 @@
 package com.hjq.demo.ui.dialog;
 
+import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
-import com.hjq.demo.widget.LoopView;
+import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.other.PickerLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,35 +26,35 @@ import java.util.Calendar;
 public final class TimeDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements View.OnClickListener {
+            extends UIDialog.Builder<Builder> implements Runnable {
 
-        private final TextView mTitleView;
-        private final TextView mCancelView;
-        private final View mLineView;
-        private final TextView mConfirmView;
+        private final RecyclerView mHourView;
+        private final RecyclerView mMinuteView;
+        private final RecyclerView mSecondView;
 
-        private final LoopView mHourView;
-        private final LoopView mMinuteView;
-        private final LoopView mSecondView;
+        private final PickerLayoutManager mHourManager;
+        private final PickerLayoutManager mMinuteManager;
+        private final PickerLayoutManager mSecondManager;
+
+        private final PickerAdapter mHourAdapter;
+        private final PickerAdapter mMinuteAdapter;
+        private final PickerAdapter mSecondAdapter;
 
         private OnListener mListener;
-        private boolean mAutoDismiss = true;
 
         @SuppressWarnings("all")
-        public Builder(FragmentActivity activity) {
-            super(activity);
-            setContentView(R.layout.dialog_time);
-            setAnimStyle(BaseDialog.AnimStyle.IOS);
+        public Builder(Context context) {
+            super(context);
+            setCustomView(R.layout.dialog_time);
+            setTitle(R.string.time_title);
 
-            mTitleView = findViewById(R.id.tv_time_title);
-            mCancelView = findViewById(R.id.tv_time_cancel);
-            mLineView = findViewById(R.id.v_time_line);
-            mConfirmView = findViewById(R.id.tv_time_confirm);
+            mHourView = findViewById(R.id.rv_time_hour);
+            mMinuteView = findViewById(R.id.rv_time_minute);
+            mSecondView = findViewById(R.id.rv_time_second);
 
-            mHourView = findViewById(R.id.lv_time_hour);
-            mMinuteView = findViewById(R.id.lv_time_minute);
-            mSecondView = findViewById(R.id.lv_time_second);
+            mHourAdapter = new PickerAdapter(context);
+            mMinuteAdapter = new PickerAdapter(context);
+            mSecondAdapter = new PickerAdapter(context);
 
             // 生产小时
             ArrayList<String> hourData = new ArrayList<>(24);
@@ -71,43 +74,50 @@ public final class TimeDialog {
                 secondData.add((i < 10 ? "0" : "") + i + " " + getString(R.string.common_second));
             }
 
-            mHourView.setData(hourData);
-            mMinuteView.setData(minuteData);
-            mSecondView.setData(secondData);
+            mHourAdapter.setData(hourData);
+            mMinuteAdapter.setData(minuteData);
+            mSecondAdapter.setData(secondData);
 
-            mCancelView.setOnClickListener(this);
-            mConfirmView.setOnClickListener(this);
+            mHourManager = new PickerLayoutManager.Builder(context)
+                    .build();
+            mMinuteManager = new PickerLayoutManager.Builder(context)
+                    .build();
+            mSecondManager = new PickerLayoutManager.Builder(context)
+                    .build();
+
+            mHourView.setLayoutManager(mHourManager);
+            mMinuteView.setLayoutManager(mMinuteManager);
+            mSecondView.setLayoutManager(mSecondManager);
+
+            mHourView.setAdapter(mHourAdapter);
+            mMinuteView.setAdapter(mMinuteAdapter);
+            mSecondView.setAdapter(mSecondAdapter);
 
             Calendar calendar = Calendar.getInstance();
             setHour(calendar.get(Calendar.HOUR_OF_DAY));
             setMinute(calendar.get(Calendar.MINUTE));
             setSecond(calendar.get(Calendar.SECOND));
+
+            postDelayed(this, 1000);
         }
 
-        public Builder setTitle(@StringRes int id) {
-            return setTitle(getString(id));
-        }
-        public Builder setTitle(CharSequence text) {
-            mTitleView.setText(text);
-            return this;
-        }
-
-        public Builder setConfirm(@StringRes int id) {
-            return setConfirm(getString(id));
-        }
-        public Builder setConfirm(CharSequence text) {
-            mConfirmView.setText(text);
-
-            mLineView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
-            return this;
-        }
-
-        public Builder setCancel(@StringRes int id) {
-            return setCancel(getString(id));
-        }
-        public Builder setCancel(CharSequence text) {
-            mCancelView.setText(text);
-            return this;
+        @Override
+        public void run() {
+            if (mHourView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
+                    mMinuteView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
+                    mSecondView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, mHourManager.getPickedPosition());
+                calendar.set(Calendar.MINUTE, mMinuteManager.getPickedPosition());
+                calendar.set(Calendar.SECOND, mSecondManager.getPickedPosition());
+                if (System.currentTimeMillis() - calendar.getTimeInMillis() < 3000) {
+                    calendar = Calendar.getInstance();
+                    setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    setMinute(calendar.get(Calendar.MINUTE));
+                    setSecond(calendar.get(Calendar.SECOND));
+                    postDelayed(this, 1000);
+                }
+            }
         }
 
         public Builder setListener(OnListener listener) {
@@ -120,11 +130,6 @@ public final class TimeDialog {
          */
         public Builder setIgnoreSecond() {
             mSecondView.setVisibility(View.GONE);
-            return this;
-        }
-
-        public Builder setAutoDismiss(boolean dismiss) {
-            mAutoDismiss = dismiss;
             return this;
         }
 
@@ -151,10 +156,10 @@ public final class TimeDialog {
             int index = hour;
             if (index < 0 || hour == 24) {
                 index = 0;
-            } else if (index > mHourView.getSize() - 1) {
-                index = mHourView.getSize() - 1;
+            } else if (index > mHourAdapter.getItemCount() - 1) {
+                index = mHourAdapter.getItemCount() - 1;
             }
-            mHourView.setInitPosition(index);
+            mHourView.scrollToPosition(index);
             return this;
         }
 
@@ -166,10 +171,10 @@ public final class TimeDialog {
             int index = minute;
             if (index < 0) {
                 index = 0;
-            } else if (index > mMinuteView.getSize() - 1) {
-                index = mMinuteView.getSize() - 1;
+            } else if (index > mMinuteAdapter.getItemCount() - 1) {
+                index = mMinuteAdapter.getItemCount() - 1;
             }
-            mMinuteView.setInitPosition(index);
+            mMinuteView.scrollToPosition(index);
             return this;
         }
 
@@ -181,29 +186,59 @@ public final class TimeDialog {
             int index = second;
             if (index < 0) {
                 index = 0;
-            } else if (index > mSecondView.getSize() - 1) {
-                index = mSecondView.getSize() - 1;
+            } else if (index > mSecondAdapter.getItemCount() - 1) {
+                index = mSecondAdapter.getItemCount() - 1;
             }
-            mSecondView.setInitPosition(index);
+            mSecondView.scrollToPosition(index);
             return this;
         }
 
-        /**
-         * {@link View.OnClickListener}
-         */
-
+        @SingleClick
         @Override
         public void onClick(View v) {
-            if (mAutoDismiss) {
-                dismiss();
+            switch (v.getId()) {
+                case R.id.tv_ui_confirm:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onSelected(getDialog(), mHourManager.getPickedPosition(), mMinuteManager.getPickedPosition(), mSecondManager.getPickedPosition());
+                    }
+                    break;
+                case R.id.tv_ui_cancel:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onCancel(getDialog());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static final class PickerAdapter extends MyAdapter<String> {
+
+        private PickerAdapter(Context context) {
+            super(context);
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder();
+        }
+
+        final class ViewHolder extends MyAdapter.ViewHolder {
+
+            private final TextView mPickerView;
+
+            ViewHolder() {
+                super(R.layout.item_picker);
+                mPickerView = (TextView) findViewById(R.id.tv_picker_name);
             }
 
-            if (mListener != null) {
-                if (v == mConfirmView) {
-                    mListener.onSelected(getDialog(), mHourView.getSelectedItem(), mMinuteView.getSelectedItem(), mSecondView.getSelectedItem());
-                } else if (v == mCancelView) {
-                    mListener.onCancel(getDialog());
-                }
+            @Override
+            public void onBindView(int position) {
+                mPickerView.setText(getItem(position));
             }
         }
     }
@@ -213,7 +248,7 @@ public final class TimeDialog {
         /**
          * 选择完时间后回调
          *
-         * @param hour              小时
+         * @param hour              时钟
          * @param minute            分钟
          * @param second            秒钟
          */
@@ -222,6 +257,6 @@ public final class TimeDialog {
         /**
          * 点击取消时回调
          */
-        void onCancel(BaseDialog dialog);
+        default void onCancel(BaseDialog dialog) {}
     }
 }

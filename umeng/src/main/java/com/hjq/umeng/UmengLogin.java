@@ -3,7 +3,7 @@ package com.hjq.umeng;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.Map;
 
 /**
@@ -23,17 +23,16 @@ public final class UmengLogin {
         /** 性别 */
         private final String mSex;
         /** 头像 */
-        private final String mIcon;
+        private final String mAvatar;
         /** Token */
         private final String mToken;
 
-        @SuppressWarnings("all")
         LoginData(Map<String, String> data) {
             // 第三方登录获取用户资料：https://developer.umeng.com/docs/66632/detail/66639#h3-u83B7u53D6u7528u6237u8D44u6599
             mId = data.get("uid");
             mName =  data.get("name");
             mSex = data.get("gender");
-            mIcon = data.get("iconurl");
+            mAvatar = data.get("iconurl");
             mToken = data.get("accessToken");
         }
 
@@ -45,8 +44,8 @@ public final class UmengLogin {
             return mSex;
         }
 
-        public String getIcon() {
-            return mIcon;
+        public String getAvatar() {
+            return mAvatar;
         }
 
         public String getId() {
@@ -68,7 +67,7 @@ public final class UmengLogin {
     /**
      * 为什么要用软引用，因为友盟会将监听回调（UMAuthListener）持有成静态的
      */
-    public static final class LoginListenerWrapper extends WeakReference<OnLoginListener> implements UMAuthListener {
+    public static final class LoginListenerWrapper extends SoftReference<OnLoginListener> implements UMAuthListener {
 
         private final Platform mPlatform;
 
@@ -92,11 +91,7 @@ public final class UmengLogin {
          * @param platform      平台名称
          */
         @Override
-        public void onStart(SHARE_MEDIA platform) {
-//            if (get() != null) {
-//                get().onStart(mPlatform);
-//            }
-        }
+        public void onStart(SHARE_MEDIA platform) {}
 
         /**
          * 授权成功的回调
@@ -142,13 +137,6 @@ public final class UmengLogin {
 
     public interface OnLoginListener {
 
-//        /**
-//         * 授权开始的回调
-//         *
-//         * @param platform      平台名称
-//         */
-//        void onStart(Platform platform);
-
         /**
          * 授权成功的回调
          *
@@ -163,13 +151,13 @@ public final class UmengLogin {
          * @param platform      平台名称
          * @param t             错误原因
          */
-        void onError(Platform platform, Throwable t);
+        default void onError(Platform platform, Throwable t) {}
 
         /**
          * 授权取消的回调
          *
          * @param platform      平台名称
          */
-        void onCancel(Platform platform);
+        default void onCancel(Platform platform) {}
     }
 }

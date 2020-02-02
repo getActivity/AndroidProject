@@ -1,8 +1,0 @@
-ext {
-    // SDK 版本
-    targetVersion = 28
-    compileVersion = targetVersion
-    // Support 版本
-    appcompatVersion = '1.1.0'
-    materialVersion = '1.1.0-alpha10'
-}

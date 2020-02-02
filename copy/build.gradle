@@ -1,15 +1,2 @@
 apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion rootProject.ext.compileVersion
-
-    defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion rootProject.ext.targetVersion
-    }
-}
-
-dependencies {
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
-    implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
-}
+apply from: "../config.gradle"

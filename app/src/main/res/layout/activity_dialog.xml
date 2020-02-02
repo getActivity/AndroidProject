@@ -11,6 +11,7 @@
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rightIcon="@drawable/ic_add_black"
         app:title="对话框案例" />
 
     <androidx.core.widget.NestedScrollView
@@ -20,8 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -55,6 +56,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="弹出居中选择框" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_dialog_single_select"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="弹出单项选择框" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_dialog_more_select"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="弹出多项选择框" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_dialog_succeed_toast"

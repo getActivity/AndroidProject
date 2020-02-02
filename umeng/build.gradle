@@ -1,22 +1,24 @@
 apply plugin: 'com.android.library'
+apply from: "../config.gradle"
 
 android {
-    compileSdkVersion rootProject.ext.compileVersion
-
-    resourcePrefix "umeng_"
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion rootProject.ext.targetVersion
         // 混淆配置
         consumerProguardFiles 'proguard-umeng.pro'
+
+        // 清单占位符
+        manifestPlaceholders = [
+                // 友盟 AppKey
+                "UMENG_APPKEY" : "5cb16d93570df399fd0014e2",
+                // QQ AppId
+                "QQ_APPID" : "101828096",
+                // QQ AppKey
+                "QQ_APPKEY" : "9dfd3300c3aa3c4596a07796c64914b2",
+                // 微信 AppId
+                "WX_APPID" : "wxdc1e388c3822c80b",
+                // 微信 AppKey
+                "WX_APPKEY" : "3baf1193c85774b3fd9d18447d76cab0"
+        ]
     }
-}
-
-dependencies {
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
-    // implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
-
-    // 依赖 libs 目录下所有 Jar 包
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }

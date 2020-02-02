@@ -16,30 +16,36 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutAnimation="@anim/layout_animation_from_bottom"
         tools:layoutAnimation="@null">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_photo_list"
+        <com.hjq.demo.widget.HintLayout
+            android:id="@+id/hl_photo_hint"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            tools:itemCount="20"
-            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/item_photo"
-            tools:spanCount="3" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_photo_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_from_bottom"
+                tools:itemCount="20"
+                tools:layoutManager="GridLayoutManager"
+                tools:listitem="@layout/item_photo"
+                tools:spanCount="3" />
+
+        </com.hjq.demo.widget.HintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_photo_floating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginRight="15dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/ic_photo_camera"
             app:borderWidth="0px"
             app:elevation="1dp"
-            app:fabSize="normal" />
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_photo_camera" />
     </FrameLayout>
 
 </LinearLayout>

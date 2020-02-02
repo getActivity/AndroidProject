@@ -3,18 +3,22 @@ package com.hjq.demo.ui.activity;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
+import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.http.glide.GlideApp;
+import com.hjq.demo.http.model.HttpData;
+import com.hjq.demo.http.request.UpdateImageApi;
 import com.hjq.demo.ui.dialog.AddressDialog;
 import com.hjq.demo.ui.dialog.InputDialog;
-import com.hjq.image.ImageLoader;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.layout.SettingBar;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -35,6 +39,14 @@ public final class PersonalDataActivity extends MyActivity {
     @BindView(R.id.sb_person_data_phone)
     SettingBar mPhoneView;
 
+    /** 省 */
+    private String mProvince = "广东省";
+    /** 市 */
+    private String mCity = "广州市";
+    /** 区 */
+    private String mArea = "天河区";
+
+    /** 头像地址 */
     private String mAvatarUrl;
 
     @Override
@@ -44,15 +56,25 @@ public final class PersonalDataActivity extends MyActivity {
 
     @Override
     protected void initView() {
-
+        setOnClickListener(R.id.iv_person_data_avatar, R.id.fl_person_data_head,
+                R.id.sb_person_data_name, R.id.sb_person_data_address, R.id.sb_person_data_phone);
     }
 
     @Override
     protected void initData() {
+        GlideApp.with(getActivity())
+                .load(R.drawable.ic_head_placeholder)
+                .placeholder(R.drawable.ic_head_placeholder)
+                .error(R.drawable.ic_head_placeholder)
+                .circleCrop()
+                .into(mAvatarView);
 
+        String address = mProvince + mCity + mArea;
+        mAddressView.setRightText(address);
     }
 
-    @OnClick({R.id.iv_person_data_avatar, R.id.fl_person_data_head, R.id.sb_person_data_name, R.id.sb_person_data_address, R.id.sb_person_data_phone})
+    @SingleClick
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_person_data_avatar:
@@ -68,11 +90,28 @@ public final class PersonalDataActivity extends MyActivity {
                 PhotoActivity.start(getActivity(), new PhotoActivity.OnPhotoSelectListener() {
 
                     @Override
-                    public void onSelect(List<String> data) {
-                        mAvatarUrl = data.get(0);
-                        ImageLoader.with(getActivity())
-                                .load(mAvatarUrl)
-                                .into(mAvatarView);
+                    public void onSelected(List<String> data) {
+                        if (true) {
+                            mAvatarUrl = data.get(0);
+                            GlideApp.with(getActivity())
+                                    .load(mAvatarUrl)
+                                    .into(mAvatarView);
+                            return;
+                        }
+                        // 上传头像
+                        EasyHttp.post(getActivity())
+                                .api(new UpdateImageApi()
+                                        .setImage(new File(data.get(0))))
+                                .request(new HttpCallback<HttpData<String>>(PersonalDataActivity.this) {
+
+                                    @Override
+                                    public void onSucceed(HttpData<String> data) {
+                                        mAvatarUrl = data.getData();
+                                        GlideApp.with(getActivity())
+                                                .load(mAvatarUrl)
+                                                .into(mAvatarView);
+                                    }
+                                });
                     }
 
                     @Override
@@ -90,17 +129,10 @@ public final class PersonalDataActivity extends MyActivity {
                         //.setCancel("取消")
                         // 设置点击按钮后不关闭对话框
                         //.setAutoDismiss(false)
-                        .setListener(new InputDialog.OnListener() {
-
-                            @Override
-                            public void onConfirm(BaseDialog dialog, String content) {
-                                if (!mNameView.getRightText().equals(content)) {
-                                    mNameView.setRightText(content);
-                                }
+                        .setListener((dialog, content) -> {
+                            if (!mNameView.getRightText().equals(content)) {
+                                mNameView.setRightText(content);
                             }
-
-                            @Override
-                            public void onCancel(BaseDialog dialog) {}
                         })
                         .show();
                 break;
@@ -108,23 +140,19 @@ public final class PersonalDataActivity extends MyActivity {
                 new AddressDialog.Builder(this)
                         //.setTitle("选择地区")
                         // 设置默认省份
-                        .setProvince("广东省")
+                        .setProvince(mProvince)
                         // 设置默认城市（必须要先设置默认省份）
-                        .setCity("广州市")
+                        .setCity(mCity)
                         // 不选择县级区域
                         //.setIgnoreArea()
-                        .setListener(new AddressDialog.OnListener() {
-
-                            @Override
-                            public void onSelected(BaseDialog dialog, String province, String city, String area) {
-                                String address = province + city + area;
-                                if (!mAddressView.getRightText().equals(address)) {
-                                    mAddressView.setRightText(address);
-                                }
+                        .setListener((dialog, province, city, area) -> {
+                            String address = province + city + area;
+                            if (!mAddressView.getRightText().equals(address)) {
+                                mProvince = province;
+                                mCity = city;
+                                mArea = area;
+                                mAddressView.setRightText(address);
                             }
-
-                            @Override
-                            public void onCancel(BaseDialog dialog) {}
                         })
                         .show();
                 break;

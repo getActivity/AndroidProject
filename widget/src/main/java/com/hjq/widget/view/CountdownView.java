@@ -24,8 +24,6 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
     private int mCurrentSecond;
     /** 记录原有的文本 */
     private CharSequence mRecordText;
-    /** 标记是否重置了倒计控件 */
-    private boolean mFlag;
 
     public CountdownView(Context context) {
         super(context);
@@ -47,10 +45,21 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
     }
 
     /**
-     * 重置倒计时控件
+     * 开始倒计时
      */
-    public void resetState() {
-        mFlag = true;
+    public void start() {
+        mRecordText = getText();
+        setEnabled(false);
+        mCurrentSecond = mTotalSecond;
+        post(this);
+    }
+
+    /**
+     * 结束倒计时
+     */
+    public void stop() {
+        setText(mRecordText);
+        setEnabled(true);
     }
 
     @Override
@@ -67,26 +76,11 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
         super.onDetachedFromWindow();
     }
 
-    @Override
-    public boolean performClick() {
-        boolean click = super.performClick();
-        mRecordText = getText();
-        setEnabled(false);
-        mCurrentSecond = mTotalSecond;
-        post(this);
-        return click;
-    }
-
-    /**
-     * {@link Runnable}
-     */
     @SuppressLint("SetTextI18n")
     @Override
     public void run() {
-        if (mCurrentSecond == 0 || mFlag) {
-            setText(mRecordText);
-            setEnabled(true);
-            mFlag = false;
+        if (mCurrentSecond == 0) {
+            stop();
         } else {
             mCurrentSecond--;
             setText(mCurrentSecond + " " + TIME_UNIT);

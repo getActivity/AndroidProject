@@ -2,6 +2,7 @@ package com.hjq.demo.ui.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -13,18 +14,25 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.hjq.demo.R;
+import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.helper.InputTextHelper;
+import com.hjq.demo.http.glide.GlideApp;
+import com.hjq.demo.http.model.HttpData;
+import com.hjq.demo.http.request.LoginApi;
+import com.hjq.demo.http.response.LoginBean;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.other.KeyboardWatcher;
 import com.hjq.demo.wxapi.WXEntryActivity;
-import com.hjq.image.ImageLoader;
+import com.hjq.http.EasyConfig;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -35,6 +43,14 @@ import butterknife.OnClick;
 public final class LoginActivity extends MyActivity
         implements UmengLogin.OnLoginListener,
         KeyboardWatcher.SoftKeyboardStateListener {
+
+    @DebugLog
+    public static void start(Context context, String phone, String password) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(IntentKey.PHONE, phone);
+        intent.putExtra(IntentKey.PASSWORD, password);
+        context.startActivity(intent);
+    }
 
     @BindView(R.id.iv_login_logo)
     ImageView mLogoView;
@@ -75,32 +91,25 @@ public final class LoginActivity extends MyActivity
                 .addView(mPhoneView)
                 .addView(mPasswordView)
                 .setMain(mCommitView)
-                .setListener(new InputTextHelper.OnInputTextListener() {
-
-                    @Override
-                    public boolean onInputChange(InputTextHelper helper) {
-                        return mPhoneView.getText().toString().length() == 11 &&
-                                mPasswordView.getText().toString().length() >= 6;
-                    }
-                })
+                .setListener(helper -> mPhoneView.getText().toString().length() == 11 &&
+                        mPasswordView.getText().toString().length() >= 6)
                 .build();
 
-        post(new Runnable() {
-
-            @Override
-            public void run() {
-                // 因为在小屏幕手机上面，因为计算规则的因素会导致动画效果特别夸张，所以不在小屏幕手机上面展示这个动画效果
-                if (mBlankView.getHeight() > mBodyLayout.getHeight()) {
-                    // 只有空白区域的高度大于登录框区域的高度才展示动画
-                    KeyboardWatcher.with(LoginActivity.this)
-                            .setListener(LoginActivity.this);
-                }
-            }
-        });
+        setOnClickListener(R.id.tv_login_forget, R.id.btn_login_commit, R.id.iv_login_qq, R.id.iv_login_wx);
     }
 
     @Override
     protected void initData() {
+
+        postDelayed(() -> {
+            // 因为在小屏幕手机上面，因为计算规则的因素会导致动画效果特别夸张，所以不在小屏幕手机上面展示这个动画效果
+            if (mBlankView.getHeight() > mBodyLayout.getHeight()) {
+                // 只有空白区域的高度大于登录框区域的高度才展示动画
+                KeyboardWatcher.with(LoginActivity.this)
+                        .setListener(LoginActivity.this);
+            }
+        }, 500);
+
         // 判断用户当前有没有安装 QQ
         if (!UmengClient.isAppInstalled(this, Platform.QQ)) {
             mQQView.setVisibility(View.GONE);
@@ -115,26 +124,27 @@ public final class LoginActivity extends MyActivity
         if (mQQView.getVisibility() == View.GONE && mWeChatView.getVisibility() == View.GONE) {
             mOtherView.setVisibility(View.GONE);
         }
+
+        // 填充传入的手机号和密码
+        mPhoneView.setText(getString(IntentKey.PHONE));
+        mPasswordView.setText(getString(IntentKey.PASSWORD));
     }
 
     @Override
     public void onRightClick(View v) {
         // 跳转到注册界面
-        startActivityForResult(RegisterActivity.class, new ActivityCallback() {
-
-            @Override
-            public void onActivityResult(int resultCode, @Nullable Intent data) {
-                // 如果已经注册成功，就执行登录操作
-                if (resultCode == RESULT_OK && data != null) {
-                    mPhoneView.setText(data.getStringExtra(IntentKey.PHONE));
-                    mPasswordView.setText(data.getStringExtra(IntentKey.PASSWORD));
-                    onClick(mCommitView);
-                }
+        startActivityForResult(RegisterActivity.class, (resultCode, data) -> {
+            // 如果已经注册成功，就执行登录操作
+            if (resultCode == RESULT_OK && data != null) {
+                mPhoneView.setText(data.getStringExtra(IntentKey.PHONE));
+                mPasswordView.setText(data.getStringExtra(IntentKey.PASSWORD));
+                onClick(mCommitView);
             }
         });
     }
 
-    @OnClick({R.id.tv_login_forget, R.id.btn_login_commit, R.id.iv_login_qq, R.id.iv_login_wx})
+    @SingleClick
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_login_forget:
@@ -143,17 +153,31 @@ public final class LoginActivity extends MyActivity
             case R.id.btn_login_commit:
                 if (mPhoneView.getText().toString().length() != 11) {
                     toast(R.string.common_phone_input_error);
-                } else {
-                    showLoading();
-                    postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showComplete();
-                            // 处理登录
-                            startActivityFinish(HomeActivity.class);
-                        }
-                    }, 2000);
+                    return;
                 }
+
+                if (true) {
+                    startActivity(HomeActivity.class);
+                    finish();
+                    return;
+                }
+
+                EasyHttp.post(this)
+                        .api(new LoginApi()
+                        .setPhone(mPhoneView.getText().toString())
+                        .setPassword(mPasswordView.getText().toString()))
+                        .request(new HttpCallback<HttpData<LoginBean>>(this) {
+
+                            @Override
+                            public void onSucceed(HttpData<LoginBean> data) {
+                                // 更新 Token
+                                EasyConfig.getInstance()
+                                        .addParam("token", data.getData().getToken());
+                                // 跳转到主页
+                                startActivity(HomeActivity.class);
+                                finish();
+                            }
+                        });
                 break;
             case R.id.iv_login_qq:
             case R.id.iv_login_wx:
@@ -185,7 +209,6 @@ public final class LoginActivity extends MyActivity
     }
 
     /**
-     * 友盟第三方登录授权回调接口
      * {@link UmengLogin.OnLoginListener}
      */
 
@@ -207,9 +230,9 @@ public final class LoginActivity extends MyActivity
                 break;
         }
 
-        ImageLoader.with(this)
-                .load(data.getIcon())
-                .circle()
+        GlideApp.with(this)
+                .load(data.getAvatar())
+                .circleCrop()
                 .into(mLogoView);
 
         toast("昵称：" + data.getName() + "\n" + "性别：" + data.getSex());
@@ -292,5 +315,10 @@ public final class LoginActivity extends MyActivity
         animatorSet.play(translationY).with(scaleX).with(scaleY);
         animatorSet.setDuration(mAnimTime);
         animatorSet.start();
+    }
+
+    @Override
+    public boolean isSwipeEnable() {
+        return false;
     }
 }

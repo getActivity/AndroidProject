@@ -12,31 +12,41 @@
 
 #### 常用界面
 
-![](picture/activity/1.png) ![](picture/activity/2.png) ![](picture/activity/3.png)
+![](picture/activity/1.jpg) ![](picture/activity/2.jpg) ![](picture/activity/3.jpg)
 
-![](picture/activity/4.png) ![](picture/activity/5.png) ![](picture/activity/6.png)
+![](picture/activity/4.jpg) ![](picture/activity/5.jpg) ![](picture/activity/6.jpg)
 
-![](picture/activity/7.png) ![](picture/activity/8.png) ![](picture/activity/9.png)
+![](picture/activity/7.jpg) ![](picture/activity/8.jpg) ![](picture/activity/9.jpg)
 
-![](picture/activity/11.png) ![](picture/activity/12.png) ![](picture/activity/13.png)
+![](picture/activity/10.jpg) ![](picture/activity/11.jpg) ![](picture/activity/12.jpg)
 
-![](picture/activity/14.png) ![](picture/activity/15.png) ![](picture/activity/16.png)
+![](picture/activity/13.jpg) ![](picture/activity/14.jpg) ![](picture/activity/15.jpg)
 
-![](picture/activity/17.png) ![](picture/activity/18.png) ![](picture/activity/19.png)
+![](picture/activity/16.jpg) ![](picture/activity/17.jpg) ![](picture/activity/18.jpg)
 
-![](picture/activity/20.png) ![](picture/activity/21.png) ![](picture/activity/22.png)
+![](picture/activity/19.jpg) ![](picture/activity/20.jpg) ![](picture/activity/21.jpg)
+
+![](picture/activity/22.jpg) ![](picture/activity/23.jpg) ![](picture/activity/24.jpg)
+
+![](picture/activity/25.jpg) ![](picture/activity/26.jpg) ![](picture/activity/27.jpg)
+
+![](picture/activity/28.jpg) ![](picture/activity/29.jpg) ![](picture/activity/30.jpg)
+
+![](picture/activity/31.jpg)
 
 #### 常用对话框
 
-![](picture/dialog/1.png) ![](picture/dialog/2.png) ![](picture/dialog/3.png)
+![](picture/dialog/1.jpg) ![](picture/dialog/2.jpg) ![](picture/dialog/3.jpg)
 
-![](picture/dialog/4.png) ![](picture/dialog/5.png) ![](picture/dialog/6.png)
+![](picture/dialog/4.jpg) ![](picture/dialog/5.jpg) ![](picture/dialog/6.jpg)
 
-![](picture/dialog/7.png) ![](picture/dialog/8.png) ![](picture/dialog/9.png)
+![](picture/dialog/7.jpg) ![](picture/dialog/8.jpg) ![](picture/dialog/9.jpg)
 
-![](picture/dialog/10.png) ![](picture/dialog/11.png) ![](picture/dialog/12.png)
+![](picture/dialog/10.jpg) ![](picture/dialog/11.jpg) ![](picture/dialog/12.jpg)
 
-![](picture/dialog/13.png) ![](picture/dialog/14.png) ![](picture/dialog/15.png)
+![](picture/dialog/13.jpg) ![](picture/dialog/14.jpg) ![](picture/dialog/15.jpg)
+
+![](picture/dialog/16.jpg) ![](picture/dialog/17.jpg) ![](picture/dialog/18.jpg)
 
 #### 动图欣赏
 
@@ -46,29 +56,27 @@
 
 #### 集成框架
 
-* 权限请求框架：[https://github.com/getActivity/XXPermissions](https://github.com/getActivity/XXPermissions)
-
-* 标题栏：[https://github.com/getActivity/TitleBar](https://github.com/getActivity/TitleBar)
-
-* 吐司工具类：[https://github.com/getActivity/ToastUtils](https://github.com/getActivity/ToastUtils)
-
 * 状态栏沉浸：[https://github.com/gyf-dev/ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
 
-* 缩放 ImageView：[https://github.com/chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
+* 手势 ImageView：[https://github.com/chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
 
 * ViewPager 指示器：[https://github.com/romandanylyk/PageIndicatorView](https://github.com/romandanylyk/PageIndicatorView)
 
-* ButterKnife 注解：[https://github.com/JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
-
-* EventBus 事件：[https://github.com/greenrobot/EventBus](https://github.com/greenrobot/EventBus)
+* View 注解：[https://github.com/JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 
 * 内存泄漏捕捉：[https://github.com/square/leakcanary](https://github.com/square/leakcanary)
 
 * 本地异常捕捉：[https://github.com/Ereza/CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash)
 
+* 动画解析库：[https://github.com/airbnb/lottie-android](https://github.com/airbnb/lottie-android)
+
+* 上拉刷新下拉加载：[https://github.com/scwang90/SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
+
+* 侧滑框架：[https://github.com/luckybilly/SmartSwipe](https://github.com/luckybilly/SmartSwipe)
+
 #### 模板项目亮点，[查看详细](ProjectDetails.md)
 
-* 必备优秀框架：危险权限处理，标题栏控件，吐司工具类，圆形ImageView
+* 必备优秀框架：危险权限处理，标题栏控件，吐司工具类，圆形 ImageView
 
 * 常用页面模板：启动界面，主页界面，登录界面，注册界面，关于界面，浏览器界面
 
@@ -96,15 +104,19 @@
 
 #### 作者的其他开源项目
 
-* 权限框架：[XXPermissions](https://github.com/getActivity/XXPermissions)
+* 网络框架：[EasyHttp](https://github.com/getActivity/EasyHttp)  （已集成）
 
-* 吐司框架：[ToastUtils](https://github.com/getActivity/ToastUtils)
+* 日志框架：[Logcat](https://github.com/getActivity/Logcat)  （已集成）
 
-* 国际化框架：[MultiLanguages](https://github.com/getActivity/MultiLanguages)
+* 权限框架：[XXPermissions](https://github.com/getActivity/XXPermissions)  （已集成）
 
-* 标题栏框架：[TitleBar](https://github.com/getActivity/TitleBar)
+* 吐司框架：[ToastUtils](https://github.com/getActivity/ToastUtils)  （已集成）
 
-* 悬浮窗框架：[XToast](https://github.com/getActivity/XToast)
+* 标题栏框架：[TitleBar](https://github.com/getActivity/TitleBar)  （已集成）
+
+* 悬浮窗框架：[XToast](https://github.com/getActivity/XToast)  （未集成）
+
+* 国际化框架：[MultiLanguages](https://github.com/getActivity/MultiLanguages)  （未集成）
 
 #### Android技术讨论Q群：78797078
 

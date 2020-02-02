@@ -1,16 +1,15 @@
 package com.hjq.demo.ui.dialog;
 
+import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
+import com.hjq.demo.aop.SingleClick;
 
 /**
  *    author : Android 轮子哥
@@ -21,46 +20,21 @@ import com.hjq.demo.common.MyDialogFragment;
 public final class InputDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements View.OnClickListener,
-            BaseDialog.OnShowListener,
+            extends UIDialog.Builder<Builder>
+            implements BaseDialog.OnShowListener,
             BaseDialog.OnDismissListener {
 
         private OnListener mListener;
-        private boolean mAutoDismiss = true;
-
-        private final TextView mTitleView;
         private final EditText mInputView;
 
-        private final TextView mCancelView;
-        private final View mLineView;
-        private final TextView mConfirmView;
+        public Builder(Context context) {
+            super(context);
+            setCustomView(R.layout.dialog_input);
 
-        public Builder(FragmentActivity activity) {
-            super(activity);
-            setContentView(R.layout.dialog_input);
-            setAnimStyle(BaseDialog.AnimStyle.IOS);
-
-            mTitleView = findViewById(R.id.tv_input_title);
             mInputView = findViewById(R.id.tv_input_message);
-
-            mCancelView  = findViewById(R.id.tv_input_cancel);
-            mLineView = findViewById(R.id.v_input_line);
-            mConfirmView  = findViewById(R.id.tv_input_confirm);
-
-            mCancelView.setOnClickListener(this);
-            mConfirmView.setOnClickListener(this);
 
             addOnShowListener(this);
             addOnDismissListener(this);
-        }
-
-        public Builder setTitle(@StringRes int id) {
-            return setTitle(getString(id));
-        }
-        public Builder setTitle(CharSequence text) {
-            mTitleView.setText(text);
-            return this;
         }
 
         public Builder setHint(@StringRes int id) {
@@ -84,29 +58,6 @@ public final class InputDialog {
             return this;
         }
 
-        public Builder setConfirm(@StringRes int id) {
-            return setConfirm(getString(id));
-        }
-        public Builder setConfirm(CharSequence text) {
-            mConfirmView.setText(text);
-            return this;
-        }
-
-        public Builder setCancel(@StringRes int id) {
-            return setCancel(getString(id));
-        }
-        public Builder setCancel(CharSequence text) {
-            mCancelView.setText(text);
-
-            mLineView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
-            return this;
-        }
-
-        public Builder setAutoDismiss(boolean dismiss) {
-            mAutoDismiss = dismiss;
-            return this;
-        }
-
         public Builder setListener(OnListener listener) {
             mListener = listener;
             return this;
@@ -117,12 +68,7 @@ public final class InputDialog {
          */
         @Override
         public void onShow(BaseDialog dialog) {
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getSystemService(InputMethodManager.class).showSoftInput(mInputView, 0);
-                }
-            }, 500);
+            postDelayed(() -> getSystemService(InputMethodManager.class).showSoftInput(mInputView, 0), 500);
         }
 
         /**
@@ -133,22 +79,24 @@ public final class InputDialog {
             getSystemService(InputMethodManager.class).hideSoftInputFromWindow(mInputView.getWindowToken(), 0);
         }
 
-        /**
-         * {@link View.OnClickListener}
-         */
+        @SingleClick
         @Override
         public void onClick(View v) {
-            if (mAutoDismiss) {
-                dismiss();
-            }
-
-            if (mListener != null) {
-                if (v == mConfirmView) {
-                    // 判断输入是否为空
-                    mListener.onConfirm(getDialog(), mInputView.getText().toString());
-                } else if (v == mCancelView) {
-                    mListener.onCancel(getDialog());
-                }
+            switch (v.getId()) {
+                case R.id.tv_ui_confirm:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onConfirm(getDialog(), mInputView.getText().toString());
+                    }
+                    break;
+                case R.id.tv_ui_cancel:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onCancel(getDialog());
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -163,6 +111,6 @@ public final class InputDialog {
         /**
          * 点击取消时回调
          */
-        void onCancel(BaseDialog dialog);
+        default void onCancel(BaseDialog dialog) {}
     }
 }

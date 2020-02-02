@@ -29,7 +29,7 @@ public final class RadioButtonGroupHelper implements CompoundButton.OnCheckedCha
         for (RadioButton view : groups) {
             // 如果这个RadioButton没有设置id的话
             if (view.getId() == View.NO_ID) {
-                throw new IllegalArgumentException("The resource id must be set for the RadioButton");
+                throw new IllegalArgumentException("are you ok?");
             }
             view.setOnCheckedChangeListener(this);
             mViewSet.add(view);

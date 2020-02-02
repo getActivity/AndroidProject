@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="15dp"
+    android:paddingStart="15dp"
     android:paddingTop="15dp"
-    android:paddingRight="15dp"
+    android:paddingEnd="15dp"
     tools:context=".ui.dialog.AlbumDialog">
 
     <com.hjq.widget.view.ScaleImageView
@@ -22,8 +22,8 @@
     <LinearLayout
         android:layout_width="0px"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -52,10 +52,10 @@
         android:id="@+id/rb_album_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:background="@null"
-        android:button="@drawable/selector_checkbox"
+        android:button="@drawable/selector_radiobutton"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false" />

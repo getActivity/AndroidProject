@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,9 @@ public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapte
     /** 当前显示的Fragment */
     private F mCurrentFragment;
 
+    /** 当前 ViewPager */
+    private ViewPager mViewPager;
+
     public BaseFragmentAdapter(FragmentActivity activity) {
         this(activity.getSupportFragmentManager());
     }
@@ -34,7 +38,11 @@ public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapte
     }
 
     public BaseFragmentAdapter(FragmentManager manager) {
-        super(manager);
+        this(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+    }
+
+    public BaseFragmentAdapter(FragmentManager manager, int behavior) {
+        super(manager, behavior);
     }
 
     @NonNull
@@ -74,5 +82,40 @@ public class BaseFragmentAdapter<F extends Fragment> extends FragmentPagerAdapte
      */
     public F getCurrentFragment() {
         return mCurrentFragment;
+    }
+
+    @Override
+    public void startUpdate(@NonNull ViewGroup container) {
+        super.startUpdate(container);
+        if (container instanceof ViewPager) {
+            // 记录绑定 ViewPager
+            mViewPager = (ViewPager) container;
+        }
+    }
+
+    /**
+     * 设置当前条目
+     *
+     * @param clazz             欲切换的 Fragment
+     */
+    public void setCurrentItem(Class<? extends F> clazz) {
+        for (int i = 0; i < mFragmentSet.size(); i++) {
+            if (mFragmentSet.get(i).getClass() == clazz) {
+                setCurrentItem(i);
+                break;
+            }
+        }
+    }
+
+    public void setCurrentItem(int position) {
+        if (mViewPager != null) {
+            mViewPager.setCurrentItem(position);
+        }
+    }
+
+    public void setCurrentItem(int position, boolean smoothScroll) {
+        if (mViewPager != null) {
+            mViewPager.setCurrentItem(position, smoothScroll);
+        }
     }
 }

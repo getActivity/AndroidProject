@@ -16,7 +16,7 @@ import com.hjq.widget.R;
 public final class RatioFrameLayout extends FrameLayout {
 
     /** 宽高比 */
-    private float mSizeRatio;
+    private final float mSizeRatio;
 
     public RatioFrameLayout(Context context) {
         this(context, null);

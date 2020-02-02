@@ -69,6 +69,13 @@ public final class CustomViewStub extends FrameLayout {
     }
 
     /**
+     * 设置显示状态（避免 setVisibility 导致的无限递归）
+     */
+    public void setCustomVisibility(int visibility) {
+        super.setVisibility(visibility);
+    }
+
+    /**
      * 获取填充的 View
      */
     public View getInflateView() {

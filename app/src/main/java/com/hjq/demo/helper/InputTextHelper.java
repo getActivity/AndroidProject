@@ -41,7 +41,7 @@ public final class InputTextHelper implements TextWatcher {
      */
     private InputTextHelper(View view, boolean alpha) {
         if (view == null) {
-            throw new IllegalArgumentException("The view is empty");
+            throw new IllegalArgumentException("are you ok?");
         }
         mView = view;
         isAlpha = alpha;
@@ -214,8 +214,6 @@ public final class InputTextHelper implements TextWatcher {
         private boolean isAlpha;
         /**  TextView集合 */
         private final List<TextView> mViewSet = new ArrayList<>();
-        /** 文本输入辅助类 */
-        private InputTextHelper mTextHelper;
         /** 文本 */
         private OnInputTextListener mListener;
 
@@ -244,11 +242,12 @@ public final class InputTextHelper implements TextWatcher {
         }
 
         public InputTextHelper build(){
-            mTextHelper = new InputTextHelper(mView, isAlpha);
-            mTextHelper.addViews(mViewSet);
-            mTextHelper.setListener(mListener);
-            mActivity.getApplication().registerActivityLifecycleCallbacks(new TextInputLifecycle(mActivity, mTextHelper));
-            return mTextHelper;
+            /** 文本输入辅助类 */
+            InputTextHelper helper = new InputTextHelper(mView, isAlpha);
+            helper.addViews(mViewSet);
+            helper.setListener(mListener);
+            mActivity.getApplication().registerActivityLifecycleCallbacks(new TextInputLifecycle(mActivity, helper));
+            return helper;
         }
     }
 

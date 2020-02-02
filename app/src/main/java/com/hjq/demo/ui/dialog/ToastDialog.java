@@ -1,14 +1,14 @@
 package com.hjq.demo.ui.dialog;
 
+import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
 
 import com.hjq.base.BaseDialog;
+import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
 
 /**
  *    author : Android 轮子哥
@@ -19,7 +19,7 @@ import com.hjq.demo.common.MyDialogFragment;
 public final class ToastDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
+            extends BaseDialog.Builder<Builder>
             implements Runnable, BaseDialog.OnShowListener {
 
         private final TextView mMessageView;
@@ -28,10 +28,10 @@ public final class ToastDialog {
         private Type mType = Type.WARN;
         private int mDuration = 2000;
 
-        public Builder(FragmentActivity activity) {
-            super(activity);
+        public Builder(Context context) {
+            super(context);
             setContentView(R.layout.dialog_toast);
-            setAnimStyle(BaseDialog.AnimStyle.TOAST);
+            setAnimStyle(AnimAction.TOAST);
             setBackgroundDimEnabled(false);
             setCancelable(false);
 
@@ -94,10 +94,7 @@ public final class ToastDialog {
 
         @Override
         public void run() {
-            if (getDialogFragment() != null &&
-                    getDialogFragment().isAdded() &&
-                    getDialog() != null &&
-                    getDialog().isShowing()) {
+            if (isShowing()) {
                 dismiss();
             }
         }

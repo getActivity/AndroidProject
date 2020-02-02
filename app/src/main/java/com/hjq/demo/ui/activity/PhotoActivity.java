@@ -3,44 +3,38 @@ package com.hjq.demo.ui.activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hjq.base.BaseActivity;
-import com.hjq.base.BaseDialog;
-import com.hjq.base.BaseRecyclerViewAdapter;
+import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
+import com.hjq.demo.action.StatusAction;
+import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Permissions;
+import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.other.AppConfig;
+import com.hjq.demo.other.GridSpaceDecoration;
 import com.hjq.demo.other.IntentKey;
-import com.hjq.demo.other.PhotoSpaceDecoration;
 import com.hjq.demo.ui.adapter.PhotoAdapter;
 import com.hjq.demo.ui.dialog.AlbumDialog;
-import com.hjq.permissions.OnPermission;
+import com.hjq.demo.widget.HintLayout;
 import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -49,14 +43,17 @@ import butterknife.OnClick;
  *    desc   : 图片选择
  */
 public final class PhotoActivity extends MyActivity
-        implements BaseRecyclerViewAdapter.OnItemClickListener,
-        BaseRecyclerViewAdapter.OnItemLongClickListener,
-        BaseRecyclerViewAdapter.OnChildClickListener, Runnable {
+        implements StatusAction,
+        BaseAdapter.OnItemClickListener,
+        BaseAdapter.OnItemLongClickListener,
+        BaseAdapter.OnChildClickListener, Runnable {
 
     public static void start(BaseActivity activity, OnPhotoSelectListener listener) {
         start(activity, 1, listener);
     }
 
+    @DebugLog
+    @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE})
     public static void start(BaseActivity activity, int maxSelect, OnPhotoSelectListener listener) {
         if (maxSelect < 1) {
             // 最少要选择一个图片
@@ -64,23 +61,22 @@ public final class PhotoActivity extends MyActivity
         }
         Intent intent = new Intent(activity, PhotoActivity.class);
         intent.putExtra(IntentKey.AMOUNT, maxSelect);
-        activity.startActivityForResult(intent, new ActivityCallback() {
+        activity.startActivityForResult(intent, (resultCode, data) -> {
 
-            @Override
-            public void onActivityResult(int resultCode, @Nullable Intent data) {
-                if (listener == null || data == null) {
-                    return;
-                }
+            if (listener == null || data == null) {
+                return;
+            }
 
-                if (resultCode == RESULT_OK) {
-                    listener.onSelect(data.getStringArrayListExtra(IntentKey.PICTURE));
-                } else {
-                    listener.onCancel();
-                }
+            if (resultCode == RESULT_OK) {
+                listener.onSelected(data.getStringArrayListExtra(IntentKey.PICTURE));
+            } else {
+                listener.onCancel();
             }
         });
     }
 
+    @BindView(R.id.hl_photo_hint)
+    HintLayout mHintLayout;
     @BindView(R.id.rv_photo_list)
     RecyclerView mRecyclerView;
     @BindView(R.id.fab_photo_floating)
@@ -113,37 +109,25 @@ public final class PhotoActivity extends MyActivity
         // 禁用动画效果
         mRecyclerView.setItemAnimator(null);
         // 添加分割线
-        mRecyclerView.addItemDecoration(new PhotoSpaceDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics())));
+        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics())));
+        setOnClickListener(R.id.fab_photo_floating);
     }
 
+    @SuppressWarnings("all")
     @Override
     protected void initData() {
         // 获取最大的选择数
-        mMaxSelect = getIntent().getIntExtra(IntentKey.AMOUNT, mMaxSelect);
+        mMaxSelect = getInt(IntentKey.AMOUNT, mMaxSelect);
 
-        // 申请存储权限
-        XXPermissions.with(this)
-                .permission(Permission.Group.STORAGE)
-                .constantRequest()
-                .request(new OnPermission() {
-                    @Override
-                    public void hasPermission(List<String> granted, boolean isAll) {
-                        // 显示加载进度条
-                        showLoading();
-                        // 加载图片列表
-                        new Thread(PhotoActivity.this).start();
-                    }
+        // 显示加载进度条
+        showLoading();
+        // 加载图片列表
+        new Thread(PhotoActivity.this).start();
+    }
 
-                    @Override
-                    public void noPermission(List<String> denied, boolean quick) {
-                        if (quick) {
-                            toast(R.string.common_permission_fail);
-                            XXPermissions.gotoPermissionSettings(PhotoActivity.this, false);
-                        } else {
-                            toast(R.string.common_permission_hint);
-                        }
-                    }
-                });
+    @Override
+    public HintLayout getHintLayout() {
+        return mHintLayout;
     }
 
     @Override
@@ -164,21 +148,19 @@ public final class PhotoActivity extends MyActivity
 
         new AlbumDialog.Builder(this)
                 .setData(data)
-                .setListener(new AlbumDialog.OnListener() {
-                    @Override
-                    public void onSelected(BaseDialog dialog, int position, AlbumDialog.AlbumBean bean) {
-                        setRightTitle(bean.getName());
-                        // 滚动回第一个位置
-                        mRecyclerView.scrollToPosition(0);
-                        if (position == 0) {
-                            mAdapter.setData(mAllPhoto);
-                        } else {
-                            mAdapter.setData(mAllAlbum.get(bean.getName()));
-                        }
-                        // 执行列表动画
-                        mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_from_right));
-                        mRecyclerView.scheduleLayoutAnimation();
+                .setListener((dialog, position, bean) -> {
+
+                    setRightTitle(bean.getName());
+                    // 滚动回第一个位置
+                    mRecyclerView.scrollToPosition(0);
+                    if (position == 0) {
+                        mAdapter.setData(mAllPhoto);
+                    } else {
+                        mAdapter.setData(mAllAlbum.get(bean.getName()));
                     }
+                    // 执行列表动画
+                    mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_from_right));
+                    mRecyclerView.scheduleLayoutAnimation();
                 })
                 .show();
     }
@@ -193,44 +175,44 @@ public final class PhotoActivity extends MyActivity
 
                 mSelectPhoto.remove(path);
                 mAllPhoto.remove(path);
-                List<String> data = mAllAlbum.get(file.getParentFile().getName());
-                if (data != null) {
-                    data.remove(path);
-                }
-                mAdapter.notifyDataSetChanged();
 
-                if (mSelectPhoto.isEmpty()) {
-                    mFloatingView.setImageResource(R.drawable.ic_photo_camera);
-                } else {
-                    mFloatingView.setImageResource(R.drawable.ic_photo_succeed);
+                File parentFile = file.getParentFile();
+                if (parentFile != null) {
+                    List<String> data = mAllAlbum.get(parentFile.getName());
+                    if (data != null) {
+                        data.remove(path);
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                    if (mSelectPhoto.isEmpty()) {
+                        mFloatingView.setImageResource(R.drawable.ic_photo_camera);
+                    } else {
+                        mFloatingView.setImageResource(R.drawable.ic_photo_succeed);
+                    }
                 }
             }
         }
     }
 
-    @OnClick(R.id.fab_photo_floating)
+    @SingleClick
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fab_photo_floating) {
             if (mSelectPhoto.isEmpty()) {
-                XXPermissions.with(this)
-                        .permission(Permission.CAMERA)
-                        .request(new OnPermission() {
-                            @Override
-                            public void hasPermission(List<String> granted, boolean isAll) {
-                                // 点击拍照
-                                launchCamera();
-                            }
+                // 点击拍照
+                CameraActivity.start(this, file -> {
 
-                            @Override
-                            public void noPermission(List<String> denied, boolean quick) {
-                                if (quick) {
-                                    toast(R.string.common_permission_fail);
-                                    XXPermissions.gotoPermissionSettings(PhotoActivity.this, true);
-                                } else {
-                                    toast(R.string.common_permission_hint);
-                                }
-                            }
-                        });
+                    // 当前选中图片的数量必须小于最大选中数
+                    if (mSelectPhoto.size() < mMaxSelect) {
+                        mSelectPhoto.add(file.getPath());
+                    }
+
+                    // 这里需要延迟刷新，否则可能会找不到拍照的图片
+                    postDelayed(() -> {
+                        // 重新加载图片列表
+                        new Thread(PhotoActivity.this).start();
+                    }, 1000);
+                });
             } else {
                 // 完成选择
                 setResult(RESULT_OK, new Intent().putStringArrayListExtra(IntentKey.PICTURE, mSelectPhoto));
@@ -240,7 +222,7 @@ public final class PhotoActivity extends MyActivity
     }
 
     /**
-     * {@link BaseRecyclerViewAdapter.OnItemClickListener}
+     * {@link BaseAdapter.OnItemClickListener}
      * @param recyclerView      RecyclerView对象
      * @param itemView          被点击的条目对象
      * @param position          被点击的条目位置
@@ -255,7 +237,7 @@ public final class PhotoActivity extends MyActivity
     }
 
     /**
-     * {@link BaseRecyclerViewAdapter.OnItemLongClickListener}
+     * {@link BaseAdapter.OnItemLongClickListener}
      * @param recyclerView      RecyclerView对象
      * @param itemView          被点击的条目对象
      * @param position          被点击的条目位置
@@ -271,52 +253,55 @@ public final class PhotoActivity extends MyActivity
     }
 
     /**
-     * {@link BaseRecyclerViewAdapter.OnChildClickListener}
+     * {@link BaseAdapter.OnChildClickListener}
      * @param recyclerView      RecyclerView对象
      * @param childView         被点击的条目子 View Id
      * @param position          被点击的条目位置
      */
     @Override
     public void onChildClick(RecyclerView recyclerView, View childView, int position) {
-        switch (childView.getId()) {
-            case R.id.fl_photo_check:
-                if (mSelectPhoto.contains(mAdapter.getItem(position))) {
-                    mSelectPhoto.remove(mAdapter.getItem(position));
+        if (childView.getId() == R.id.fl_photo_check) {
+            if (mSelectPhoto.contains(mAdapter.getItem(position))) {
+                mSelectPhoto.remove(mAdapter.getItem(position));
 
-                    if (mSelectPhoto.isEmpty()) {
+                if (mSelectPhoto.isEmpty()) {
+                    mFloatingView.hide();
+                    postDelayed(() -> {
+                        mFloatingView.setImageResource(R.drawable.ic_photo_camera);
+                        mFloatingView.show();
+                    }, 200);
+                }
+
+            } else {
+
+                if (mMaxSelect == 1 && mSelectPhoto.size() == 1) {
+
+                    List<String> data = mAdapter.getData();
+                    if (data != null) {
+                        int index = data.indexOf(mSelectPhoto.get(0));
+                        if (index != -1) {
+                            mSelectPhoto.remove(0);
+                            mAdapter.notifyItemChanged(index);
+                        }
+                    }
+                    mSelectPhoto.add(mAdapter.getItem(position));
+
+                } else if (mSelectPhoto.size() < mMaxSelect) {
+
+                    mSelectPhoto.add(mAdapter.getItem(position));
+
+                    if (mSelectPhoto.size() == 1) {
                         mFloatingView.hide();
-                        postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mFloatingView.setImageResource(R.drawable.ic_photo_camera);
-                                mFloatingView.show();
-                            }
+                        postDelayed(() -> {
+                            mFloatingView.setImageResource(R.drawable.ic_photo_succeed);
+                            mFloatingView.show();
                         }, 200);
                     }
-
                 } else {
-
-                    if (mSelectPhoto.size() < mMaxSelect) {
-                        mSelectPhoto.add(mAdapter.getItem(position));
-
-                        if (mSelectPhoto.size() == 1) {
-                            mFloatingView.hide();
-                            postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mFloatingView.setImageResource(R.drawable.ic_photo_succeed);
-                                    mFloatingView.show();
-                                }
-                            }, 200);
-                        }
-                    } else {
-                        toast(String.format(getString(R.string.photo_max_hint), mMaxSelect));
-                    }
+                    toast(String.format(getString(R.string.photo_max_hint), mMaxSelect));
                 }
-                mAdapter.notifyItemChanged(position);
-                break;
-            default:
-                break;
+            }
+            mAdapter.notifyItemChanged(position);
         }
     }
 
@@ -338,16 +323,10 @@ public final class PhotoActivity extends MyActivity
 
         ContentResolver contentResolver = getContentResolver();
         String[] projections;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            projections = new String[]{MediaStore.Files.FileColumns._ID, MediaStore.MediaColumns.DATA,
-                    MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_MODIFIED,
-                    MediaStore.MediaColumns.MIME_TYPE, MediaStore.MediaColumns.WIDTH, MediaStore
-                    .MediaColumns.HEIGHT, MediaStore.MediaColumns.SIZE, MediaStore.Video.Media.DURATION};
-        } else {
-            projections = new String[]{MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DATA,
-                    MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_MODIFIED,
-                    MediaStore.MediaColumns.MIME_TYPE, MediaStore.MediaColumns.SIZE, MediaStore.Video.Media.DURATION};
-        }
+        projections = new String[]{MediaStore.Files.FileColumns._ID, MediaStore.MediaColumns.DATA,
+                MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_MODIFIED,
+                MediaStore.MediaColumns.MIME_TYPE, MediaStore.MediaColumns.WIDTH, MediaStore
+                .MediaColumns.HEIGHT, MediaStore.MediaColumns.SIZE};
 
         Cursor cursor = contentResolver.query(contentUri, projections, selection, selectionAllArgs, sortOrder);
         if (cursor != null && cursor.moveToFirst()) {
@@ -355,12 +334,8 @@ public final class PhotoActivity extends MyActivity
             int pathIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
             int mimeTypeIndex = cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE);
             int sizeIndex = cursor.getColumnIndex(MediaStore.MediaColumns.SIZE);
-            int widthIndex = 0;
-            int heightIndex = 0;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                widthIndex = cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH);
-                heightIndex = cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT);
-            }
+            int widthIndex = cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH);
+            int heightIndex = cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT);
 
             do {
                 long size = cursor.getLong(sizeIndex);
@@ -374,12 +349,10 @@ public final class PhotoActivity extends MyActivity
                     continue;
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    int width = cursor.getInt(widthIndex);
-                    int height = cursor.getInt(heightIndex);
-                    if (width < 1 || height < 1) {
-                        continue;
-                    }
+                int width = cursor.getInt(widthIndex);
+                int height = cursor.getInt(heightIndex);
+                if (width < 1 || height < 1) {
+                    continue;
                 }
 
                 File file = new File(path);
@@ -387,138 +360,64 @@ public final class PhotoActivity extends MyActivity
                     continue;
                 }
 
-                // 专辑名称
-                String albumName = file.getParentFile().getName();
-                List<String> files = mAllAlbum.get(albumName);
-                if (files == null) {
-                    files = new ArrayList<>();
-                    mAllAlbum.put(albumName, files);
+                File parentFile = file.getParentFile();
+                if (parentFile != null) {
+                    // 获取目录名作为专辑名称
+                    String albumName = parentFile.getName();
+                    List<String> files = mAllAlbum.get(albumName);
+                    if (files == null) {
+                        files = new ArrayList<>();
+                        mAllAlbum.put(albumName, files);
+                    }
+                    files.add(path);
+                    mAllPhoto.add(path);
                 }
-                files.add(path);
-                mAllPhoto.add(path);
 
             } while (cursor.moveToNext());
 
             cursor.close();
         }
 
-        postDelayed(new Runnable() {
+        postDelayed(() -> {
+            // 滚动回第一个位置
+            mRecyclerView.scrollToPosition(0);
+            // 设置新的列表数据
+            mAdapter.setData(mAllPhoto);
 
-            @Override
-            public void run() {
-                // 滚动回第一个位置
-                mRecyclerView.scrollToPosition(0);
-                // 设置新的列表数据
-                mAdapter.setData(mAllPhoto);
+            if (mSelectPhoto.isEmpty()) {
+                mFloatingView.setImageResource(R.drawable.ic_photo_camera);
+            } else {
+                mFloatingView.setImageResource(R.drawable.ic_photo_succeed);
+            }
 
-                if (mSelectPhoto.isEmpty()) {
-                    mFloatingView.setImageResource(R.drawable.ic_photo_camera);
-                } else {
-                    mFloatingView.setImageResource(R.drawable.ic_photo_succeed);
-                }
+            // 执行列表动画
+            mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_fall_down));
+            mRecyclerView.scheduleLayoutAnimation();
 
-                // 执行列表动画
-                mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_fall_down));
-                mRecyclerView.scheduleLayoutAnimation();
+            // 设置右标提
+            setRightTitle(R.string.photo_all);
 
+            if (mAllPhoto.isEmpty()) {
+                // 显示空布局
+                showEmpty();
+            } else {
                 // 显示加载完成
                 showComplete();
-                // 设置右标提
-                setRightTitle(R.string.photo_all);
             }
-        }, 1000);
-    }
-
-    /**
-     * 启动系统相机
-     */
-    private void launchCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            File file = createCameraFile();
-            if (file != null && file.exists()) {
-
-                Uri imageUri;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    // 通过 FileProvider 创建一个 Content 类型的 Uri 文件
-                    imageUri = FileProvider.getUriForFile(this, AppConfig.getPackageName() + ".provider", file);
-                } else {
-                    imageUri = Uri.fromFile(file);
-                }
-                // 对目标应用临时授权该 Uri 所代表的文件
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                // 将拍取的照片保存到指定 Uri
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, new ActivityCallback() {
-
-                    @SuppressWarnings("ResultOfMethodCallIgnored")
-                    @Override
-                    public void onActivityResult(int resultCode, @Nullable Intent data) {
-                        switch (resultCode) {
-                            case RESULT_OK:
-                                if (file.exists() && file.isFile()) {
-                                    // 重新扫描多媒体（否则可能扫描不到）
-                                    MediaScannerConnection.scanFile(getApplicationContext(), new String[]{file.getPath()}, null,null);
-
-                                    // 当前选中图片的数量必须小于最大选中数
-                                    if (mSelectPhoto.size() < mMaxSelect) {
-                                        mSelectPhoto.add(file.getPath());
-                                    }
-
-                                    // 这里需要延迟刷新，否则可能会找不到拍照的图片
-                                    postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            // 重新加载图片列表
-                                            new Thread(PhotoActivity.this).start();
-                                        }
-                                    }, 1000);
-                                }
-                                break;
-                            case RESULT_CANCELED:
-                                file.delete();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-            } else {
-                toast(R.string.photo_picture_error);
-            }
-        } else {
-            toast(R.string.photo_launch_fail);
-        }
-    }
-
-    /**
-     * 创建一个拍照图片文件对象
-     */
-    private File createCameraFile() {
-        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
-        if (!folder.exists() || !folder.isDirectory()) {
-            if (!folder.mkdirs()) {
-                folder = Environment.getExternalStorageDirectory();
-            }
-        }
-
-        try {
-            return File.createTempFile("IMG", ".jpg", folder);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        }, 500);
     }
 
     /**
      * 图片选择监听
      */
     public interface OnPhotoSelectListener {
+
         /**
-         * 选择结果回调
+         * 选择回调
+         *
          * @param data          图片列表
          */
-        void onSelect(List<String> data);
+        void onSelected(List<String> data);
 
         /**
          * 取消回调

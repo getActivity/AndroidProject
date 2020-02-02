@@ -76,6 +76,8 @@ public final class IntentKey {
     // 文件类型相关
 
     /** 文本 */
+    public static final String FILE = "file";
+    /** 文本 */
     public static final String TXT = "txt";
     /** 图片 */
     public static final String PICTURE = "picture";

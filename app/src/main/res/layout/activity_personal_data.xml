@@ -12,40 +12,23 @@
         android:layout_height="wrap_content"
         app:title="@string/personal_data_title" />
 
-    <FrameLayout
+    <com.hjq.widget.layout.SettingBar
         android:id="@+id/fl_person_data_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_white"
-        android:paddingStart="20dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="20dp">
+        app:bar_leftText="@string/personal_data_head">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/personal_data_head"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <androidx.cardview.widget.CardView
-            style="@style/CircleCardViewStyle"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_person_data_avatar"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:layout_gravity="end|center_vertical">
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="20dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_head_placeholder" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_person_data_avatar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_head_placeholder" />
-
-        </androidx.cardview.widget.CardView>
-
-    </FrameLayout>
+    </com.hjq.widget.layout.SettingBar>
 
     <com.hjq.widget.layout.SettingBar
         android:id="@+id/sb_person_data_id"
@@ -70,8 +53,7 @@
         android:layout_height="wrap_content"
         app:bar_leftText="@string/personal_data_address"
         app:bar_rightHint="@string/personal_data_address_hint"
-        app:bar_rightIcon="@drawable/ico_go_black"
-        app:bar_rightText="广东省广州市天河区" />
+        app:bar_rightIcon="@drawable/ico_go_black" />
 
     <com.hjq.widget.layout.SettingBar
         android:id="@+id/sb_person_data_phone"

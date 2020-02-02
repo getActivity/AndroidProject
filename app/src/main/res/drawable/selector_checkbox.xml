@@ -8,6 +8,6 @@
     <item android:drawable="@drawable/ic_checkbox_disable" android:state_enabled="false" />
 
     <!-- 默认状态-->
-    <item android:drawable="@drawable/ic_checkbox_normal" />
+    <item android:drawable="@drawable/ic_compound_normal" />
 
 </selector>
