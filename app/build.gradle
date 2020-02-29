@@ -129,7 +129,7 @@ dependencies {
     implementation 'com.hjq:toast:8.0'
 
     // OkHttp 框架：https://github.com/square/okhttp
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.8'
 
     // JSON 解析框架：https://github.com/google/gson
     implementation 'com.google.code.gson:gson:2.8.6'
