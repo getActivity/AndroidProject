@@ -949,16 +949,17 @@ public class BaseDialog extends AppCompatDialog implements ContextAction, Handle
         @Override
         public void onActivityResumed(@NonNull Activity activity) {
             if (mDialog != null && mDialog.isShowing()) {
-                // 还原 Dialog 动画样式（这里必须要使用延迟设置，否则有一定几率会出现）
-                mDialog.post(() -> mDialog.setWindowAnimations(mDialogAnim));
+                // 还原 Dialog 动画样式（这里必须要使用延迟设置，否则还是有一定几率会出现）
+                mDialog.postDelayed(() -> {
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.setWindowAnimations(mDialogAnim);
+                    }
+                }, 100);
             }
         }
 
         @Override
-        public void onActivityPaused(@NonNull Activity activity) {}
-
-        @Override
-        public void onActivityStopped(@NonNull Activity activity) {
+        public void onActivityPaused(@NonNull Activity activity) {
             if (mDialog != null && mDialog.isShowing()) {
                 // 获取 Dialog 动画样式
                 mDialogAnim = mDialog.getWindowAnimations();
@@ -968,14 +969,17 @@ public class BaseDialog extends AppCompatDialog implements ContextAction, Handle
         }
 
         @Override
+        public void onActivityStopped(@NonNull Activity activity) {}
+
+        @Override
         public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
 
         @Override
         public void onActivityDestroyed(@NonNull Activity activity) {
             if (mActivity == activity) {
                 if (mDialog != null) {
-                    mDialog.removeOnShowListener(null);
-                    mDialog.removeOnDismissListener(null);
+                    mDialog.removeOnShowListener(this);
+                    mDialog.removeOnDismissListener(this);
                     if (mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
@@ -989,13 +993,17 @@ public class BaseDialog extends AppCompatDialog implements ContextAction, Handle
         @Override
         public void onShow(BaseDialog dialog) {
             mDialog = dialog;
-            mActivity.getApplication().registerActivityLifecycleCallbacks(this);
+            if (mActivity != null) {
+                mActivity.getApplication().registerActivityLifecycleCallbacks(this);
+            }
         }
 
         @Override
         public void onDismiss(BaseDialog dialog) {
             mDialog = null;
-            mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
+            if (mActivity != null) {
+                mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
+            }
         }
     }
 
