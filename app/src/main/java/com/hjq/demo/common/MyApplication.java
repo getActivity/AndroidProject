@@ -43,7 +43,7 @@ public final class MyApplication extends Application {
         }
 
         // 内存泄漏检测
-        LeakCanary.install(application);
+//        LeakCanary.install(application);
 
         // 友盟统计、登录、分享 SDK
         UmengClient.init(application);

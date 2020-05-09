@@ -7,14 +7,19 @@
     android:orientation="vertical"
     tools:context=".ui.activity.HomeActivity">
 
-    <com.hjq.widget.layout.NoScrollViewPager
+   <!-- <com.hjq.widget.layout.NoScrollViewPager
+        android:id="@+id/vp_home_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1" />-->
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_home_pager"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bv_home_navigation"
+        android:soundEffectsEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"

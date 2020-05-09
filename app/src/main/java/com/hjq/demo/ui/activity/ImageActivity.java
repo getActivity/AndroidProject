@@ -3,8 +3,6 @@ package com.hjq.demo.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.viewpager.widget.ViewPager;
-
 import com.gyf.immersionbar.BarHide;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyActivity;
@@ -14,6 +12,8 @@ import com.rd.PageIndicatorView;
 
 import java.util.ArrayList;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
@@ -23,7 +23,7 @@ import butterknife.BindView;
  *    desc   : 查看大图
  */
 public final class ImageActivity extends MyActivity {
-
+   RecyclerView a ;
     @BindView(R.id.vp_image_pager)
     ViewPager mViewPager;
     @BindView(R.id.pv_image_indicator)
