@@ -12,16 +12,25 @@
         android:layout_height="wrap_content"
         app:title="界面状态案例" />
 
-    <com.hjq.widget.layout.HintLayout
+    <com.hjq.demo.widget.HintLayout
+        android:id="@+id/hl_status_hint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/rl_status_refresh"
+            style="@style/RefreshLayoutStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listCount="10"
-            tools:listitem="@layout/item_copy" />
+            android:layout_height="match_parent">
 
-    </com.hjq.widget.layout.HintLayout>
+            <com.hjq.widget.layout.WrapRecyclerView
+                android:id="@+id/rv_status_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listCount="10"
+                tools:listitem="@layout/item_copy" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </com.hjq.demo.widget.HintLayout>
 
 </LinearLayout>

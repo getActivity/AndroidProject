@@ -6,30 +6,31 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal|bottom"
     android:orientation="vertical"
-    tools:context="com.hjq.demo.ui.dialog.MenuDialog">
+    tools:context=".ui.dialog.MenuDialog">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/dialog_message_round_size"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/dialog_ui_round_size"
         app:cardElevation="0px">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_menu_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_menu" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/dialog_message_round_size"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/dialog_ui_round_size"
         app:cardElevation="0px">
 
         <com.hjq.widget.view.SmartTextView
@@ -39,9 +40,9 @@
             android:background="@drawable/selector_transparent"
             android:focusable="true"
             android:gravity="center"
-            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
             android:paddingTop="13dp"
-            android:paddingRight="15dp"
+            android:paddingEnd="15dp"
             android:paddingBottom="13dp"
             android:singleLine="true"
             android:text="@string/common_cancel"

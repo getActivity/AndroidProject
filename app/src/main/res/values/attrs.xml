@@ -1,35 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- 自定义数字进度条 -->
-    <declare-styleable name="NumberProgressBar">
-        <attr name="pb_progress" format="integer"/>
-        <attr name="pb_maxProgress" format="integer"/>
-
-        <attr name="pb_textSize" format="dimension"/>
-        <attr name="pb_textColor" format="color"/>
-
-        <attr name="pb_textOffset" format="dimension"/>
-
-        <attr name="pb_unreachedColor" format="color"/>
-        <attr name="pb_reachedColor" format="color"/>
-
-        <attr name="pb_reachedHeight" format="dimension"/>
-        <attr name="pb_unreachedHeight" format="dimension"/>
-
-    </declare-styleable>
-
-    <!-- 滚动列表 -->
-    <declare-styleable name="LoopView">
-        <attr name="lv_lineColor" format="color"/>
-        <attr name="lv_topBottomTextColor" format="color"/>
-        <attr name="lv_centerTextColor" format="color"/>
-        <attr name="lv_textSize" format="dimension"/>
-        <attr name="lv_canLoop" format="boolean"/>
-        <attr name="lv_initPosition" format="integer"/>
-        <attr name="lv_drawItemCount" format="integer"/>
-    </declare-styleable>
-
     <!-- 进度条 -->
     <declare-styleable name="ProgressView">
         <attr name="progressIndeterminate" format="boolean" />

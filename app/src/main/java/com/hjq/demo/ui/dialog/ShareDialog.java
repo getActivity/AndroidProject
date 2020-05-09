@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hjq.base.BaseRecyclerViewAdapter;
+import com.hjq.base.BaseAdapter;
+import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
-import com.hjq.demo.common.MyRecyclerViewAdapter;
+import com.hjq.demo.common.MyAdapter;
+import com.hjq.toast.ToastUtils;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengShare;
@@ -35,18 +35,17 @@ import java.util.List;
 public final class ShareDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements BaseRecyclerViewAdapter.OnItemClickListener {
+            extends BaseDialog.Builder<Builder>
+            implements BaseAdapter.OnItemClickListener {
 
         private final ShareAdapter mAdapter;
-        private final RecyclerView mRecyclerView;
 
         private final UmengShare.ShareData mData;
 
         private UmengShare.OnShareListener mListener;
 
-        public Builder(FragmentActivity activity) {
-            super(activity);
+        public Builder(Context context) {
+            super(context);
 
             setContentView(R.layout.dialog_share);
 
@@ -57,14 +56,15 @@ public final class ShareDialog {
             data.add(new ShareBean(getDrawable(R.drawable.ic_share_qzone), getString(R.string.share_platform_qzone), Platform.QZONE));
             data.add(new ShareBean(getDrawable(R.drawable.ic_share_link), getString(R.string.share_platform_link), null));
 
-            mRecyclerView = findViewById(R.id.rv_share_list);
-            mAdapter = new ShareAdapter(activity);
+            mAdapter = new ShareAdapter(context);
             mAdapter.setData(data);
             mAdapter.setOnItemClickListener(this);
-            mRecyclerView.setLayoutManager(new GridLayoutManager(activity, data.size()));
-            mRecyclerView.setAdapter(mAdapter);
 
-            mData = new UmengShare.ShareData(getActivity());
+            RecyclerView recyclerView = findViewById(R.id.rv_share_list);
+            recyclerView.setLayoutManager(new GridLayoutManager(context, data.size()));
+            recyclerView.setAdapter(mAdapter);
+
+            mData = new UmengShare.ShareData(context);
         }
 
         public Builder setShareTitle(String title) {
@@ -98,7 +98,7 @@ public final class ShareDialog {
         }
 
         /**
-         * {@link BaseRecyclerViewAdapter.OnItemClickListener}
+         * {@link BaseAdapter.OnItemClickListener}
          */
         @Override
         public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
@@ -108,13 +108,13 @@ public final class ShareDialog {
             } else {
                 // 复制到剪贴板
                 getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("url", mData.getShareUrl()));
-                toast(R.string.share_platform_copy_hint);
+                ToastUtils.show(R.string.share_platform_copy_hint);
             }
             dismiss();
         }
     }
 
-    private static class ShareAdapter extends MyRecyclerViewAdapter<ShareBean> {
+    private static class ShareAdapter extends MyAdapter<ShareBean> {
 
         private ShareAdapter(Context context) {
             super(context);
@@ -126,10 +126,10 @@ public final class ShareDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
+        final class ViewHolder extends MyAdapter.ViewHolder {
 
-            private ImageView mImageView;
-            private TextView mTextView;
+            private final ImageView mImageView;
+            private final TextView mTextView;
 
             private ViewHolder() {
                 super(R.layout.item_share);
@@ -149,28 +149,28 @@ public final class ShareDialog {
     private static class ShareBean {
 
         /** 分享图标 */
-        private final Drawable shareIcon;
+        private final Drawable mShareIcon;
         /** 分享名称 */
-        private final String shareName;
+        private final String mShareName;
         /** 分享平台 */
-        private final Platform sharePlatform;
+        private final Platform mSharePlatform;
 
         private ShareBean(Drawable icon, String name, Platform platform) {
-            shareIcon = icon;
-            shareName = name;
-            sharePlatform = platform;
+            mShareIcon = icon;
+            mShareName = name;
+            mSharePlatform = platform;
         }
 
         private Drawable getShareIcon() {
-            return shareIcon;
+            return mShareIcon;
         }
 
         private String getShareName() {
-            return shareName;
+            return mShareName;
         }
 
         private Platform getSharePlatform() {
-            return sharePlatform;
+            return mSharePlatform;
         }
     }
 }

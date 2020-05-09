@@ -1,14 +1,14 @@
 package com.hjq.demo.ui.dialog;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
+import com.hjq.demo.aop.SingleClick;
 
 /**
  *    author : Android 轮子哥
@@ -19,41 +19,16 @@ import com.hjq.demo.common.MyDialogFragment;
 public final class MessageDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements View.OnClickListener {
+            extends UIDialog.Builder<Builder> {
 
         private OnListener mListener;
-        private boolean mAutoDismiss = true;
 
-        private final TextView mTitleView;
         private final TextView mMessageView;
 
-        private final TextView mCancelView;
-        private final View mLineView;
-        private final TextView mConfirmView;
-
-        public Builder(FragmentActivity activity) {
-            super(activity);
-            setContentView(R.layout.dialog_message);
-            setAnimStyle(BaseDialog.AnimStyle.IOS);
-
-            mTitleView = findViewById(R.id.tv_message_title);
+        public Builder(Context context) {
+            super(context);
+            setCustomView(R.layout.dialog_message);
             mMessageView = findViewById(R.id.tv_message_message);
-
-            mCancelView  = findViewById(R.id.tv_message_cancel);
-            mLineView = findViewById(R.id.v_message_line);
-            mConfirmView  = findViewById(R.id.tv_message_confirm);
-
-            mCancelView.setOnClickListener(this);
-            mConfirmView.setOnClickListener(this);
-        }
-
-        public Builder setTitle(@StringRes int id) {
-            return setTitle(getString(id));
-        }
-        public Builder setTitle(CharSequence text) {
-            mTitleView.setText(text);
-            return this;
         }
 
         public Builder setMessage(@StringRes int id) {
@@ -61,28 +36,6 @@ public final class MessageDialog {
         }
         public Builder setMessage(CharSequence text) {
             mMessageView.setText(text);
-            return this;
-        }
-
-        public Builder setCancel(@StringRes int id) {
-            return setCancel(getString(id));
-        }
-        public Builder setCancel(CharSequence text) {
-            mCancelView.setText(text);
-            mLineView.setVisibility((text == null || "".equals(text.toString())) ? View.GONE : View.VISIBLE);
-            return this;
-        }
-
-        public Builder setConfirm(@StringRes int id) {
-            return setConfirm(getString(id));
-        }
-        public Builder setConfirm(CharSequence text) {
-            mConfirmView.setText(text);
-            return this;
-        }
-
-        public Builder setAutoDismiss(boolean dismiss) {
-            mAutoDismiss = dismiss;
             return this;
         }
 
@@ -100,21 +53,24 @@ public final class MessageDialog {
             return super.create();
         }
 
-        /**
-         * {@link View.OnClickListener}
-         */
+        @SingleClick
         @Override
         public void onClick(View v) {
-            if (mAutoDismiss) {
-                dismiss();
-            }
-
-            if (mListener != null) {
-                if (v == mConfirmView) {
-                    mListener.onConfirm(getDialog());
-                } else if (v == mCancelView) {
-                    mListener.onCancel(getDialog());
-                }
+            switch (v.getId()) {
+                case R.id.tv_ui_confirm:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onConfirm(getDialog());
+                    }
+                    break;
+                case R.id.tv_ui_cancel:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onCancel(getDialog());
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -129,6 +85,6 @@ public final class MessageDialog {
         /**
          * 点击取消时回调
          */
-        void onCancel(BaseDialog dialog);
+        default void onCancel(BaseDialog dialog) {}
     }
 }

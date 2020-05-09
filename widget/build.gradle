@@ -1,17 +1,7 @@
 apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion rootProject.ext.compileVersion
-
-    defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion rootProject.ext.targetVersion
-    }
-}
+apply from: "../config.gradle"
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
-    implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
     // 基础库（不包任何第三方框架）
     implementation project(':base')
 }

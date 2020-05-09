@@ -43,10 +43,7 @@ public final class CacheDataManager {
             if (dir.isDirectory()) {
                 String[] children = dir.list();
                 for (String child : children) {
-                    boolean success = deleteDir(new File(dir, child));
-                    if (!success) {
-                        return false;
-                    }
+                    deleteDir(new File(dir, child));
                 }
             } else {
                 return dir.delete();

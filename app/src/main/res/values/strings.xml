@@ -31,6 +31,24 @@
     <string name="common_minute">分</string>
     <string name="common_second">秒</string>
 
+    <string name="common_network">当前没有网络连接，请检查网络设置</string>
+
+    <!-- 网络请求 -->
+    <string name="http_loading">加载中&#8230;</string>
+
+    <string name="http_unknown_error">请求出错，未知错误</string>
+    <string name="http_account_error">账号异常，请重新登录</string>
+    <string name="http_data_explain_error">数据解析异常，请稍后</string>
+    <string name="http_server_out_time">服务器请求超时，请稍后再试</string>
+    <string name="http_network_error">请求失败，请检查网络设置</string>
+    <string name="http_server_error">服务器连接异常，请稍后再试</string>
+    <string name="http_request_cancel">请求被中断，请重试</string>
+
+    <!-- 提示布局 -->
+    <string name="hint_layout_no_data">空空如也</string>
+    <string name="hint_layout_error_request">请求出错，点击重试</string>
+    <string name="hint_layout_error_network">网络错误，点击重试</string>
+
     <!-- 地区对话框 -->
     <string name="address_title">请选择地区</string>
     <string name="address_hint">请选择</string>
@@ -42,16 +60,19 @@
     <string name="time_title">请选择时间</string>
 
     <!-- 升级对话框 -->
-    <string name="update_app">升级</string>
+    <string name="update_title">发现新版本</string>
 
-    <string name="update_download_fail">启动下载失败</string>
+    <string name="update_content">更新内容</string>
+
+    <string name="update_no">下次再说</string>
+    <string name="update_yes">立即更新</string>
+    <string name="update_background">后台更新</string>
+
     <string name="update_permission_hint">必须先要授予权限才能正常下载更新哦</string>
 
-    <string name="update_status_running">下载中</string>
+    <string name="update_status_running">下载中 %d%%</string>
     <string name="update_status_successful">立即安装</string>
     <string name="update_status_failed">下载失败</string>
-    <string name="update_status_paused">暂停中</string>
-    <string name="update_status_pending">等待下载</string>
 
     <string name="update_no_update">当前已是最新版本</string>
 
@@ -69,10 +90,9 @@
     <!-- 支付密码对话框 -->
     <string name="pay_title">请输入支付密码</string>
 
-    <!-- 提示 -->
-    <string name="hint_layout_no_data">亲，暂无数据</string>
-    <string name="hint_layout_error_request">亲，请求出错了</string>
-    <string name="hint_layout_error_network">亲，没有网络了</string>
+    <!-- 支付密码对话框 -->
+    <string name="select_min_hint">至少要选择 %d 项</string>
+    <string name="select_max_hint">最多只能选择 %d 项</string>
 
     <!-- 主页 -->
     <string name="home_exit_hint">再按一次退出</string>
@@ -91,7 +111,6 @@
     <!-- 注册 -->
     <string name="register_title">注册</string>
     <string name="register_hint">手机号仅用于登录和保护账号安全</string>
-    <string name="register_login">登录</string>
     <string name="register_password_hint1">设置6&#8211;18位登录密码</string>
     <string name="register_password_hint2">请再次输入一次密码</string>
     <string name="register_password_input_error">两次密码输入不一致，请重新输入</string>
@@ -114,7 +133,7 @@
     <string name="about_title">关于我们</string>
     <string name="about_author"><font color="#85b84f">Android</font> 轮子哥</string>
 
-    <string name="about_copyright">Copyright © 2018 &#8211; 2019</string>
+    <string name="about_copyright">Copyright © 2018 &#8211; 2020</string>
 
     <!-- 忘记密码 -->
     <string name="password_forget_title">忘记密码</string>
@@ -158,7 +177,7 @@
     <string name="crash_error_hint">发生意外错误\n抱歉，给您带来不便</string>
 
     <string name="crash_error_restart">重新启动</string>
-    <string name="crash_error_log">错误日志</string>
+    <string name="crash_error_log">查看日志</string>
 
     <string name="crash_error_details">错误详情</string>
     <string name="crash_error_info">错误信息</string>

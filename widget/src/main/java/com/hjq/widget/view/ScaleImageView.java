@@ -35,8 +35,7 @@ public final class ScaleImageView extends AppCompatImageView {
     }
 
     @Override
-    public void setPressed(boolean pressed) {
-        super.setPressed(pressed);
+    protected void dispatchSetPressed(boolean pressed) {
         // 判断当前手指是否按下了
         if (pressed) {
             setScaleX(mScaleSize);

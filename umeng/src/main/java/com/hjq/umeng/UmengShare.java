@@ -9,7 +9,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 
 /**
  *    author : Android 轮子哥
@@ -74,7 +74,7 @@ public final class UmengShare {
     /**
      * 为什么要用软引用，因为友盟会将监听回调（UMShareListener）持有成静态的
      */
-    public static final class ShareListenerWrapper extends WeakReference<OnShareListener> implements UMShareListener {
+    public static final class ShareListenerWrapper extends SoftReference<OnShareListener> implements UMShareListener {
 
         private final Platform mPlatform;
 
@@ -104,11 +104,7 @@ public final class UmengShare {
          * @param platform      平台名称
          */
         @Override
-        public void onStart(SHARE_MEDIA platform) {
-//            if (get() != null) {
-//                get().onStart(mPlatform);
-//            }
-        }
+        public void onStart(SHARE_MEDIA platform) {}
 
         /**
          * 授权成功的回调
@@ -150,13 +146,6 @@ public final class UmengShare {
 
     public interface OnShareListener {
 
-//        /**
-//         * 分享开始的回调
-//         *
-//         * @param platform      平台名称
-//         */
-//        void onStart(Platform platform);
-
         /**
          * 分享成功的回调
          *
@@ -170,13 +159,13 @@ public final class UmengShare {
          * @param platform      平台名称
          * @param t             错误原因
          */
-        void onError(Platform platform, Throwable t);
+        default void onError(Platform platform, Throwable t) {}
 
         /**
          * 分享取消的回调
          *
          * @param platform      平台名称
          */
-        void onCancel(Platform platform);
+        default void onCancel(Platform platform) {}
     }
 }

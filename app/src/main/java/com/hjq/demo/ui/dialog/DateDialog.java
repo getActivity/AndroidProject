@@ -1,15 +1,18 @@
 package com.hjq.demo.ui.dialog;
 
+import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.StringRes;
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
-import com.hjq.demo.widget.LoopView;
+import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.other.PickerLayoutManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,36 +29,39 @@ import java.util.Locale;
 public final class DateDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements LoopView.LoopScrollListener,
-            View.OnClickListener {
+            extends UIDialog.Builder<Builder>
+            implements PickerLayoutManager.OnPickerListener {
 
-        private final int mStartYear = 1920;
-        private final int mEndYear = 2019;
+        private final int mStartYear = Calendar.getInstance().get(Calendar.YEAR) - 100;
+        private final int mEndYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        private final TextView mTitleView;
-        private final TextView mCancelView;
-        private final TextView mConfirmView;
+        private final RecyclerView mYearView;
+        private final RecyclerView mMonthView;
+        private final RecyclerView mDayView;
 
-        private final LoopView mYearView;
-        private final LoopView mMonthView;
-        private final LoopView mDayView;
+        private final PickerLayoutManager mYearManager;
+        private final PickerLayoutManager mMonthManager;
+        private final PickerLayoutManager mDayManager;
+
+        private final PickerAdapter mYearAdapter;
+        private final PickerAdapter mMonthAdapter;
+        private final PickerAdapter mDayAdapter;
 
         private OnListener mListener;
-        private boolean mAutoDismiss = true;
 
-        @SuppressWarnings("all")
-        public Builder(FragmentActivity activity) {
-            super(activity);
-            setContentView(R.layout.dialog_date);
+        public Builder(Context context) {
+            super(context);
 
-            mTitleView = findViewById(R.id.tv_date_title);
-            mCancelView = findViewById(R.id.tv_date_cancel);
-            mConfirmView = findViewById(R.id.tv_date_confirm);
+            setCustomView(R.layout.dialog_date);
+            setTitle(R.string.time_title);
 
-            mYearView = findViewById(R.id.lv_date_year);
-            mMonthView = findViewById(R.id.lv_date_month);
-            mDayView = findViewById(R.id.lv_date_day);
+            mYearView = findViewById(R.id.rv_date_year);
+            mMonthView = findViewById(R.id.rv_date_month);
+            mDayView = findViewById(R.id.rv_date_day);
+
+            mYearAdapter = new PickerAdapter(context);
+            mMonthAdapter = new PickerAdapter(context);
+            mDayAdapter = new PickerAdapter(context);
 
             // 生产年份
             ArrayList<String> yearData = new ArrayList<>(10);
@@ -69,52 +75,44 @@ public final class DateDialog {
                 monthData.add(i + " " + getString(R.string.common_month));
             }
 
-            mYearView.setData(yearData);
-            mMonthView.setData(monthData);
+            Calendar calendar = Calendar.getInstance(Locale.CHINA);
 
-            mYearView.setLoopListener(this);
-            mMonthView.setLoopListener(this);
+            int day = calendar.getActualMaximum(Calendar.DATE);
+            // 生产天数
+            ArrayList<String> dayData = new ArrayList<>(day);
+            for (int i = 1; i <= day; i++) {
+                dayData.add(i + " " + getString(R.string.common_day));
+            }
 
-            mCancelView.setOnClickListener(this);
-            mConfirmView.setOnClickListener(this);
+            mYearAdapter.setData(yearData);
+            mMonthAdapter.setData(monthData);
+            mDayAdapter.setData(dayData);
 
-            Calendar calendar = Calendar.getInstance();
+            mYearManager = new PickerLayoutManager.Builder(context)
+                    .build();
+            mMonthManager = new PickerLayoutManager.Builder(context)
+                    .build();
+            mDayManager = new PickerLayoutManager.Builder(context)
+                    .build();
+
+            mYearView.setLayoutManager(mYearManager);
+            mMonthView.setLayoutManager(mMonthManager);
+            mDayView.setLayoutManager(mDayManager);
+
+            mYearView.setAdapter(mYearAdapter);
+            mMonthView.setAdapter(mMonthAdapter);
+            mDayView.setAdapter(mDayAdapter);
+            
             setYear(calendar.get(Calendar.YEAR));
             setMonth(calendar.get(Calendar.MONTH) + 1);
             setDay(calendar.get(Calendar.DAY_OF_MONTH));
-        }
 
-        public Builder setTitle(@StringRes int id) {
-            return setTitle(getString(id));
-        }
-        public Builder setTitle(CharSequence text) {
-            mTitleView.setText(text);
-            return this;
-        }
-
-        public Builder setCancel(@StringRes int id) {
-            return setCancel(getString(id));
-        }
-        public Builder setCancel(CharSequence text) {
-            mCancelView.setText(text);
-            return this;
-        }
-
-        public Builder setConfirm(@StringRes int id) {
-            return setConfirm(getString(id));
-        }
-        public Builder setConfirm(CharSequence text) {
-            mConfirmView.setText(text);
-            return this;
+            mYearManager.setOnPickerListener(this);
+            mMonthManager.setOnPickerListener(this);
         }
 
         public Builder setListener(OnListener listener) {
             mListener = listener;
-            return this;
-        }
-
-        public Builder setAutoDismiss(boolean dismiss) {
-            mAutoDismiss = dismiss;
             return this;
         }
 
@@ -156,10 +154,10 @@ public final class DateDialog {
             int index = year - mStartYear;
             if (index < 0) {
                 index = 0;
-            } else if (index > mYearView.getSize() - 1) {
-                index = mYearView.getSize() - 1;
+            } else if (index > mYearAdapter.getItemCount() - 1) {
+                index = mYearAdapter.getItemCount() - 1;
             }
-            mYearView.setInitPosition(index);
+            mYearView.scrollToPosition(index);
             return this;
         }
 
@@ -171,10 +169,10 @@ public final class DateDialog {
             int index = month - 1;
             if (index < 0) {
                 index = 0;
-            } else if (index > mMonthView.getSize() - 1) {
-                index = mMonthView.getSize() - 1;
+            } else if (index > mMonthAdapter.getItemCount() - 1) {
+                index = mMonthAdapter.getItemCount() - 1;
             }
-            mMonthView.setInitPosition(index);
+            mMonthView.scrollToPosition(index);
             return this;
         }
 
@@ -186,48 +184,84 @@ public final class DateDialog {
             int index = day - 1;
             if (index < 0) {
                 index = 0;
-            } else if (index > mDayView.getSize() - 1) {
-                index = mDayView.getSize() - 1;
+            } else if (index > mDayAdapter.getItemCount() - 1) {
+                index = mDayAdapter.getItemCount() - 1;
             }
-            mDayView.setInitPosition(index);
+            mDayView.scrollToPosition(index);
             return this;
         }
 
+        /**
+         * {@link PickerLayoutManager.OnPickerListener}
+         * 
+         * @param recyclerView              RecyclerView 对象
+         * @param position                  当前滚动的位置
+         */
         @Override
-        public void onItemSelect(LoopView loopView, int position) {
+        public void onPicked(RecyclerView recyclerView, int position) {
             // 获取这个月最多有多少天
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
-            if (loopView == mYearView) {
-                calendar.set(mStartYear + mYearView.getSelectedItem(), mMonthView.getSelectedItem(), 1);
-            } else if (loopView == mMonthView) {
-                calendar.set(mStartYear + mYearView.getSelectedItem(), mMonthView.getSelectedItem(), 1);
+            if (recyclerView == mYearView) {
+                calendar.set(mStartYear + position, mMonthManager.getPickedPosition(), 1);
+            } else if (recyclerView == mMonthView) {
+                calendar.set(mStartYear + mYearManager.getPickedPosition(), position, 1);
             }
 
             int day = calendar.getActualMaximum(Calendar.DATE);
-
-            ArrayList<String> dayData = new ArrayList<>(day);
-            for (int i = 1; i <= day; i++) {
-                dayData.add(i + " " + getString(R.string.common_day));
+            if (mDayAdapter.getItemCount() != day) {
+                ArrayList<String> dayData = new ArrayList<>(day);
+                for (int i = 1; i <= day; i++) {
+                    dayData.add(i + " " + getString(R.string.common_day));
+                }
+                mDayAdapter.setData(dayData);
             }
-
-            mDayView.setData(dayData);
         }
 
-        /**
-         * {@link View.OnClickListener}
-         */
-
+        @SingleClick
         @Override
         public void onClick(View v) {
-            if (mAutoDismiss) {
-                dismiss();
+            switch (v.getId()) {
+                case R.id.tv_ui_confirm:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onSelected(getDialog(), mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition() + 1, mDayManager.getPickedPosition() + 1);
+                    }
+                    break;
+                case R.id.tv_ui_cancel:
+                    autoDismiss();
+                    if (mListener != null) {
+                        mListener.onCancel(getDialog());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private static final class PickerAdapter extends MyAdapter<String> {
+
+            private PickerAdapter(Context context) {
+                super(context);
             }
 
-            if (mListener != null) {
-                if (v == mConfirmView) {
-                    mListener.onSelected(getDialog(), mStartYear + mYearView.getSelectedItem(), mMonthView.getSelectedItem() + 1, mDayView.getSelectedItem() + 1);
-                } else if (v == mCancelView) {
-                    mListener.onCancel(getDialog());
+            @NonNull
+            @Override
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new ViewHolder();
+            }
+
+            final class ViewHolder extends MyAdapter.ViewHolder {
+
+                private final TextView mPickerView;
+
+                ViewHolder() {
+                    super(R.layout.item_picker);
+                    mPickerView = (TextView) findViewById(R.id.tv_picker_name);
+                }
+
+                @Override
+                public void onBindView(int position) {
+                    mPickerView.setText(getItem(position));
                 }
             }
         }
@@ -247,6 +281,6 @@ public final class DateDialog {
         /**
          * 点击取消时回调
          */
-        void onCancel(BaseDialog dialog);
+        default void onCancel(BaseDialog dialog) {}
     }
 }

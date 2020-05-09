@@ -8,15 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
-import com.hjq.base.BaseRecyclerViewAdapter;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyDialogFragment;
-import com.hjq.demo.common.MyRecyclerViewAdapter;
-import com.hjq.image.ImageLoader;
+import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.http.glide.GlideApp;
 
 import java.util.List;
 
@@ -29,22 +27,22 @@ import java.util.List;
 public final class AlbumDialog {
 
     public static final class Builder
-            extends MyDialogFragment.Builder<Builder>
-            implements BaseRecyclerViewAdapter.OnItemClickListener {
+            extends BaseDialog.Builder<Builder>
+            implements BaseAdapter.OnItemClickListener {
 
         private OnListener mListener;
 
         private final RecyclerView mRecyclerView;
         private final AlbumAdapter mAdapter;
 
-        public Builder(FragmentActivity activity) {
-            super(activity);
+        public Builder(Context context) {
+            super(context);
 
             setContentView(R.layout.dialog_album);
             setHeight(getResources().getDisplayMetrics().heightPixels / 2);
 
             mRecyclerView = findViewById(R.id.rv_album_list);
-            mAdapter = new AlbumAdapter(activity);
+            mAdapter = new AlbumAdapter(context);
             mAdapter.setOnItemClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
         }
@@ -82,20 +80,18 @@ public final class AlbumDialog {
             mAdapter.notifyDataSetChanged();
 
             // 延迟消失
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mListener != null) {
-                        mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
-                    }
+            postDelayed(() -> {
 
-                    dismiss();
+                if (mListener != null) {
+                    mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
                 }
+                dismiss();
+
             }, 300);
         }
     }
 
-    private static final class AlbumAdapter extends MyRecyclerViewAdapter<AlbumBean> {
+    private static final class AlbumAdapter extends MyAdapter<AlbumBean> {
 
         private AlbumAdapter(Context context) {
             super(context);
@@ -107,7 +103,7 @@ public final class AlbumDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
+        final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final ImageView mIconView;
             private final TextView mNameView;
@@ -126,7 +122,7 @@ public final class AlbumDialog {
             public void onBindView(int position) {
                 AlbumBean bean = getItem(position);
 
-                ImageLoader.with(getContext())
+                GlideApp.with(getContext())
                         .load(bean.getIcon())
                         .into(mIconView);
 

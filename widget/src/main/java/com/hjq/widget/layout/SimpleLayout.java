@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  *    time   : 2018/10/18
  *    desc   : 简单的 Layout（常用于自定义组合控件继承的基类，可以起到性能优化的作用）
  */
-public class SimpleLayout extends ViewGroup {
+public final class SimpleLayout extends ViewGroup {
 
     public SimpleLayout(Context context) {
         super(context);

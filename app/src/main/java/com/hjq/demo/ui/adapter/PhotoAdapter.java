@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyRecyclerViewAdapter;
-import com.hjq.image.ImageLoader;
+import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.http.glide.GlideApp;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import butterknife.BindView;
  *    time   : 2019/07/24
  *    desc   : 图片选择适配器
  */
-public final class PhotoAdapter extends MyRecyclerViewAdapter<String> {
+public final class PhotoAdapter extends MyAdapter<String> {
 
     private final List<String> mSelectPhoto;
 
@@ -38,7 +38,7 @@ public final class PhotoAdapter extends MyRecyclerViewAdapter<String> {
         return new ViewHolder();
     }
 
-    final class ViewHolder extends MyRecyclerViewAdapter.ViewHolder {
+    final class ViewHolder extends MyAdapter.ViewHolder {
 
         @BindView(R.id.iv_photo_image)
         ImageView mImageView;
@@ -51,7 +51,7 @@ public final class PhotoAdapter extends MyRecyclerViewAdapter<String> {
 
         @Override
         public void onBindView(int position) {
-            ImageLoader.with(getContext())
+            GlideApp.with(getContext())
                     .load(getItem(position))
                     .into(mImageView);
 
@@ -60,7 +60,7 @@ public final class PhotoAdapter extends MyRecyclerViewAdapter<String> {
     }
 
     @Override
-    protected RecyclerView.LayoutManager getDefaultLayoutManager(Context context) {
+    protected RecyclerView.LayoutManager generateDefaultLayoutManager(Context context) {
         return new GridLayoutManager(context, 3);
     }
 }

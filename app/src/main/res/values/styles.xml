@@ -3,37 +3,33 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- 窗口背景颜色 -->
         <item name="android:windowBackground">@color/windowBackground</item>
-        <!-- 应用的主要色调，actionBar默认使用该颜色，Toolbar导航栏的底色 -->
+        <!-- 应用的主要色调，ActionBar Toolbar 默认使用该颜色 -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <!-- 应用的主要暗色调，statusBarColor默认使用该颜色 -->
+        <!-- 应用的主要暗色调，状态栏默认使用该颜色 -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <!-- 应用的强调色，CheckBox，RadioButton，SwitchCompat等一般控件的选中效果默认采用该颜色 -->
+        <!-- 应用的强调色，CheckBox RadioButton Switch 等一般控件的选中效果默认采用该颜色 -->
         <item name="colorAccent">@color/colorAccent</item>
-        <!--Button、TextView的文字颜色-->
+        <!-- 默认文本颜色，Button、TextView 的文字颜色-->
         <item name="android:textColor">@color/textColor</item>
-        <!-- Button、TextView的提示文字颜色 -->
+        <!-- 默认提示颜色，Button、TextView 的提示文字颜色 -->
         <item name="android:textColorHint">@color/textColorHint</item>
-        <!-- ActionMode覆盖Actionbar，不顶下来 -->
+        <!-- ActionMode 覆盖 Actionbar 不被顶下来 -->
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <!-- ActionMode的颜色 -->
+        <!-- ActionMode 的颜色 -->
         <item name="actionModeBackground">@color/colorPrimary</item>
         <!-- 解决 Android 5.1 及以上版本 Button 英文字符串自动变大写的问题 -->
         <item name="android:textAllCaps">false</item>
         <!-- 默认隐藏输入法，开启这个选项后会导致输入对话框在关闭之后不能关闭软键盘   -->
         <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
-    </style>
-
-    <!-- 解决启动页白屏的问题 -->
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 关闭 RecyclerView ScrollView ViewPager 水波纹效果 -->
+        <item name="android:overScrollMode">never</item>
     </style>
 
     <!-- 默认圆角按钮样式 -->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textSize">14sp</item>
@@ -56,8 +52,8 @@
         <item name="android:textColor">#333333</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
     </style>
 
     <!-- 默认水平分割线样式 -->
@@ -79,8 +75,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/selector_countdown</item>
-        <item name="android:layout_marginLeft">15dp</item>
-        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:minWidth">90dp</item>
@@ -90,11 +86,11 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- 圆形 CardView 样式 -->
-    <style name="CircleCardViewStyle" parent="Base.CardView">
-        <item name="cardElevation">0px</item>
-        <item name="cardBackgroundColor">#00000000</item>
-        <item name="cardCornerRadius">999dp</item>
+    <!-- 上拉刷新下拉加载样式 -->
+    <style name="RefreshLayoutStyle" parent="Base.CardView">
+        <item name="srlPrimaryColor">@color/colorAccent</item>
+        <item name="srlAccentColor">@color/white</item>
+        <item name="srlEnablePreviewInEditMode">false</item>
     </style>
 
 </resources>

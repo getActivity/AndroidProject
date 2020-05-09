@@ -10,11 +10,7 @@
 
 > startActivity 方法优化
 
-    public void startActivity(Class<? extends Activity> cls)
-
-    public void startActivityFinish(Class<? extends Activity> cls)
-
-    public void startActivityFinish(Intent intent)
+    public void startActivity(Class<? extends Activity> clazz)
 
 > startActivityForResult 方法优化
 
@@ -89,7 +85,7 @@
 
 > 跳转到其他Activity
 
-    public void startActivity(Class<? extends Activity> cls)
+    public void startActivity(Class<? extends Activity> clazz)
 
 > 销毁当前 Fragment 所在的 Activity
 

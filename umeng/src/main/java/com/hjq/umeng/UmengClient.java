@@ -37,8 +37,8 @@ public final class UmengClient {
             // 初始化各个平台的 Key
             PlatformConfig.setWeixin(String.valueOf(metaData.get("WX_APPID")), String.valueOf(metaData.get("WX_APPKEY")));
             PlatformConfig.setQQZone(String.valueOf(metaData.get("QQ_APPID")), String.valueOf(metaData.get("QQ_APPKEY")));
-            PlatformConfig.setSinaWeibo(String.valueOf(metaData.get("SN_APPID")), String.valueOf(metaData.get("SN_APPKEY")),"http://sns.whalecloud.com");
 
+            //PlatformConfig.setSinaWeibo(String.valueOf(metaData.get("SN_APPID")), String.valueOf(metaData.get("SN_APPKEY")),"http://sns.whalecloud.com");
             // 豆瓣RENREN平台目前只能在服务器端配置
             //PlatformConfig.setYixin("yxc0614e80c9304c11b0391514d09f13bf");
             //PlatformConfig.setTwitter("3aIN7fuF685MuZ7jtXkQxalyi", "MK6FEYG63eWcpDFgRYw4w9puJhzDl0tyuqWjZ3M7XJuuG7mMbO");
@@ -156,9 +156,9 @@ public final class UmengClient {
 
     private static boolean isAppInstalled(Context context, @NonNull final String packageName) {
         try {
-            return context.getPackageManager().getApplicationInfo(packageName, 0) != null;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            context.getPackageManager().getApplicationInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException ignored) {
             return false;
         }
     }

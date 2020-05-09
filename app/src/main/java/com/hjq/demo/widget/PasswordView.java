@@ -85,7 +85,6 @@ public final class PasswordView extends View {
                 widthMeasureSpec = MeasureSpec.makeMeasureSpec(mItemWidth * PASSWORD_COUNT, MeasureSpec.EXACTLY);
                 break;
             case MeasureSpec.EXACTLY:
-                break;
             default:
                 break;
         }
@@ -96,7 +95,6 @@ public final class PasswordView extends View {
                 heightMeasureSpec = MeasureSpec.makeMeasureSpec(mItemHeight, MeasureSpec.EXACTLY);
                 break;
             case MeasureSpec.EXACTLY:
-                break;
             default:
                 break;
         }

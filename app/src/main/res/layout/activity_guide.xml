@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.activity.GuideActivity">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_guide_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="30dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="40dp">
+
+        <com.rd.PageIndicatorView
+            android:id="@+id/pv_guide_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:piv_animationType="scale"
+            app:piv_dynamicCount="true"
+            app:piv_interactiveAnimation="true"
+            app:piv_padding="10dp"
+            app:piv_radius="6dp"
+            app:piv_selectedColor="#51d5b8"
+            app:piv_unselectedColor="#bfd6cf" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_guide_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_guide_3"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+</FrameLayout>

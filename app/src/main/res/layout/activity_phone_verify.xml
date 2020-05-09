@@ -46,13 +46,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/white"
-            android:drawableLeft="@drawable/ic_small_safe"
+            android:drawableStart="@drawable/ic_small_safe"
             android:drawablePadding="15dp"
             android:hint="@string/common_code_input_hint"
-            android:maxLength="4"
-            android:paddingLeft="20dp"
+            android:maxLength="@integer/sms_code_length"
+            android:paddingStart="20dp"
             android:paddingTop="18dp"
-            android:paddingRight="20dp"
+            android:paddingEnd="20dp"
             android:paddingBottom="18dp"
             android:singleLine="true" />
 

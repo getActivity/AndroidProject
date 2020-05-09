@@ -15,21 +15,16 @@ import androidx.appcompat.widget.AppCompatTextView;
 public final class SmartTextView extends AppCompatTextView implements TextWatcher {
 
     public SmartTextView(Context context) {
-        super(context);
-        initialize();
+        this(context, null);
     }
 
     public SmartTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initialize();
+        this(context, attrs, android.R.attr.textViewStyle);
     }
 
     public SmartTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize();
-    }
 
-    private void initialize() {
         addTextChangedListener(this);
         // 触发一次监听
         afterTextChanged(null);

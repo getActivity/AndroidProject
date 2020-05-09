@@ -1,5 +1,4 @@
 include ':app'
 include ':base'
 include ':widget'
-include ':image'
 include ':umeng'

@@ -14,6 +14,8 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.hjq.widget.R;
 
+import java.util.Objects;
+
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -30,25 +32,18 @@ public final class ClearEditText extends RegexEditText
     private OnFocusChangeListener mOnFocusChangeListener;
 
     public ClearEditText(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ClearEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public ClearEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
 
-    @SuppressWarnings("all")
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    protected void initialize(Context context, AttributeSet attrs) {
-        super.initialize(context, attrs);
-
-        // Wrap the drawable so that it can be tinted pre Lollipop
-        mClearDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_delete));
+        mClearDrawable = DrawableCompat.wrap(Objects.requireNonNull(ContextCompat.getDrawable(context, R.drawable.ic_input_delete)));
         mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(), mClearDrawable.getIntrinsicHeight());
         setDrawableVisible(false);
         super.setOnTouchListener(this);
@@ -81,7 +76,7 @@ public final class ClearEditText extends RegexEditText
     }
 
     /**
-     * {@link View.OnFocusChangeListener}
+     * {@link OnFocusChangeListener}
      */
 
     @Override
@@ -97,7 +92,7 @@ public final class ClearEditText extends RegexEditText
     }
 
     /**
-     * {@link View.OnTouchListener}
+     * {@link OnTouchListener}
      */
 
     @Override

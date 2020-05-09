@@ -37,24 +37,16 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
     private Pattern mPattern;
 
     public RegexEditText(Context context) {
-        super(context);
-        initialize(context, null);
+        this(context, null);
     }
 
     public RegexEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initialize(context, attrs);
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
     public RegexEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize(context, attrs);
-    }
 
-    /**
-     * 初始化属性
-     */
-    protected void initialize(Context context, AttributeSet attrs) {
         final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RegexEditText);
 
         if (array.hasValue(R.styleable.RegexEditText_inputRegex)) {

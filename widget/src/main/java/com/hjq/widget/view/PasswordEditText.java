@@ -29,35 +29,30 @@ public final class PasswordEditText extends RegexEditText
     private static final int TYPE_INVISIBLE = InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
     private Drawable mCurrentDrawable;
-    private Drawable mVisibleDrawable;
-    private Drawable mInvisibleDrawable;
+    private final Drawable mVisibleDrawable;
+    private final Drawable mInvisibleDrawable;
 
     private OnTouchListener mOnTouchListener;
     private OnFocusChangeListener mOnFocusChangeListener;
 
     public PasswordEditText(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public PasswordEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public PasswordEditText(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
     @SuppressWarnings("all")
     @SuppressLint("ClickableViewAccessibility")
-    @Override
-    protected void initialize(Context context, AttributeSet attrs) {
-        super.initialize(context, attrs);
+    public PasswordEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
 
         // Wrap the drawable so that it can be tinted pre Lollipop
-        mVisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_show));
+        mVisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_hide));
         mVisibleDrawable.setBounds(0, 0, mVisibleDrawable.getIntrinsicWidth(), mVisibleDrawable.getIntrinsicHeight());
 
-        mInvisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_hide));
+        mInvisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_show));
         mInvisibleDrawable.setBounds(0, 0, mInvisibleDrawable.getIntrinsicWidth(), mInvisibleDrawable.getIntrinsicHeight());
 
         mCurrentDrawable = mVisibleDrawable;
@@ -75,14 +70,14 @@ public final class PasswordEditText extends RegexEditText
         super.addTextChangedListener(this);
     }
 
-    private void setDrawableVisible(final boolean visible) {
+    private void setDrawableVisible(boolean visible) {
         if (mCurrentDrawable.isVisible() == visible) {
             return;
         }
 
         mCurrentDrawable.setVisible(visible, false);
-        final Drawable[] drawables = getCompoundDrawables();
-        setCompoundDrawables(
+        Drawable[] drawables = getCompoundDrawables();
+        setCompoundDrawablesRelative(
                 drawables[0],
                 drawables[1],
                 visible ? mCurrentDrawable : null,
@@ -90,8 +85,8 @@ public final class PasswordEditText extends RegexEditText
     }
 
     private void refreshDrawableStatus() {
-        final Drawable[] drawables = getCompoundDrawables();
-        setCompoundDrawables(
+        Drawable[] drawables = getCompoundDrawables();
+        setCompoundDrawablesRelative(
                 drawables[0],
                 drawables[1],
                 mCurrentDrawable,
@@ -99,12 +94,12 @@ public final class PasswordEditText extends RegexEditText
     }
 
     @Override
-    public void setOnFocusChangeListener(final OnFocusChangeListener onFocusChangeListener) {
+    public void setOnFocusChangeListener(OnFocusChangeListener onFocusChangeListener) {
         mOnFocusChangeListener = onFocusChangeListener;
     }
 
     @Override
-    public void setOnTouchListener(final OnTouchListener onTouchListener) {
+    public void setOnTouchListener(OnTouchListener onTouchListener) {
         mOnTouchListener = onTouchListener;
     }
 
@@ -113,7 +108,7 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public void onFocusChange(final View view, final boolean hasFocus) {
+    public void onFocusChange(View view, boolean hasFocus) {
         if (hasFocus && getText() != null) {
             setDrawableVisible(getText().length() > 0);
         } else {
@@ -129,8 +124,8 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public boolean onTouch(final View view, final MotionEvent motionEvent) {
-        final int x = (int) motionEvent.getX();
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        int x = (int) motionEvent.getX();
         if (mCurrentDrawable.isVisible() && x > getWidth() - getPaddingRight() - mCurrentDrawable.getIntrinsicWidth()) {
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 if (mCurrentDrawable == mVisibleDrawable) {
@@ -161,7 +156,7 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (isFocused()) {
             setDrawableVisible(s.length() > 0);
         }

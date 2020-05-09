@@ -25,43 +25,35 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="20dp">
 
-                <androidx.cardview.widget.CardView
-                    style="@style/CircleCardViewStyle"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/bg_launcher" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    style="@style/CircleCardViewStyle"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_test_circle"
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    android:layout_marginLeft="20dp"
-                    app:cardCornerRadius="10dp">
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_launcher" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0px">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bg_launcher" />
-
                 </androidx.cardview.widget.CardView>
 
                 <com.hjq.widget.view.ScaleImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -96,7 +88,7 @@
                     style="@style/ButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:enabled="false"
                     android:text="禁用了的按钮" />
 
@@ -104,7 +96,7 @@
                     style="@style/RectButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="不带圆角的" />
 
             </LinearLayout>
@@ -126,8 +118,8 @@
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@null"
                     android:button="@drawable/selector_checkbox" />
 
@@ -147,23 +139,26 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.hjq.widget.view.SwitchButton
-                    android:id="@+id/sb_test_switch"
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:button="@drawable/selector_radiobutton"
                     android:checked="true" />
 
-                <com.hjq.widget.view.SwitchButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:checked="false" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@null"
+                    android:button="@drawable/selector_radiobutton" />
 
-                <com.hjq.widget.view.SwitchButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:button="@drawable/selector_radiobutton"
                     android:enabled="false" />
 
             </LinearLayout>
@@ -171,9 +166,37 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.hjq.widget.view.SwitchButton
+                    android:id="@+id/sb_test_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:checked="true" />
+
+                <com.hjq.widget.view.SwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:checked="false" />
+
+                <com.hjq.widget.view.SwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:enabled="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -191,18 +214,18 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 android:text="这是一个带清除的按钮的EditText" />
 
             <com.hjq.widget.view.PasswordEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:text="78797078" />
@@ -211,9 +234,9 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 android:hint="这里只能输入手机号（只能以 1 开头）"
                 app:regexType="mobile" />
 
@@ -221,8 +244,8 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:hint="这里只能输入中文（普通的中文字符）"
                 app:regexType="chinese" />
 
@@ -230,8 +253,8 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:hint="这里只能输入英文（大写和小写的英文）"
                 app:regexType="english" />
 
@@ -239,8 +262,8 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:hint="这里只能输入数量（非 0 开头的数字）"
                 app:regexType="count" />
 
@@ -248,8 +271,8 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:hint="这里只能输入用户名（中文、英文、数字）"
                 app:regexType="name" />
 
@@ -257,8 +280,8 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:hint="这里只能输入非空格的字符"
                 app:regexType="nonnull" />
 
@@ -267,7 +290,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="这是一条华丽的分割线" />
 

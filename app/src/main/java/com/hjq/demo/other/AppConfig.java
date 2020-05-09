@@ -44,4 +44,11 @@ public final class AppConfig {
     public static String getProductFlavors() {
         return BuildConfig.FLAVOR;
     }
+
+    /**
+     * 获取 BuglyId
+     */
+    public static String getBuglyId() {
+        return BuildConfig.BUGLY_ID;
+    }
 }

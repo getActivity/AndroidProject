@@ -1,17 +1,10 @@
 apply plugin: 'com.android.library'
+apply from: "../config.gradle"
 
 android {
-    compileSdkVersion rootProject.ext.compileVersion
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetVersion
         // 混淆配置
         consumerProguardFiles 'proguard-base.pro'
     }
-}
-
-dependencies {
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
-    implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
 }
