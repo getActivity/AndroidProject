@@ -18,7 +18,7 @@ import com.hjq.demo.R;
  */
 public final class GuidePagerAdapter extends PagerAdapter {
 
-    private static final int[] DRAWABLES = {R.drawable.bg_guide_1, R.drawable.bg_guide_2, R.drawable.bg_guide_3};
+    private static final int[] DRAWABLES = {R.drawable.guide_1_bg, R.drawable.guide_2_bg, R.drawable.guide_3_bg};
 
     @Override
     public int getCount() {
@@ -35,7 +35,8 @@ public final class GuidePagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         AppCompatImageView imageView = new AppCompatImageView(container.getContext());
         imageView.setPaddingRelative(0, 0, 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, container.getContext().getResources().getDisplayMetrics()));
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50,
+                        container.getContext().getResources().getDisplayMetrics()));
         imageView.setImageResource(DRAWABLES[position]);
         container.addView(imageView);
         return imageView;

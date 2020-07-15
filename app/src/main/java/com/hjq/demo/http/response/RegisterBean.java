@@ -6,6 +6,6 @@ package com.hjq.demo.http.response;
  *    time   : 2019/12/07
  *    desc   : 注册返回
  */
-public class RegisterBean {
+public final class RegisterBean {
 
 }

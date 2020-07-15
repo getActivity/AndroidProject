@@ -6,7 +6,7 @@ package com.hjq.demo.http.response;
  *    time   : 2019/12/07
  *    desc   : 登录返回
  */
-public class LoginBean {
+public final class LoginBean {
 
     private String token;
 

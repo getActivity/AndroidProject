@@ -8,7 +8,7 @@ import com.hjq.http.config.IRequestApi;
  *    time   : 2019/12/07
  *    desc   : 验证码校验
  */
-public class VerifyCodeApi implements IRequestApi {
+public final class VerifyCodeApi implements IRequestApi {
 
     @Override
     public String getApi() {

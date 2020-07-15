@@ -42,8 +42,10 @@ public final class CacheDataManager {
         if (dir != null) {
             if (dir.isDirectory()) {
                 String[] children = dir.list();
-                for (String child : children) {
-                    deleteDir(new File(dir, child));
+                if (children != null) {
+                    for (String child : children) {
+                        deleteDir(new File(dir, child));
+                    }
                 }
             } else {
                 return dir.delete();
@@ -59,12 +61,14 @@ public final class CacheDataManager {
         long size = 0;
         try {
             File[] list = file.listFiles();
-            for (File temp : list) {
-                // 如果下面还有文件
-                if (temp.isDirectory()) {
-                    size = size + getFolderSize(temp);
-                } else {
-                    size = size + temp.length();
+            if (list != null) {
+                for (File temp : list) {
+                    // 如果下面还有文件
+                    if (temp.isDirectory()) {
+                        size = size + getFolderSize(temp);
+                    } else {
+                        size = size + temp.length();
+                    }
                 }
             }
         } catch (Exception e) {
@@ -76,7 +80,7 @@ public final class CacheDataManager {
     /**
      * 格式化单位
      */
-    private static String getFormatSize(double size) {
+    public static String getFormatSize(double size) {
         double kiloByte = size / 1024;
         if (kiloByte < 1) {
             // return size + "Byte";

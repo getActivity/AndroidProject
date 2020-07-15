@@ -26,7 +26,7 @@ import okhttp3.ResponseBody;
  *    time   : 2019/12/15
  *    desc   : OkHttp 加载器
  */
-public class OkHttpFetcher implements DataFetcher<InputStream>, Callback {
+public final class OkHttpFetcher implements DataFetcher<InputStream>, Callback {
 
     private final Call.Factory mCallFactory;
     private final GlideUrl mGlideUrl;

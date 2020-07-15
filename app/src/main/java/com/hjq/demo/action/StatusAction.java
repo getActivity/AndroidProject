@@ -1,6 +1,6 @@
 package com.hjq.demo.action;
 
-import android.app.Application;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,7 +12,6 @@ import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
 import com.hjq.demo.R;
-import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.demo.widget.HintLayout;
 
 /**
@@ -57,33 +56,34 @@ public interface StatusAction {
      * 显示空提示
      */
     default void showEmpty() {
-        showLayout(R.drawable.ic_hint_empty, R.string.hint_layout_no_data, null);
+        showLayout(R.drawable.hint_empty_ic, R.string.hint_layout_no_data, null);
     }
 
     /**
      * 显示错误提示
      */
     default void showError(View.OnClickListener listener) {
-        Application application = ActivityStackManager.getInstance().getApplication();
-        if (application != null) {
-            ConnectivityManager manager = ContextCompat.getSystemService(application, ConnectivityManager.class);
-            if (manager != null) {
-                NetworkInfo info = manager.getActiveNetworkInfo();
-                // 判断网络是否连接
-                if (info == null || !info.isConnected()) {
-                    showLayout(R.drawable.ic_hint_nerwork, R.string.hint_layout_error_network, listener);
-                    return;
-                }
+        HintLayout layout = getHintLayout();
+        Context context = layout.getContext();
+        ConnectivityManager manager = ContextCompat.getSystemService(context, ConnectivityManager.class);
+        if (manager != null) {
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            // 判断网络是否连接
+            if (info == null || !info.isConnected()) {
+                showLayout(R.drawable.hint_nerwork_ic, R.string.hint_layout_error_network, listener);
+                return;
             }
         }
-        showLayout(R.drawable.ic_hint_error, R.string.hint_layout_error_request, listener);
+        showLayout(R.drawable.hint_error_ic, R.string.hint_layout_error_request, listener);
     }
 
     /**
      * 显示自定义提示
      */
     default void showLayout(@DrawableRes int drawableId, @StringRes int stringId, View.OnClickListener listener) {
-        showLayout(ContextCompat.getDrawable(ActivityStackManager.getInstance().getTopActivity(), drawableId), ActivityStackManager.getInstance().getTopActivity().getString(stringId), listener);
+        HintLayout layout = getHintLayout();
+        Context context = layout.getContext();
+        showLayout(ContextCompat.getDrawable(context, drawableId), context.getString(stringId), listener);
     }
 
     default void showLayout(Drawable drawable, CharSequence hint, View.OnClickListener listener) {

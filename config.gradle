@@ -3,10 +3,10 @@ android {
 
     compileSdkVersion 29
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
+        versionName '1.0'
         versionCode 10
-        versionName "1.0"
     }
 
     // 支持 Java JDK 8
@@ -15,7 +15,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
     }
 
-    // 设置 SO 库存放目录
+    // 设置存放 so 文件的目录
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -30,6 +30,6 @@ dependencies {
     implementation fileTree(include: ['*.aar'], dir: 'libs')
 
     // 谷歌兼容库：https://developer.android.google.cn/jetpack/androidx/releases/appcompat?hl=zh-cn
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
 }

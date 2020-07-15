@@ -14,6 +14,8 @@ public final class IntentKey {
     public static final String ID = "id";
     /** token */
     public static final String TOKEN = "token";
+    /** 标题 */
+    public static final String TITLE = "title";
     /** 索引 */
     public static final String INDEX = "index";
     /** 位置 */
@@ -75,12 +77,12 @@ public final class IntentKey {
 
     // 文件类型相关
 
-    /** 文本 */
+    /** 文件 */
     public static final String FILE = "file";
     /** 文本 */
-    public static final String TXT = "txt";
+    public static final String TEXT = "text";
     /** 图片 */
-    public static final String PICTURE = "picture";
+    public static final String IMAGE = "picture";
     /** 音频 */
     public static final String VOICE = "voice";
     /** 视频 */

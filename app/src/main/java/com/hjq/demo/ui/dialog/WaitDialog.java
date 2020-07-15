@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.StringRes;
 
 import com.hjq.base.BaseDialog;
-import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
 
 /**
@@ -25,8 +24,8 @@ public final class WaitDialog {
 
         public Builder(Context context) {
             super(context);
-            setContentView(R.layout.dialog_wait);
-            setAnimStyle(AnimAction.TOAST);
+            setContentView(R.layout.wait_dialog);
+            setAnimStyle(BaseDialog.ANIM_TOAST);
             setBackgroundDimEnabled(false);
             setCancelable(false);
 
@@ -36,6 +35,7 @@ public final class WaitDialog {
         public Builder setMessage(@StringRes int id) {
             return setMessage(getString(id));
         }
+
         public Builder setMessage(CharSequence text) {
             mMessageView.setText(text);
             mMessageView.setVisibility(text == null ? View.GONE : View.VISIBLE);

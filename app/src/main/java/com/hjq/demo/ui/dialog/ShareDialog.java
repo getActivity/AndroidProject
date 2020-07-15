@@ -47,14 +47,14 @@ public final class ShareDialog {
         public Builder(Context context) {
             super(context);
 
-            setContentView(R.layout.dialog_share);
+            setContentView(R.layout.share_dialog);
 
             final List<ShareBean> data = new ArrayList<>();
-            data.add(new ShareBean(getDrawable(R.drawable.ic_share_wechat), getString(R.string.share_platform_wechat), Platform.WECHAT));
-            data.add(new ShareBean(getDrawable(R.drawable.ic_share_moment), getString(R.string.share_platform_moment), Platform.CIRCLE));
-            data.add(new ShareBean(getDrawable(R.drawable.ic_share_qq), getString(R.string.share_platform_qq), Platform.QQ));
-            data.add(new ShareBean(getDrawable(R.drawable.ic_share_qzone), getString(R.string.share_platform_qzone), Platform.QZONE));
-            data.add(new ShareBean(getDrawable(R.drawable.ic_share_link), getString(R.string.share_platform_link), null));
+            data.add(new ShareBean(getDrawable(R.drawable.share_wechat_ic), getString(R.string.share_platform_wechat), Platform.WECHAT));
+            data.add(new ShareBean(getDrawable(R.drawable.share_moment_ic), getString(R.string.share_platform_moment), Platform.CIRCLE));
+            data.add(new ShareBean(getDrawable(R.drawable.share_qq_ic), getString(R.string.share_platform_qq), Platform.QQ));
+            data.add(new ShareBean(getDrawable(R.drawable.share_qzone_ic), getString(R.string.share_platform_qzone), Platform.QZONE));
+            data.add(new ShareBean(getDrawable(R.drawable.share_link_ic), getString(R.string.share_platform_link), null));
 
             mAdapter = new ShareAdapter(context);
             mAdapter.setData(data);
@@ -126,13 +126,13 @@ public final class ShareDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final ImageView mImageView;
             private final TextView mTextView;
 
             private ViewHolder() {
-                super(R.layout.item_share);
+                super(R.layout.share_item);
                 mImageView = (ImageView) findViewById(R.id.iv_share_image);
                 mTextView = (TextView) findViewById(R.id.tv_share_text);
             }
@@ -145,6 +145,7 @@ public final class ShareDialog {
             }
         }
     }
+
 
     private static class ShareBean {
 

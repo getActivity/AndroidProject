@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/dialog_ui_round_size"
+    app:cardElevation="0px"
+    tools:context=".ui.dialog.UIDialog">
+
+    <LinearLayout
+        android:id="@+id/ll_ui_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <com.hjq.widget.view.SmartTextView
+            android:id="@+id/tv_ui_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="标题" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_size"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <com.hjq.widget.view.SmartTextView
+                android:id="@+id/tv_ui_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/transparent_selector"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/common_cancel"
+                android:textColor="@color/colorCancel"
+                android:textSize="14sp" />
+
+            <View
+                android:id="@+id/v_ui_line"
+                android:layout_width="@dimen/line_size"
+                android:layout_height="match_parent"
+                android:background="@color/colorLine" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_ui_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/transparent_selector"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/common_confirm"
+                android:textColor="@color/colorConfirm"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

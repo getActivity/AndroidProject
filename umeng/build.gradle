@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply from: "../config.gradle"
+apply from: '../config.gradle'
 
 android {
 
@@ -10,15 +10,31 @@ android {
         // 清单占位符
         manifestPlaceholders = [
                 // 友盟 AppKey
-                "UMENG_APPKEY" : "5cb16d93570df399fd0014e2",
+                'UMENG_APPKEY' : '5cb16d93570df399fd0014e2',
                 // QQ AppId
-                "QQ_APPID" : "101828096",
+                'QQ_APPID' : '101828096',
                 // QQ AppKey
-                "QQ_APPKEY" : "9dfd3300c3aa3c4596a07796c64914b2",
+                'QQ_APPKEY' : '9dfd3300c3aa3c4596a07796c64914b2',
                 // 微信 AppId
-                "WX_APPID" : "wxdc1e388c3822c80b",
+                'WX_APPID' : 'wxd35706cc9f46114c',
                 // 微信 AppKey
-                "WX_APPKEY" : "3baf1193c85774b3fd9d18447d76cab0"
+                'WX_APPKEY' : '0c8c7cf831dd135a32b3e395ea459b5a'
         ]
     }
+}
+
+// 友盟仓库：https://bintray.com/umsdk/release
+dependencies {
+    // 友盟基础组件：https://bintray.com/umsdk/release/common
+    implementation 'com.umeng.umsdk:common:2.2.5'
+
+    // 友盟统计：https://bintray.com/umsdk/release/analytics
+    implementation 'com.umeng.umsdk:analytics:8.1.6'
+
+    // 友盟社会化：https://bintray.com/umsdk/release/share-core
+    //implementation 'com.umeng.umsdk:share-core:6.9.8'
+    // QQ SDK：https://bintray.com/umsdk/release/share-qq
+    //implementation 'com.umeng.umsdk:share-qq:6.9.8'
+    // 微信 SDK：https://bintray.com/umsdk/release/share-wx
+    //implementation 'com.umeng.umsdk:share-wx:6.9.8'
 }

@@ -3,14 +3,16 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven { url "https://jitpack.io" }
+        maven { url 'https://jitpack.io' }
     }
+
+    // Studio 插件推荐：https://github.com/getActivity/StudioPlugins
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        // AOP 开发插件：https://mvnrepository.com/artifact/org.aspectj/aspectjtools
-        classpath 'org.aspectj:aspectjtools:1.9.5'
-        // AOP 配置插件：https://github.com/xuexiangjys/XAOP
-        classpath 'com.github.xuexiangjys.XAOP:xaop-plugin:1.0.5'
+        classpath 'com.android.tools.build:gradle:3.6.3'
+        // AOP 配置插件：https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
+        // 资源混淆插件：https://github.com/shwenzhang/AndResGuard
+        classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.17'
     }
 }
 
@@ -24,8 +26,9 @@ allprojects {
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
         maven { url 'https://maven.aliyun.com/nexus/content/repositories/central/' }
         maven { url 'https://dl.bintray.com/getactivity/maven/' }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
         maven { url 'https://maven.google.com' }
-        maven { url "https://jitpack.io" }
+        maven { url 'https://jitpack.io' }
     }
 }
 

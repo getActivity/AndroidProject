@@ -1,6 +1,7 @@
 package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -69,7 +70,7 @@ public final class AddressDialog {
         @SuppressWarnings("all")
         public Builder(Context context) {
             super(context);
-            setContentView(R.layout.dialog_address);
+            setContentView(R.layout.address_dialog);
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getSystemService(WindowManager.class).getDefaultDisplay().getMetrics(displayMetrics);
@@ -83,6 +84,7 @@ public final class AddressDialog {
             mTitleView = findViewById(R.id.tv_address_title);
             mCloseView = findViewById(R.id.iv_address_closer);
             mTabLayout = findViewById(R.id.tb_address_tab);
+            setOnClickListener(mCloseView);
 
             mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
             mTabLayout.addOnTabSelectedListener(this);
@@ -111,9 +113,6 @@ public final class AddressDialog {
 
             // 显示省份列表
             mAdapter.addItem(AddressManager.getProvinceList(getContext()));
-
-            setOnClickListener(R.id.iv_address_closer);
-
             addOnShowListener(this);
             addOnDismissListener(this);
         }
@@ -130,7 +129,7 @@ public final class AddressDialog {
          * 设置默认省份
          */
         public Builder setProvince(String province) {
-            if (province != null && !"".equals(province)) {
+            if (!TextUtils.isEmpty(province)) {
                 List<AddressBean> data = mAdapter.getItem(0);
                 if (data != null && !data.isEmpty()) {
                     for (int i = 0; i < data.size(); i++) {
@@ -152,7 +151,7 @@ public final class AddressDialog {
                 // 已经忽略了县级区域的选择，不能选定指定的城市
                 throw new IllegalStateException("The selection of county-level regions has been ignored. The designated city cannot be selected");
             }
-            if (city != null && !"".equals(city)) {
+            if (!TextUtils.isEmpty(city)) {
                 List<AddressBean> data = mAdapter.getItem(1);
                 if (data != null && !data.isEmpty()) {
                     for (int i = 0; i < data.size(); i++) {
@@ -173,9 +172,8 @@ public final class AddressDialog {
          * 不选择县级区域
          */
         public Builder setIgnoreArea() {
-            List<AddressBean> data = mAdapter.getItem(1);
-            if (data != null && !data.isEmpty()) {
-                // 已经指定了城市，不能再忽略县级区域
+            if (mAdapter.getItemCount() == 3) {
+                // 已经指定了城市，则不能忽略县级区域
                 throw new IllegalStateException("Cities have been designated and county-level areas can no longer be ignored");
             }
             mIgnoreArea = true;
@@ -346,7 +344,7 @@ public final class AddressDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder implements OnItemClickListener {
+        private final class ViewHolder extends MyAdapter.ViewHolder implements OnItemClickListener {
 
             private final AddressAdapter mAdapter;
 
@@ -376,7 +374,7 @@ public final class AddressDialog {
             mListener = listener;
         }
 
-        public interface OnSelectListener {
+        private interface OnSelectListener {
 
             void onSelected(int recyclerViewPosition, int clickItemPosition);
         }
@@ -393,7 +391,7 @@ public final class AddressDialog {
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
             TextView textView = new TextView(parent.getContext());
             textView.setGravity(Gravity.CENTER_VERTICAL);
-            textView.setBackgroundResource(R.drawable.selector_transparent);
+            textView.setBackgroundResource(R.drawable.transparent_selector);
             textView.setTextColor(0xFF222222);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -404,7 +402,7 @@ public final class AddressDialog {
             return new ViewHolder(textView);
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final TextView mTextView;
 

@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
@@ -43,14 +45,18 @@ public final class SettingBar extends FrameLayout {
     }
 
     public SettingBar(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public SettingBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
         mMainLayout = new LinearLayout(getContext());
         mLeftView = new TextView(getContext());
         mRightView = new TextView(getContext());
         mLineView  = new View(getContext());
 
-        mRightView.setGravity(Gravity.END);
+        mRightView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
 
         mLeftView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), mLeftView.getLineSpacingMultiplier());
         mRightView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), mRightView.getLineSpacingMultiplier());

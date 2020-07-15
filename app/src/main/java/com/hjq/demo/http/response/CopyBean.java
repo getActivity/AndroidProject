@@ -6,6 +6,6 @@ package com.hjq.demo.http.response;
  *    time   : 2019/12/07
  *    desc   : 可进行拷贝的副本
  */
-public class CopyBean {
+public final class CopyBean {
 
 }

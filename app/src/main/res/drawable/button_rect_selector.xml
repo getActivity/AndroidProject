@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 不带圆角按钮样式 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 禁用状态 -->
+    <item android:drawable="@color/colorButtonDisable" android:state_enabled="false" />
+
+    <!-- 按压状态 -->
+    <item android:drawable="@color/colorButtonPressed" android:state_pressed="true" />
+
+    <!-- 焦点状态 -->
+    <item android:drawable="@color/colorButtonPressed" android:state_focused="true" />
+
+    <!-- 默认状态 -->
+    <item android:drawable="@color/colorAccent" />
+
+</selector>

@@ -8,7 +8,7 @@ import com.hjq.http.config.IRequestApi;
  *    time   : 2019/12/07
  *    desc   : 用户登录
  */
-public class LoginApi implements IRequestApi {
+public final class LoginApi implements IRequestApi {
 
     @Override
     public String getApi() {

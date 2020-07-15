@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    tools:context=".ui.dialog.SelectDialog">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_select_text"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:singleLine="true"
+        android:textColor="@color/black80"
+        android:textSize="15sp"
+        tools:text="条目" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/tv_select_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:buttonCompat="@drawable/checkbox_selector"
+        tools:checked="true" />
+
+</LinearLayout>

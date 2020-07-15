@@ -1,5 +1,7 @@
 package com.hjq.demo.aop;
 
+import android.app.Activity;
+
 import com.hjq.demo.R;
 import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.permissions.OnPermission;
@@ -33,7 +35,11 @@ public class PermissionsAspect {
      */
     @Around("method() && @annotation(permissions)")
     public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, Permissions permissions) {
-        XXPermissions.with(ActivityStackManager.getInstance().getTopActivity())
+        Activity activity = ActivityStackManager.getInstance().getTopActivity();
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            return;
+        }
+        XXPermissions.with(activity)
                 .permission(permissions.value())
                 .request(new OnPermission() {
 
@@ -53,7 +59,7 @@ public class PermissionsAspect {
                     public void noPermission(List<String> denied, boolean quick) {
                         if (quick) {
                             ToastUtils.show(R.string.common_permission_fail);
-                            XXPermissions.gotoPermissionSettings(ActivityStackManager.getInstance().getTopActivity(), false);
+                            XXPermissions.startPermissionActivity(activity, false);
                         } else {
                             ToastUtils.show(R.string.common_permission_hint);
                         }

@@ -43,7 +43,7 @@ public final class ClearEditText extends RegexEditText
     public ClearEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mClearDrawable = DrawableCompat.wrap(Objects.requireNonNull(ContextCompat.getDrawable(context, R.drawable.ic_input_delete)));
+        mClearDrawable = DrawableCompat.wrap(Objects.requireNonNull(ContextCompat.getDrawable(context, R.drawable.input_delete_ic)));
         mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(), mClearDrawable.getIntrinsicHeight());
         setDrawableVisible(false);
         super.setOnTouchListener(this);

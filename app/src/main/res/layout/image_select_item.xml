@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.widget.layout.RatioFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:sizeRatio="1"
+    tools:context=".ui.adapter.ImageSelectAdapter">
+
+    <com.hjq.widget.view.ScaleImageView
+        android:id="@+id/iv_image_select_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        app:scaleRatio="0.95"
+        tools:src="@drawable/logo_big_ic" />
+
+    <FrameLayout
+        android:id="@+id/fl_image_select_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingStart="20dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="3dp"
+        android:paddingBottom="20dp">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/iv_image_select_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            app:buttonCompat="@drawable/checkbox_selector" />
+
+    </FrameLayout>
+
+</com.hjq.widget.layout.RatioFrameLayout>

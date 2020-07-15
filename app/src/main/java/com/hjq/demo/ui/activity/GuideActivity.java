@@ -1,7 +1,6 @@
 package com.hjq.demo.ui.activity;
 
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -10,8 +9,6 @@ import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.ui.pager.GuidePagerAdapter;
 import com.rd.PageIndicatorView;
-
-import butterknife.BindView;
 
 /**
  *    author : Android 轮子哥
@@ -22,24 +19,25 @@ import butterknife.BindView;
 public final class GuideActivity extends MyActivity
         implements ViewPager.OnPageChangeListener {
 
-    @BindView(R.id.vp_guide_pager)
-    ViewPager mViewPager;
-    @BindView(R.id.pv_guide_indicator)
-    PageIndicatorView mIndicatorView;
-    @BindView(R.id.iv_guide_complete)
-    ImageView mCompleteView;
+    private ViewPager mViewPager;
+    private PageIndicatorView mIndicatorView;
+    private View mCompleteView;
 
     private GuidePagerAdapter mPagerAdapter;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_guide;
+        return R.layout.guide_activity;
     }
 
     @Override
     protected void initView() {
+        mViewPager = findViewById(R.id.vp_guide_pager);
+        mIndicatorView = findViewById(R.id.pv_guide_indicator);
+        mCompleteView = findViewById(R.id.btn_guide_complete);
+        setOnClickListener(mCompleteView);
+
         mIndicatorView.setViewPager(mViewPager);
-        setOnClickListener(R.id.iv_guide_complete);
     }
 
     @Override
@@ -52,7 +50,7 @@ public final class GuideActivity extends MyActivity
     @SingleClick
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.iv_guide_complete) {
+        if (v == mCompleteView) {
             startActivity(HomeActivity.class);
             finish();
         }

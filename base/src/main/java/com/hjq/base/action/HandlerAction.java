@@ -47,7 +47,14 @@ public interface HandlerAction {
     }
 
     /**
-     * 移除消息回调
+     * 移除单个消息回调
+     */
+    default void removeCallbacks(Runnable r) {
+        HANDLER.removeCallbacks(r);
+    }
+
+    /**
+     * 移除全部消息回调
      */
     default void removeCallbacks() {
         HANDLER.removeCallbacksAndMessages(this);

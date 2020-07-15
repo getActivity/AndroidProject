@@ -45,7 +45,7 @@ public final class TimeDialog {
         @SuppressWarnings("all")
         public Builder(Context context) {
             super(context);
-            setCustomView(R.layout.dialog_time);
+            setCustomView(R.layout.time_dialog);
             setTitle(R.string.time_title);
 
             mHourView = findViewById(R.id.rv_time_hour);
@@ -149,7 +149,7 @@ public final class TimeDialog {
         }
 
         public Builder setHour(String hour) {
-            return setHour(Integer.valueOf(hour));
+            return setHour(Integer.parseInt(hour));
         }
 
         public Builder setHour(int hour) {
@@ -164,7 +164,7 @@ public final class TimeDialog {
         }
 
         public Builder setMinute(String minute) {
-            return setMinute(Integer.valueOf(minute));
+            return setMinute(Integer.parseInt(minute));
         }
 
         public Builder setMinute(int minute) {
@@ -179,7 +179,7 @@ public final class TimeDialog {
         }
 
         public Builder setSecond(String second) {
-            return setSecond(Integer.valueOf(second));
+            return setSecond(Integer.parseInt(second));
         }
 
         public Builder setSecond(int second) {
@@ -227,12 +227,12 @@ public final class TimeDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final TextView mPickerView;
 
             ViewHolder() {
-                super(R.layout.item_picker);
+                super(R.layout.picker_item);
                 mPickerView = (TextView) findViewById(R.id.tv_picker_name);
             }
 

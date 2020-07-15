@@ -18,7 +18,7 @@ import okhttp3.Call;
  *    time   : 2019/12/15
  *    desc   : OkHttp 加载模型
  */
-public class OkHttpLoader implements ModelLoader<GlideUrl, InputStream> {
+public final class OkHttpLoader implements ModelLoader<GlideUrl, InputStream> {
 
     private final Call.Factory mFactory;
 

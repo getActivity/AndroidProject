@@ -2,18 +2,19 @@ package com.hjq.demo.widget;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -21,12 +22,21 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 
+import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseDialog;
+import com.hjq.base.action.ActivityAction;
+import com.hjq.demo.R;
+import com.hjq.demo.ui.dialog.HintDialog;
 import com.hjq.demo.ui.dialog.InputDialog;
 import com.hjq.demo.ui.dialog.MessageDialog;
-import com.hjq.demo.ui.dialog.ToastDialog;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
+import com.hjq.toast.ToastUtils;
+
+import java.util.List;
 
 /**
  *    author : Android 轮子哥
@@ -34,7 +44,7 @@ import com.hjq.demo.ui.dialog.ToastDialog;
  *    time   : 2019/09/24
  *    desc   : 基于 WebView 封装
  */
-public final class BrowserView extends WebView {
+public final class BrowserView extends WebView implements ActivityAction {
 
     public BrowserView(Context context) {
         this(context, null);
@@ -44,9 +54,13 @@ public final class BrowserView extends WebView {
         this(context, attrs, android.R.attr.webViewStyle);
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     public BrowserView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(getFixedContext(context), attrs, defStyleAttr);
+        this(getFixedContext(context), attrs, defStyleAttr, 0);
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    public BrowserView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
         WebSettings settings = getSettings();
         // 允许文件访问
@@ -76,20 +90,26 @@ public final class BrowserView extends WebView {
 
     /**
      * 修复原生 WebView 和 AndroidX 在 Android 5.x 上面崩溃的问题
+     *
+     * doc：https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview
      */
     public static Context getFixedContext(Context context) {
-        // 博客地址：https://blog.csdn.net/qq_34206863/article/details/103660307
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            // 不用上下文
-            return context.createConfigurationContext(new Configuration());
+            // 这种写法返回的 Context 是 ContextImpl，而不是 Activity 或者 ContextWrapper
+            // 为什么不用 ContextImpl，因为使用 ContextImpl 获取不到 Activity 对象，而 ContextWrapper 可以
+            // return context.createConfigurationContext(new Configuration());
+            // 如果使用 ContextWrapper 还是导致崩溃，因为 Resources 对象冲突了
+            // return new ContextWrapper(context);
+            // 如果使用 ContextThemeWrapper 就没有问题，因为它重写了 getResources 方法，返回的是一个新的 Resources 对象
+            return new ContextThemeWrapper(context, context.getTheme());
         }
         return context;
     }
 
     /**
-     * 获取当前的url
+     * 获取当前的 url
      *
-     * @return      返回原始的url,因为有些url是被WebView解码过的
+     * @return      返回原始的 url，因为有些url是被WebView解码过的
      */
     @Override
     public String getUrl() {
@@ -214,133 +234,146 @@ public final class BrowserView extends WebView {
     public static class BrowserChromeClient extends WebChromeClient {
 
         private final BrowserView mWebView;
-        private FragmentActivity mActivity;
-
-        private View mCustomView;
-        private CustomViewCallback mCustomViewCallback;
 
         public BrowserChromeClient(BrowserView view) {
             mWebView = view;
-            if (view.getContext() instanceof FragmentActivity) {
-                mActivity = (FragmentActivity) view.getContext();
+            if (mWebView == null) {
+                throw new IllegalArgumentException("are you ok?");
             }
         }
 
         /**
-         * 播放视频时进入全屏回调
+         * 网页弹出警告框
          */
         @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
-            if (mActivity == null) {
-                return;
-            }
-            mCustomViewCallback = callback;
-            // 给Activity设置横屏
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-            if (mCustomView != null) {
-                mWebView.setVisibility(View.GONE);
-                mCustomViewCallback.onCustomViewHidden();
-                mWebView.setVisibility(View.VISIBLE);
-                return;
-            }
-
-            mWebView.addView(view);
-            mCustomView = view;
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            new HintDialog.Builder(mWebView.getContext())
+                    .setIcon(HintDialog.ICON_WARNING)
+                    .setMessage(message)
+                    .addOnDismissListener(dialog -> result.confirm())
+                    .show();
+            return true;
         }
 
         /**
-         * 播放视频时退出全屏回调
+         * 网页弹出确定取消框
          */
         @Override
-        public void onHideCustomView() {
-            // 不是全屏播放状态就不往下执行
-            if (mActivity == null || mCustomView == null || mCustomViewCallback == null) {
-                return;
-            }
+        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+            new MessageDialog.Builder(mWebView.getContext())
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setListener(new MessageDialog.OnListener() {
 
-            // 给Activity设置竖屏
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        @Override
+                        public void onConfirm(BaseDialog dialog) {
+                            result.confirm();
+                        }
 
-            mWebView.removeView(mCustomView);
-            mCustomView = null;
-
-            mWebView.setVisibility(View.GONE);
-            mCustomViewCallback.onCustomViewHidden();
-            mWebView.setVisibility(View.VISIBLE);
+                        @Override
+                        public void onCancel(BaseDialog dialog) {
+                            result.cancel();
+                        }
+                    })
+                    .show();
+            return true;
         }
 
         /**
-         * 弹出警告框
+         * 网页弹出输入框
          */
         @Override
-        public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
-            if (mActivity == null) {
-                return super.onJsAlert(view, url, message, result);
-            } else {
-                new ToastDialog.Builder(mActivity)
-                        .setType(ToastDialog.Type.WARN)
-                        .setMessage(message)
-                        .addOnDismissListener(dialog -> result.confirm())
-                        .show();
-                return true;
-            }
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+            new InputDialog.Builder(mWebView.getContext())
+                    .setContent(defaultValue)
+                    .setHint(message)
+                    .setListener(new InputDialog.OnListener() {
+
+                        @Override
+                        public void onConfirm(BaseDialog dialog, String content) {
+                            result.confirm(content);
+                        }
+
+                        @Override
+                        public void onCancel(BaseDialog dialog) {
+                            result.cancel();
+                        }
+                    })
+                    .show();
+            return true;
         }
 
         /**
-         * 弹出确定取消框
+         * 网页弹出选择文件请求（测试地址：https://app.xunjiepdf.com/jpg2pdf/、http://www.script-tutorials.com/demos/199/index.html）
+         *
+         * @param callback              文件选择回调
+         * @param params                文件选择参数
          */
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
-        public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-            if (mActivity == null) {
-                return super.onJsConfirm(view, url, message, result);
-            } else {
-                new MessageDialog.Builder(mActivity)
-                        .setMessage(message)
-                        .setCancelable(false)
-                        .setListener(new MessageDialog.OnListener() {
-
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, FileChooserParams params) {
+            Activity activity = mWebView.getActivity();
+            if (activity instanceof BaseActivity) {
+                XXPermissions.with(activity)
+                        .permission(Permission.Group.STORAGE)
+                        .request(new OnPermission() {
                             @Override
-                            public void onConfirm(BaseDialog dialog) {
-                                result.confirm();
+                            public void hasPermission(List<String> granted, boolean all) {
+                                if (all) {
+                                    openSystemFileChooser((BaseActivity) activity, callback, params);
+                                } else {
+                                    callback.onReceiveValue(null);
+                                }
                             }
 
                             @Override
-                            public void onCancel(BaseDialog dialog) {
-                                result.cancel();
+                            public void noPermission(List<String> denied, boolean quick) {
+                                callback.onReceiveValue(null);
+                                if (quick) {
+                                    ToastUtils.show(R.string.common_permission_fail);
+                                    XXPermissions.startPermissionActivity(activity, false);
+                                } else {
+                                    ToastUtils.show(R.string.common_permission_hint);
+                                }
                             }
-                        })
-                        .show();
-                return true;
+                        });
             }
+            return true;
         }
 
         /**
-         * 弹出输入框
+         * 打开系统文件选择器
          */
-        @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
-            if (mActivity == null){
-                return super.onJsPrompt(view, url, message, defaultValue, result);
-            } else {
-                new InputDialog.Builder(mActivity)
-                        .setContent(defaultValue)
-                        .setHint(message)
-                        .setListener(new InputDialog.OnListener() {
-
-                            @Override
-                            public void onConfirm(BaseDialog dialog, String content) {
-                                result.confirm(content);
-                            }
-
-                            @Override
-                            public void onCancel(BaseDialog dialog) {
-                                result.cancel();
-                            }
-                        })
-                        .show();
-                return true;
+        private void openSystemFileChooser(BaseActivity activity, ValueCallback<Uri[]> callback, FileChooserParams params) {
+            Intent intent = params.createIntent();
+            String[] mimeTypes = params.getAcceptTypes();
+            if (mimeTypes != null && mimeTypes.length > 0 && mimeTypes[0] != null && !"".equals(mimeTypes[0])) {
+                // 设置要过滤的文件类型
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
             }
+            // 设置是否是多选模式
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE);
+            activity.startActivityForResult(Intent.createChooser(intent, params.getTitle()), (resultCode, data) -> {
+                Uri[] uris = null;
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        // 如果用户只选择了一个文件
+                        uris = new Uri[]{uri};
+                    } else {
+                        // 如果用户选择了多个文件
+                        ClipData clipData = data.getClipData();
+                        if (clipData != null) {
+                            uris = new Uri[clipData.getItemCount()];
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                uris[i] = clipData.getItemAt(i).getUri();
+                            }
+                        }
+                    }
+                }
+                // 不管用户最后有没有选择文件，最后还是调用 onReceiveValue，如果没有调用就会导致网页再次上传无响应
+                callback.onReceiveValue(uris);
+            });
         }
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatEditText xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_input_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/dialog_input_bg"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp"
+    android:singleLine="true"
+    android:textColor="#333333"
+    android:textSize="14sp"
+    tools:context=".ui.dialog.InputDialog" />

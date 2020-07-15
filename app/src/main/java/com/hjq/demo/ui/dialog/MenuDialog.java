@@ -1,9 +1,11 @@
 package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
-import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyAdapter;
@@ -31,27 +32,29 @@ public final class MenuDialog {
 
     public static final class Builder
             extends BaseDialog.Builder<Builder>
-            implements BaseAdapter.OnItemClickListener {
+            implements BaseAdapter.OnItemClickListener,
+            View.OnLayoutChangeListener, Runnable {
 
         private OnListener mListener;
         private boolean mAutoDismiss = true;
 
-        private final MenuAdapter mAdapter;
+        private final RecyclerView mRecyclerView;
         private final TextView mCancelView;
+
+        private final MenuAdapter mAdapter;
 
         public Builder(Context context) {
             super(context);
-            setContentView(R.layout.dialog_menu);
-            setAnimStyle(AnimAction.BOTTOM);
+            setContentView(R.layout.menu_dialog);
+            setAnimStyle(BaseDialog.ANIM_BOTTOM);
 
-            RecyclerView recyclerView = findViewById(R.id.rv_menu_list);
+            mRecyclerView = findViewById(R.id.rv_menu_list);
             mCancelView  = findViewById(R.id.tv_menu_cancel);
+            setOnClickListener(mCancelView);
 
             mAdapter = new MenuAdapter(getContext());
             mAdapter.setOnItemClickListener(this);
-            recyclerView.setAdapter(mAdapter);
-
-            setOnClickListener(R.id.tv_menu_cancel);
+            mRecyclerView.setAdapter(mAdapter);
         }
 
         @Override
@@ -63,7 +66,7 @@ public final class MenuDialog {
                     // 不显示取消按钮
                     setCancel(null);
                     // 重新设置动画
-                    setAnimStyle(AnimAction.SCALE);
+                    setAnimStyle(BaseDialog.ANIM_SCALE);
                     break;
                 default:
                     break;
@@ -86,6 +89,7 @@ public final class MenuDialog {
         @SuppressWarnings("all")
         public Builder setList(List data) {
             mAdapter.setData(data);
+            mRecyclerView.addOnLayoutChangeListener(this);
             return this;
         }
 
@@ -136,6 +140,43 @@ public final class MenuDialog {
                 mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
             }
         }
+
+        /**
+         * {@link View.OnLayoutChangeListener}
+         */
+        @Override
+        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            mRecyclerView.removeOnLayoutChangeListener(this);
+            // 这里一定要加延迟，如果不加在 Android 9.0 上面会导致 setLayoutParams 无效
+            post(this);
+        }
+
+        @Override
+        public void run() {
+            final ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
+            final int maxHeight = getScreenHeight() / 4 * 3;
+            if (mRecyclerView.getHeight() > maxHeight) {
+                if (params.height != maxHeight) {
+                    params.height = maxHeight;
+                    mRecyclerView.setLayoutParams(params);
+                }
+            } else {
+                if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    mRecyclerView.setLayoutParams(params);
+                }
+            }
+        }
+
+        /**
+         *  获取屏幕的高度
+         */
+        private int getScreenHeight() {
+            WindowManager manager = getSystemService(WindowManager.class);
+            DisplayMetrics outMetrics = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(outMetrics);
+            return outMetrics.heightPixels;
+        }
     }
 
     private static final class MenuAdapter extends MyAdapter<Object> {
@@ -150,13 +191,13 @@ public final class MenuDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final TextView mTextView;
             private final View mLineView;
 
             ViewHolder() {
-                super(R.layout.item_menu);
+                super(R.layout.menu_item);
                 mTextView = (TextView) findViewById(R.id.tv_menu_text);
                 mLineView = findViewById(R.id.v_menu_line);
             }

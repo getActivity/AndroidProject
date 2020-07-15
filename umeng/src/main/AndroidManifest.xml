@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hjq.umeng">
 
     <!-- 共同权限 -->
@@ -44,7 +45,8 @@
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true">
+            android:noHistory="true"
+            tools:node="replace">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -57,8 +59,9 @@
 
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:node="replace" />
 
         <!-- 微信回调（请注意这个 Activity 放置的包名要和当前项目的包名保持一致，否则将不能正常回调） -->
         <!--suppress AndroidDomInspection -->
@@ -66,7 +69,8 @@
             android:name="${applicationId}.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:node="replace" />
 
     </application>
 

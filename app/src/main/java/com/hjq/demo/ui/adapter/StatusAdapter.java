@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyAdapter;
 
-import butterknife.BindView;
-
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -29,13 +27,13 @@ public final class StatusAdapter extends MyAdapter<String> {
         return new ViewHolder();
     }
 
-    final class ViewHolder extends MyAdapter.ViewHolder {
+    private final class ViewHolder extends MyAdapter.ViewHolder {
 
-        @BindView(R.id.tv_status_text)
-        TextView mTextView;
+        private TextView mTextView;
 
-        ViewHolder() {
-            super(R.layout.item_status);
+        private ViewHolder() {
+            super(R.layout.status_item);
+            mTextView = (TextView) findViewById(R.id.tv_status_text);
         }
 
         @Override

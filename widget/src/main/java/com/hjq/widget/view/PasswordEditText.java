@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,9 +26,6 @@ import com.hjq.widget.R;
 public final class PasswordEditText extends RegexEditText
         implements View.OnTouchListener,
         View.OnFocusChangeListener, TextWatcher {
-
-    private static final int TYPE_VISIBLE = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
-    private static final int TYPE_INVISIBLE = InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
     private Drawable mCurrentDrawable;
     private final Drawable mVisibleDrawable;
@@ -48,17 +47,16 @@ public final class PasswordEditText extends RegexEditText
     public PasswordEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        // Wrap the drawable so that it can be tinted pre Lollipop
-        mVisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_hide));
+        mVisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.password_off_ic));
         mVisibleDrawable.setBounds(0, 0, mVisibleDrawable.getIntrinsicWidth(), mVisibleDrawable.getIntrinsicHeight());
 
-        mInvisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ic_input_show));
+        mInvisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.password_on_ic));
         mInvisibleDrawable.setBounds(0, 0, mInvisibleDrawable.getIntrinsicWidth(), mInvisibleDrawable.getIntrinsicHeight());
 
         mCurrentDrawable = mVisibleDrawable;
 
         // 密码不可见
-        addInputType(TYPE_INVISIBLE);
+        addInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         if (getInputRegex() == null) {
             // 密码输入规则
             setInputRegex(REGEX_NONNULL);
@@ -76,7 +74,7 @@ public final class PasswordEditText extends RegexEditText
         }
 
         mCurrentDrawable.setVisible(visible, false);
-        Drawable[] drawables = getCompoundDrawables();
+        Drawable[] drawables = getCompoundDrawablesRelative();
         setCompoundDrawablesRelative(
                 drawables[0],
                 drawables[1],
@@ -85,7 +83,7 @@ public final class PasswordEditText extends RegexEditText
     }
 
     private void refreshDrawableStatus() {
-        Drawable[] drawables = getCompoundDrawables();
+        Drawable[] drawables = getCompoundDrawablesRelative();
         setCompoundDrawablesRelative(
                 drawables[0],
                 drawables[1],
@@ -131,14 +129,12 @@ public final class PasswordEditText extends RegexEditText
                 if (mCurrentDrawable == mVisibleDrawable) {
                     mCurrentDrawable = mInvisibleDrawable;
                     // 密码可见
-                    removeInputType(TYPE_INVISIBLE);
-                    addInputType(TYPE_VISIBLE);
+                    setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     refreshDrawableStatus();
                 } else if (mCurrentDrawable == mInvisibleDrawable) {
                     mCurrentDrawable = mVisibleDrawable;
                     // 密码不可见
-                    removeInputType(TYPE_VISIBLE);
-                    addInputType(TYPE_INVISIBLE);
+                    setTransformationMethod(PasswordTransformationMethod.getInstance());
                     refreshDrawableStatus();
                 }
                 Editable editable = getText();

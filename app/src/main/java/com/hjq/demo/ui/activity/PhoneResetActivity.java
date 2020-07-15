@@ -17,115 +17,117 @@ import com.hjq.demo.http.request.PhoneApi;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
+import com.hjq.toast.ToastUtils;
 import com.hjq.widget.view.CountdownView;
-
-import butterknife.BindView;
 
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2019/04/20
- *    desc   : 更换手机号
+ *    desc   : 设置手机号
  */
 public final class PhoneResetActivity extends MyActivity {
 
     @DebugLog
     public static void start(Context context, String code) {
-        Intent intent = new Intent(context, PasswordResetActivity.class);
+        Intent intent = new Intent(context, PhoneResetActivity.class);
         intent.putExtra(IntentKey.CODE, code);
         context.startActivity(intent);
     }
 
-    @BindView(R.id.et_phone_reset_phone)
-    EditText mPhoneView;
-    @BindView(R.id.et_phone_reset_code)
-    EditText mCodeView;
-
-    @BindView(R.id.cv_phone_reset_countdown)
-    CountdownView mCountdownView;
-
-    @BindView(R.id.btn_phone_reset_commit)
-    Button mCommitView;
+    private EditText mPhoneView;
+    private EditText mCodeView;
+    private CountdownView mCountdownView;
+    private Button mCommitView;
 
     /** 验证码 */
-    private String mCode;
+    private String mVerifyCode;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_phone_reset;
+        return R.layout.phone_reset_activity;
     }
 
     @Override
     protected void initView() {
+        mPhoneView = findViewById(R.id.et_phone_reset_phone);
+        mCodeView = findViewById(R.id.et_phone_reset_code);
+        mCountdownView = findViewById(R.id.cv_phone_reset_countdown);
+        mCommitView = findViewById(R.id.btn_phone_reset_commit);
+        setOnClickListener(mCountdownView, mCommitView);
+
         InputTextHelper.with(this)
                 .addView(mPhoneView)
                 .addView(mCodeView)
                 .setMain(mCommitView)
-                .setListener(helper -> mPhoneView.getText().toString().length() == 11 && mCodeView.getText().toString().length() == 4)
                 .build();
-
-        setOnClickListener(R.id.cv_phone_reset_countdown, R.id.btn_phone_reset_commit);
     }
 
     @Override
     protected void initData() {
-        mCode = getString(IntentKey.CODE);
+        mVerifyCode = getString(IntentKey.CODE);
     }
 
     @SingleClick
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.cv_phone_reset_countdown:
-                // 获取验证码
-                if (mPhoneView.getText().toString().length() != 11) {
-                    toast(R.string.common_phone_input_error);
-                    return;
-                }
+        if (v == mCountdownView) {
 
-                if (true) {
-                    toast(R.string.common_code_send_hint);
-                    mCountdownView.start();
-                    return;
-                }
+            if (mPhoneView.getText().toString().length() != 11) {
+                toast(R.string.common_phone_input_error);
+                return;
+            }
 
-                // 获取验证码
-                EasyHttp.post(this)
-                        .api(new GetCodeApi()
-                        .setPhone(mPhoneView.getText().toString()))
-                        .request(new HttpCallback<HttpData<Void>>(this) {
+            if (true) {
+                toast(R.string.common_code_send_hint);
+                mCountdownView.start();
+                return;
+            }
 
-                            @Override
-                            public void onSucceed(HttpData<Void> data) {
-                                toast(R.string.common_code_send_hint);
-                                mCountdownView.start();
-                            }
-                        });
-                break;
-            case R.id.btn_phone_reset_commit:
-                if (true) {
-                    toast(R.string.phone_reset_commit_succeed);
-                    finish();
-                    return;
-                }
+            // 获取验证码
+            EasyHttp.post(this)
+                    .api(new GetCodeApi()
+                            .setPhone(mPhoneView.getText().toString()))
+                    .request(new HttpCallback<HttpData<Void>>(this) {
 
-                // 更换手机号
-                EasyHttp.post(this)
-                        .api(new PhoneApi()
-                        .setPreCode(mCode)
-                        .setPhone(mPhoneView.getText().toString())
-                        .setCode(mCodeView.getText().toString()))
-                        .request(new HttpCallback<HttpData<Void>>(this) {
+                        @Override
+                        public void onSucceed(HttpData<Void> data) {
+                            toast(R.string.common_code_send_hint);
+                            mCountdownView.start();
+                        }
+                    });
+        } else if (v == mCommitView) {
 
-                            @Override
-                            public void onSucceed(HttpData<Void> data) {
-                                toast(R.string.phone_reset_commit_succeed);
-                                finish();
-                            }
-                        });
-                break;
-            default:
-                break;
+            if (mPhoneView.getText().toString().length() != 11) {
+                toast(R.string.common_phone_input_error);
+                return;
+            }
+
+            if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
+                ToastUtils.show(R.string.common_code_error_hint);
+                return;
+            }
+
+            if (true) {
+                toast(R.string.phone_reset_commit_succeed);
+                finish();
+                return;
+            }
+
+            // 更换手机号
+            EasyHttp.post(this)
+                    .api(new PhoneApi()
+                            .setPreCode(mVerifyCode)
+                            .setPhone(mPhoneView.getText().toString())
+                            .setCode(mCodeView.getText().toString()))
+                    .request(new HttpCallback<HttpData<Void>>(this) {
+
+                        @Override
+                        public void onSucceed(HttpData<Void> data) {
+                            toast(R.string.phone_reset_commit_succeed);
+                            finish();
+                        }
+                    });
         }
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_status_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1px"
+    android:background="@drawable/white_selector"
+    android:gravity="center_horizontal"
+    android:paddingVertical="15dp"
+    android:textSize="18sp"
+    tools:context=".ui.adapter.StatusAdapter"
+    tools:text="我是条目" />

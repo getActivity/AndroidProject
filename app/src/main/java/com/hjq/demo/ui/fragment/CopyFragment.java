@@ -18,7 +18,7 @@ public final class CopyFragment extends MyFragment<CopyActivity> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_copy;
+        return R.layout.copy_fragment;
     }
 
     @Override

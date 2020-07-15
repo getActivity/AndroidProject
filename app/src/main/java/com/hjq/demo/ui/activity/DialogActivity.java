@@ -3,7 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 
@@ -13,17 +13,18 @@ import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.ui.dialog.AddressDialog;
 import com.hjq.demo.ui.dialog.DateDialog;
+import com.hjq.demo.ui.dialog.HintDialog;
 import com.hjq.demo.ui.dialog.InputDialog;
 import com.hjq.demo.ui.dialog.MenuDialog;
 import com.hjq.demo.ui.dialog.MessageDialog;
 import com.hjq.demo.ui.dialog.PayPasswordDialog;
+import com.hjq.demo.ui.dialog.SafeDialog;
 import com.hjq.demo.ui.dialog.SelectDialog;
 import com.hjq.demo.ui.dialog.ShareDialog;
 import com.hjq.demo.ui.dialog.TimeDialog;
-import com.hjq.demo.ui.dialog.ToastDialog;
 import com.hjq.demo.ui.dialog.UpdateDialog;
 import com.hjq.demo.ui.dialog.WaitDialog;
-import com.hjq.demo.ui.popup.MenuPopup;
+import com.hjq.demo.ui.popup.ListPopup;
 import com.hjq.demo.wxapi.WXEntryActivity;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
@@ -44,7 +45,7 @@ public final class DialogActivity extends MyActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_dialog;
+        return R.layout.dialog_activity;
     }
 
     @Override
@@ -57,7 +58,7 @@ public final class DialogActivity extends MyActivity {
                 R.id.btn_dialog_pay, R.id.btn_dialog_address,
                 R.id.btn_dialog_date, R.id.btn_dialog_time,
                 R.id.btn_dialog_update, R.id.btn_dialog_share,
-                R.id.btn_dialog_custom);
+                R.id.btn_dialog_safe, R.id.btn_dialog_custom);
     }
 
     @Override
@@ -128,7 +129,7 @@ public final class DialogActivity extends MyActivity {
             case R.id.btn_dialog_bottom_menu:
                 List<String> data = new ArrayList<>();
                 for (int i = 0; i < 10; i++) {
-                    data.add("我是数据" + i);
+                    data.add("我是数据" + (i + 1));
                 }
                 // 底部选择框
                 new MenuDialog.Builder(this)
@@ -154,7 +155,7 @@ public final class DialogActivity extends MyActivity {
             case R.id.btn_dialog_center_menu:
                 List<String> data1 = new ArrayList<>();
                 for (int i = 0; i < 10; i++) {
-                    data1.add("我是数据" + i);
+                    data1.add("我是数据" + (i + 1));
                 }
                 // 居中选择框
                 new MenuDialog.Builder(this)
@@ -191,7 +192,7 @@ public final class DialogActivity extends MyActivity {
 
                             @Override
                             public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
-                                toast("确定了" + data.toString());
+                                toast("确定了：" + data.toString());
                             }
 
                             @Override
@@ -214,7 +215,7 @@ public final class DialogActivity extends MyActivity {
 
                             @Override
                             public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
-                                toast("确定了" + data.toString());
+                                toast("确定了：" + data.toString());
                             }
 
                             @Override
@@ -226,22 +227,22 @@ public final class DialogActivity extends MyActivity {
                 break;
             case R.id.btn_dialog_succeed_toast:
                 // 成功对话框
-                new ToastDialog.Builder(this)
-                        .setType(ToastDialog.Type.FINISH)
+                new HintDialog.Builder(this)
+                        .setIcon(HintDialog.ICON_FINISH)
                         .setMessage("完成")
                         .show();
                 break;
             case R.id.btn_dialog_fail_toast:
                 // 失败对话框
-                new ToastDialog.Builder(this)
-                        .setType(ToastDialog.Type.ERROR)
+                new HintDialog.Builder(this)
+                        .setIcon(HintDialog.ICON_ERROR)
                         .setMessage("错误")
                         .show();
                 break;
             case R.id.btn_dialog_warn_toast:
                 // 警告对话框
-                new ToastDialog.Builder(this)
-                        .setType(ToastDialog.Type.WARN)
+                new HintDialog.Builder(this)
+                        .setIcon(HintDialog.ICON_WARNING)
                         .setMessage("警告")
                         .show();
                 break;
@@ -391,7 +392,7 @@ public final class DialogActivity extends MyActivity {
                         // 分享描述
                         .setShareDescription("AndroidProject")
                         // 分享缩略图
-                        .setShareLogo("https://avatars1.githubusercontent.com/u/28616817?s=460&v=4")
+                        .setShareLogo(R.mipmap.launcher_ic)
                         // 分享链接
                         .setShareUrl("https://github.com/getActivity/AndroidProject")
                         .setListener(new UmengShare.OnShareListener() {
@@ -417,23 +418,40 @@ public final class DialogActivity extends MyActivity {
                 // 升级对话框
                 new UpdateDialog.Builder(this)
                         // 版本名
-                        .setVersionName("2.0")
+                        .setVersionName("5.2.0")
                         // 是否强制更新
                         .setForceUpdate(false)
                         // 更新日志
                         .setUpdateLog("到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥")
                         // 下载 URL
-                        .setDownloadUrl("https://raw.githubusercontent.com/getActivity/AndroidProject/master/AndroidProject.apk")
+                        .setDownloadUrl("https://dldir1.qq.com/weixin/android/weixin7014android1660.apk")
                         // 文件 MD5
-                        //.setFileMD5("56A5A5712D1856BDBD4C2AECA9B1FFE7")
+                        .setFileMd5("6ec99cb762ffd9158e8b27dc33d9680d")
+                        .show();
+                break;
+            case R.id.btn_dialog_safe:
+                new SafeDialog.Builder(this)
+                        .setListener(new SafeDialog.OnListener() {
+
+                            @Override
+                            public void onConfirm(BaseDialog dialog, String phone, String code) {
+                                toast("手机号：" + phone + "\n验证码：" + code);
+                            }
+
+                            @Override
+                            public void onCancel(BaseDialog dialog) {
+                                toast("取消了");
+                            }
+                        })
                         .show();
                 break;
             case R.id.btn_dialog_custom:
                 // 自定义对话框
                 new BaseDialog.Builder(this)
-                        .setContentView(R.layout.dialog_custom)
+                        .setContentView(R.layout.custom_dialog)
+                        .setAnimStyle(BaseDialog.ANIM_SCALE)
                         //.setText(id, "我是预设置的文本")
-                        .setOnClickListener(R.id.btn_dialog_custom_ok, (BaseDialog.OnClickListener<ImageView>) (dialog, view) -> dialog.dismiss())
+                        .setOnClickListener(R.id.btn_dialog_custom_ok, (BaseDialog.OnClickListener<Button>) (dialog, view) -> dialog.dismiss())
                         .addOnShowListener(dialog -> toast("Dialog  显示了"))
                         .addOnCancelListener(dialog -> toast("Dialog 取消了"))
                         .addOnDismissListener(dialog -> toast("Dialog 销毁了"))
@@ -458,9 +476,11 @@ public final class DialogActivity extends MyActivity {
     @Override
     public void onRightClick(View v) {
         // 菜单弹窗
-        new MenuPopup.Builder(this)
+        new ListPopup.Builder(this)
                 .setList("选择拍照", "选取相册")
-                .setListener((MenuPopup.OnListener<String>) (popupWindow, position, s) -> toast(s))
+                .addOnShowListener(popupWindow -> toast("PopupWindow 显示了"))
+                .addOnDismissListener(popupWindow -> toast("PopupWindow 销毁了"))
+                .setListener((ListPopup.OnListener<String>) (popupWindow, position, s) -> toast("点击了：" + s))
                 .showAsDropDown(v);
     }
 }

@@ -13,7 +13,7 @@ public final class CopyActivity extends MyActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_copy;
+        return R.layout.copy_activity;
     }
 
     @Override

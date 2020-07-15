@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.StatusActivity">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="界面状态案例" />
+
+    <com.hjq.demo.widget.HintLayout
+        android:id="@+id/hl_status_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:name="com.hjq.demo.ui.fragment.StatusFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MissingId" />
+
+    </com.hjq.demo.widget.HintLayout>
+
+</LinearLayout>

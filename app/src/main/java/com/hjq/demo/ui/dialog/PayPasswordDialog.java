@@ -47,29 +47,26 @@ public final class PayPasswordDialog {
         private final TextView mMoneyView;
 
         private final PasswordView mPasswordView;
-
+        private final RecyclerView mRecyclerView;
         private final KeyboardAdapter mAdapter;
 
         public Builder(Context context) {
             super(context);
-            setContentView(R.layout.dialog_pay_password);
+            setContentView(R.layout.pay_password_dialog);
             setCancelable(false);
 
             mTitleView = findViewById(R.id.tv_pay_title);
             mCloseView = findViewById(R.id.iv_pay_close);
-
             mSubTitleView = findViewById(R.id.tv_pay_sub_title);
             mMoneyView = findViewById(R.id.tv_pay_money);
-
             mPasswordView = findViewById(R.id.pw_pay_view);
+            mRecyclerView = findViewById(R.id.rv_pay_list);
+            setOnClickListener(mCloseView);
 
-            RecyclerView recyclerView = findViewById(R.id.rv_pay_list);
             mAdapter = new KeyboardAdapter(getContext());
             mAdapter.setData(Arrays.asList(KEYBOARD_TEXT));
             mAdapter.setOnItemClickListener(this);
-            recyclerView.setAdapter(mAdapter);
-
-            setOnClickListener(R.id.iv_pay_close);
+            mRecyclerView.setAdapter(mAdapter);
         }
 
         public Builder setTitle(@StringRes int id) {
@@ -199,20 +196,20 @@ public final class PayPasswordDialog {
         public MyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             switch (viewType) {
                 case TYPE_DELETE:
-                    return new MyAdapter.SimpleHolder(R.layout.item_pay_password_delete);
+                    return new MyAdapter.SimpleHolder(R.layout.pay_password_delete_item);
                 case TYPE_EMPTY:
-                    return new MyAdapter.SimpleHolder(R.layout.item_pay_password_empty);
+                    return new MyAdapter.SimpleHolder(R.layout.pay_password_empty_item);
                 default:
                     return new KeyboardAdapter.ViewHolder();
             }
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final TextView mTextView;
 
-            ViewHolder() {
-                super(R.layout.item_pay_password_normal);
+            private ViewHolder() {
+                super(R.layout.pay_password_normal_item);
                 mTextView = (TextView) getItemView();
             }
 

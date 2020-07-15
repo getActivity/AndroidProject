@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/dialog_rounded_corner_bg"
+    android:orientation="vertical"
+    tools:context=".ui.dialog.AddressDialog">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_address_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="40dp"
+            android:gravity="center"
+            android:text="@string/address_title"
+            android:textColor="#333333"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_address_closer"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|center_vertical"
+            android:padding="5dp"
+            app:srcCompat="@drawable/close_icon" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_size"
+        android:background="#ececec" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tb_address_tab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        app:tabIndicatorColor="@color/colorConfirm"
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="scrollable"
+        app:tabPaddingEnd="10dp"
+        app:tabPaddingStart="10dp"
+        app:tabRippleColor="@null"
+        app:tabSelectedTextColor="@color/colorConfirm"
+        app:tabTextColor="#333333" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_address_province"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

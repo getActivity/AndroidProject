@@ -51,7 +51,11 @@ public final class PasswordView extends View {
     }
 
     public PasswordView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public PasswordView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
         mItemWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mItemWidth, getResources().getDisplayMetrics());
         mItemHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mItemHeight, getResources().getDisplayMetrics());

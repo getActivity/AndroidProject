@@ -24,4 +24,10 @@ public interface ClickAction extends View.OnClickListener {
             findViewById(id).setOnClickListener(this);
         }
     }
+
+    default void setOnClickListener(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
+    }
 }

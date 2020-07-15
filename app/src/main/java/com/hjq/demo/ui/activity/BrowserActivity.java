@@ -3,6 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -14,7 +15,6 @@ import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
 import com.hjq.demo.aop.CheckNet;
 import com.hjq.demo.aop.DebugLog;
-import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.common.MyActivity;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.widget.BrowserView;
@@ -22,8 +22,6 @@ import com.hjq.demo.widget.HintLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-
-import butterknife.BindView;
 
 /**
  *    author : Android 轮子哥
@@ -37,7 +35,7 @@ public final class BrowserActivity extends MyActivity
     @CheckNet
     @DebugLog
     public static void start(Context context, String url) {
-        if (url == null || "".equals(url)) {
+        if (TextUtils.isEmpty(url)) {
             return;
         }
         Intent intent = new Intent(context, BrowserActivity.class);
@@ -45,22 +43,23 @@ public final class BrowserActivity extends MyActivity
         context.startActivity(intent);
     }
 
-    @BindView(R.id.hl_browser_hint)
-    HintLayout mHintLayout;
-    @BindView(R.id.pb_browser_progress)
-    ProgressBar mProgressBar;
-    @BindView(R.id.sl_browser_refresh)
-    SmartRefreshLayout mRefreshLayout;
-    @BindView(R.id.wv_browser_view)
-    BrowserView mBrowserView;
+    private HintLayout mHintLayout;
+    private ProgressBar mProgressBar;
+    private SmartRefreshLayout mRefreshLayout;
+    private BrowserView mBrowserView;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_browser;
+        return R.layout.browser_activity;
     }
 
     @Override
     protected void initView() {
+        mHintLayout = findViewById(R.id.hl_browser_hint);
+        mProgressBar = findViewById(R.id.pb_browser_progress);
+        mRefreshLayout = findViewById(R.id.sl_browser_refresh);
+        mBrowserView = findViewById(R.id.wv_browser_view);
+
         // 设置网页刷新监听
         mRefreshLayout.setOnRefreshListener(this);
     }
@@ -117,7 +116,6 @@ public final class BrowserActivity extends MyActivity
     /**
      * 重新加载当前页
      */
-    @SingleClick
     @CheckNet
     private void reload() {
         mBrowserView.reload();

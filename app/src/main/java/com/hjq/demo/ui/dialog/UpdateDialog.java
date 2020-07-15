@@ -12,8 +12,8 @@ import android.widget.TextView;
 import androidx.core.content.FileProvider;
 
 import com.hjq.base.BaseDialog;
-import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
+import com.hjq.demo.aop.CheckNet;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.other.AppConfig;
@@ -50,7 +50,10 @@ public final class UpdateDialog {
         /** 下载地址 */
         private String mDownloadUrl;
         /** 文件 MD5 */
-        private String mFileMD5;
+        private String mFileMd5;
+        /** 是否强制更新 */
+        private boolean mForceUpdate;
+
         /** 当前是否下载中 */
         private boolean mDownloading;
         /** 当前是否下载完毕 */
@@ -59,18 +62,16 @@ public final class UpdateDialog {
         public Builder(Context context) {
             super(context);
 
-            setContentView(R.layout.dialog_update);
-            setAnimStyle(AnimAction.BOTTOM);
+            setContentView(R.layout.update_dialog);
+            setAnimStyle(BaseDialog.ANIM_BOTTOM);
             setCancelable(false);
 
             mNameView = findViewById(R.id.tv_update_name);
             mContentView = findViewById(R.id.tv_update_content);
             mProgressView = findViewById(R.id.pb_update_progress);
-
             mUpdateView = findViewById(R.id.tv_update_update);
             mCloseView = findViewById(R.id.tv_update_close);
-
-            setOnClickListener(R.id.tv_update_update, R.id.tv_update_close);
+            setOnClickListener(mUpdateView, mCloseView);
         }
 
         /**
@@ -94,6 +95,7 @@ public final class UpdateDialog {
          * 设置强制更新
          */
         public Builder setForceUpdate(boolean force) {
+            mForceUpdate = force;
             mCloseView.setVisibility(force ? View.GONE : View.VISIBLE);
             setCancelable(!force);
             return this;
@@ -110,8 +112,8 @@ public final class UpdateDialog {
         /**
          * 设置文件 md5
          */
-        public Builder setFileMD5(String md5) {
-            mFileMD5 = md5;
+        public Builder setFileMd5(String md5) {
+            mFileMd5 = md5;
             return this;
         }
 
@@ -123,8 +125,13 @@ public final class UpdateDialog {
             } else if (v == mUpdateView) {
                 // 判断下载状态
                 if (mDownloadComplete) {
-                    // 下载完毕，安装 Apk
-                    installApk();
+                    if (mApkFile.isFile()) {
+                        // 下载完毕，安装 Apk
+                        installApk();
+                    } else {
+                        // 下载失败，重新下载
+                        downloadApk();
+                    }
                 } else if (!mDownloading) {
                     // 没有下载，开启下载
                     downloadApk();
@@ -135,6 +142,7 @@ public final class UpdateDialog {
         /**
          * 下载 Apk
          */
+        @CheckNet
         @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE})
         private void downloadApk() {
             // 创建要下载的文件对象
@@ -142,11 +150,11 @@ public final class UpdateDialog {
             // 设置对话框不能被取消
             setCancelable(false);
 
-            EasyHttp.download(getActivity())
+            EasyHttp.download(this)
                     .method(HttpMethod.GET)
                     .file(mApkFile)
                     .url(mDownloadUrl)
-                    .md5(mFileMD5)
+                    .md5(mFileMd5)
                     .listener(new OnDownloadListener() {
 
                         @Override
@@ -156,9 +164,10 @@ public final class UpdateDialog {
                             // 标记成未下载完成
                             mDownloadComplete = false;
                             // 后台更新
-                            mCloseView.setText(R.string.update_background);
+                            mCloseView.setVisibility(View.GONE);
                             // 显示进度条
                             mProgressView.setVisibility(View.VISIBLE);
+                            mUpdateView.setText(R.string.update_status_start);
                         }
 
                         @Override
@@ -169,7 +178,6 @@ public final class UpdateDialog {
 
                         @Override
                         public void onComplete(DownloadInfo info) {
-                            mCloseView.setText(R.string.update_no);
                             mUpdateView.setText(R.string.update_status_successful);
                             // 标记成下载完成
                             mDownloadComplete = true;
@@ -187,10 +195,15 @@ public final class UpdateDialog {
 
                         @Override
                         public void onEnd(Call call) {
-                            // 隐藏进度条
+                            // 更新进度条
+                            mProgressView.setProgress(0);
                             mProgressView.setVisibility(View.GONE);
-                            // 标记当前不是下载
+                            // 标记当前不是下载中
                             mDownloading = false;
+                            // 如果当前不是强制更新，对话框就恢复成可取消状态
+                            if (!mForceUpdate) {
+                                setCancelable(true);
+                            }
                         }
                     }).start();
         }

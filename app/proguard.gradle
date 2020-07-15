@@ -1,0 +1,49 @@
+apply plugin: 'AndResGuard'
+
+andResGuard {
+    // mappingFile = file("./resource_mapping.txt")
+    mappingFile = null
+    use7zip = true
+    useSign = true
+    // 是否混淆资源的路径
+    keepRoot = false
+    // 资源混淆白名单
+    whiteList = [
+            // for your icon
+            "R.drawable.icon",
+            // for fabric
+            "R.string.com.crashlytics.*",
+            // for google-services
+            "R.string.google_app_id",
+            "R.string.gcm_defaultSenderId",
+            "R.string.default_web_client_id",
+            "R.string.ga_trackingId",
+            "R.string.firebase_database_url",
+            "R.string.google_api_key",
+            "R.string.google_crash_reporting_api_key"
+    ]
+    compressFilePattern = [
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+    ]
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.2.17'
+        //path = "/usr/local/bin/7za"
+    }
+
+    // 是否合并所有哈希值重复的资源（官方解释：不要过度依赖这个功能去除去冗余资源）
+    //mergeDuplicatedRes = true
+
+    /**
+     * 可选： 如果不设置则会默认覆盖assemble输出的apk
+     **/
+    // finalApkBackupPath = "${project.rootDir}/final.apk"
+
+    /**
+     * 可选: 指定v1签名时生成jar文件的摘要算法
+     * 默认值为“SHA-1”
+     **/
+    // digestalg = "SHA-256"
+}

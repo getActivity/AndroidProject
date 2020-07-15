@@ -6,6 +6,6 @@ package com.hjq.demo.http.response;
  *    time   : 2019/12/07
  *    desc   : 用户信息
  */
-public class UserInfoBean {
+public final class UserInfoBean {
 
 }

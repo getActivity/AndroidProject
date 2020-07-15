@@ -2,7 +2,7 @@
 <paths>
     <!-- 适配Android 7.0文件意图 -->
     <external-path
-        path="Android/data/${applicationId}/"
+        path="Android/data/com.hjq.demo/"
         name="files_root" />
     <external-path
         path="."

@@ -8,7 +8,7 @@ import com.hjq.http.config.IRequestApi;
  *    time   : 2019/12/07
  *    desc   : 获取验证码
  */
-public class GetCodeApi implements IRequestApi {
+public final class GetCodeApi implements IRequestApi {
 
     @Override
     public String getApi() {

@@ -30,18 +30,23 @@ import java.util.Locale;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2019/12/18
- *    desc   : 拍照选择
+ *    desc   : 拍照选择（拍摄图片、视频）
  */
 public final class CameraActivity extends MyActivity {
 
     private static final int CAMERA_REQUEST_CODE = 1024;
 
+    public static void start(BaseActivity activity, OnCameraListener listener) {
+        start(activity, false, listener);
+    }
+
     @DebugLog
     @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA})
-    public static void start(BaseActivity activity, OnCameraListener listener) {
-        File file = createCameraFile();
+    public static void start(BaseActivity activity, boolean video, OnCameraListener listener) {
+        File file = createCameraFile(video);
         Intent intent = new Intent(activity, CameraActivity.class);
         intent.putExtra(IntentKey.FILE, file);
+        intent.putExtra(IntentKey.VIDEO, video);
         activity.startActivityForResult(intent, (resultCode, data) -> {
 
             if (listener == null) {
@@ -70,9 +75,16 @@ public final class CameraActivity extends MyActivity {
 
     @Override
     protected void initData() {
+        Intent intent;
         // 启动系统相机
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (XXPermissions.isHasPermission(this, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA)
+        if (getBoolean(IntentKey.VIDEO)) {
+            // 录制视频
+            intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        } else {
+            // 拍摄照片
+            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        }
+        if (XXPermissions.hasPermission(this, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA)
                 && intent.resolveActivity(getPackageManager()) != null) {
             mFile = getSerializable(IntentKey.FILE);
             if (mFile != null && mFile.exists()) {
@@ -90,11 +102,11 @@ public final class CameraActivity extends MyActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
             } else {
-                toast(R.string.photo_picture_error);
+                toast(R.string.camera_image_error);
                 finish();
             }
         } else {
-            toast(R.string.photo_launch_fail);
+            toast(R.string.camera_launch_fail);
             finish();
         }
     }
@@ -125,7 +137,7 @@ public final class CameraActivity extends MyActivity {
      * 创建一个拍照图片文件对象
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private static File createCameraFile() {
+    private static File createCameraFile(boolean video) {
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
         if (!folder.exists() || !folder.isDirectory()) {
             if (!folder.mkdirs()) {
@@ -134,7 +146,7 @@ public final class CameraActivity extends MyActivity {
         }
 
         try {
-            File file = new File(folder, "IMG_" + new SimpleDateFormat("yyyyMMdd_kkmmss", Locale.getDefault()).format(new Date()) + ".jpg");
+            File file = new File(folder, (video ? "IMG_" : "VID") + new SimpleDateFormat("_yyyyMMdd_HHmmss.", Locale.getDefault()).format(new Date()) + (video ? "mp4" : "jpg"));
             file.createNewFile();
             return file;
         } catch (IOException e) {
@@ -151,7 +163,7 @@ public final class CameraActivity extends MyActivity {
         /**
          * 选择回调
          *
-         * @param file          照片
+         * @param file          文件
          */
         void onSelected(File file);
 

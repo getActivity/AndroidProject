@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 选中状态 -->
+    <item android:drawable="@drawable/checkbox_checked_ic" android:state_checked="true" />
+
+    <!-- 未选状态 -->
+    <item android:drawable="@drawable/checkbox_disable_ic" android:state_enabled="false" />
+
+    <!-- 默认状态-->
+    <item android:drawable="@drawable/compound_normal_ic" />
+
+</selector>

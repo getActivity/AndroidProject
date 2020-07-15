@@ -19,7 +19,7 @@ public final class CopyPopup {
         public Builder(Context context) {
             super(context);
 
-            setContentView(R.layout.popup_copy);
+            setContentView(R.layout.copy_popup);
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
@@ -17,11 +18,8 @@ import com.hjq.demo.action.TitleBarAction;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.ui.dialog.WaitDialog;
-import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnHttpListener;
-import com.hjq.umeng.UmengClient;
 
-import butterknife.ButterKnife;
 import okhttp3.Call;
 
 /**
@@ -55,28 +53,31 @@ public abstract class MyActivity extends BaseActivity
      * 显示加载对话框
      */
     public void showDialog() {
-        if (mDialog == null) {
-            mDialog = new WaitDialog.Builder(this)
-                    .setCancelable(false)
-                    .create();
-        }
-        if (!mDialog.isShowing()) {
-            mDialog.show();
-        }
         mDialogTotal++;
+        postDelayed(() -> {
+            if (mDialogTotal > 0 && !isFinishing()) {
+                if (mDialog == null) {
+                    mDialog = new WaitDialog.Builder(this)
+                            .setCancelable(false)
+                            .create();
+                }
+                if (!mDialog.isShowing()) {
+                    mDialog.show();
+                }
+            }
+        }, 300);
     }
 
     /**
      * 隐藏加载对话框
      */
     public void hideDialog() {
-        if (mDialogTotal == 1) {
-            if (mDialog != null && mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
-        }
         if (mDialogTotal > 0) {
             mDialogTotal--;
+        }
+
+        if (mDialogTotal == 0 && mDialog != null && mDialog.isShowing() && !isFinishing()) {
+            mDialog.dismiss();
         }
     }
 
@@ -88,21 +89,13 @@ public abstract class MyActivity extends BaseActivity
             getTitleBar().setOnTitleBarListener(this);
         }
 
-        ButterKnife.bind(this);
-        initImmersion();
-    }
-
-    /**
-     * 初始化沉浸式
-     */
-    protected void initImmersion() {
         // 初始化沉浸式状态栏
         if (isStatusBarEnabled()) {
-            createStatusBarConfig().init();
+            getStatusBarConfig().init();
 
             // 设置标题栏沉浸
-            if (mTitleBar != null) {
-                ImmersionBar.setTitleBar(this, mTitleBar);
+            if (getTitleBar() != null) {
+                ImmersionBar.setTitleBar(this, getTitleBar());
             }
         }
     }
@@ -124,19 +117,21 @@ public abstract class MyActivity extends BaseActivity
     /**
      * 初始化沉浸式状态栏
      */
+    @NonNull
     protected ImmersionBar createStatusBarConfig() {
-        // 在BaseActivity里初始化
-        mImmersionBar = ImmersionBar.with(this)
+        return ImmersionBar.with(this)
                 // 默认状态栏字体颜色为黑色
                 .statusBarDarkFont(isStatusBarDarkFont());
-        return mImmersionBar;
     }
 
     /**
      * 获取状态栏沉浸的配置对象
      */
-    @Nullable
+    @NonNull
     public ImmersionBar getStatusBarConfig() {
+        if (mImmersionBar == null) {
+            mImmersionBar = createStatusBarConfig();
+        }
         return mImmersionBar;
     }
 
@@ -154,8 +149,8 @@ public abstract class MyActivity extends BaseActivity
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
-        if (mTitleBar != null) {
-            mTitleBar.setTitle(title);
+        if (getTitleBar() != null) {
+            getTitleBar().setTitle(title);
         }
     }
 
@@ -163,7 +158,7 @@ public abstract class MyActivity extends BaseActivity
     @Nullable
     public TitleBar getTitleBar() {
         if (mTitleBar == null) {
-            mTitleBar = findTitleBar(getContentView());
+            mTitleBar = obtainTitleBar(getContentView());
         }
         return mTitleBar;
     }
@@ -174,27 +169,15 @@ public abstract class MyActivity extends BaseActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        UmengClient.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        UmengClient.onPause(this);
-        super.onPause();
-    }
-
-    @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
-        overridePendingTransition(R.anim.activity_right_in, R.anim.activity_right_out);
+        overridePendingTransition(R.anim.right_in_activity, R.anim.right_out_activity);
     }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.activity_left_in, R.anim.activity_left_out);
+        overridePendingTransition(R.anim.left_in_activity, R.anim.left_out_activity);
     }
 
     /**
@@ -225,9 +208,8 @@ public abstract class MyActivity extends BaseActivity
 
     @Override
     protected void onDestroy() {
-        EasyHttp.cancel(this);
         if (isShowDialog()) {
-            mDialog.dismiss();
+            hideDialog();
         }
         mDialog = null;
         super.onDestroy();

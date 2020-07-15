@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.BrowserActivity">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/pb_browser_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:progressDrawable="@drawable/progress_gradient_bg"
+        android:visibility="gone" />
+
+    <com.hjq.demo.widget.HintLayout
+        android:id="@+id/hl_browser_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/sl_browser_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlEnableLoadMore="false"
+            app:srlEnablePreviewInEditMode="false"
+            app:srlPrimaryColor="#444444">
+
+            <com.hjq.demo.widget.BrowserView
+                android:id="@+id/wv_browser_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </com.hjq.demo.widget.HintLayout>
+
+</LinearLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.PhoneResetActivity">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/phone_reset_title" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:gravity="center_horizontal"
+        android:text="@string/phone_reset_change_hint"
+        android:textColor="#A4A4A4"
+        android:textSize="14sp" />
+
+    <com.hjq.widget.view.RegexEditText
+        android:id="@+id/et_phone_reset_phone"
+        style="@style/EditTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableStart="@drawable/phone_ic"
+        android:drawablePadding="15dp"
+        android:hint="@string/common_phone_input_hint"
+        android:inputType="number"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="18dp"
+        android:singleLine="true"
+        app:regexType="mobile" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_phone_reset_code"
+            style="@style/EditTextStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableStart="@drawable/safe_ic"
+            android:drawablePadding="15dp"
+            android:hint="@string/common_code_input_hint"
+            android:inputType="number"
+            android:maxLength="@integer/sms_code_length"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="18dp"
+            android:singleLine="true" />
+
+        <com.hjq.widget.view.CountdownView
+            android:id="@+id/cv_phone_reset_countdown"
+            style="@style/CountdownViewStyle" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_phone_reset_commit"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginVertical="30dp"
+        android:text="@string/phone_reset_commit" />
+
+</LinearLayout>

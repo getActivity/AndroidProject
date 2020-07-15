@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.hjq.widget.R;
 
 /**
@@ -33,7 +36,11 @@ public final class CustomViewStub extends FrameLayout {
     }
 
     public CustomViewStub(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public CustomViewStub(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
         final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CustomViewStub);
         mLayoutResource = array.getResourceId(R.styleable.CustomViewStub_android_layout, 0);

@@ -52,7 +52,7 @@ public final class DateDialog {
         public Builder(Context context) {
             super(context);
 
-            setCustomView(R.layout.dialog_date);
+            setCustomView(R.layout.date_dialog);
             setTitle(R.string.time_title);
 
             mYearView = findViewById(R.id.rv_date_year);
@@ -147,7 +147,7 @@ public final class DateDialog {
         }
 
         public Builder setYear(String year) {
-            return setYear(Integer.valueOf(year));
+            return setYear(Integer.parseInt(year));
         }
 
         public Builder setYear(int year) {
@@ -162,7 +162,7 @@ public final class DateDialog {
         }
 
         public Builder setMonth(String month) {
-            return setMonth(Integer.valueOf(month));
+            return setMonth(Integer.parseInt(month));
         }
 
         public Builder setMonth(int month) {
@@ -177,7 +177,7 @@ public final class DateDialog {
         }
 
         public Builder setDay(String day) {
-            return setDay(Integer.valueOf(day));
+            return setDay(Integer.parseInt(day));
         }
 
         public Builder setDay(int day) {
@@ -250,12 +250,12 @@ public final class DateDialog {
                 return new ViewHolder();
             }
 
-            final class ViewHolder extends MyAdapter.ViewHolder {
+            private final class ViewHolder extends MyAdapter.ViewHolder {
 
                 private final TextView mPickerView;
 
                 ViewHolder() {
-                    super(R.layout.item_picker);
+                    super(R.layout.picker_item);
                     mPickerView = (TextView) findViewById(R.id.tv_picker_name);
                 }
 

@@ -5,11 +5,11 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
@@ -32,8 +32,6 @@ import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
 
-import butterknife.BindView;
-
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -52,28 +50,20 @@ public final class LoginActivity extends MyActivity
         context.startActivity(intent);
     }
 
-    @BindView(R.id.iv_login_logo)
-    ImageView mLogoView;
+    private ImageView mLogoView;
 
-    @BindView(R.id.ll_login_body)
-    LinearLayout mBodyLayout;
-    @BindView(R.id.et_login_phone)
-    EditText mPhoneView;
-    @BindView(R.id.et_login_password)
-    EditText mPasswordView;
+    private ViewGroup mBodyLayout;
+    private EditText mPhoneView;
+    private EditText mPasswordView;
 
-    @BindView(R.id.btn_login_commit)
-    Button mCommitView;
+    private View mForgetView;
+    private Button mCommitView;
 
-    @BindView(R.id.v_login_blank)
-    View mBlankView;
+    private View mBlankView;
 
-    @BindView(R.id.ll_login_other)
-    View mOtherView;
-    @BindView(R.id.iv_login_qq)
-    View mQQView;
-    @BindView(R.id.iv_login_wx)
-    View mWeChatView;
+    private View mOtherView;
+    private View mQQView;
+    private View mWeChatView;
 
     /** logo 缩放比例 */
     private final float mLogoScale = 0.8f;
@@ -82,20 +72,28 @@ public final class LoginActivity extends MyActivity
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_login;
+        return R.layout.login_activity;
     }
 
     @Override
     protected void initView() {
+        mLogoView = findViewById(R.id.iv_login_logo);
+        mBodyLayout = findViewById(R.id.ll_login_body);
+        mPhoneView = findViewById(R.id.et_login_phone);
+        mPasswordView = findViewById(R.id.et_login_password);
+        mForgetView = findViewById(R.id.tv_login_forget);
+        mCommitView = findViewById(R.id.btn_login_commit);
+        mBlankView = findViewById(R.id.v_login_blank);
+        mOtherView = findViewById(R.id.ll_login_other);
+        mQQView = findViewById(R.id.iv_login_qq);
+        mWeChatView = findViewById(R.id.iv_login_wechat);
+        setOnClickListener(mForgetView, mCommitView, mQQView, mWeChatView);
+
         InputTextHelper.with(this)
                 .addView(mPhoneView)
                 .addView(mPasswordView)
                 .setMain(mCommitView)
-                .setListener(helper -> mPhoneView.getText().toString().length() == 11 &&
-                        mPasswordView.getText().toString().length() >= 6)
                 .build();
-
-        setOnClickListener(R.id.tv_login_forget, R.id.btn_login_commit, R.id.iv_login_qq, R.id.iv_login_wx);
     }
 
     @Override
@@ -138,6 +136,7 @@ public final class LoginActivity extends MyActivity
             if (resultCode == RESULT_OK && data != null) {
                 mPhoneView.setText(data.getStringExtra(IntentKey.PHONE));
                 mPasswordView.setText(data.getStringExtra(IntentKey.PASSWORD));
+                mPasswordView.setSelection(mPasswordView.getText().length());
                 onClick(mCommitView);
             }
         });
@@ -146,58 +145,52 @@ public final class LoginActivity extends MyActivity
     @SingleClick
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_login_forget:
-                startActivity(PasswordForgetActivity.class);
-                break;
-            case R.id.btn_login_commit:
-                if (mPhoneView.getText().toString().length() != 11) {
-                    toast(R.string.common_phone_input_error);
-                    return;
-                }
+        if (v == mForgetView) {
+            startActivity(PasswordForgetActivity.class);
+        } else if (v == mCommitView) {
+            if (mPhoneView.getText().toString().length() != 11) {
+                toast(R.string.common_phone_input_error);
+                return;
+            }
 
-                if (true) {
+            if (true) {
+                showDialog();
+                postDelayed(() -> {
+                    hideDialog();
                     startActivity(HomeActivity.class);
                     finish();
-                    return;
-                }
+                }, 2000);
+                return;
+            }
 
-                EasyHttp.post(this)
-                        .api(new LoginApi()
-                        .setPhone(mPhoneView.getText().toString())
-                        .setPassword(mPasswordView.getText().toString()))
-                        .request(new HttpCallback<HttpData<LoginBean>>(this) {
+            EasyHttp.post(this)
+                    .api(new LoginApi()
+                            .setPhone(mPhoneView.getText().toString())
+                            .setPassword(mPasswordView.getText().toString()))
+                    .request(new HttpCallback<HttpData<LoginBean>>(this) {
 
-                            @Override
-                            public void onSucceed(HttpData<LoginBean> data) {
-                                // 更新 Token
-                                EasyConfig.getInstance()
-                                        .addParam("token", data.getData().getToken());
-                                // 跳转到主页
-                                startActivity(HomeActivity.class);
-                                finish();
-                            }
-                        });
-                break;
-            case R.id.iv_login_qq:
-            case R.id.iv_login_wx:
-                toast("记得改好第三方 AppID 和 AppKey，否则会调不起来哦");
-                Platform platform;
-                switch (v.getId()) {
-                    case R.id.iv_login_qq:
-                        platform = Platform.QQ;
-                        break;
-                    case R.id.iv_login_wx:
-                        platform = Platform.WECHAT;
-                        toast("也别忘了改微信 " + WXEntryActivity.class.getSimpleName() + " 类所在的包名哦");
-                        break;
-                    default:
-                        throw new IllegalStateException("are you ok?");
-                }
-                UmengClient.login(this, platform, this);
-                break;
-            default:
-                break;
+                        @Override
+                        public void onSucceed(HttpData<LoginBean> data) {
+                            // 更新 Token
+                            EasyConfig.getInstance()
+                                    .addParam("token", data.getData().getToken());
+                            // 跳转到主页
+                            startActivity(HomeActivity.class);
+                            finish();
+                        }
+                    });
+        } else if (v == mQQView || v == mWeChatView) {
+            toast("记得改好第三方 AppID 和 AppKey，否则会调不起来哦");
+            Platform platform;
+            if (v == mQQView) {
+                platform = Platform.QQ;
+            } else if (v == mWeChatView) {
+                platform = Platform.WECHAT;
+                toast("也别忘了改微信 " + WXEntryActivity.class.getSimpleName() + " 类所在的包名哦");
+            } else {
+                throw new IllegalStateException("are you ok?");
+            }
+            UmengClient.login(this, platform, this);
         }
     }
 

@@ -44,7 +44,11 @@ public final class HintLayout extends FrameLayout {
     }
 
     public HintLayout(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public HintLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
         setClickable(true);
         setFocusable(true);
@@ -103,6 +107,8 @@ public final class HintLayout extends FrameLayout {
      */
     public void setAnim(@RawRes int id) {
         mImageView.setAnimation(id);
+        // 这里需要调用播放动画，否则会出现第一次显示动画效果正常，第二次显示动画会不动
+        mImageView.playAnimation();
     }
 
     /**
