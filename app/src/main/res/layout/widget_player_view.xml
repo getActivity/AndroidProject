@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
     android:orientation="vertical">
 
     <VideoView
         android:id="@+id/vv_player_view_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:keepScreenOn="true" />
+        android:layout_gravity="center" />
 
     <FrameLayout
         android:id="@+id/ll_player_view_top"

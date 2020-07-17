@@ -35,7 +35,7 @@ import androidx.core.widget.PopupWindowCompat;
 import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.AnimAction;
 import com.hjq.base.action.ClickAction;
-import com.hjq.base.action.ContextAction;
+import com.hjq.base.action.ResourcesAction;
 import com.hjq.base.action.HandlerAction;
 
 import java.lang.ref.SoftReference;
@@ -226,7 +226,7 @@ public class BasePopupWindow extends PopupWindow
     /**
      * 设置背景遮盖层的透明度
      */
-    public void setBackgroundDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
+    public void setBackgroundDimAmount(@FloatRange(from = 0.0, to = 1.0) float dimAmount) {
         float alpha = 1 - dimAmount;
         if (isShowing()) {
             setActivityAlpha(alpha);
@@ -263,7 +263,7 @@ public class BasePopupWindow extends PopupWindow
     }
 
     @SuppressWarnings("unchecked")
-    public static class Builder<B extends BasePopupWindow.Builder> implements ContextAction, ClickAction {
+    public static class Builder<B extends BasePopupWindow.Builder> implements ResourcesAction, ClickAction {
 
         private static final int DEFAULT_ANCHORED_GRAVITY = Gravity.TOP | Gravity.START;
 
@@ -447,7 +447,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置背景遮盖层的透明度
          */
-        public B setBackgroundDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
+        public B setBackgroundDimAmount(@FloatRange(from = 0.0, to = 1.0) float dimAmount) {
             mBackgroundDimAmount = dimAmount;
             if (isShowing()) {
                 mPopupWindow.setBackgroundDimAmount(dimAmount);

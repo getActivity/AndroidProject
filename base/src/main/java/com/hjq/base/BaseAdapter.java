@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hjq.base.action.ContextAction;
+import com.hjq.base.action.ResourcesAction;
 
 /**
  *    author : Android 轮子哥
@@ -20,7 +20,7 @@ import com.hjq.base.action.ContextAction;
  *    desc   : RecyclerView 适配器基类
  */
 public abstract class BaseAdapter<VH extends BaseAdapter.ViewHolder>
-        extends RecyclerView.Adapter<VH> implements ContextAction {
+        extends RecyclerView.Adapter<VH> implements ResourcesAction {
 
     /** 上下文对象 */
     private final Context mContext;

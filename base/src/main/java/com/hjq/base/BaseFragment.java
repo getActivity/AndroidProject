@@ -18,6 +18,7 @@ import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
+import com.hjq.base.action.ResourcesAction;
 
 import java.util.Random;
 
@@ -27,8 +28,8 @@ import java.util.Random;
  *    time   : 2018/10/18
  *    desc   : Fragment 基类
  */
-public abstract class BaseFragment<A extends BaseActivity>
-        extends Fragment implements ActivityAction, HandlerAction, ClickAction, BundleAction {
+public abstract class BaseFragment<A extends BaseActivity> extends Fragment implements
+        ActivityAction, ResourcesAction, HandlerAction, ClickAction, BundleAction {
 
     /** Activity 对象 */
     private A mActivity;

@@ -11,7 +11,12 @@ import android.content.Intent;
  *    time   : 2020/03/08
  *    desc   : Activity 相关意图
  */
-public interface ActivityAction extends ContextAction {
+public interface ActivityAction {
+
+    /**
+     * 获取 Context
+     */
+    Context getContext();
 
     /**
      * 获取 Activity

@@ -41,6 +41,7 @@ import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.AnimAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
+import com.hjq.base.action.ResourcesAction;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -52,7 +53,8 @@ import java.util.List;
  *    time   : 2018/11/24
  *    desc   : Dialog 基类
  */
-public class BaseDialog extends AppCompatDialog implements LifecycleOwner, ActivityAction, HandlerAction, ClickAction, AnimAction,
+public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
+        ActivityAction, ResourcesAction, HandlerAction, ClickAction, AnimAction,
         DialogInterface.OnShowListener, DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
     private final ListenersWrapper<BaseDialog> mListeners = new ListenersWrapper<>(this);
@@ -161,7 +163,7 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner, Activ
     /**
      * 设置背景遮盖层的透明度（前提条件是背景遮盖层开关必须是为开启状态）
      */
-    public void setBackgroundDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
+    public void setBackgroundDimAmount(@FloatRange(from = 0.0, to = 1.0) float dimAmount) {
         Window window = getWindow();
         if (window != null) {
             window.setDimAmount(dimAmount);
@@ -400,7 +402,7 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner, Activ
     }
 
     @SuppressWarnings("unchecked")
-    public static class Builder<B extends Builder> implements LifecycleOwner, ActivityAction, ClickAction {
+    public static class Builder<B extends Builder> implements LifecycleOwner, ActivityAction, ResourcesAction, ClickAction {
 
         /** 上下文对象 */
         private final Context mContext;
@@ -617,7 +619,7 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner, Activ
         /**
          * 设置背景遮盖层的透明度（前提条件是背景遮盖层开关必须是为开启状态）
          */
-        public B setBackgroundDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
+        public B setBackgroundDimAmount(@FloatRange(from = 0.0, to = 1.0) float dimAmount) {
             mBackgroundDimAmount = dimAmount;
             if (isCreated()) {
                 mDialog.setBackgroundDimAmount(dimAmount);

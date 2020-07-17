@@ -30,7 +30,7 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
     /** 计数（非 0 开头的数字） */
     public static final String REGEX_COUNT = "[1-9]\\d*";
     /** 用户名（中文、英文、数字） */
-    public static final String REGEX_NAME = REGEX_CHINESE + "|" + REGEX_ENGLISH + "|\\d*";
+    public static final String REGEX_NAME = "[[\\u4e00-\\u9fa5]|[a-zA-Z]|\\d]*";
     /** 非空格的字符（不能输入空格） */
     public static final String REGEX_NONNULL = "\\S+";
 
