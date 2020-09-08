@@ -315,9 +315,10 @@ public final class DialogActivity extends MyActivity {
                         // 设置月份
                         //.setMonth(2)
                         // 设置天数
-                        //.setDay(20)
+//                        .setDay(20)
                         // 不选择天数
                         //.setIgnoreDay()
+                        .setIgnoreMonth()
                         .setListener(new DateDialog.OnListener() {
                             @Override
                             public void onSelected(BaseDialog dialog, int year, int month, int day) {
