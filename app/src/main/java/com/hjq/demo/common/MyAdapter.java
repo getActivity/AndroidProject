@@ -13,7 +13,6 @@ import com.hjq.base.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 
 /**
  *    author : Android 轮子哥
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
  *    time   : 2018/12/19
  *    desc   : 项目中 RecyclerView 适配器基类
  */
-public abstract class MyAdapter<T> extends BaseAdapter<MyAdapter.ViewHolder> {
+public abstract class MyAdapter<T> extends BaseAdapter<BaseAdapter.ViewHolder> {
 
     /** 列表数据 */
     private List<T> mDataSet;
@@ -139,9 +138,9 @@ public abstract class MyAdapter<T> extends BaseAdapter<MyAdapter.ViewHolder> {
     }
 
     public void removeItem(@IntRange(from = 0) int position) {
-        //如果是在for循环删除后要记得i--
+        // 如果是在for循环删除后要记得i--
         mDataSet.remove(position);
-        //告诉适配器删除数据的位置，会有动画效果
+        // 告诉适配器删除数据的位置，会有动画效果
         notifyItemRemoved(position);
     }
 
@@ -186,19 +185,6 @@ public abstract class MyAdapter<T> extends BaseAdapter<MyAdapter.ViewHolder> {
      */
     public void setTag(@NonNull Object tag) {
         mTag = tag;
-    }
-
-    public abstract class ViewHolder extends BaseAdapter.ViewHolder {
-
-        public ViewHolder(@LayoutRes int id) {
-            super(id);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 
     public final class SimpleHolder extends ViewHolder {

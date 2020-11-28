@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -29,7 +30,7 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
     /** 计数（非 0 开头的数字） */
     public static final String REGEX_COUNT = "[1-9]\\d*";
     /** 用户名（中文、英文、数字） */
-    public static final String REGEX_NAME = "[" + REGEX_CHINESE + "|" + REGEX_ENGLISH + "|" + "\\d*" + "]*";
+    public static final String REGEX_NAME = "[[\\u4e00-\\u9fa5]|[a-zA-Z]|\\d]*";
     /** 非空格的字符（不能输入空格） */
     public static final String REGEX_NONNULL = "\\S+";
 
@@ -107,7 +108,7 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
      * 设置输入正则
      */
     public void setInputRegex(String regex) {
-        if (regex == null || "".equals(regex)) {
+        if (TextUtils.isEmpty(regex)) {
             return;
         }
 
@@ -154,37 +155,37 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
      * @param start         新输入的字符串起始下标，一般为0
      * @param end           新输入的字符串终点下标，一般为source长度-1
      * @param dest          输入之前文本框内容
-     * @param dstart        原内容起始坐标，一般为0
-     * @param dend          原内容终点坐标，一般为dest长度-1
+     * @param destStart     原内容起始坐标，一般为0
+     * @param destEnd       原内容终点坐标，一般为dest长度-1
      * @return              返回字符串将会加入到内容中
      */
     @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-        if (mPattern == null) {
-            return source;
-        }
+    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int destStart, int destEnd) {
+        if (mPattern != null) {
+            // 拼接出最终的字符串
+            String begin = dest.toString().substring(0, destStart);
+            String over = dest.toString().substring(destStart + (destEnd - destStart), destStart + (dest.toString().length() - begin.length()));
+            String result = begin + source + over;
 
-        // 拼接出最终的字符串
-        String begin = dest.toString().substring(0, dstart);
-        String over = dest.toString().substring(dstart + (dend - dstart), dstart + (dest.toString().length() - begin.length()));
-        String result = begin + source + over;
-
-        // 判断是插入还是删除
-        if (dstart > dend - 1) {
-            if (mPattern.matcher(result).matches()) {
-                // 如果匹配就允许这个文本通过
-                return source;
-            }
-        } else {
-            if (!mPattern.matcher(result).matches()) {
-                // 如果不匹配则不让删除（删空操作除外）
-                if (!"".equals(result)) {
-                    return dest.toString().substring(dstart, dend);
+            // 判断是插入还是删除
+            if (destStart > destEnd - 1) {
+                // 如果是插入字符
+                if (!mPattern.matcher(result).matches()) {
+                    // 如果不匹配就不让这个字符输入
+                    return "";
+                }
+            } else {
+                // 如果是删除字符
+                if (!mPattern.matcher(result).matches()) {
+                    // 如果不匹配则不让删除（删空操作除外）
+                    if (!"".equals(result)) {
+                        return dest.toString().substring(destStart, destEnd);
+                    }
                 }
             }
         }
 
-        // 注意这里不能返回 null，否则会和 return source 效果一致
-        return "";
+        // 不做任何修改
+        return source;
     }
 }

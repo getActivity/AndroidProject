@@ -10,7 +10,7 @@ import java.io.File;
  *    time   : 2019/12/07
  *    desc   : 上传图片
  */
-public class UpdateImageApi implements IRequestApi {
+public final class UpdateImageApi implements IRequestApi {
 
     @Override
     public String getApi() {

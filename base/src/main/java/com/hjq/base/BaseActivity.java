@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
@@ -25,7 +26,7 @@ import java.util.Random;
  *    desc   : Activity 基类
  */
 public abstract class BaseActivity extends AppCompatActivity
-        implements HandlerAction, ClickAction, BundleAction {
+        implements ActivityAction, ClickAction, HandlerAction, BundleAction {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,24 +101,15 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     /**
-     * 获取当前 Activity 对象
-     */
-    protected BaseActivity getActivity() {
-        return this;
-    }
-
-    /**
      * 和 setContentView 对应的方法
      */
     public ViewGroup getContentView() {
         return findViewById(Window.ID_ANDROID_CONTENT);
     }
 
-    /**
-     * startActivity 方法简化
-     */
-    public void startActivity(Class<? extends Activity> clazz) {
-        startActivity(new Intent(this, clazz));
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     /**
@@ -170,8 +162,8 @@ public abstract class BaseActivity extends AppCompatActivity
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (manager != null) {
-                manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (manager != null && manager.isActive(view)) {
+                manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
     }

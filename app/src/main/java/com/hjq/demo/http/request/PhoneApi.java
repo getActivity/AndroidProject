@@ -8,7 +8,7 @@ import com.hjq.http.config.IRequestApi;
  *    time   : 2019/12/07
  *    desc   : 修改手机
  */
-public class PhoneApi implements IRequestApi {
+public final class PhoneApi implements IRequestApi {
 
     @Override
     public String getApi() {

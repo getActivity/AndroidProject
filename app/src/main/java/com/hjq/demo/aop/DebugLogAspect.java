@@ -60,10 +60,6 @@ public class DebugLogAspect {
      * 方法执行前切入
      */
     private void enterMethod(ProceedingJoinPoint joinPoint, DebugLog debugLog) {
-        if (!AppConfig.isDebug()) {
-            return;
-        }
-
         CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
 
         // 方法所在类

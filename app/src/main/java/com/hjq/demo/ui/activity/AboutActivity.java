@@ -13,7 +13,7 @@ public final class AboutActivity extends MyActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_about;
+        return R.layout.about_activity;
     }
 
     @Override

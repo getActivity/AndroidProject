@@ -1,8 +1,9 @@
 package com.hjq.demo.ui.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 import com.hjq.demo.R;
 import com.hjq.demo.common.MyAdapter;
@@ -30,10 +31,10 @@ public final class CopyAdapter extends MyAdapter<String> {
         return new ViewHolder();
     }
 
-    final class ViewHolder extends MyAdapter.ViewHolder {
+    private final class ViewHolder extends MyAdapter.ViewHolder {
 
-        ViewHolder() {
-            super(R.layout.item_copy);
+        private ViewHolder() {
+            super(R.layout.copy_item);
         }
 
         @Override

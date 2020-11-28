@@ -40,7 +40,7 @@ public final class SelectDialog {
         public Builder(Context context) {
             super(context);
 
-            setCustomView(R.layout.dialog_select);
+            setCustomView(R.layout.select_dialog);
             RecyclerView recyclerView = findViewById(R.id.rv_select_list);
             recyclerView.setItemAnimator(null);
 
@@ -213,13 +213,13 @@ public final class SelectDialog {
             }
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final TextView mTextView;
             private final CheckBox mCheckBox;
 
             ViewHolder() {
-                super(R.layout.item_select);
+                super(R.layout.select_item);
                 mTextView = (TextView) findViewById(R.id.tv_select_text);
                 mCheckBox = (CheckBox) findViewById(R.id.tv_select_checkbox);
             }

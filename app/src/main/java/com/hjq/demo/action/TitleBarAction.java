@@ -156,13 +156,13 @@ public interface TitleBarAction extends OnTitleBarListener {
     /**
      * 递归获取 ViewGroup 中的 TitleBar 对象
      */
-    default TitleBar findTitleBar(ViewGroup group) {
+    default TitleBar obtainTitleBar(ViewGroup group) {
         for (int i = 0; i < group.getChildCount(); i++) {
             View view = group.getChildAt(i);
             if ((view instanceof TitleBar)) {
                 return (TitleBar) view;
             } else if (view instanceof ViewGroup) {
-                TitleBar titleBar = findTitleBar((ViewGroup) view);
+                TitleBar titleBar = obtainTitleBar((ViewGroup) view);
                 if (titleBar != null) {
                     return titleBar;
                 }

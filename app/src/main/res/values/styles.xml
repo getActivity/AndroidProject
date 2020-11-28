@@ -26,6 +26,10 @@
         <item name="android:overScrollMode">never</item>
     </style>
 
+    <style name="FullScreenTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <!-- 默认圆角按钮样式 -->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:paddingStart">15dp</item>
@@ -35,13 +39,13 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white90</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/selector_button</item>
+        <item name="android:background">@drawable/button_selector</item>
         <item name="android:foreground">@null</item>
     </style>
 
     <!-- 不带圆角按钮样式 -->
     <style name="RectButtonStyle" parent="ButtonStyle">
-        <item name="android:background">@drawable/selector_button_rect</item>
+        <item name="android:background">@drawable/button_rect_selector</item>
     </style>
 
     <!-- 默认文本框样式 -->
@@ -74,7 +78,7 @@
     <style name="CountdownViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/selector_countdown</item>
+        <item name="android:background">@drawable/countdown_selector</item>
         <item name="android:layout_marginStart">15dp</item>
         <item name="android:layout_marginEnd">15dp</item>
         <item name="android:paddingTop">10dp</item>
@@ -82,15 +86,8 @@
         <item name="android:minWidth">90dp</item>
         <item name="android:gravity">center</item>
         <item name="android:text">@string/common_code_send</item>
-        <item name="android:textColor">@drawable/selector_countdown_color</item>
+        <item name="android:textColor">@drawable/countdown_color_selector</item>
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <!-- 上拉刷新下拉加载样式 -->
-    <style name="RefreshLayoutStyle" parent="Base.CardView">
-        <item name="srlPrimaryColor">@color/colorAccent</item>
-        <item name="srlAccentColor">@color/white</item>
-        <item name="srlEnablePreviewInEditMode">false</item>
     </style>
 
 </resources>

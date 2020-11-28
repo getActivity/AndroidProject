@@ -6,10 +6,12 @@
     <string name="common_phone_input_error">手机号输入不正确</string>
 
     <string name="common_password_input_error">请输入密码</string>
+    <string name="common_password_input_unlike">两次密码输入不一致，请重新输入</string>
 
     <string name="common_code_input_hint">输入验证码</string>
     <string name="common_code_send">发送验证码</string>
     <string name="common_code_send_hint">验证码已发送，请注意查收</string>
+    <string name="common_code_error_hint">验证码错误，请检查输入</string>
 
     <string name="common_step_next">下一步</string>
     <string name="common_step_complete">完成</string>
@@ -41,6 +43,7 @@
     <string name="http_data_explain_error">数据解析异常，请稍后</string>
     <string name="http_server_out_time">服务器请求超时，请稍后再试</string>
     <string name="http_network_error">请求失败，请检查网络设置</string>
+    <string name="http_response_error">服务器响应异常，请稍后再试</string>
     <string name="http_server_error">服务器连接异常，请稍后再试</string>
     <string name="http_request_cancel">请求被中断，请重试</string>
 
@@ -66,13 +69,13 @@
 
     <string name="update_no">下次再说</string>
     <string name="update_yes">立即更新</string>
-    <string name="update_background">后台更新</string>
 
     <string name="update_permission_hint">必须先要授予权限才能正常下载更新哦</string>
 
+    <string name="update_status_start">正在下载</string>
     <string name="update_status_running">下载中 %d%%</string>
-    <string name="update_status_successful">立即安装</string>
-    <string name="update_status_failed">下载失败</string>
+    <string name="update_status_successful">下载完成，点击安装</string>
+    <string name="update_status_failed">下载失败，点击重试</string>
 
     <string name="update_no_update">当前已是最新版本</string>
 
@@ -90,9 +93,12 @@
     <!-- 支付密码对话框 -->
     <string name="pay_title">请输入支付密码</string>
 
-    <!-- 支付密码对话框 -->
+    <!-- 选择对话框 -->
     <string name="select_min_hint">至少要选择 %d 项</string>
     <string name="select_max_hint">最多只能选择 %d 项</string>
+
+    <!-- 身份校验对话框 -->
+    <string name="safe_title">身份校验</string>
 
     <!-- 主页 -->
     <string name="home_exit_hint">再按一次退出</string>
@@ -113,7 +119,7 @@
     <string name="register_hint">手机号仅用于登录和保护账号安全</string>
     <string name="register_password_hint1">设置6&#8211;18位登录密码</string>
     <string name="register_password_hint2">请再次输入一次密码</string>
-    <string name="register_password_input_error">两次密码输入不一致，请重新输入</string>
+    <string name="register_succeed">注册成功</string>
 
     <!-- 设置 -->
     <string name="setting_title">设置</string>
@@ -121,12 +127,17 @@
     <string name="setting_language">语言切换</string>
     <string name="setting_language_simple">简体中文</string>
     <string name="setting_language_complex">繁体中文</string>
-
     <string name="setting_update">检查更新</string>
-    <string name="setting_cache">清空缓存</string>
+
+    <string name="setting_password">修改密码</string>
+    <string name="setting_phone">修改手机</string>
+
     <string name="setting_auto">自动登录</string>
+    <string name="setting_cache">清空缓存</string>
+
     <string name="setting_agreement">隐私协议</string>
     <string name="setting_about">关于我们</string>
+
     <string name="setting_exit">退出登录</string>
 
     <!-- 关于 -->
@@ -145,12 +156,8 @@
     <string name="password_reset_input_error">两次密码输入不一致，请重新输入</string>
     <string name="password_reset_success">密码重置成功</string>
 
-    <!-- 校验手机号 -->
-    <string name="phone_verify_title">手机号验证</string>
-    <string name="phone_verify_current_phone">当前手机号：%s</string>
-
     <!-- 修改手机号 -->
-    <string name="phone_reset_title">修改手机号</string>
+    <string name="phone_reset_title">设置手机号</string>
     <string name="phone_reset_change_hint">下次登录请使用更换后的新手机号登录</string>
     <string name="phone_reset_commit">立即绑定</string>
 
@@ -173,26 +180,24 @@
     <!-- 浏览器 -->
     <string name="web_title">网页加载中&#8230;</string>
 
-    <!-- 异常捕捉 -->
-    <string name="crash_error_hint">发生意外错误\n抱歉，给您带来不便</string>
-
-    <string name="crash_error_restart">重新启动</string>
-    <string name="crash_error_log">查看日志</string>
-
-    <string name="crash_error_details">错误详情</string>
-    <string name="crash_error_info">错误信息</string>
-    <string name="crash_copy_log">复制日志</string>
-    <string name="crash_close">关闭</string>
-
     <!-- 图片选择 -->
-    <string name="photo_title">图片选择</string>
-    <string name="photo_all">所有图片</string>
+    <string name="image_select_title">图片选择</string>
+    <string name="image_select_all">所有图片</string>
 
-    <string name="photo_total">共 %d 张</string>
+    <string name="image_select_total">共 %d 张</string>
 
-    <string name="photo_max_hint">本次最多只能选择 %d 张图片</string>
+    <string name="image_select_max_hint">本次最多只能选择 %d 张图片</string>
 
-    <string name="photo_launch_fail">无法启动相机</string>
-    <string name="photo_picture_error">图片错误</string>
+    <!-- 视频选择 -->
+    <string name="video_select_title">视频选择</string>
+    <string name="video_select_all">所有视频</string>
+
+    <string name="video_select_total">共 %d 个</string>
+
+    <string name="video_select_max_hint">本次最多只能选择 %d 个视频</string>
+
+    <!-- 拍照 -->
+    <string name="camera_launch_fail">无法启动相机</string>
+    <string name="camera_image_error">目标地址错误</string>
 
 </resources>

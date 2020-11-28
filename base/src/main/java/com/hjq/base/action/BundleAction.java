@@ -51,6 +51,14 @@ public interface BundleAction {
         return getBundle() == null ? defaultValue : getBundle().getDouble(name, defaultValue);
     }
 
+    default boolean getBoolean(String name) {
+        return getBoolean(name, false);
+    }
+
+    default boolean getBoolean(String name, boolean defaultValue) {
+        return getBundle() == null ? defaultValue : getBundle().getBoolean(name, defaultValue);
+    }
+
     default String getString(String name) {
         return getBundle() == null ? null : getBundle().getString(name);
     }

@@ -32,9 +32,10 @@ import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.PopupWindowCompat;
 
+import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.AnimAction;
 import com.hjq.base.action.ClickAction;
-import com.hjq.base.action.ContextAction;
+import com.hjq.base.action.ResourcesAction;
 import com.hjq.base.action.HandlerAction;
 
 import java.lang.ref.SoftReference;
@@ -48,8 +49,8 @@ import java.util.List;
  *    desc   : PopupWindow 基类
  */
 public class BasePopupWindow extends PopupWindow
-        implements ContextAction, HandlerAction, ClickAction,
-        PopupWindow.OnDismissListener {
+        implements ActivityAction, HandlerAction, ClickAction,
+        AnimAction, PopupWindow.OnDismissListener {
 
     private final Context mContext;
     private PopupBackground mPopupBackground;
@@ -157,7 +158,7 @@ public class BasePopupWindow extends PopupWindow
     }
 
     @Override
-    public void showAsDropDown(View anchor, int xoff, int yoff, int gravity) {
+    public void showAsDropDown(View anchor, int xOff, int yOff, int gravity) {
         if (isShowing() || getContentView() == null) {
             return;
         }
@@ -167,7 +168,7 @@ public class BasePopupWindow extends PopupWindow
                 listener.onShow(this);
             }
         }
-        super.showAsDropDown(anchor, xoff, yoff, gravity);
+        super.showAsDropDown(anchor, xOff, yOff, gravity);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class BasePopupWindow extends PopupWindow
     /**
      * 设置背景遮盖层的透明度
      */
-    public void setBackgroundDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
+    public void setBackgroundDimAmount(@FloatRange(from = 0.0, to = 1.0) float dimAmount) {
         float alpha = 1 - dimAmount;
         if (isShowing()) {
             setActivityAlpha(alpha);
@@ -262,7 +263,7 @@ public class BasePopupWindow extends PopupWindow
     }
 
     @SuppressWarnings("unchecked")
-    public static class Builder<B extends BasePopupWindow.Builder> implements ContextAction, ClickAction {
+    public static class Builder<B extends BasePopupWindow.Builder> implements ResourcesAction, ClickAction {
 
         private static final int DEFAULT_ANCHORED_GRAVITY = Gravity.TOP | Gravity.START;
 
@@ -279,7 +280,7 @@ public class BasePopupWindow extends PopupWindow
         private List<BasePopupWindow.OnDismissListener> mOnDismissListeners;
 
         /** 动画 */
-        private int mAnimations = AnimAction.NO_ANIM;
+        private int mAnimations = BasePopupWindow.ANIM_DEFAULT;
         /** 位置 */
         private int mGravity = DEFAULT_ANCHORED_GRAVITY;
         /** 宽度和高度 */
@@ -446,7 +447,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置背景遮盖层的透明度
          */
-        public B setBackgroundDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
+        public B setBackgroundDimAmount(@FloatRange(from = 0.0, to = 1.0) float dimAmount) {
             mBackgroundDimAmount = dimAmount;
             if (isShowing()) {
                 mPopupWindow.setBackgroundDimAmount(dimAmount);
@@ -579,22 +580,22 @@ public class BasePopupWindow extends PopupWindow
             }
 
             // 如果当前没有设置动画效果，就设置一个默认的动画效果
-            if (mAnimations == AnimAction.NO_ANIM) {
+            if (mAnimations == BasePopupWindow.ANIM_DEFAULT) {
                 switch (mGravity) {
                     case Gravity.TOP:
-                        mAnimations = AnimAction.TOP;
+                        mAnimations = BasePopupWindow.ANIM_TOP;
                         break;
                     case Gravity.BOTTOM:
-                        mAnimations = AnimAction.BOTTOM;
+                        mAnimations = BasePopupWindow.ANIM_BOTTOM;
                         break;
                     case Gravity.LEFT:
-                        mAnimations = AnimAction.LEFT;
+                        mAnimations = BasePopupWindow.ANIM_LEFT;
                         break;
                     case Gravity.RIGHT:
-                        mAnimations = AnimAction.RIGHT;
+                        mAnimations = BasePopupWindow.ANIM_RIGHT;
                         break;
                     default:
-                        mAnimations = AnimAction.DEFAULT;
+                        mAnimations = BasePopupWindow.ANIM_DEFAULT;
                         break;
                 }
             }
@@ -608,7 +609,6 @@ public class BasePopupWindow extends PopupWindow
             mPopupWindow.setFocusable(mFocusable);
             mPopupWindow.setOutsideTouchable(mOutsideTouchable);
             mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            mPopupWindow.setBackgroundDimAmount(mBackgroundDimAmount);
 
             if (mOnShowListeners != null) {
                 mPopupWindow.setOnShowListeners(mOnShowListeners);
@@ -617,6 +617,8 @@ public class BasePopupWindow extends PopupWindow
             if (mOnDismissListeners != null) {
                 mPopupWindow.setOnDismissListeners(mOnDismissListeners);
             }
+
+            mPopupWindow.setBackgroundDimAmount(mBackgroundDimAmount);
 
             for (int i = 0; mClickArray != null && i < mClickArray.size(); i++) {
                 mContentView.findViewById(mClickArray.keyAt(i)).setOnClickListener(new BasePopupWindow.ViewClickWrapper(mPopupWindow, mClickArray.valueAt(i)));

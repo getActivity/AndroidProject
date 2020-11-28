@@ -14,10 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.hjq.base.action.ClickAction;
-import com.hjq.base.action.ContextAction;
+import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
+import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
+import com.hjq.base.action.ResourcesAction;
 
 import java.util.Random;
 
@@ -27,15 +28,15 @@ import java.util.Random;
  *    time   : 2018/10/18
  *    desc   : Fragment 基类
  */
-public abstract class BaseFragment<A extends BaseActivity>
-        extends Fragment implements ContextAction, HandlerAction, ClickAction, BundleAction {
+public abstract class BaseFragment<A extends BaseActivity> extends Fragment implements
+        ActivityAction, ResourcesAction, HandlerAction, ClickAction, BundleAction {
 
     /** Activity 对象 */
     private A mActivity;
     /** 根布局 */
     private View mRootView;
-    /** 是否初始化过 */
-    private boolean mInitialize;
+    /** 当前是否加载过 */
+    private boolean mLoading;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -54,25 +55,35 @@ public abstract class BaseFragment<A extends BaseActivity>
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mRootView == null && getLayoutId() > 0) {
-            mRootView = inflater.inflate(getLayoutId(), null);
+        mLoading = false;
+        if (getLayoutId() > 0) {
+            return mRootView = inflater.inflate(getLayoutId(), null);
+        } else {
+            return null;
         }
+    }
 
-        ViewGroup parent = (ViewGroup) mRootView.getParent();
-        if (parent != null) {
-            parent.removeView(mRootView);
-        }
-
-        return mRootView;
+    @Override
+    public void onDestroyView() {
+        mLoading = false;
+        mRootView = null;
+        super.onDestroyView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!mInitialize) {
-            mInitialize = true;
+        if (!mLoading) {
+            mLoading = true;
             initFragment();
         }
+    }
+
+    /**
+     * 这个 Fragment 是否已经加载过了
+     */
+    public boolean isLoading() {
+        return mLoading;
     }
 
     @NonNull
@@ -140,8 +151,8 @@ public abstract class BaseFragment<A extends BaseActivity>
         // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
         if (mActivityCallback == null) {
             mActivityCallback = callback;
-            // 随机生成请求码，这个请求码在 0 - 255 之间
-            mActivityRequestCode = new Random().nextInt(255);
+            // 随机生成请求码，这个请求码必须在 2 的 16 次幂以内，也就是 0 - 65535
+            mActivityRequestCode = new Random().nextInt((int) Math.pow(2, 16));
             startActivityForResult(intent, mActivityRequestCode, options);
         }
     }

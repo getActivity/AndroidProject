@@ -49,22 +49,22 @@
     <color name="black5">#0D000000</color>
 
     <!-- 灰色 -->
-    <color name="gray">#808080</color>
+    <color name="gray">#FF808080</color>
     <!-- 红色 -->
-    <color name="red">#FF0000</color>
+    <color name="red">#FFFF0000</color>
     <!-- 金色 -->
-    <color name="gold">#FFD700</color>
+    <color name="gold">#FFFFD700</color>
     <!-- 黄色 -->
-    <color name="yellow">#FFFF00</color>
+    <color name="yellow">#FFFFFF00</color>
     <!-- 绿色 -->
-    <color name="green">#008000</color>
+    <color name="green">#FF008000</color>
     <!-- 蓝色 -->
-    <color name="blue">#0000FF</color>
+    <color name="blue">#FF0000FF</color>
     <!-- 紫色 -->
-    <color name="purple">#800080</color>
+    <color name="purple">#FF800080</color>
     <!-- 粉色 -->
-    <color name="pink">#FFC0CB</color>
+    <color name="pink">#FFFFC0CB</color>
     <!-- 橙色 -->
-    <color name="orange">#FFA500</color>
+    <color name="orange">#FFFFA500</color>
 
 </resources>

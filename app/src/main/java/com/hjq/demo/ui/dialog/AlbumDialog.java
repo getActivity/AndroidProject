@@ -38,7 +38,7 @@ public final class AlbumDialog {
         public Builder(Context context) {
             super(context);
 
-            setContentView(R.layout.dialog_album);
+            setContentView(R.layout.album_dialog);
             setHeight(getResources().getDisplayMetrics().heightPixels / 2);
 
             mRecyclerView = findViewById(R.id.rv_album_list);
@@ -47,7 +47,7 @@ public final class AlbumDialog {
             mRecyclerView.setAdapter(mAdapter);
         }
 
-        public Builder setData(List<AlbumBean> data) {
+        public Builder setData(List<AlbumInfo> data) {
             mAdapter.setData(data);
             // 滚动到选中的位置
             for (int i = 0; i < data.size(); i++) {
@@ -65,14 +65,14 @@ public final class AlbumDialog {
 
         @Override
         public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-            List<AlbumBean> data = mAdapter.getData();
+            List<AlbumInfo> data = mAdapter.getData();
             if (data == null) {
                 return;
             }
 
-            for (AlbumBean bean : data) {
-                if (bean.isSelect()) {
-                    bean.setSelect(false);
+            for (AlbumInfo info : data) {
+                if (info.isSelect()) {
+                    info.setSelect(false);
                     break;
                 }
             }
@@ -91,7 +91,7 @@ public final class AlbumDialog {
         }
     }
 
-    private static final class AlbumAdapter extends MyAdapter<AlbumBean> {
+    private static final class AlbumAdapter extends MyAdapter<AlbumInfo> {
 
         private AlbumAdapter(Context context) {
             super(context);
@@ -103,33 +103,33 @@ public final class AlbumDialog {
             return new ViewHolder();
         }
 
-        final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends MyAdapter.ViewHolder {
 
             private final ImageView mIconView;
             private final TextView mNameView;
-            private final TextView mCountView;
+            private final TextView mRemarkView;
             private final CheckBox mCheckBox;
 
             private ViewHolder() {
-                super(R.layout.item_album);
+                super(R.layout.album_item);
                 mIconView = (ImageView) findViewById(R.id.iv_album_icon);
                 mNameView = (TextView) findViewById(R.id.tv_album_name);
-                mCountView = (TextView) findViewById(R.id.tv_album_count);
+                mRemarkView = (TextView) findViewById(R.id.tv_album_remark);
                 mCheckBox = (CheckBox) findViewById(R.id.rb_album_check);
             }
 
             @Override
             public void onBindView(int position) {
-                AlbumBean bean = getItem(position);
+                AlbumInfo info = getItem(position);
 
                 GlideApp.with(getContext())
-                        .load(bean.getIcon())
+                        .load(info.getIcon())
                         .into(mIconView);
 
-                mNameView.setText(bean.getName());
-                mCountView.setText(String.format(getString(R.string.photo_total), bean.getCount()));
-                mCheckBox.setChecked(bean.isSelect());
-                mCheckBox.setVisibility(bean.isSelect() ? View.VISIBLE : View.INVISIBLE);
+                mNameView.setText(info.getName());
+                mRemarkView.setText(info.getRemark());
+                mCheckBox.setChecked(info.isSelect());
+                mCheckBox.setVisibility(info.isSelect() ? View.VISIBLE : View.INVISIBLE);
             }
         }
     }
@@ -137,21 +137,21 @@ public final class AlbumDialog {
     /**
      * 专辑信息类
      */
-    public static class AlbumBean {
+    public static class AlbumInfo {
 
         /** 封面 */
         private String icon;
         /** 名称 */
         private String name;
-        /** 数量 */
-        private int count;
+        /** 备注 */
+        private String remark;
         /** 选中 */
         private boolean select;
 
-        public AlbumBean(String icon, String name, int count, boolean select) {
+        public AlbumInfo(String icon, String name, String remark, boolean select) {
             this.icon = icon;
             this.name = name;
-            this.count = count;
+            this.remark = remark;
             this.select = select;
         }
 
@@ -171,8 +171,8 @@ public final class AlbumDialog {
             return name;
         }
 
-        public int getCount() {
-            return count;
+        public String getRemark() {
+            return remark;
         }
 
         public boolean isSelect() {
@@ -185,6 +185,6 @@ public final class AlbumDialog {
         /**
          * 选择条目时回调
          */
-        void onSelected(BaseDialog dialog, int position, AlbumBean bean);
+        void onSelected(BaseDialog dialog, int position, AlbumInfo bean);
     }
 }

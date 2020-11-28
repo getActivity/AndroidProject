@@ -9,11 +9,13 @@
     <color name="textColorHint">#757575</color>
 
     <!-- 按钮按压时的颜色 -->
-    <color name="colorButtonPressed">#1976D2</color>
+    <color name="colorButtonPressed">#AA5A8DDF</color>
     <!-- 按钮禁用时的颜色 -->
     <color name="colorButtonDisable">#BBBBBB</color>
     <!-- 分割线的颜色 -->
     <color name="colorLine">#ECECEC</color>
+    <!-- 图标颜色 -->
+    <color name="colorIcon">#7C7C7C</color>
 
     <!-- 对话框确认按钮文本颜色 -->
     <color name="colorConfirm">#007AFF</color>

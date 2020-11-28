@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.Gravity;
 
 import com.hjq.base.BaseDialog;
-import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
 
 /**
@@ -21,8 +20,8 @@ public final class CopyDialog {
         public Builder(Context context) {
             super(context);
 
-            setContentView(R.layout.dialog_copy);
-            setAnimStyle(AnimAction.BOTTOM);
+            setContentView(R.layout.copy_dialog);
+            setAnimStyle(BaseDialog.ANIM_BOTTOM);
             setGravity(Gravity.BOTTOM);
         }
     }

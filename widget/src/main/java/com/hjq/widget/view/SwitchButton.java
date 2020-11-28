@@ -96,7 +96,11 @@ public final class SwitchButton extends View {
     }
 
     public SwitchButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public SwitchButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
 
@@ -134,12 +138,12 @@ public final class SwitchButton extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        isCanVisibleDrawing = w > getPaddingLeft() + getPaddingRight() && h > getPaddingTop() + getPaddingBottom();
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        isCanVisibleDrawing = width > getPaddingLeft() + getPaddingRight() && height > getPaddingTop() + getPaddingBottom();
 
         if (isCanVisibleDrawing) {
-            int actuallyDrawingAreaWidth = w - getPaddingLeft() - getPaddingRight();
-            int actuallyDrawingAreaHeight = h - getPaddingTop() - getPaddingBottom();
+            int actuallyDrawingAreaWidth = width - getPaddingLeft() - getPaddingRight();
+            int actuallyDrawingAreaHeight = height - getPaddingTop() - getPaddingBottom();
 
             int actuallyDrawingAreaLeft;
             int actuallyDrawingAreaRight;
@@ -147,7 +151,7 @@ public final class SwitchButton extends View {
             int actuallyDrawingAreaBottom;
             if (actuallyDrawingAreaWidth * mAspectRatio < actuallyDrawingAreaHeight) {
                 actuallyDrawingAreaLeft = getPaddingLeft();
-                actuallyDrawingAreaRight = w - getPaddingRight();
+                actuallyDrawingAreaRight = width - getPaddingRight();
                 int heightExtraSize = (int) (actuallyDrawingAreaHeight - actuallyDrawingAreaWidth * mAspectRatio);
                 actuallyDrawingAreaTop = getPaddingTop() + heightExtraSize / 2;
                 actuallyDrawingAreaBottom = getHeight() - getPaddingBottom() - heightExtraSize / 2;

@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.StringRes;
 
 import com.hjq.base.BaseDialog;
-import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
 
 /**
@@ -38,18 +37,16 @@ public final class UIDialog {
         public Builder(Context context) {
             super(context);
 
-            setContentView(R.layout.dialog_ui);
-            setAnimStyle(AnimAction.IOS);
+            setContentView(R.layout.ui_dialog);
+            setAnimStyle(BaseDialog.ANIM_IOS);
             setGravity(Gravity.CENTER);
 
             mContainerLayout = findViewById(R.id.ll_ui_container);
-
             mTitleView = findViewById(R.id.tv_ui_title);
             mCancelView  = findViewById(R.id.tv_ui_cancel);
             mLineView = findViewById(R.id.v_ui_line);
             mConfirmView  = findViewById(R.id.tv_ui_confirm);
-
-            setOnClickListener(R.id.tv_ui_cancel, R.id.tv_ui_confirm);
+            setOnClickListener(mCancelView, mConfirmView);
         }
 
         public B setCustomView(@LayoutRes int id) {

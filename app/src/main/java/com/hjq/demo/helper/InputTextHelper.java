@@ -242,7 +242,6 @@ public final class InputTextHelper implements TextWatcher {
         }
 
         public InputTextHelper build(){
-            /** 文本输入辅助类 */
             InputTextHelper helper = new InputTextHelper(mView, isAlpha);
             helper.addViews(mViewSet);
             helper.setListener(mListener);

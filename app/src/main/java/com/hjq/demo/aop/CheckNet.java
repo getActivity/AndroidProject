@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
  *    time   : 2020/01/11
  *    desc   : 检测网络注解
  */
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface CheckNet {}

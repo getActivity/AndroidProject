@@ -47,6 +47,8 @@ public final class WrapRecyclerView extends RecyclerView {
         mRealAdapter = adapter;
         // 偷梁换柱
         mWrapAdapter.setRealAdapter(mRealAdapter);
+        // 禁用条目动画
+        setItemAnimator(null);
         super.setAdapter(mWrapAdapter);
     }
 
@@ -133,6 +135,25 @@ public final class WrapRecyclerView extends RecyclerView {
     }
 
     /**
+     * 设置在 GridLayoutManager 模式下头部和尾部都是独占一行的效果
+     */
+    public void adjustSpanSize() {
+
+        final RecyclerView.LayoutManager layoutManager = getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager) {
+            ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                @Override
+                public int getSpanSize(int position) {
+                    return (position < mWrapAdapter.getHeaderViewsCount()
+                            || position >= mWrapAdapter.getHeaderViewsCount() + (mRealAdapter == null ? 0 : mRealAdapter.getItemCount()))
+                            ? ((GridLayoutManager) layoutManager).getSpanCount() : 1;
+                }
+            });
+        }
+    }
+
+    /**
      * 采用装饰设计模式，将原有的适配器包装起来
      */
     private static final class WrapRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -186,7 +207,7 @@ public final class WrapRecyclerView extends RecyclerView {
         public int getItemCount() {
             if (mRealAdapter != null) {
                 return getHeaderViewsCount() + mRealAdapter.getItemCount() + getFooterViewsCount();
-            }else {
+            } else {
                 return getHeaderViewsCount() + getFooterViewsCount();
             }
         }
@@ -203,9 +224,9 @@ public final class WrapRecyclerView extends RecyclerView {
             int adjPosition = position - headerCount;
             if (position < headerCount) {
                 return HEADER_VIEW_TYPE;
-            }else if (adjPosition < adapterCount) {
+            } else if (adjPosition < adapterCount) {
                 return mRealAdapter.getItemViewType(adjPosition);
-            }else {
+            } else {
                 return FOOTER_VIEW_TYPE;
             }
         }
@@ -330,7 +351,6 @@ public final class WrapRecyclerView extends RecyclerView {
         private void addHeaderView(View view) {
             // 不能添加同一个View对象，否则会导致RecyclerView复用异常
             if (!mHeaderViews.contains(view) && !mFooterViews.contains(view)) {
-                adjustSpanSize(mRecyclerView, this, mRealAdapter);
                 mHeaderViews.add(view);
                 notifyDataSetChanged();
             }
@@ -351,7 +371,6 @@ public final class WrapRecyclerView extends RecyclerView {
         private void addFooterView(View view) {
             // 不能添加同一个View对象，否则会导致RecyclerView复用异常
             if (!mFooterViews.contains(view) && !mHeaderViews.contains(view)) {
-                adjustSpanSize(mRecyclerView, this, mRealAdapter);
                 mFooterViews.add(view);
                 notifyDataSetChanged();
             }
@@ -393,33 +412,6 @@ public final class WrapRecyclerView extends RecyclerView {
         private List<View> getFooterViews() {
             return mFooterViews;
         }
-
-        /**
-         * 添加头部尾部的时候，在 RecyclerView 模式是配置 GridLayoutManager 的时候，发现头部会跑到第一格，也就不是独立一行的效果
-         *
-         * @param recyclerView          RecyclerView对象
-         * @param wrapAdapter           增强的适配器
-         * @param realAdapter           原有的适配器
-         */
-        private static void adjustSpanSize(RecyclerView recyclerView, final WrapRecyclerAdapter wrapAdapter, final RecyclerView.Adapter realAdapter) {
-
-            if (recyclerView == null || wrapAdapter == null || realAdapter == null) {
-                return;
-            }
-
-            final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof GridLayoutManager) {
-                ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-
-                    @Override
-                    public int getSpanSize(int position) {
-                        return (position < wrapAdapter.getHeaderViewsCount()
-                                || position >= wrapAdapter.getHeaderViewsCount() + realAdapter.getItemCount())
-                                ? ((GridLayoutManager) layoutManager).getSpanCount() : 1;
-                    }
-                });
-            }
-        }
     }
 
     /**
@@ -449,13 +441,13 @@ public final class WrapRecyclerView extends RecyclerView {
         }
 
         @Override
-        public void onItemRangeChanged(int positionStart, int itemCount) {
-            mWrapAdapter.notifyItemRangeChanged(mWrapAdapter.getHeaderViewsCount() + positionStart, itemCount);
+        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+            onItemRangeChanged(mWrapAdapter.getHeaderViewsCount() + positionStart, itemCount);
         }
 
         @Override
-        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-            onItemRangeChanged(mWrapAdapter.getHeaderViewsCount() + positionStart, itemCount);
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            mWrapAdapter.notifyItemRangeChanged(mWrapAdapter.getHeaderViewsCount() + positionStart, itemCount);
         }
 
         @Override

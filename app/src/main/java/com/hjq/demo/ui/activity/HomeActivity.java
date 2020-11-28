@@ -15,12 +15,10 @@ import com.hjq.demo.common.MyFragment;
 import com.hjq.demo.helper.ActivityStackManager;
 import com.hjq.demo.helper.DoubleClickHelper;
 import com.hjq.demo.other.KeyboardWatcher;
-import com.hjq.demo.ui.fragment.TestFragmentA;
-import com.hjq.demo.ui.fragment.TestFragmentB;
-import com.hjq.demo.ui.fragment.TestFragmentC;
-import com.hjq.demo.ui.fragment.TestFragmentD;
-
-import butterknife.BindView;
+import com.hjq.demo.ui.fragment.FindFragment;
+import com.hjq.demo.ui.fragment.HomeFragment;
+import com.hjq.demo.ui.fragment.MeFragment;
+import com.hjq.demo.ui.fragment.MessageFragment;
 
 /**
  *    author : Android 轮子哥
@@ -30,22 +28,23 @@ import butterknife.BindView;
  */
 public final class HomeActivity extends MyActivity
         implements KeyboardWatcher.SoftKeyboardStateListener,
-        BottomNavigationView.OnNavigationItemSelectedListener{
+        BottomNavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.vp_home_pager)
-    ViewPager mViewPager;
-    @BindView(R.id.bv_home_navigation)
-    BottomNavigationView mBottomNavigationView;
+    private ViewPager mViewPager;
+    private BottomNavigationView mBottomNavigationView;
 
     private BaseFragmentAdapter<MyFragment> mPagerAdapter;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_home;
+        return R.layout.home_activity;
     }
 
     @Override
     protected void initView() {
+        mViewPager = findViewById(R.id.vp_home_pager);
+        mBottomNavigationView = findViewById(R.id.bv_home_navigation);
+
         // 不使用图标默认变色
         mBottomNavigationView.setItemIconTintList(null);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -57,15 +56,13 @@ public final class HomeActivity extends MyActivity
     @Override
     protected void initData() {
         mPagerAdapter = new BaseFragmentAdapter<>(this);
-        mPagerAdapter.addFragment(TestFragmentA.newInstance());
-        mPagerAdapter.addFragment(TestFragmentB.newInstance());
-        mPagerAdapter.addFragment(TestFragmentC.newInstance());
-        mPagerAdapter.addFragment(TestFragmentD.newInstance());
-
+        mPagerAdapter.addFragment(HomeFragment.newInstance());
+        mPagerAdapter.addFragment(FindFragment.newInstance());
+        mPagerAdapter.addFragment(MessageFragment.newInstance());
+        mPagerAdapter.addFragment(MeFragment.newInstance());
+        // 设置成懒加载模式
+        mPagerAdapter.setLazyMode(true);
         mViewPager.setAdapter(mPagerAdapter);
-
-        // 限制页面数量
-        mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
     }
 
     /**
@@ -76,16 +73,16 @@ public final class HomeActivity extends MyActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_home:
-                mPagerAdapter.setCurrentItem(TestFragmentA.class);
+                mViewPager.setCurrentItem(0);
                 return true;
             case R.id.home_found:
-                mPagerAdapter.setCurrentItem(TestFragmentB.class);
+                mViewPager.setCurrentItem(1);
                 return true;
             case R.id.home_message:
-                mPagerAdapter.setCurrentItem(TestFragmentC.class);
+                mViewPager.setCurrentItem(2);
                 return true;
             case R.id.home_me:
-                mPagerAdapter.setCurrentItem(TestFragmentD.class);
+                mViewPager.setCurrentItem(3);
                 return true;
             default:
                 break;
@@ -109,7 +106,7 @@ public final class HomeActivity extends MyActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 回调当前 Fragment 的 onKeyDown 方法
-        if (mPagerAdapter.getCurrentFragment().onKeyDown(keyCode, event)) {
+        if (mPagerAdapter.getShowFragment().onKeyDown(keyCode, event)) {
             return true;
         }
         return super.onKeyDown(keyCode, event);

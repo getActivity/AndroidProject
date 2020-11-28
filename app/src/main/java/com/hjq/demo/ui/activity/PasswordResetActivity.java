@@ -17,8 +17,6 @@ import com.hjq.demo.other.IntentKey;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 
-import butterknife.BindView;
-
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -35,45 +33,50 @@ public final class PasswordResetActivity extends MyActivity {
         context.startActivity(intent);
     }
 
-    @BindView(R.id.et_password_reset_password1)
-    EditText mPasswordView1;
-    @BindView(R.id.et_password_reset_password2)
-    EditText mPasswordView2;
-    @BindView(R.id.btn_password_reset_commit)
-    Button mCommitView;
+    private EditText mPasswordView1;
+    private EditText mPasswordView2;
+    private Button mCommitView;
 
     /** 手机号 */
-    private String mPhone;
+    private String mPhoneNumber;
     /** 验证码 */
-    private String mCode;
+    private String mVerifyCode;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_password_reset;
+        return R.layout.password_reset_activity;
     }
 
     @Override
     protected void initView() {
+        mPasswordView1 = findViewById(R.id.et_password_reset_password1);
+        mPasswordView2 = findViewById(R.id.et_password_reset_password2);
+        mCommitView = findViewById(R.id.btn_password_reset_commit);
+        setOnClickListener(mCommitView);
+
         InputTextHelper.with(this)
                 .addView(mPasswordView1)
                 .addView(mPasswordView2)
                 .setMain(mCommitView)
-                .setListener(helper -> mPasswordView1.getText().toString().length() >= 6 &&
-                        mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString()))
                 .build();
-        setOnClickListener(R.id.btn_password_reset_commit);
     }
 
     @Override
     protected void initData() {
-        mPhone = getString(IntentKey.PHONE);
-        mCode = getString(IntentKey.CODE);
+        mPhoneNumber = getString(IntentKey.PHONE);
+        mVerifyCode = getString(IntentKey.CODE);
     }
 
     @SingleClick
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_password_reset_commit) {
+        if (v == mCommitView) {
+
+            if (!mPasswordView1.getText().toString().equals(mPasswordView2.getText().toString())) {
+                toast(R.string.common_password_input_unlike);
+                return;
+            }
+
             if (true) {
                 toast(R.string.password_reset_success);
                 finish();
@@ -83,9 +86,9 @@ public final class PasswordResetActivity extends MyActivity {
             // 重置密码
             EasyHttp.post(this)
                     .api(new PasswordApi()
-                    .setPhone(mPhone)
-                    .setCode(mCode)
-                    .setPassword(mPasswordView1.getText().toString()))
+                            .setPhone(mPhoneNumber)
+                            .setCode(mVerifyCode)
+                            .setPassword(mPasswordView1.getText().toString()))
                     .request(new HttpCallback<HttpData<Void>>(this) {
 
                         @Override
