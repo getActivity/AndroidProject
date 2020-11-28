@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="5dp"
+    android:paddingBottom="15dp"
+    tools:context=".ui.dialog.ShareDialog">
+
+    <com.hjq.widget.view.ScaleImageView
+        android:id="@+id/iv_share_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:scaleRatio="1.2"
+        tools:src="@mipmap/launcher_ic" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_share_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        tools:text="分享平台" />
+
+</LinearLayout>

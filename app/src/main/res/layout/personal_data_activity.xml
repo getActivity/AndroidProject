@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.PersonalDataActivity">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/personal_data_title" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/fl_person_data_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_selector"
+        app:bar_leftText="@string/personal_data_head">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_person_data_avatar"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="20dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/avatar_placeholder_ic" />
+
+    </com.hjq.widget.layout.SettingBar>
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_person_data_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        app:bar_leftText="@string/personal_data_id"
+        app:bar_rightText="880634" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_person_data_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/personal_data_name"
+        app:bar_rightHint="@string/personal_data_name_hint"
+        app:bar_rightText="Android 轮子哥" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_person_data_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/personal_data_address"
+        app:bar_rightHint="@string/personal_data_address_hint"
+        app:bar_rightIcon="@drawable/arrows_right_ic" />
+
+</LinearLayout>

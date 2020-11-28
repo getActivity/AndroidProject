@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.SettingActivity">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/setting_title" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:bar_leftText="@string/setting_language"
+        app:bar_rightIcon="@drawable/arrows_right_ic"
+        tools:bar_rightHint="@string/setting_language_simple" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/setting_update">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/setting_update_bg"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="3dp"
+            android:text="new"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+
+    </com.hjq.widget.layout.SettingBar>
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:bar_leftText="@string/setting_phone"
+        app:bar_rightIcon="@drawable/arrows_right_ic"
+        tools:bar_rightText="181****1413" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/setting_password"
+        app:bar_rightIcon="@drawable/arrows_right_ic"
+        tools:bar_rightText="密码强度较低" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_agreement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:bar_leftText="@string/setting_agreement"
+        app:bar_rightIcon="@drawable/arrows_right_ic" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/setting_about"
+        app:bar_rightIcon="@drawable/arrows_right_ic" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:bar_leftText="@string/setting_auto">
+
+        <com.hjq.widget.view.SwitchButton
+            android:id="@+id/sb_setting_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginHorizontal="15dp" />
+
+    </com.hjq.widget.layout.SettingBar>
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_cache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="@string/setting_cache"
+        app:bar_rightIcon="@drawable/arrows_right_ic" />
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_setting_exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:bar_leftColor="@color/red"
+        app:bar_leftText="@string/setting_exit" />
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rv_album_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/dialog_rounded_corner_bg"
+    android:layoutAnimation="@anim/from_bottom_layout"
+    android:orientation="horizontal"
+    tools:context=".ui.dialog.AlbumDialog"
+    tools:itemCount="4"
+    tools:layoutAnimation="@null"
+    tools:listitem="@layout/album_item" />

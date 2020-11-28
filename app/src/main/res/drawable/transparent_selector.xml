@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 透明背景按压效果样式 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 按压状态 -->
+    <item android:drawable="@color/black5" android:state_pressed="true" />
+
+    <!-- 选中状态 -->
+    <item android:drawable="@color/black5" android:state_selected="true" />
+
+    <!-- 焦点状态 -->
+    <item android:drawable="@color/black5" android:state_focused="true" />
+
+    <!-- 默认状态 -->
+    <item android:drawable="@color/transparent" />
+
+</selector>

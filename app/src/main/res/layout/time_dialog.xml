@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="5dp"
+    tools:context=".ui.dialog.TimeDialog">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_time_hour"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:itemCount="3"
+        tools:listitem="@layout/picker_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_time_minute"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:itemCount="3"
+        tools:listitem="@layout/picker_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_time_second"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:itemCount="3"
+        tools:listitem="@layout/picker_item" />
+
+</LinearLayout>

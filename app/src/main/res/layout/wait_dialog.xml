@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/black85"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="0px"
+    tools:context=".ui.dialog.WaitDialog">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minWidth="110dp"
+        android:minHeight="110dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.hjq.demo.widget.ProgressView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:barColor="@android:color/white"
+            app:barWidth="2dp"
+            app:fillRadius="false"
+            app:linearProgress="true"
+            app:progressIndeterminate="true" />
+
+        <com.hjq.widget.view.SmartTextView
+            android:id="@+id/tv_wait_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="3"
+            android:text="@string/common_loading"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

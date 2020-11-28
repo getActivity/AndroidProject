@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:layoutAnimation="@anim/from_bottom_layout"
+    android:orientation="vertical"
+    tools:context=".ui.activity.LoginActivity"
+    tools:layoutAnimation="@null">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:backButton="false"
+        app:barStyle="transparent"
+        app:rightColor="@color/colorAccent"
+        app:rightTitle="@string/login_register"
+        app:title="" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_login_logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginVertical="30dp"
+        android:src="@drawable/logo_big_ic" />
+
+    <LinearLayout
+        android:id="@+id/ll_login_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.hjq.widget.view.ClearEditText
+            android:id="@+id/et_login_phone"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/common_phone_input_hint"
+            android:inputType="textVisiblePassword"
+            android:singleLine="true"
+            app:regexType="mobile" />
+
+        <View
+            style="@style/HorizontalLineStyle"
+            android:layout_marginHorizontal="40dp" />
+
+        <com.hjq.widget.view.PasswordEditText
+            android:id="@+id/et_login_password"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="20dp"
+            android:hint="@string/common_password_input_error"
+            android:maxLength="20"
+            android:maxLines="1" />
+
+        <View
+            style="@style/HorizontalLineStyle"
+            android:layout_marginHorizontal="40dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_login_forget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="60dp"
+            android:text="@string/login_forget"
+            android:textColor="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_login_commit"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/login_text" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_login_blank"
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="5" />
+
+    <LinearLayout
+        android:id="@+id/ll_login_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            style="@style/HorizontalLineStyle"
+            android:layout_width="60dp"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:text="@string/login_other"
+            android:textColor="@color/black50" />
+
+        <View
+            style="@style/HorizontalLineStyle"
+            android:layout_width="60dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.hjq.widget.view.ScaleImageView
+            android:id="@+id/iv_login_qq"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="25dp"
+            android:layout_weight="1"
+            app:scaleRatio="1.2"
+            app:srcCompat="@drawable/login_qq_ic" />
+
+        <com.hjq.widget.view.ScaleImageView
+            android:id="@+id/iv_login_wechat"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="25dp"
+            android:layout_weight="1"
+            app:scaleRatio="1.2"
+            app:srcCompat="@drawable/login_wechat_ic" />
+    </LinearLayout>
+
+</LinearLayout>

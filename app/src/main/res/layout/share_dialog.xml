@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.dialog.ShareDialog">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="25dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="5dp"
+        android:text="@string/share_title"
+        android:textColor="#666666"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_share_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/from_bottom_layout"
+        tools:itemCount="5"
+        tools:layoutAnimation="@null"
+        tools:layoutManager="GridLayoutManager"
+        tools:listitem="@layout/share_item"
+        tools:spanCount="5" />
+
+</LinearLayout>

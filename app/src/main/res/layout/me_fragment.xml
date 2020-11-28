@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.MeFragment"
+    tools:ignore="HardcodedText">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backButton="false"
+        app:title="@string/home_nav_me" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_dialog"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入对话框案例" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_hint"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入界面状态案例" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_login"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入登录界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_register"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入注册界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_forget"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入忘记密码" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_reset"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入重置密码" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_change"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入重置手机" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_personal"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入个人界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_message_setting"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入设置界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_about"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入关于界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_guide"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入引导界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_browser"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入浏览器界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_image_select"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入选择图片界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_image_preview"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入查看大图界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_video_select"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入选择视频界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_video_play"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入视频播放界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_crash"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="点我进入崩溃捕捉界面" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_me_pay"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
+                android:text="丢包辣条给作者" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

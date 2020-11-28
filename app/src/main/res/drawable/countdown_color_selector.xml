@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 禁用状态 -->
+    <item android:color="@color/white" android:state_enabled="false" />
+
+    <!-- 按压状态 -->
+    <item android:color="@color/white" android:state_pressed="true" />
+
+    <!-- 焦点状态 -->
+    <item android:color="@color/white" android:state_focused="true" />
+
+    <!-- 默认状态 -->
+    <item android:color="@color/colorAccent" />
+
+</selector>
