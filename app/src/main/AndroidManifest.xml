@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.hjq.demo">
+    package="com.cn.android">
 
     <!-- 联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:name=".common.MyApplication"
+        android:name="com.cn.android.common.MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/launcher_ic"
         android:label="@string/app_name"
@@ -49,7 +49,7 @@
 
         <!-- 闪屏界面 -->
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name="com.cn.android.ui.activity.SplashActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
@@ -67,7 +67,7 @@
 
         <!-- 崩溃界面 -->
         <activity
-            android:name=".ui.activity.CrashActivity"
+            android:name="com.cn.android.ui.activity.CrashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:process=":crash"
@@ -75,35 +75,35 @@
 
         <!-- 引导界面 -->
         <activity
-            android:name=".ui.activity.GuideActivity"
+            android:name="com.cn.android.ui.activity.GuideActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- App 首页 -->
         <activity
-            android:name=".ui.activity.HomeActivity"
+            android:name="com.cn.android.ui.activity.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <!-- 登录界面 -->
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name="com.cn.android.ui.activity.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 注册界面 -->
         <activity
-            android:name=".ui.activity.RegisterActivity"
+            android:name="com.cn.android.ui.activity.RegisterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 设置界面 -->
         <activity
-            android:name=".ui.activity.SettingActivity"
+            android:name="com.cn.android.ui.activity.SettingActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/setting_title"
             android:launchMode="singleTop"
@@ -111,7 +111,7 @@
 
         <!-- 忘记密码 -->
         <activity
-            android:name=".ui.activity.PasswordForgetActivity"
+            android:name="com.cn.android.ui.activity.PasswordForgetActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/password_forget_title"
             android:launchMode="singleTop"
@@ -119,7 +119,7 @@
 
         <!-- 重置密码 -->
         <activity
-            android:name=".ui.activity.PasswordResetActivity"
+            android:name="com.cn.android.ui.activity.PasswordResetActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
@@ -127,7 +127,7 @@
 
         <!-- 手机号更换 -->
         <activity
-            android:name=".ui.activity.PhoneResetActivity"
+            android:name="com.cn.android.ui.activity.PhoneResetActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/phone_reset_title"
             android:launchMode="singleTop"
@@ -135,7 +135,7 @@
 
         <!-- 关于我们 -->
         <activity
-            android:name=".ui.activity.AboutActivity"
+            android:name="com.cn.android.ui.activity.AboutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/about_title"
             android:launchMode="singleTop"
@@ -143,7 +143,7 @@
 
         <!-- 个人资料 -->
         <activity
-            android:name=".ui.activity.PersonalDataActivity"
+            android:name="com.cn.android.ui.activity.PersonalDataActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/personal_data_title"
             android:launchMode="singleTop"
@@ -151,7 +151,7 @@
 
         <!-- 浏览器 -->
         <activity
-            android:name=".ui.activity.BrowserActivity"
+            android:name="com.cn.android.ui.activity.BrowserActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/web_title"
             android:launchMode="singleTop"
@@ -159,14 +159,14 @@
 
         <!-- 拍照选择 -->
         <activity
-            android:name=".ui.activity.CameraActivity"
+            android:name="com.cn.android.ui.activity.CameraActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 图片选择 -->
         <activity
-            android:name=".ui.activity.ImageSelectActivity"
+            android:name="com.cn.android.ui.activity.ImageSelectActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/image_select_title"
             android:launchMode="singleTop"
@@ -174,14 +174,14 @@
 
         <!-- 查看大图 -->
         <activity
-            android:name=".ui.activity.ImagePreviewActivity"
+            android:name="com.cn.android.ui.activity.ImagePreviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 播放视频 -->
         <activity
-            android:name=".ui.activity.VideoPlayActivity"
+            android:name="com.cn.android.ui.activity.VideoPlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
@@ -189,21 +189,21 @@
 
         <!-- 选择视频 -->
         <activity
-            android:name=".ui.activity.VideoSelectActivity"
+            android:name="com.cn.android.ui.activity.VideoSelectActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 对话框案例 -->
         <activity
-            android:name=".ui.activity.DialogActivity"
+            android:name="com.cn.android.ui.activity.DialogActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 状态案例 -->
         <activity
-            android:name=".ui.activity.StatusActivity"
+            android:name="com.cn.android.ui.activity.StatusActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

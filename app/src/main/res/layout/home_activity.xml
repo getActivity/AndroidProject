@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.HomeActivity">
+    tools:context="com.cn.android.ui.activity.HomeActivity">
 
     <com.hjq.widget.layout.NoScrollViewPager
         android:id="@+id/vp_home_pager"

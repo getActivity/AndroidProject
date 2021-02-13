@@ -7,7 +7,7 @@
     android:paddingHorizontal="10dp"
     android:paddingTop="15dp"
     android:paddingBottom="5dp"
-    tools:context=".ui.dialog.DateDialog">
+    tools:context="com.cn.android.ui.dialog.DateDialog">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_date_year"

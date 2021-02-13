@@ -8,7 +8,7 @@
     android:paddingHorizontal="10dp"
     android:paddingVertical="8dp"
     tools:background="@color/white"
-    tools:context=".ui.dialog.SafeDialog">
+    tools:context="com.cn.android.ui.dialog.SafeDialog">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_safe_phone"

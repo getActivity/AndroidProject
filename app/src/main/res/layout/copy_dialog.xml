@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="horizontal"
-    tools:context=".ui.dialog.CopyDialog">
+    tools:context="com.cn.android.ui.dialog.CopyDialog">
 
 </LinearLayout>

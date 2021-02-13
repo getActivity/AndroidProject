@@ -10,7 +10,7 @@
     app:cardBackgroundColor="@color/black85"
     app:cardCornerRadius="15dp"
     app:cardElevation="0px"
-    tools:context=".ui.dialog.WaitDialog">
+    tools:context="com.cn.android.ui.dialog.WaitDialog">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <com.hjq.demo.widget.ProgressView
+        <com.cn.android.widget.ProgressView
             android:layout_width="60dp"
             android:layout_height="60dp"
             app:barColor="@android:color/white"

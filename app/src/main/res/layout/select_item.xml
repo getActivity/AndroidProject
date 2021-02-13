@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingHorizontal="20dp"
-    tools:context=".ui.dialog.SelectDialog">
+    tools:context="com.cn.android.ui.dialog.SelectDialog">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_select_text"

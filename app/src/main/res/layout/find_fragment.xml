@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragment.FindFragment"
+    tools:context="com.cn.android.ui.fragment.FindFragment"
     tools:ignore="HardcodedText">
 
     <com.hjq.bar.TitleBar

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.HomeFragment"
+    tools:context="com.cn.android.ui.fragment.HomeFragment"
     tools:ignore="HardcodedText">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:elevation="0px">
 
-        <com.hjq.demo.widget.XCollapsingToolbarLayout
+        <com.cn.android.widget.XCollapsingToolbarLayout
             android:id="@+id/ctl_home_bar"
             android:layout_width="match_parent"
             android:layout_height="256dp"
@@ -83,7 +83,7 @@
 
             </com.hjq.bar.TitleBar>
 
-        </com.hjq.demo.widget.XCollapsingToolbarLayout>
+        </com.cn.android.widget.XCollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_home_tab"

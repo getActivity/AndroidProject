@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srlEnablePreviewInEditMode="false"
-        tools:context=".ui.fragment.StatusFragment">
+        tools:context="com.cn.android.ui.fragment.StatusFragment">
 
         <com.hjq.widget.layout.WrapRecyclerView
             android:id="@+id/rv_status_list"

@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="15dp"
-    tools:context=".ui.dialog.SelectDialog"
+    tools:context="com.cn.android.ui.dialog.SelectDialog"
     tools:itemCount="5"
     tools:listitem="@layout/select_item" />

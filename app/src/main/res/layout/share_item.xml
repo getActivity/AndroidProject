@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:paddingTop="5dp"
     android:paddingBottom="15dp"
-    tools:context=".ui.dialog.ShareDialog">
+    tools:context="com.cn.android.ui.dialog.ShareDialog">
 
     <com.hjq.widget.view.ScaleImageView
         android:id="@+id/iv_share_image"

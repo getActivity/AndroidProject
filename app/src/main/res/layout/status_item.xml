@@ -9,5 +9,5 @@
     android:gravity="center_horizontal"
     android:paddingVertical="15dp"
     android:textSize="18sp"
-    tools:context=".ui.adapter.StatusAdapter"
+    tools:context="com.cn.android.ui.adapter.StatusAdapter"
     tools:text="我是条目" />

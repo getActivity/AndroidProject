@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusable="true"
-    tools:context=".ui.dialog.MenuDialog">
+    tools:context="com.cn.android.ui.dialog.MenuDialog">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_menu_text"

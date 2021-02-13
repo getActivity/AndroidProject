@@ -8,7 +8,7 @@ android {
     defaultConfig {
 
         // 无痛修改包名（推荐使用第二种方案）：https://www.jianshu.com/p/17327e191d2e
-        applicationId 'com.hjq.demo'
+        applicationId 'com.cn.android'
 
         // 仅保留中文语种的资源
         resConfigs 'zh'

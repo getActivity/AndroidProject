@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.activity.GuideActivity">
+    tools:context="com.cn.android.ui.activity.GuideActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_guide_pager"

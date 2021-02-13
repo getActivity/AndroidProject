@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
-        tools:context=".ui.activity.CrashActivity">
+        tools:context="com.cn.android.ui.activity.CrashActivity">
 
         <LinearLayout
             android:id="@+id/ll_crash_bar"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.PhoneResetActivity">
+    tools:context="com.cn.android.ui.activity.PhoneResetActivity">
 
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"

@@ -14,4 +14,4 @@
     android:singleLine="true"
     android:textColor="#333333"
     android:textSize="14sp"
-    tools:context=".ui.dialog.InputDialog" />
+    tools:context="com.cn.android.ui.dialog.InputDialog" />

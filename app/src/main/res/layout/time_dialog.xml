@@ -7,7 +7,7 @@
     android:paddingHorizontal="10dp"
     android:paddingTop="15dp"
     android:paddingBottom="5dp"
-    tools:context=".ui.dialog.TimeDialog">
+    tools:context="com.cn.android.ui.dialog.TimeDialog">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_time_hour"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".ui.activity.AboutActivity">
+    tools:context="com.cn.android.ui.activity.AboutActivity">
 
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
