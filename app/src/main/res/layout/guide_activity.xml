@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".ui.activity.GuideActivity">
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_guide_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,18 +19,12 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="30dp">
 
-        <com.rd.PageIndicatorView
-            android:id="@+id/pv_guide_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:piv_animationType="scale"
-            app:piv_dynamicCount="true"
-            app:piv_interactiveAnimation="true"
-            app:piv_padding="10dp"
-            app:piv_radius="6dp"
-            app:piv_selectedColor="@color/colorAccent"
-            app:piv_unselectedColor="@color/colorButtonDisable" />
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/cv_guide_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:ci_drawable="@drawable/guide_indicator_selected"
+            app:ci_drawable_unselected="@drawable/guide_indicator_unselected" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_guide_complete"
@@ -40,8 +34,7 @@
             android:layout_gravity="center"
             android:minWidth="160dp"
             android:text="了解详情"
-            android:visibility="invisible"
-            tools:ignore="HardcodedText" />
+            android:visibility="invisible" />
 
     </FrameLayout>
 

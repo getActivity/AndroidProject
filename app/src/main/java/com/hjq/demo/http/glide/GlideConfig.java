@@ -60,13 +60,16 @@ public final class GlideConfig extends AppGlideModule {
         builder.setMemoryCache(new LruResourceCache(customMemoryCacheSize));
         builder.setBitmapPool(new LruBitmapPool(customBitmapPoolSize));
 
-        // 设置默认的加载占位图和加载出错图
-        builder.setDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.image_loading_bg).error(R.drawable.image_error_bg));
+        builder.setDefaultRequestOptions(new RequestOptions()
+                // 设置默认加载中占位图
+                .placeholder(R.drawable.image_loading_bg)
+                // 设置默认加载出错占位图
+                .error(R.drawable.image_error_bg));
     }
 
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
-        // Glide 默认采用的是 HttpURLConnection 来做网络请求，这里切换成更高效的 OkHttp
+        // Glide 默认使用的是 HttpURLConnection 来做网络请求，这里切换成更高效的 OkHttp
         registry.replace(GlideUrl.class, InputStream.class, new OkHttpLoader.Factory(EasyConfig.getInstance().getClient()));
     }
 

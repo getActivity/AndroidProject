@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 清单文件合并指引：https://developer.android.google.cn/studio/build/manifest-merge?hl=zh-cn -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hjq.demo">
@@ -6,32 +7,40 @@
     <!-- 联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- 访问网络状态 -->
+    <!-- 网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <!-- 外部存储读写权限 -->
+    <!-- 外部存储 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
     <!-- 拍照权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- 安装包的权限 -->
+    <!-- 安装权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <!-- 定位权限（用于 WebView 定位）-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Application 节点详解：https://developer.android.google.cn/guide/topics/manifest/application-element -->
+    <!-- Activity 节点详解：https://developer.android.google.cn/guide/topics/manifest/activity-element -->
     <application
-        android:name=".common.MyApplication"
+        android:name=".app.AppApplication"
         android:allowBackup="false"
         android:icon="@mipmap/launcher_ic"
-        android:label="@string/app_name"
+        android:label="${app_name}"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
+        android:resizeableActivity="true"
         android:roundIcon="@mipmap/launcher_ic"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute,LockedOrientationActivity"
+        tools:ignore="AllowBackup,LockedOrientationActivity"
         tools:replace="android:allowBackup,android:supportsRtl"
         tools:targetApi="n">
 
@@ -47,13 +56,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- 闪屏界面 -->
+        <!-- 闪屏页 -->
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
 
             <!-- 程序入口 -->
             <intent-filter>
@@ -65,46 +73,47 @@
 
         </activity>
 
-        <!-- 崩溃界面 -->
+        <!-- 引导页 -->
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <!-- 首页 -->
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- 登录页 -->
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <!-- 注册页 -->
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <!-- 崩溃展示（必须在独立进程） -->
         <activity
             android:name=".ui.activity.CrashActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:process=":crash"
             android:screenOrientation="landscape" />
 
-        <!-- 引导界面 -->
+        <!-- 重启应用（必须在独立进程） -->
         <activity
-            android:name=".ui.activity.GuideActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name=".ui.activity.RestartActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:process=":restart" />
 
-        <!-- App 首页 -->
-        <activity
-            android:name=".ui.activity.HomeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-
-        <!-- 登录界面 -->
-        <activity
-            android:name=".ui.activity.LoginActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-        <!-- 注册界面 -->
-        <activity
-            android:name=".ui.activity.RegisterActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-        <!-- 设置界面 -->
+        <!-- 设置页 -->
         <activity
             android:name=".ui.activity.SettingActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/setting_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -112,7 +121,6 @@
         <!-- 忘记密码 -->
         <activity
             android:name=".ui.activity.PasswordForgetActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/password_forget_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -120,15 +128,13 @@
         <!-- 重置密码 -->
         <activity
             android:name=".ui.activity.PasswordResetActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
-        <!-- 手机号更换 -->
+        <!-- 更换手机 -->
         <activity
             android:name=".ui.activity.PhoneResetActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/phone_reset_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -136,7 +142,6 @@
         <!-- 关于我们 -->
         <activity
             android:name=".ui.activity.AboutActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/about_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -144,15 +149,13 @@
         <!-- 个人资料 -->
         <activity
             android:name=".ui.activity.PersonalDataActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/personal_data_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
-        <!-- 浏览器 -->
+        <!-- 网页浏览 -->
         <activity
             android:name=".ui.activity.BrowserActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/web_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -160,14 +163,12 @@
         <!-- 拍照选择 -->
         <activity
             android:name=".ui.activity.CameraActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 图片选择 -->
         <activity
             android:name=".ui.activity.ImageSelectActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/image_select_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -175,14 +176,12 @@
         <!-- 查看大图 -->
         <activity
             android:name=".ui.activity.ImagePreviewActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 播放视频 -->
         <activity
             android:name=".ui.activity.VideoPlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:theme="@style/FullScreenTheme" />
@@ -190,21 +189,18 @@
         <!-- 选择视频 -->
         <activity
             android:name=".ui.activity.VideoSelectActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 对话框案例 -->
         <activity
             android:name=".ui.activity.DialogActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 状态案例 -->
         <activity
             android:name=".ui.activity.StatusActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 

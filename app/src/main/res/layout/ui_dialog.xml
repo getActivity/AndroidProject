@@ -8,7 +8,7 @@
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/dialog_ui_round_size"
     app:cardElevation="0px"
-    tools:context=".ui.dialog.UIDialog">
+    tools:context=".ui.dialog.CommonDialog">
 
     <LinearLayout
         android:id="@+id/ll_ui_container"
@@ -31,41 +31,43 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
             android:layout_marginTop="10dp"
-            android:background="@color/colorLine" />
+            android:background="@color/common_line_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.hjq.widget.view.SmartTextView
                 android:id="@+id/tv_ui_cancel"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/transparent_selector"
                 android:focusable="true"
                 android:gravity="center"
+                android:paddingVertical="15dp"
                 android:text="@string/common_cancel"
-                android:textColor="@color/colorCancel"
+                android:textColor="@color/common_cancel_text_color"
                 android:textSize="14sp" />
 
             <View
                 android:id="@+id/v_ui_line"
                 android:layout_width="@dimen/line_size"
                 android:layout_height="match_parent"
-                android:background="@color/colorLine" />
+                android:background="@color/common_line_color" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_ui_confirm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/transparent_selector"
                 android:focusable="true"
                 android:gravity="center"
+                android:paddingVertical="15dp"
                 android:text="@string/common_confirm"
-                android:textColor="@color/colorConfirm"
+                android:textColor="@color/common_confirm_text_color"
                 android:textSize="14sp" />
         </LinearLayout>
 

@@ -24,26 +24,26 @@ public interface TitleBarAction extends OnTitleBarListener {
     /**
      * 左项被点击
      *
-     * @param v     被点击的左项View
+     * @param view     被点击的左项View
      */
     @Override
-    default void onLeftClick(View v) {}
+    default void onLeftClick(View view) {}
 
     /**
      * 标题被点击
      *
-     * @param v     被点击的标题View
+     * @param view     被点击的标题View
      */
     @Override
-    default void onTitleClick(View v){}
+    default void onTitleClick(View view) {}
 
     /**
      * 右项被点击
      *
-     * @param v     被点击的右项View
+     * @param view     被点击的右项View
      */
     @Override
-    default void onRightClick(View v) {}
+    default void onRightClick(View view) {}
 
     /**
      * 设置标题栏的标题

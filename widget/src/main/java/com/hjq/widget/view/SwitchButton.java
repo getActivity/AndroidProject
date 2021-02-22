@@ -57,7 +57,7 @@ public final class SwitchButton extends View {
     private boolean isCanVisibleDrawing = false;
 
     /** 是否显示按钮阴影 */
-    protected boolean isShadow;
+    protected boolean mShadow;
     /** 是否选中 */
     protected boolean mChecked;
 
@@ -322,7 +322,7 @@ public final class SwitchButton extends View {
         final boolean isState2 = (mCheckedState == STATE_SWITCH_ON2 || mCheckedState == STATE_SWITCH_OFF2);
         calcBPath(isState2 ? 1 - dbAnim : dbAnim);
         // Use center bar path to draw shadow
-        if (isShadow) {
+        if (mShadow) {
             mPaint.setStyle(Paint.Style.FILL);
             mPaint.setShader(mShadowGradient);
             canvas.drawPath(mBarPath, mPaint);
@@ -423,7 +423,7 @@ public final class SwitchButton extends View {
      * 设置按钮阴影开关
      */
     public void setShadow(boolean shadow) {
-        isShadow = shadow;
+        mShadow = shadow;
         invalidate();
     }
 
@@ -477,14 +477,17 @@ public final class SwitchButton extends View {
         mListener = listener;
     }
 
+    /**
+     * 选中监听器
+     */
     public interface OnCheckedChangeListener {
         /**
          * 回调监听
          *
          * @param button            切换按钮
-         * @param isChecked         是否选中
+         * @param checked           是否选中
          */
-        void onCheckedChanged(SwitchButton button, boolean isChecked);
+        void onCheckedChanged(SwitchButton button, boolean checked);
     }
 
     /**

@@ -15,7 +15,7 @@ import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.widget.PasswordView;
 
 import java.util.Arrays;
@@ -130,21 +130,19 @@ public final class PayPasswordDialog {
 
                     // 判断密码是否已经输入完毕
                     if (mRecordList.size() == PasswordView.PASSWORD_COUNT) {
-                        if (mListener != null) {
-                            postDelayed(() -> {
-
-                                if (mAutoDismiss) {
-                                    dismiss();
-                                }
-                                // 获取输入的支付密码
-                                StringBuilder password = new StringBuilder();
-                                for (String s : mRecordList) {
-                                    password.append(s);
-                                }
+                        postDelayed(() -> {
+                            if (mAutoDismiss) {
+                                dismiss();
+                            }
+                            // 获取输入的支付密码
+                            StringBuilder password = new StringBuilder();
+                            for (String s : mRecordList) {
+                                password.append(s);
+                            }
+                            if (mListener != null) {
                                 mListener.onCompleted(getDialog(), password.toString());
-
-                            }, 300);
-                        }
+                            }
+                        }, 300);
                     }
                     break;
             }
@@ -153,8 +151,8 @@ public final class PayPasswordDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            if (v == mCloseView) {
+        public void onClick(View view) {
+            if (view == mCloseView) {
                 if (mAutoDismiss) {
                     dismiss();
                 }
@@ -166,7 +164,7 @@ public final class PayPasswordDialog {
         }
     }
 
-    private static final class KeyboardAdapter extends MyAdapter<String> {
+    private static final class KeyboardAdapter extends AppAdapter<String> {
 
         /** 数字按钮条目 */
         private static final int TYPE_NORMAL = 0;
@@ -193,18 +191,18 @@ public final class PayPasswordDialog {
 
         @NonNull
         @Override
-        public MyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public AppAdapter<?>.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             switch (viewType) {
                 case TYPE_DELETE:
-                    return new MyAdapter.SimpleHolder(R.layout.pay_password_delete_item);
+                    return new AppAdapter<?>.SimpleHolder(R.layout.pay_password_delete_item);
                 case TYPE_EMPTY:
-                    return new MyAdapter.SimpleHolder(R.layout.pay_password_empty_item);
+                    return new AppAdapter<?>.SimpleHolder(R.layout.pay_password_empty_item);
                 default:
                     return new KeyboardAdapter.ViewHolder();
             }
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final TextView mTextView;
 

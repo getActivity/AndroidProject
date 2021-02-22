@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:title="界面状态案例" />
 
-    <com.hjq.demo.widget.HintLayout
+    <com.hjq.demo.widget.StatusLayout
         android:id="@+id/hl_status_hint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,6 +23,6 @@
             android:layout_height="match_parent"
             tools:ignore="MissingId" />
 
-    </com.hjq.demo.widget.HintLayout>
+    </com.hjq.demo.widget.StatusLayout>
 
 </LinearLayout>

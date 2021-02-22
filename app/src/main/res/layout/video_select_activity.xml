@@ -10,15 +10,13 @@
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:rightTitle="@string/video_select_all"
         app:title="@string/video_select_title" />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layoutAnimation="@null">
+        android:layout_height="match_parent">
 
-        <com.hjq.demo.widget.HintLayout
+        <com.hjq.demo.widget.StatusLayout
             android:id="@+id/hl_video_select_hint"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -27,13 +25,12 @@
                 android:id="@+id/rv_video_select_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layoutAnimation="@anim/from_bottom_layout"
                 tools:itemCount="20"
                 tools:layoutManager="GridLayoutManager"
                 tools:listitem="@layout/video_select_item"
-                tools:spanCount="3" />
+                tools:spanCount="2" />
 
-        </com.hjq.demo.widget.HintLayout>
+        </com.hjq.demo.widget.StatusLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_video_select_floating"

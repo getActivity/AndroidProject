@@ -1,13 +1,14 @@
-apply plugin: 'com.android.application'
-apply plugin: 'android-aspectjx'
-apply from: '../config.gradle'
-apply from: 'proguard.gradle'
+apply plugin : 'com.android.application'
+apply plugin : 'android-aspectjx'
+apply from : '../config.gradle'
 
+// Android 代码规范文档：https://github.com/getActivity/AndroidCodeStandard
 android {
 
+    // 资源目录存放指引：https://developer.android.google.cn/guide/topics/resources/providing-resources
     defaultConfig {
 
-        // 无痛修改包名（推荐使用第二种方案）：https://www.jianshu.com/p/17327e191d2e
+        // 无痛修改包名：https://www.jianshu.com/p/17327e191d2e
         applicationId 'com.hjq.demo'
 
         // 仅保留中文语种的资源
@@ -16,19 +17,11 @@ android {
         // 仅保留 xxhdpi 图片资源（目前主流分辨率 1920 * 1080）
         resConfig 'xxhdpi'
 
-        // 仅保留两种架构的 so 库，根据 Bugly 统计得出
-        ndk {
-            // armeabi：万金油架构平台（占用率：0%）
-            // armeabi-v7a：曾经主流的架构平台（占用率：10%）
-            // arm64-v8a：目前主流架构平台（占用率：90%）
-            abiFilters 'armeabi-v7a', 'arm64-v8a'
-        }
-
         // 混淆配置
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-app.pro'
+        proguardFiles 'proguard-sdk.pro', 'proguard-app.pro'
     }
 
-    // APK 签名的那些事：https://www.jianshu.com/p/a1f8e5896aa2
+    // Apk 签名的那些事：https://www.jianshu.com/p/a1f8e5896aa2
     signingConfigs {
         config {
             storeFile file(StoreFile)
@@ -41,44 +34,84 @@ android {
     buildTypes {
 
         debug {
+            // 给包名添加后缀
+            applicationIdSuffix '.debug'
+            // 调试模式开关
             debuggable true
             jniDebuggable true
-            // 移除无用的资源文件
-            shrinkResources false
-            // ZipAlign 优化
+            // 压缩对齐开关
             zipAlignEnabled false
-            // 设置混淆
+            // 移除无用的资源
+            shrinkResources false
+            // 代码混淆开关
             minifyEnabled false
-            // 开发环境下的 BuglyId
-            buildConfigField 'String', 'BUGLY_ID', '\"请自行替换 Bugly 上面的 AppID\"'
+            // 签名信息配置
             signingConfig signingConfigs.config
+            // 日志打印开关
+            buildConfigField('boolean', 'LOG_ENABLE', 'true')
+            // 测试包下的 BuglyId
+            buildConfigField('String', 'BUGLY_ID', '"请自行替换 Bugly 上面的 AppID"')
+            // 测试服务器的主机地址
+            buildConfigField('String', 'HOST_URL', '"https://www.test.baidu.com/"')
+            // 设置清单占位符
+            manifestPlaceholders = ['app_name' : '安卓技术中台 Debug 版']
+            // 调试模式下只保留一种架构的 so 库，提升打包速度
+            ndk {
+                abiFilters 'armeabi-v7a'
+            }
+        }
+
+        preview.initWith(debug)
+        preview {
+            applicationIdSuffix ''
+            // 设置清单占位符
+            manifestPlaceholders = ['app_name' : '安卓技术中台 Preview 版']
         }
 
         release {
+            // 调试模式开关
             debuggable false
             jniDebuggable false
-            // 移除无用的资源文件
-            shrinkResources true
-            // ZipAlign 优化
+            // 压缩对齐开关
             zipAlignEnabled true
-            // 设置混淆
+            // 移除无用的资源
+            shrinkResources true
+            // 代码混淆开关
             minifyEnabled true
-            // 正式环境下的 BuglyId
-            buildConfigField 'String', 'BUGLY_ID', '\"请自行替换 Bugly 上面的 AppID\"'
+            // 签名信息配置
             signingConfig signingConfigs.config
+            // 日志打印开关
+            buildConfigField('boolean', 'LOG_ENABLE', 'false')
+            // 正式包下的 BuglyId
+            buildConfigField('String', 'BUGLY_ID', '"请自行替换 Bugly 上面的 AppID"')
+            // 正式服务器的主机地址
+            buildConfigField('String', 'HOST_URL', '"https://www.baidu.com/"')
+            // 设置清单占位符
+            manifestPlaceholders = ['app_name' : '@string/app_name']
+            // 仅保留两种架构的 so 库，根据 Bugly 统计得出
+            ndk {
+                // armeabi：万金油架构平台（占用率：0%）
+                // armeabi-v7a：曾经主流的架构平台（占用率：10%）
+                // arm64-v8a：目前主流架构平台（占用率：95%）
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
         }
     }
 
     packagingOptions {
-        // 剔除这个包下的所有文件（除了签名信息）
+        // 剔除这个包下的所有文件（不会移除签名信息）
         exclude 'META-INF/*******'
     }
 
-    // AOP 配置
+    // AOP 配置（exclude 和 include 二选一）
     aspectjx {
         // 排除一些第三方库的包名（Gson、 LeakCanary 和 AOP 有冲突）
-        // 否则就会起冲突：ClassNotFoundException: Didn't find class on path: DexPathList
-        exclude 'androidx', 'com.google', 'com.squareup', 'com.alipay', 'com.taobao', 'org.apache'
+        // exclude 'androidx', 'com.google', 'com.squareup', 'org.apache', 'com.alipay', 'com.taobao', 'versions.9'
+        // 只对以下包名做 AOP 处理
+        include 'com.hjq.demo'
+        // 否则就会引发冲突，具体表现为：
+        // 编译不过去，报错：java.util.zip.ZipException：Cause: zip file is empty
+        // 编译能过去，但运行时报错：ClassNotFoundException: Didn't find class on path: DexPathList
     }
 
     applicationVariants.all { variant ->
@@ -96,80 +129,87 @@ android {
 
 // api 与 implementation 的区别：https://www.jianshu.com/p/8962d6ba936e
 dependencies {
-    // 基类库
+    // 基类封装
     implementation project(':base')
-    // 自定义 View
+    // 控件封装
     implementation project(':widget')
     // 友盟封装
     implementation project(':umeng')
 
-    // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation 'com.hjq:http:6.9'
-
     // 权限请求框架：https://github.com/getActivity/XXPermissions
-    implementation 'com.hjq:xxpermissions:6.5'
+    implementation 'com.hjq:xxpermissions:9.8'
 
     // 标题栏框架：https://github.com/getActivity/TitleBar
-    implementation 'com.hjq:titlebar:6.5'
+    implementation 'com.hjq:titlebar:8.2'
 
     // 吐司框架：https://github.com/getActivity/ToastUtils
-    implementation 'com.hjq:toast:8.6'
+    implementation 'com.hjq:toast:8.8'
 
+    // 网络请求框架：https://github.com/getActivity/EasyHttp
+    implementation 'com.hjq:http:9.0'
     // OkHttp 框架：https://github.com/square/okhttp
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    // noinspection GradleDependency
+    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
 
-    // JSON 解析框架：https://github.com/google/gson
+    // Json 解析框架：https://github.com/google/gson
     implementation 'com.google.code.gson:gson:2.8.6'
+    // Gson 解析容错：https://github.com/getActivity/GsonFactory
+    implementation 'com.hjq.gson:factory:3.0'
 
     // AOP 插件库：https://mvnrepository.com/artifact/org.aspectj/aspectjrt
-    implementation 'org.aspectj:aspectjrt:1.9.5'
+    implementation 'org.aspectj:aspectjrt:1.9.6'
 
     // 图片加载框架：https://github.com/bumptech/glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    // 官方使用文档：https://muyangmin.github.io/glide-docs-cn/
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
-    // 状态栏沉浸：https://github.com/gyf-dev/ImmersionBar
+    // 沉浸式框架：https://github.com/gyf-dev/ImmersionBar
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
 
     // 手势 ImageView：https://github.com/chrisbanes/PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-    // ViewPager 指示器：https://github.com/romandanylyk/PageIndicatorView
-    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 
     // Bugly 异常捕捉：https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20190418140644
-    implementation 'com.tencent.bugly:crashreport:3.1.9'
-    implementation 'com.tencent.bugly:nativecrashreport:3.7.1'
+    implementation 'com.tencent.bugly:crashreport:3.3.3'
+    implementation 'com.tencent.bugly:nativecrashreport:3.7.700'
 
     // 动画解析库：https://github.com/airbnb/lottie-android
     // 动画资源：https://lottiefiles.com、https://icons8.com/animated-icons
-    implementation 'com.airbnb.android:lottie:3.4.1'
+    implementation 'com.airbnb.android:lottie:3.6.1'
 
-    // 上拉刷新下拉加载：https://github.com/scwang90/SmartRefreshLayout
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.2'
-    // SmartRefreshLayout 刷新样式集合库
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.2'
+    // 刷新框架：https://github.com/scwang90/SmartRefreshLayout
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'
+    implementation 'com.scwang.smart:refresh-header-material:2.0.3'
 
     // 侧滑框架：https://github.com/luckybilly/SmartSwipe
     implementation 'com.billy.android:smart-swipe:1.1.2'
     implementation 'com.billy.android:smart-swipe-x:1.1.0'
 
-    // 日志调试：https://github.com/getActivity/Logcat
-    debugImplementation 'com.hjq:logcat:8.2'
+    // 日志打印框架：https://github.com/JakeWharton/timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    // 内存泄漏：https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    // 指示器框架：https://github.com/ongakuer/CircleIndicator
+    implementation 'me.relex:circleindicator:2.1.4'
+
+    // 内存泄漏监测框架：https://github.com/square/leakcanary
+    // noinspection GradleDependency
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    // noinspection GradleDependency
+    previewImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 
     // 国际化：https://github.com/getActivity/MultiLanguages
     // 悬浮窗：https://github.com/getActivity/XToast
+    // 日志输出：https://github.com/getActivity/Logcat
     // 工具类：https://github.com/Blankj/AndroidUtilCode
-    // 平板适配：https://github.com/JessYanCoding/AndroidAutoSize
     // 轮播图：https://github.com/bingoogolapple/BGABanner-Android
     // 二维码：https://github.com/bingoogolapple/BGAQRCode-Android
     // 跑马灯：https://github.com/sunfusheng/MarqueeView
-    // 第三方支付：https://github.com/Cuieney/RxPay
-    // Log 打印：https://github.com/JakeWharton/timber
-    // 图片裁剪：https://github.com/Yalantis/uCrop
+    // 对象注解：https://www.jianshu.com/p/f1f888e4a35f
+    // 平板适配：https://github.com/JessYanCoding/AndroidAutoSize
     // 图片压缩：https://github.com/Curzibn/Luban
     // 对象存储：https://github.com/leavesC/DoKV
-    // 对象注解：https://www.jianshu.com/p/f1f888e4a35f
+    // 第三方支付：https://github.com/Cuieney/RxPay
+    // 多渠道打包：https://github.com/Meituan-Dianping/walle
+    // 设备唯一标识：http://msa-alliance.cn/col.jsp?id=120
 }

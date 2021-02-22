@@ -3,6 +3,8 @@
 
     <!-- 透明色 -->
     <color name="transparent">#00000000</color>
+    <!-- 熊猫色（黑白背景通吃） -->
+    <color name="panda">#FF757575</color>
 
     <!-- 白色 -->
     <color name="white">#FFFFFFFF</color>

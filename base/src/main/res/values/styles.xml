@@ -1,7 +1,7 @@
 <resources>
 
-    <!-- 对话框默认样式 -->
-    <style name="BaseDialogStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert"><!-- @android:style/Theme.Dialog -->
+    <!-- 对话框默认主题 -->
+    <style name="BaseDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert"><!-- @android:style/Theme.Dialog -->
         <!-- 无边框 -->
         <item name="android:windowFrame">@null</item>
         <!-- 浮在 Activity 之上 -->
@@ -9,7 +9,7 @@
         <!-- 半透明 -->
         <item name="android:windowIsTranslucent">true</item>
         <!-- 背景透明 -->
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/transparent</item>
         <!-- 遮盖层 -->
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 无标题 -->

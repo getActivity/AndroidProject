@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
+import com.hjq.base.BottomSheetDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.http.glide.GlideApp;
 
 import java.util.List;
@@ -39,7 +40,6 @@ public final class AlbumDialog {
             super(context);
 
             setContentView(R.layout.album_dialog);
-            setHeight(getResources().getDisplayMetrics().heightPixels / 2);
 
             mRecyclerView = findViewById(R.id.rv_album_list);
             mAdapter = new AlbumAdapter(context);
@@ -53,6 +53,7 @@ public final class AlbumDialog {
             for (int i = 0; i < data.size(); i++) {
                 if (data.get(i).isSelect()) {
                     mRecyclerView.scrollToPosition(i);
+                    break;
                 }
             }
             return this;
@@ -89,9 +90,17 @@ public final class AlbumDialog {
 
             }, 300);
         }
+
+        @NonNull
+        @Override
+        protected BaseDialog createDialog(Context context, int themeId) {
+            BottomSheetDialog dialog = new BottomSheetDialog(context, themeId);
+            dialog.getBottomSheetBehavior().setPeekHeight(getResources().getDisplayMetrics().heightPixels / 2);
+            return dialog;
+        }
     }
 
-    private static final class AlbumAdapter extends MyAdapter<AlbumInfo> {
+    private static final class AlbumAdapter extends AppAdapter<AlbumInfo> {
 
         private AlbumAdapter(Context context) {
             super(context);
@@ -103,7 +112,7 @@ public final class AlbumDialog {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final ImageView mIconView;
             private final TextView mNameView;
@@ -112,10 +121,10 @@ public final class AlbumDialog {
 
             private ViewHolder() {
                 super(R.layout.album_item);
-                mIconView = (ImageView) findViewById(R.id.iv_album_icon);
-                mNameView = (TextView) findViewById(R.id.tv_album_name);
-                mRemarkView = (TextView) findViewById(R.id.tv_album_remark);
-                mCheckBox = (CheckBox) findViewById(R.id.rb_album_check);
+                mIconView = findViewById(R.id.iv_album_icon);
+                mNameView = findViewById(R.id.tv_album_name);
+                mRemarkView = findViewById(R.id.tv_album_remark);
+                mCheckBox = findViewById(R.id.rb_album_check);
             }
 
             @Override
@@ -123,6 +132,7 @@ public final class AlbumDialog {
                 AlbumInfo info = getItem(position);
 
                 GlideApp.with(getContext())
+                        .asBitmap()
                         .load(info.getIcon())
                         .into(mIconView);
 

@@ -22,7 +22,6 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
                 android:src="@drawable/update_app_top_bg" />
 
             <LinearLayout

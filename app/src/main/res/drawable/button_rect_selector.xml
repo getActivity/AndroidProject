@@ -3,15 +3,15 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 禁用状态 -->
-    <item android:drawable="@color/colorButtonDisable" android:state_enabled="false" />
+    <item android:drawable="@color/common_button_disable_color" android:state_enabled="false" />
 
     <!-- 按压状态 -->
-    <item android:drawable="@color/colorButtonPressed" android:state_pressed="true" />
+    <item android:drawable="@color/common_button_pressed_color" android:state_pressed="true" />
 
     <!-- 焦点状态 -->
-    <item android:drawable="@color/colorButtonPressed" android:state_focused="true" />
+    <item android:drawable="@color/common_button_pressed_color" android:state_focused="true" />
 
     <!-- 默认状态 -->
-    <item android:drawable="@color/colorAccent" />
+    <item android:drawable="@color/common_accent_color" />
 
 </selector>

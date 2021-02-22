@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragment.FindFragment"
-    tools:ignore="HardcodedText">
+    tools:context=".ui.fragment.FindFragment">
 
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
@@ -34,22 +33,16 @@
                     android:id="@+id/iv_find_circle"
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/example_bg" />
+                    app:srcCompat="@drawable/example_bg"
+                    tools:scaleType="centerCrop" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_find_corner"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:layout_marginStart="20dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="0px">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/example_bg" />
-                </androidx.cardview.widget.CardView>
+                    app:srcCompat="@drawable/example_bg"
+                    tools:scaleType="centerCrop" />
 
                 <com.hjq.widget.view.ScaleImageView
                     android:layout_width="80dp"
@@ -223,7 +216,7 @@
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="10dp"
                 android:maxLength="20"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:text="78797078" />
 
             <com.hjq.widget.view.RegexEditText
@@ -289,8 +282,8 @@
             <com.hjq.widget.layout.RatioFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                app:sizeRatio="2">
+                android:background="@color/common_accent_color"
+                app:sizeRatio="2:1">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"

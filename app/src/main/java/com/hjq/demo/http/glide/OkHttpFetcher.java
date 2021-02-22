@@ -41,8 +41,7 @@ public final class OkHttpFetcher implements DataFetcher<InputStream>, Callback {
     }
 
     @Override
-    public void loadData(@NonNull Priority priority,
-                         @NonNull final DataFetcher.DataCallback<? super InputStream> callback) {
+    public void loadData(@NonNull Priority priority, @NonNull final DataFetcher.DataCallback<? super InputStream> callback) {
         Request.Builder requestBuilder = new Request.Builder().url(mGlideUrl.toStringUrl());
         for (Map.Entry<String, String> headerEntry : mGlideUrl.getHeaders().entrySet()) {
             String key = headerEntry.getKey();

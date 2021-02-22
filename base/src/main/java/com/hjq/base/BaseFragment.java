@@ -11,16 +11,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
+import com.hjq.base.action.KeyboardAction;
 import com.hjq.base.action.ResourcesAction;
 
-import java.util.Random;
+import java.util.List;
 
 /**
  *    author : Android 轮子哥
@@ -29,7 +30,7 @@ import java.util.Random;
  *    desc   : Fragment 基类
  */
 public abstract class BaseFragment<A extends BaseActivity> extends Fragment implements
-        ActivityAction, ResourcesAction, HandlerAction, ClickAction, BundleAction {
+        ActivityAction, ResourcesAction, HandlerAction, ClickAction, BundleAction, KeyboardAction {
 
     /** Activity 对象 */
     private A mActivity;
@@ -47,27 +48,15 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     }
 
     @Override
-    public void onDetach() {
-        removeCallbacks();
-        mActivity = null;
-        super.onDetach();
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mLoading = false;
-        if (getLayoutId() > 0) {
-            return mRootView = inflater.inflate(getLayoutId(), null);
-        } else {
+        if (getLayoutId() <= 0) {
             return null;
         }
-    }
 
-    @Override
-    public void onDestroyView() {
         mLoading = false;
-        mRootView = null;
-        super.onDestroyView();
+        mRootView = inflater.inflate(getLayoutId(), container, false);
+        initView();
+        return mRootView;
     }
 
     @Override
@@ -75,8 +64,47 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         super.onResume();
         if (!mLoading) {
             mLoading = true;
-            initFragment();
+            initData();
+            onFragmentResume(true);
+            return;
         }
+
+        if (mActivity != null && mActivity.getLifecycle().getCurrentState() == Lifecycle.State.STARTED) {
+            onActivityResume();
+        } else {
+            onFragmentResume(false);
+        }
+    }
+
+    /**
+     * Fragment 可见回调
+     *
+     * @param first                 是否首次调用
+     */
+    protected void onFragmentResume(boolean first) {}
+
+    /**
+     * Activity 可见回调
+     */
+    protected void onActivityResume() {}
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRootView = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mLoading = false;
+        removeCallbacks();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null;
     }
 
     /**
@@ -97,11 +125,6 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
      */
     public A getAttachActivity() {
         return mActivity;
-    }
-
-    protected void initFragment() {
-        initView();
-        initData();
     }
 
     /**
@@ -136,51 +159,68 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
      * startActivityForResult 方法优化
      */
 
-    private BaseActivity.OnActivityCallback mActivityCallback;
-    private int mActivityRequestCode;
-
     public void startActivityForResult(Class<? extends Activity> clazz, BaseActivity.OnActivityCallback callback) {
-        startActivityForResult(new Intent(mActivity, clazz), null, callback);
+        getAttachActivity().startActivityForResult(clazz, callback);
     }
 
     public void startActivityForResult(Intent intent, BaseActivity.OnActivityCallback callback) {
-        startActivityForResult(intent, null, callback);
+        getAttachActivity().startActivityForResult(intent, null, callback);
     }
 
     public void startActivityForResult(Intent intent, Bundle options, BaseActivity.OnActivityCallback callback) {
-        // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
-        if (mActivityCallback == null) {
-            mActivityCallback = callback;
-            // 随机生成请求码，这个请求码必须在 2 的 16 次幂以内，也就是 0 - 65535
-            mActivityRequestCode = new Random().nextInt((int) Math.pow(2, 16));
-            startActivityForResult(intent, mActivityRequestCode, options);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (mActivityCallback != null && mActivityRequestCode == requestCode) {
-            mActivityCallback.onActivityResult(resultCode, data);
-            mActivityCallback = null;
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        getAttachActivity().startActivityForResult(intent, options, callback);
     }
 
     /**
      * 销毁当前 Fragment 所在的 Activity
      */
     public void finish() {
-        if (mActivity != null && !mActivity.isFinishing()) {
-            mActivity.finish();
+        if (mActivity == null || mActivity.isFinishing() || mActivity.isDestroyed()) {
+            return;
+        }
+        mActivity.finish();
+    }
+
+    /**
+     * Fragment 按键事件派发
+     */
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            // 这个子 Fragment 必须是 BaseFragment 的子类，并且处于可见状态
+            if (!(fragment instanceof BaseFragment) ||
+                    fragment.getLifecycle().getCurrentState() != Lifecycle.State.RESUMED) {
+                continue;
+            }
+            // 将按键事件派发给子 Fragment 进行处理
+            if (((BaseFragment<?>) fragment).dispatchKeyEvent(event)) {
+                // 如果子 Fragment 拦截了这个事件，那么就不交给父 Fragment 处理
+                return true;
+            }
+        }
+        switch (event.getAction()) {
+            case KeyEvent.ACTION_DOWN:
+                return onKeyDown(event.getKeyCode(), event);
+            case KeyEvent.ACTION_UP:
+                return onKeyUp(event.getKeyCode(), event);
+            default:
+                return false;
         }
     }
 
     /**
-     * Fragment 返回键被按下时回调
+     * 按键按下事件回调
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // 默认不拦截按键事件，回传给 Activity
+        // 默认不拦截按键事件
+        return false;
+    }
+
+    /**
+     * 按键抬起事件回调
+     */
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        // 默认不拦截按键事件
         return false;
     }
 }

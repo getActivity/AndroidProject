@@ -70,8 +70,17 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:ignore="MissingClass"
             tools:node="replace" />
 
     </application>
+
+    <!-- Android 11 软件包可见性适配：https://developer.android.google.cn/about/versions/11/privacy/package-visibility -->
+    <queries>
+        <!-- 手 Q 的包名 -->
+        <package android:name="com.tencent.mobileqq" />
+        <!-- 微信的包名 -->
+        <package android:name="com.tencent.mm" />
+    </queries>
 
 </manifest>

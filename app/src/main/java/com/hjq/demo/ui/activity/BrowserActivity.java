@@ -1,8 +1,10 @@
 package com.hjq.demo.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,13 +17,13 @@ import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
 import com.hjq.demo.aop.CheckNet;
 import com.hjq.demo.aop.DebugLog;
-import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.widget.BrowserView;
-import com.hjq.demo.widget.HintLayout;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.hjq.demo.widget.StatusLayout;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 /**
  *    author : Android 轮子哥
@@ -29,7 +31,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
  *    time   : 2018/10/18
  *    desc   : 浏览器界面
  */
-public final class BrowserActivity extends MyActivity
+public final class BrowserActivity extends AppActivity
         implements StatusAction, OnRefreshListener {
 
     @CheckNet
@@ -40,10 +42,13 @@ public final class BrowserActivity extends MyActivity
         }
         Intent intent = new Intent(context, BrowserActivity.class);
         intent.putExtra(IntentKey.URL, url);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(intent);
     }
 
-    private HintLayout mHintLayout;
+    private StatusLayout mStatusLayout;
     private ProgressBar mProgressBar;
     private SmartRefreshLayout mRefreshLayout;
     private BrowserView mBrowserView;
@@ -55,11 +60,13 @@ public final class BrowserActivity extends MyActivity
 
     @Override
     protected void initView() {
-        mHintLayout = findViewById(R.id.hl_browser_hint);
+        mStatusLayout = findViewById(R.id.hl_browser_hint);
         mProgressBar = findViewById(R.id.pb_browser_progress);
         mRefreshLayout = findViewById(R.id.sl_browser_refresh);
         mBrowserView = findViewById(R.id.wv_browser_view);
 
+        // 设置 WebView 生命管控
+        mBrowserView.setLifecycleOwner(this);
         // 设置网页刷新监听
         mRefreshLayout.setOnRefreshListener(this);
     }
@@ -70,18 +77,16 @@ public final class BrowserActivity extends MyActivity
 
         mBrowserView.setBrowserViewClient(new MyBrowserViewClient());
         mBrowserView.setBrowserChromeClient(new MyBrowserChromeClient(mBrowserView));
-
-        String url = getString(IntentKey.URL);
-        mBrowserView.loadUrl(url);
+        mBrowserView.loadUrl(getString(IntentKey.URL));
     }
 
     @Override
-    public HintLayout getHintLayout() {
-        return mHintLayout;
+    public StatusLayout getStatusLayout() {
+        return mStatusLayout;
     }
 
     @Override
-    public void onLeftClick(View v) {
+    public void onLeftClick(View view) {
         finish();
     }
 
@@ -93,24 +98,6 @@ public final class BrowserActivity extends MyActivity
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onResume() {
-        mBrowserView.onResume();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        mBrowserView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mBrowserView.onDestroy();
-        super.onDestroy();
     }
 
     /**
@@ -127,7 +114,7 @@ public final class BrowserActivity extends MyActivity
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        mBrowserView.reload();
+        reload();
     }
 
     private class MyBrowserViewClient extends BrowserView.BrowserViewClient {
@@ -173,6 +160,13 @@ public final class BrowserActivity extends MyActivity
         public void onReceivedTitle(WebView view, String title) {
             if (title != null) {
                 setTitle(title);
+            }
+        }
+
+        @Override
+        public void onReceivedIcon(WebView view, Bitmap icon) {
+            if (icon != null) {
+                setRightIcon(new BitmapDrawable(getResources(), icon));
             }
         }
 

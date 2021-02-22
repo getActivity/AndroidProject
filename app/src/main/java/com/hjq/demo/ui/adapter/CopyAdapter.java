@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 
 /**
  *    author : Android 轮子哥
@@ -14,7 +14,7 @@ import com.hjq.demo.common.MyAdapter;
  *    time   : 2018/11/05
  *    desc   : 可进行拷贝的副本
  */
-public final class CopyAdapter extends MyAdapter<String> {
+public final class CopyAdapter extends AppAdapter<String> {
 
     public CopyAdapter(Context context) {
         super(context);
@@ -31,7 +31,7 @@ public final class CopyAdapter extends MyAdapter<String> {
         return new ViewHolder();
     }
 
-    private final class ViewHolder extends MyAdapter.ViewHolder {
+    private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
         private ViewHolder() {
             super(R.layout.copy_item);

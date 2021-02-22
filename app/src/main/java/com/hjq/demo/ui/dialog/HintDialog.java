@@ -40,7 +40,7 @@ public final class HintDialog {
             setCancelable(false);
 
             mMessageView = findViewById(R.id.tv_hint_message);
-            mIconView = findViewById(R.id.iv_hint_icon);
+            mIconView = findViewById(R.id.iv_status_icon);
 
             addOnShowListener(this);
         }

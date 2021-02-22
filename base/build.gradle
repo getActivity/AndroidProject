@@ -1,10 +1,10 @@
-apply plugin: 'com.android.library'
-apply from: '../config.gradle'
+apply plugin : 'com.android.library'
+apply from : '../config.gradle'
 
 android {
 
     defaultConfig {
-        // 混淆配置
+        // 模块混淆配置
         consumerProguardFiles 'proguard-base.pro'
     }
 }

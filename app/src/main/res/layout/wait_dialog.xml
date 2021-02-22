@@ -21,14 +21,12 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <com.hjq.demo.widget.ProgressView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:barColor="@android:color/white"
-            app:barWidth="2dp"
-            app:fillRadius="false"
-            app:linearProgress="true"
-            app:progressIndeterminate="true" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/progress" />
 
         <com.hjq.widget.view.SmartTextView
             android:id="@+id/tv_wait_message"

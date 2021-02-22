@@ -22,6 +22,7 @@ import java.util.List;
  *    time   : 2019/09/21
  *    desc   : 支持添加底部和头部的 RecyclerView
  */
+@SuppressWarnings("rawtypes")
 public final class WrapRecyclerView extends RecyclerView {
 
     /** 原有的适配器 */
@@ -138,7 +139,6 @@ public final class WrapRecyclerView extends RecyclerView {
      * 设置在 GridLayoutManager 模式下头部和尾部都是独占一行的效果
      */
     public void adjustSpanSize() {
-
         final RecyclerView.LayoutManager layoutManager = getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -207,9 +207,8 @@ public final class WrapRecyclerView extends RecyclerView {
         public int getItemCount() {
             if (mRealAdapter != null) {
                 return getHeaderViewsCount() + mRealAdapter.getItemCount() + getFooterViewsCount();
-            } else {
-                return getHeaderViewsCount() + getFooterViewsCount();
             }
+            return getHeaderViewsCount() + getFooterViewsCount();
         }
 
         @SuppressWarnings("all")
@@ -226,9 +225,8 @@ public final class WrapRecyclerView extends RecyclerView {
                 return HEADER_VIEW_TYPE;
             } else if (adjPosition < adapterCount) {
                 return mRealAdapter.getItemViewType(adjPosition);
-            } else {
-                return FOOTER_VIEW_TYPE;
             }
+            return FOOTER_VIEW_TYPE;
         }
 
         public int getPosition() {
@@ -250,9 +248,8 @@ public final class WrapRecyclerView extends RecyclerView {
                     }
                     if (mRealAdapter != null) {
                         return mRealAdapter.onCreateViewHolder(parent, itemViewType);
-                    } else {
-                        return null;
                     }
+                    return null;
             }
         }
 
@@ -273,7 +270,7 @@ public final class WrapRecyclerView extends RecyclerView {
         }
 
         private WrapViewHolder newWrapViewHolder(View view) {
-            ViewParent parent =  view.getParent();
+            ViewParent parent = view.getParent();
             if (parent instanceof ViewGroup) {
                 // IllegalStateException: ViewHolder views must not be attached when created.
                 // Ensure that you are not passing 'true' to the attachToRoot parameter of LayoutInflater.inflate(..., boolean attachToRoot)
@@ -286,9 +283,8 @@ public final class WrapRecyclerView extends RecyclerView {
         public long getItemId(int position) {
             if (mRealAdapter != null && position > getHeaderViewsCount() - 1 && position < getHeaderViewsCount() + mRealAdapter.getItemCount()) {
                 return mRealAdapter.getItemId(position - getHeaderViewsCount());
-            } else {
-                return super.getItemId(position);
             }
+            return super.getItemId(position);
         }
 
         @Override

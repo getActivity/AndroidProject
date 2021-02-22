@@ -13,12 +13,15 @@
         android:layout_height="0px"
         android:layout_weight="1" />
 
+    <!-- 底部导航栏花式用法：https://juejin.im/post/6867895624025997320 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bv_home_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:itemBackground="@null"
+        app:itemTextAppearanceActive="@style/BottomTabTextStyle"
+        app:itemTextAppearanceInactive="@style/BottomTabTextStyle"
         app:itemTextColor="@drawable/home_navigation_color_selector"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_home_bottom_nav" />

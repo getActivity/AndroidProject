@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.HomeFragment"
-    tools:ignore="HardcodedText">
+    tools:context=".ui.fragment.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 app:srcCompat="@drawable/example_bg" />
@@ -33,27 +32,19 @@
                 android:id="@+id/tb_home_title"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:layout_marginEnd="20dp"
-                app:layout_collapseMode="pin" />
-
-            <com.hjq.bar.TitleBar
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                app:backButton="false"
-                app:barStyle="transparent"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingVertical="10dp">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_home_address"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
                         android:text="广州"
                         android:textColor="@color/white"
@@ -74,14 +65,14 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_home_search"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         app:srcCompat="@drawable/search_ic"
                         app:tint="@color/white" />
 
                 </LinearLayout>
 
-            </com.hjq.bar.TitleBar>
+            </androidx.appcompat.widget.Toolbar>
 
         </com.hjq.demo.widget.XCollapsingToolbarLayout>
 
@@ -89,16 +80,16 @@
             android:id="@+id/tl_home_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabRippleColor="@color/transparent"
-            app:tabIndicatorColor="@color/colorAccent"
+            app:tabIndicatorColor="@color/common_accent_color"
             app:tabIndicatorFullWidth="false"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabRippleColor="@color/transparent"
+            app:tabSelectedTextColor="@color/common_accent_color"
             app:tabTextColor="@color/black25" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <com.hjq.widget.layout.NestedViewPager
         android:id="@+id/vp_home_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

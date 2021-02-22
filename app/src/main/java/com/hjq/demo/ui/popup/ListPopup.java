@@ -14,7 +14,7 @@ import com.hjq.base.BaseAdapter;
 import com.hjq.base.BasePopupWindow;
 import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.other.ArrowDrawable;
 
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ public final class ListPopup {
             extends BasePopupWindow.Builder<Builder>
             implements BaseAdapter.OnItemClickListener {
 
+        @SuppressWarnings("rawtypes")
         private OnListener mListener;
         private boolean mAutoDismiss = true;
 
@@ -95,6 +96,7 @@ public final class ListPopup {
             return this;
         }
 
+        @SuppressWarnings("rawtypes")
         public Builder setListener(OnListener listener) {
             mListener = listener;
             return this;
@@ -116,7 +118,7 @@ public final class ListPopup {
         }
     }
 
-    private static final class MenuAdapter extends MyAdapter<Object> {
+    private static final class MenuAdapter extends AppAdapter<Object> {
 
         private MenuAdapter(Context context) {
             super(context);
@@ -128,7 +130,7 @@ public final class ListPopup {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final TextView mTextView;
 

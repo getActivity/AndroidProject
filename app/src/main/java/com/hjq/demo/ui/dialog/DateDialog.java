@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyAdapter;
-import com.hjq.demo.other.PickerLayoutManager;
+import com.hjq.demo.app.AppAdapter;
+import com.hjq.demo.manager.PickerLayoutManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,11 +29,10 @@ import java.util.Locale;
 public final class DateDialog {
 
     public static final class Builder
-            extends UIDialog.Builder<Builder>
+            extends CommonDialog.Builder<Builder>
             implements PickerLayoutManager.OnPickerListener {
 
-        private final int mStartYear = Calendar.getInstance().get(Calendar.YEAR) - 100;
-        private final int mEndYear = Calendar.getInstance().get(Calendar.YEAR);
+        private final int mStartYear;
 
         private final RecyclerView mYearView;
         private final RecyclerView mMonthView;
@@ -50,7 +49,16 @@ public final class DateDialog {
         private OnListener mListener;
 
         public Builder(Context context) {
+            this(context, Calendar.getInstance(Locale.CHINA).get(Calendar.YEAR) - 100);
+        }
+
+        public Builder(Context context, int startYear) {
+            this(context, startYear, Calendar.getInstance(Locale.CHINA).get(Calendar.YEAR));
+        }
+
+        public Builder(Context context, int startYear, int endYear) {
             super(context);
+            mStartYear = startYear;
 
             setCustomView(R.layout.date_dialog);
             setTitle(R.string.time_title);
@@ -65,7 +73,7 @@ public final class DateDialog {
 
             // 生产年份
             ArrayList<String> yearData = new ArrayList<>(10);
-            for (int i = mStartYear; i <= mEndYear; i++) {
+            for (int i = mStartYear; i <= endYear; i++) {
                 yearData.add(i + " " + getString(R.string.common_year));
             }
 
@@ -132,13 +140,13 @@ public final class DateDialog {
         }
 
         public Builder setDate(String date) {
-            // 20190519
             if (date.matches("\\d{8}")) {
+                // 20190519
                 setYear(date.substring(0, 4));
                 setMonth(date.substring(4, 6));
                 setDay(date.substring(6, 8));
-            // 2019-05-19
             } else if (date.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                // 2019-05-19
                 setYear(date.substring(0, 4));
                 setMonth(date.substring(5, 7));
                 setDay(date.substring(8, 10));
@@ -158,6 +166,7 @@ public final class DateDialog {
                 index = mYearAdapter.getItemCount() - 1;
             }
             mYearView.scrollToPosition(index);
+            onPicked(mYearView, index);
             return this;
         }
 
@@ -173,6 +182,7 @@ public final class DateDialog {
                 index = mMonthAdapter.getItemCount() - 1;
             }
             mMonthView.scrollToPosition(index);
+            onPicked(mMonthView, index);
             return this;
         }
 
@@ -188,6 +198,7 @@ public final class DateDialog {
                 index = mDayAdapter.getItemCount() - 1;
             }
             mDayView.scrollToPosition(index);
+            onPicked(mDayView, index);
             return this;
         }
 
@@ -201,11 +212,7 @@ public final class DateDialog {
         public void onPicked(RecyclerView recyclerView, int position) {
             // 获取这个月最多有多少天
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
-            if (recyclerView == mYearView) {
-                calendar.set(mStartYear + position, mMonthManager.getPickedPosition(), 1);
-            } else if (recyclerView == mMonthView) {
-                calendar.set(mStartYear + mYearManager.getPickedPosition(), position, 1);
-            }
+            calendar.set(mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition(), 1);
 
             int day = calendar.getActualMaximum(Calendar.DATE);
             if (mDayAdapter.getItemCount() != day) {
@@ -219,26 +226,22 @@ public final class DateDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tv_ui_confirm:
-                    autoDismiss();
-                    if (mListener != null) {
-                        mListener.onSelected(getDialog(), mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition() + 1, mDayManager.getPickedPosition() + 1);
-                    }
-                    break;
-                case R.id.tv_ui_cancel:
-                    autoDismiss();
-                    if (mListener != null) {
-                        mListener.onCancel(getDialog());
-                    }
-                    break;
-                default:
-                    break;
+        public void onClick(View view) {
+            int viewId = view.getId();
+            if (viewId == R.id.tv_ui_confirm) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onSelected(getDialog(), mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition() + 1, mDayManager.getPickedPosition() + 1);
+                }
+            } else if (viewId == R.id.tv_ui_cancel) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onCancel(getDialog());
+                }
             }
         }
 
-        private static final class PickerAdapter extends MyAdapter<String> {
+        private static final class PickerAdapter extends AppAdapter<String> {
 
             private PickerAdapter(Context context) {
                 super(context);
@@ -250,7 +253,7 @@ public final class DateDialog {
                 return new ViewHolder();
             }
 
-            private final class ViewHolder extends MyAdapter.ViewHolder {
+            private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
                 private final TextView mPickerView;
 

@@ -19,7 +19,7 @@ import com.hjq.demo.aop.SingleClick;
 public final class MessageDialog {
 
     public static final class Builder
-            extends UIDialog.Builder<Builder> {
+            extends CommonDialog.Builder<Builder> {
 
         private OnListener mListener;
 
@@ -55,22 +55,18 @@ public final class MessageDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tv_ui_confirm:
-                    autoDismiss();
-                    if (mListener != null) {
-                        mListener.onConfirm(getDialog());
-                    }
-                    break;
-                case R.id.tv_ui_cancel:
-                    autoDismiss();
-                    if (mListener != null) {
-                        mListener.onCancel(getDialog());
-                    }
-                    break;
-                default:
-                    break;
+        public void onClick(View view) {
+            int viewId = view.getId();
+            if (viewId == R.id.tv_ui_confirm) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onConfirm(getDialog());
+                }
+            } else if (viewId == R.id.tv_ui_cancel) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onCancel(getDialog());
+                }
             }
         }
     }

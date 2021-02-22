@@ -37,7 +37,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/white"
         app:bar_leftText="@string/personal_data_id"
-        app:bar_rightText="880634" />
+        tools:bar_rightText="880634" />
 
     <com.hjq.widget.layout.SettingBar
         android:id="@+id/sb_person_data_name"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         app:bar_leftText="@string/personal_data_name"
         app:bar_rightHint="@string/personal_data_name_hint"
-        app:bar_rightText="Android 轮子哥" />
+        tools:bar_rightText="Android 轮子哥" />
 
     <com.hjq.widget.layout.SettingBar
         android:id="@+id/sb_person_data_address"

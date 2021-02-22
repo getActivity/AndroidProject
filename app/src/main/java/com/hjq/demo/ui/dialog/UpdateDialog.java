@@ -1,7 +1,11 @@
 package com.hjq.demo.ui.dialog;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -9,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
 import com.hjq.base.BaseDialog;
@@ -19,13 +24,10 @@ import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnDownloadListener;
-import com.hjq.http.model.DownloadInfo;
 import com.hjq.http.model.HttpMethod;
 import com.hjq.permissions.Permission;
 
 import java.io.File;
-
-import okhttp3.Call;
 
 /**
  *    author : Android 轮子哥
@@ -119,10 +121,10 @@ public final class UpdateDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            if (v == mCloseView) {
+        public void onClick(View view) {
+            if (view == mCloseView) {
                 dismiss();
-            } else if (v == mUpdateView) {
+            } else if (view == mUpdateView) {
                 // 判断下载状态
                 if (mDownloadComplete) {
                     if (mApkFile.isFile()) {
@@ -143,14 +145,44 @@ public final class UpdateDialog {
          * 下载 Apk
          */
         @CheckNet
-        @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE})
+        @Permissions({Permission.MANAGE_EXTERNAL_STORAGE})
         private void downloadApk() {
-            // 创建要下载的文件对象
-            mApkFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), getString(R.string.app_name) + "_v" + mNameView.getText().toString() + ".apk");
             // 设置对话框不能被取消
             setCancelable(false);
 
-            EasyHttp.download(this)
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            int notificationId = getContext().getApplicationInfo().uid;
+            String channelId = "";
+            // 适配 Android 8.0 通知渠道新特性
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(getString(R.string.update_notification_channel_id), getString(R.string.update_notification_channel_name), NotificationManager.IMPORTANCE_HIGH);
+                channel.enableLights(false);
+                channel.enableVibration(false);
+                channel.setVibrationPattern(new long[]{0});
+                channel.setSound(null, null);
+                notificationManager.createNotificationChannel(channel);
+                channelId = channel.getId();
+            }
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext(), channelId)
+                    .setWhen(System.currentTimeMillis())
+                    // 设置通知标题
+                    .setContentTitle(getString(R.string.app_name))
+                    // 设置通知小图标
+                    .setSmallIcon(R.mipmap.launcher_ic)
+                    // 设置通知大图标
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.launcher_ic))
+                    // 设置通知静音
+                    .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE)
+                    .setVibrate(new long[]{0})
+                    .setSound(null)
+                    // 设置通知的优先级
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            // 创建要下载的文件对象
+            mApkFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    getString(R.string.app_name) + "_v" + mNameView.getText().toString() + ".apk");
+            EasyHttp.download(getDialog())
                     .method(HttpMethod.GET)
                     .file(mApkFile)
                     .url(mDownloadUrl)
@@ -158,7 +190,7 @@ public final class UpdateDialog {
                     .listener(new OnDownloadListener() {
 
                         @Override
-                        public void onStart(Call call) {
+                        public void onStart(File file) {
                             // 标记为下载中
                             mDownloading = true;
                             // 标记成未下载完成
@@ -171,13 +203,34 @@ public final class UpdateDialog {
                         }
 
                         @Override
-                        public void onProgress(DownloadInfo info) {
-                            mUpdateView.setText(String.format(getString(R.string.update_status_running), info.getDownloadProgress()));
-                            mProgressView.setProgress(info.getDownloadProgress());
+                        public void onProgress(File file, int progress) {
+                            // 更新下载通知
+                            notificationManager.notify(notificationId, notificationBuilder
+                                    // 设置通知的文本
+                                    .setContentText(String.format(getString(R.string.update_status_running), progress))
+                                    // 设置下载的进度
+                                    .setProgress(100, progress, false)
+                                    // 设置点击通知后是否自动消失
+                                    .setAutoCancel(false)
+                                    // 重新创建新的通知对象
+                                    .build());
+                            mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
+                            mProgressView.setProgress(progress);
                         }
 
                         @Override
-                        public void onComplete(DownloadInfo info) {
+                        public void onComplete(File file) {
+                            // 显示下载成功通知
+                            notificationManager.notify(notificationId, notificationBuilder
+                                    // 设置通知的文本
+                                    .setContentText(String.format(getString(R.string.update_status_successful), 100))
+                                    // 设置下载的进度
+                                    .setProgress(100, 100, false)
+                                    // 设置通知点击之后的意图
+                                    .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), Intent.FILL_IN_ACTION))
+                                    // 设置点击通知后是否自动消失
+                                    .setAutoCancel(true)
+                                    .build());
                             mUpdateView.setText(R.string.update_status_successful);
                             // 标记成下载完成
                             mDownloadComplete = true;
@@ -187,14 +240,16 @@ public final class UpdateDialog {
 
                         @SuppressWarnings("ResultOfMethodCallIgnored")
                         @Override
-                        public void onError(DownloadInfo info, Exception e) {
+                        public void onError(File file, Exception e) {
+                            // 清除通知
+                            notificationManager.cancel(notificationId);
                             mUpdateView.setText(R.string.update_status_failed);
                             // 删除下载的文件
-                            info.getFile().delete();
+                            file.delete();
                         }
 
                         @Override
-                        public void onEnd(Call call) {
+                        public void onEnd(File file) {
                             // 更新进度条
                             mProgressView.setProgress(0);
                             mProgressView.setVisibility(View.GONE);
@@ -205,6 +260,7 @@ public final class UpdateDialog {
                                 setCancelable(true);
                             }
                         }
+
                     }).start();
         }
 
@@ -213,6 +269,13 @@ public final class UpdateDialog {
          */
         @Permissions({Permission.REQUEST_INSTALL_PACKAGES})
         private void installApk() {
+            getContext().startActivity(getInstallIntent());
+        }
+
+        /**
+         * 获取安装意图
+         */
+        private Intent getInstallIntent() {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             Uri uri;
@@ -222,10 +285,9 @@ public final class UpdateDialog {
             } else {
                 uri = Uri.fromFile(mApkFile);
             }
-
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(intent);
+            return intent;
         }
     }
 }

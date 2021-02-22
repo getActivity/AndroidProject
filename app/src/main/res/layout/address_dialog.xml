@@ -44,17 +44,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        app:tabIndicatorColor="@color/colorConfirm"
+        app:tabIndicatorColor="@color/common_confirm_text_color"
         app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
         app:tabPaddingEnd="10dp"
         app:tabPaddingStart="10dp"
         app:tabRippleColor="@null"
-        app:tabSelectedTextColor="@color/colorConfirm"
+        app:tabSelectedTextColor="@color/common_confirm_text_color"
         app:tabTextColor="#333333" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_address_province"
+        android:id="@+id/vp_address_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

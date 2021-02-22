@@ -63,17 +63,10 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        // 设置点击的属性
-        setClickable(true);
-    }
-
-    @Override
     protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         // 移除延迟任务，避免内存泄露
         removeCallbacks(this);
-        super.onDetachedFromWindow();
     }
 
     @SuppressLint("SetTextI18n")
@@ -81,10 +74,10 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
     public void run() {
         if (mCurrentSecond == 0) {
             stop();
-        } else {
-            mCurrentSecond--;
-            setText(mCurrentSecond + " " + TIME_UNIT);
-            postDelayed(this, 1000);
+            return;
         }
+        mCurrentSecond--;
+        setText(mCurrentSecond + " " + TIME_UNIT);
+        postDelayed(this, 1000);
     }
 }

@@ -47,8 +47,7 @@
             android:lineSpacingExtra="20dp"
             android:text="但愿人长久，搬砖不再有\n https://github.com/getActivity/AndroidProject"
             android:textColor="#222222"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

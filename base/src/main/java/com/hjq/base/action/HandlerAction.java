@@ -42,7 +42,7 @@ public interface HandlerAction {
      * 在指定的时间执行
      */
     default boolean postAtTime(Runnable r, long uptimeMillis) {
-        // 发送和这个 Activity 相关的消息回调
+        // 发送和当前对象相关的消息回调
         return HANDLER.postAtTime(r, this, uptimeMillis);
     }
 
@@ -57,6 +57,7 @@ public interface HandlerAction {
      * 移除全部消息回调
      */
     default void removeCallbacks() {
+        // 移除和当前对象相关的消息回调
         HANDLER.removeCallbacksAndMessages(this);
     }
 }

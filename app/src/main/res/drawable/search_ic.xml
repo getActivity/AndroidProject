@@ -6,7 +6,7 @@
     android:viewportHeight="1024">
 
     <path
-        android:fillColor="@color/colorIcon"
+        android:fillColor="@color/common_icon_color"
         android:pathData="M1001.53,991.7 C999.923,986.822,999.923,986.822,998.662,984.531
 C997.556,982.548,996.294,980.725,994.702,978.654
 C992.5,975.787,989.424,972.169,985.358,967.62

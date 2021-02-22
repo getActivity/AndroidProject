@@ -1,19 +1,22 @@
 package com.hjq.demo.ui.activity;
 
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.helper.InputTextHelper;
+import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.http.request.GetCodeApi;
 import com.hjq.demo.http.request.VerifyCodeApi;
+import com.hjq.demo.manager.InputTextManager;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
-import com.hjq.toast.ToastUtils;
 import com.hjq.widget.view.CountdownView;
 
 /**
@@ -22,7 +25,8 @@ import com.hjq.widget.view.CountdownView;
  *    time   : 2019/02/27
  *    desc   : 忘记密码
  */
-public final class PasswordForgetActivity extends MyActivity {
+public final class PasswordForgetActivity extends AppActivity
+        implements TextView.OnEditorActionListener {
 
     private EditText mPhoneView;
     private EditText mCodeView;
@@ -40,9 +44,12 @@ public final class PasswordForgetActivity extends MyActivity {
         mCodeView = findViewById(R.id.et_password_forget_code);
         mCountdownView = findViewById(R.id.cv_password_forget_countdown);
         mCommitView = findViewById(R.id.btn_password_forget_commit);
+
         setOnClickListener(mCountdownView, mCommitView);
 
-        InputTextHelper.with(this)
+        mCodeView.setOnEditorActionListener(this);
+
+        InputTextManager.with(this)
                 .addView(mPhoneView)
                 .addView(mCodeView)
                 .setMain(mCommitView)
@@ -56,9 +63,10 @@ public final class PasswordForgetActivity extends MyActivity {
 
     @SingleClick
     @Override
-    public void onClick(View v) {
-        if (v == mCountdownView) {
+    public void onClick(View view) {
+        if (view == mCountdownView) {
             if (mPhoneView.getText().toString().length() != 11) {
+                mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
                 toast(R.string.common_phone_input_error);
                 return;
             }
@@ -68,6 +76,9 @@ public final class PasswordForgetActivity extends MyActivity {
                 mCountdownView.start();
                 return;
             }
+
+            // 隐藏软键盘
+            hideKeyboard(getCurrentFocus());
 
             // 获取验证码
             EasyHttp.post(this)
@@ -81,15 +92,17 @@ public final class PasswordForgetActivity extends MyActivity {
                             mCountdownView.start();
                         }
                     });
-        } else if (v == mCommitView) {
+        } else if (view == mCommitView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
+                mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
                 toast(R.string.common_phone_input_error);
                 return;
             }
 
             if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
-                ToastUtils.show(R.string.common_code_error_hint);
+                mCodeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
+                toast(R.string.common_code_error_hint);
                 return;
             }
 
@@ -113,5 +126,18 @@ public final class PasswordForgetActivity extends MyActivity {
                         }
                     });
         }
+    }
+
+    /**
+     * {@link TextView.OnEditorActionListener}
+     */
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
+            // 模拟点击下一步按钮
+            onClick(mCommitView);
+            return true;
+        }
+        return false;
     }
 }

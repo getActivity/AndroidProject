@@ -40,6 +40,8 @@ public final class IntentKey {
     public static final String AMOUNT = "amount";
     /** 总数 */
     public static final String COUNT = "count";
+    /** 标记 */
+    public static final String FLAG = "flag";
     /** 其他 */
     public static final String OTHER = "other";
 

@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.common.MyFragment;
+import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.app.TitleBarFragment;
 import com.hjq.demo.ui.adapter.StatusAdapter;
 import com.hjq.widget.layout.WrapRecyclerView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,9 @@ import java.util.List;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2020/07/10
- *    desc   : 加载使用案例
+ *    desc   : 加载案例 Fragment
  */
-public final class StatusFragment extends MyFragment<MyActivity>
+public final class StatusFragment extends TitleBarFragment<AppActivity>
         implements OnRefreshLoadMoreListener,
         BaseAdapter.OnItemClickListener {
 
@@ -101,7 +101,6 @@ public final class StatusFragment extends MyFragment<MyActivity>
             mAdapter.clearData();
             mAdapter.setData(analogData());
             mRefreshLayout.finishRefresh();
-            toast("刷新完成");
         }, 1000);
     }
 
@@ -110,7 +109,9 @@ public final class StatusFragment extends MyFragment<MyActivity>
         postDelayed(() -> {
             mAdapter.addData(analogData());
             mRefreshLayout.finishLoadMore();
-            toast("加载完成");
+
+            mAdapter.setLastPage(mAdapter.getItemCount() >= 100);
+            mRefreshLayout.setNoMoreData(mAdapter.isLastPage());
         }, 1000);
     }
 }

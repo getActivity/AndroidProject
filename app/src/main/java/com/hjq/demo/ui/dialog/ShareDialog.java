@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 import com.hjq.toast.ToastUtils;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
@@ -114,7 +114,7 @@ public final class ShareDialog {
         }
     }
 
-    private static class ShareAdapter extends MyAdapter<ShareBean> {
+    private static class ShareAdapter extends AppAdapter<ShareBean> {
 
         private ShareAdapter(Context context) {
             super(context);
@@ -126,7 +126,7 @@ public final class ShareDialog {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final ImageView mImageView;
             private final TextView mTextView;
