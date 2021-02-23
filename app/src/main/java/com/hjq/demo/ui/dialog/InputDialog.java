@@ -1,6 +1,7 @@
 package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
+import android.text.method.DigitsKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -44,6 +45,16 @@ public final class InputDialog {
         }
         public Builder setHint(CharSequence text) {
             mInputView.setHint(text);
+            return this;
+        }
+
+        public Builder setInputType(int inputType) {
+            mInputView.setInputType(inputType);
+            return this;
+        }
+
+        public Builder setDigits(String digits) {
+            mInputView.setKeyListener(DigitsKeyListener.getInstance(digits));
             return this;
         }
 
