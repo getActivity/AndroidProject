@@ -19,13 +19,13 @@
 
     <string name="common_network_error">当前网络不可用，请检查网络设置</string>
 
-    <string name="common_phone_input_hint">输入手机号码</string>
+    <string name="common_phone_input_hint">请输入手机号码</string>
     <string name="common_phone_input_error">手机号输入不正确</string>
 
     <string name="common_password_input_error">请输入密码</string>
     <string name="common_password_input_unlike">两次密码输入不一致，请重新输入</string>
 
-    <string name="common_code_input_hint">输入验证码</string>
+    <string name="common_code_input_hint">请输入验证码</string>
     <string name="common_code_send">发送验证码</string>
     <string name="common_code_send_hint">验证码已发送，请注意查收</string>
     <string name="common_code_error_hint">验证码错误，请检查输入</string>
@@ -229,7 +229,7 @@
 
     <string name="image_select_max_hint">本次最多只能选择 %d 张图片</string>
 
-    <string name="image_select_error">无法选中，该图片已经被移除</string>
+    <string name="image_select_error">无法选中，该图片已经被删除</string>
 
     <!-- 视频选择 -->
     <string name="video_select_title">视频选择</string>
@@ -239,7 +239,7 @@
 
     <string name="video_select_max_hint">本次最多只能选择 %d 个视频</string>
 
-    <string name="video_select_error">无法选中，该视频已经被移除</string>
+    <string name="video_select_error">无法选中，该视频已经被删除</string>
 
     <!-- 拍照 -->
     <string name="camera_launch_fail">无法启动相机</string>

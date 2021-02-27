@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -58,6 +59,12 @@ public final class SettingBar extends FrameLayout {
 
         mLeftView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         mRightView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+
+        mLeftView.setSingleLine(true);
+        mRightView.setSingleLine(true);
+
+        mLeftView.setEllipsize(TextUtils.TruncateAt.END);
+        mRightView.setEllipsize(TextUtils.TruncateAt.END);
 
         mLeftView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), mLeftView.getLineSpacingMultiplier());
         mRightView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), mRightView.getLineSpacingMultiplier());

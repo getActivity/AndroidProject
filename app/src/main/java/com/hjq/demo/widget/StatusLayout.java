@@ -65,20 +65,22 @@ public final class StatusLayout extends FrameLayout {
             initLayout();
         }
 
-        if (!isShow()) {
-            // 显示布局
-            mMainLayout.setVisibility(VISIBLE);
+        if (isShow()) {
+            return;
         }
+        // 显示布局
+        mMainLayout.setVisibility(VISIBLE);
     }
 
     /**
      * 隐藏
      */
     public void hide() {
-        if (mMainLayout != null && isShow()) {
-            //隐藏布局
-            mMainLayout.setVisibility(INVISIBLE);
+        if (mMainLayout == null || !isShow()) {
+            return;
         }
+        //隐藏布局
+        mMainLayout.setVisibility(INVISIBLE);
     }
 
     /**
@@ -96,23 +98,25 @@ public final class StatusLayout extends FrameLayout {
     }
 
     public void setIcon(Drawable drawable) {
-        if (mLottieView != null) {
-            // 这里需要先将 Lottie 动画禁用掉
-            mLottieView.setAnimation(0);
-            if (mLottieView.isAnimating()) {
-                mLottieView.cancelAnimation();
-            }
-            mLottieView.setImageDrawable(drawable);
+        if (mLottieView == null) {
+            return;
         }
+        if (mLottieView.isAnimating()) {
+            mLottieView.cancelAnimation();
+        }
+        mLottieView.setImageDrawable(drawable);
     }
 
     /**
      * 设置提示动画
      */
     public void setAnimResource(@RawRes int id) {
-        if (mLottieView != null) {
-            mLottieView.setAnimation(id);
-            // 这里需要调用播放动画，否则会出现第一次显示动画效果正常，第二次显示动画会不动
+        if (mLottieView == null) {
+            return;
+        }
+
+        mLottieView.setAnimation(id);
+        if (!mLottieView.isAnimating()) {
             mLottieView.playAnimation();
         }
     }
@@ -125,9 +129,13 @@ public final class StatusLayout extends FrameLayout {
     }
 
     public void setHint(CharSequence text) {
-        if (mTextView != null && text != null) {
-            mTextView.setText(text);
+        if (mTextView == null) {
+            return;
         }
+        if (text == null) {
+            text = "";
+        }
+        mTextView.setText(text);
     }
 
     /**

@@ -359,9 +359,4 @@ public final class LoginActivity extends AppActivity
         }
         return false;
     }
-
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
 }

@@ -182,10 +182,6 @@ dependencies {
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'
     implementation 'com.scwang.smart:refresh-header-material:2.0.3'
 
-    // 侧滑框架：https://github.com/luckybilly/SmartSwipe
-    implementation 'com.billy.android:smart-swipe:1.1.2'
-    implementation 'com.billy.android:smart-swipe-x:1.1.0'
-
     // 日志打印框架：https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 

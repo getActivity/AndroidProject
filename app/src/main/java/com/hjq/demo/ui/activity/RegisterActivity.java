@@ -240,11 +240,6 @@ public final class RegisterActivity extends AppActivity
         return false;
     }
 
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
-
     /**
      * 注册监听
      */

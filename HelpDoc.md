@@ -4,23 +4,25 @@
 
 * [为什么没有用 ButterKnife](#为什么没有用-butterknife)
 
-* [为什么不用 ViewBinding](#为什么不用-viewbinding)
+* [为什么没有用 ViewBinding](#为什么没有用-viewbinding)
 
-* [为什么不用 DataBinding](#为什么不用-databinding)
+* [为什么没有用 DataBinding](#为什么没有用-databinding)
 
 * [为什么没有用组件化](#为什么没有用组件化)
 
-* [为什么不用今日头条的适配方案](#为什么不用今日头条的适配方案)
+* [为什么没有集成界面侧滑功能](#为什么没有集成界面侧滑功能)
+
+* [为什么没有用今日头条的适配方案](#为什么没有用今日头条的适配方案)
 
 * [字体大小为什么不用 dp 而用 sp](#字体大小为什么不用-dp-而用-sp)
 
-* [为什么不用 DialogFragment 来防止内存泄漏](#为什么不用-dialogfragment-来防止内存泄漏)
+* [为什么没有用 DialogFragment 来防止内存泄漏](#为什么没有用-dialogfragment-来防止内存泄漏)
 
-* [为什么不用腾讯 X5 WebView](#为什么不用腾讯-x5-webview)
+* [为什么没有用腾讯 X5 WebView](#为什么没有用腾讯-x5-webview)
 
-* [为什么不用单 Activity 多 Fragment](#为什么不用单-activity-多-fragment)
+* [为什么没有用单 Activity 多 Fragment](#为什么没有用单-activity-多-fragment)
 
-* [为什么不用 ConstraintLayout 来写布局](#为什么不用-constraintlayout-来写布局)
+* [为什么没有用 ConstraintLayout 来写布局](#为什么没有用-constraintlayout-来写布局)
 
 * [为什么不拆成多个框架来做这件事](#为什么不拆成多个框架来做这件事)
 
@@ -30,7 +32,7 @@
 
 * [为什么不加入 EventBus](#为什么不加入-eventbus)
 
-* [为什么不用 Retrofit 和 RxJava](#为什么不用-retrofit-和-rxjava)
+* [为什么没有用 Retrofit 和 RxJava](#为什么没有用-retrofit-和-rxjava)
 
 * [为什么没有用 Jetpack 全家桶](#为什么没有用-jetpack-全家桶)
 
@@ -42,11 +44,13 @@
 
 * [为什么没有关于列表多 type 的封装](#为什么没有关于列表多-type-的封装)
 
-* [为什么不用 Dagger 框架](#为什么不用-dagger-框架)
+* [为什么没有用 Dagger 框架](#为什么没有用-dagger-框架)
 
 * [这不就是一个模板工程换成我也能写一个](#这不就是一个模板工程换成我也能写一个)
 
 * [轮子哥你怎么看待层出不穷的新技术](#轮子哥你怎么看待层出不穷的新技术)
+
+* [为什么没有集成界面侧滑功能](#为什么没有集成界面侧滑功能)
 
 #### 为什么没有用 MVP
 
@@ -75,7 +79,7 @@ Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using
 
 * 另外大家如果不想写 findViewById，我可以推荐一款自动生成 findViewById 的插件给大家：[FindViewByMe](https://plugins.jetbrains.com/plugin/8261-findviewbyme)
 
-#### 为什么不用 ViewBinding
+#### 为什么没有用 ViewBinding
 
 * 首先 ViewBinding 和 ButterKnife 有一个相同的毛病，就是自动生成一个类，然后在这个类里面进行 findViewById，但是有一个致命的缺点，每个 `Activity / Fragment / Dialog / Adapter` 都需要先初始化 ViewBinding 对象，因为每次生成的类名都是不固定的，所以无法在基类中封装处理，并且每次都要写 `binding.xxx` 才能操作控件。
 
@@ -92,7 +96,7 @@ binding.tv_data_name.setText("字符串");
 
 * 另外大家如果不想写 findViewById，我可以推荐一款自动生成 findViewById 的插件给大家：[FindViewByMe](https://plugins.jetbrains.com/plugin/8261-findviewbyme)
 
-#### 为什么不用 DataBinding
+#### 为什么没有用 DataBinding
 
 * DataBinding 最大的优势在于，因为它可以在 xml 直接给 View 赋值，但它的优点正是它最致命的缺点，当业务逻辑简单时，会显得格外美好，但是一旦判断条件复杂起来，由于 xml 属性不能换行的特性，会导致无法在 xml 直接赋值又或者很长的一段代码堆在布局中，间接导致 CodeReview 时异常艰难，更别说在原有的基础上继续更新迭代，这对每一个开发者来讲无疑是一个巨大的灾难。
 
@@ -110,7 +114,15 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * AndroidProject 面对的是大众开发者，所以更倾向中小型的项目代码的设计，虽然我没有做过大型的项目，但是在我看来是差不多的，最大的不同可能是代码分类方式的不同，该做的事情不会少，该写的代码也不会少，就是业务和代码的体量上比我们大，所以他们要处理体量大所带来的的问题。
 
-#### 为什么不用今日头条的适配方案
+#### 为什么没有集成界面侧滑功能
+
+* AndroidProject 其实有加入过这个功能，但是在 [v9.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/9.0) 就移除了，原因是第三方侧滑框架 [BGASwipeBackLayout](https://github.com/bingoogolapple/BGASwipeBackLayout-Android) 在 Android 9.0 上面会[闪屏](https://github.com/bingoogolapple/BGASwipeBackLayout-Android/issues/173)，并且还是 **100% 必现**，**用户体验极差**，我也跟作者反馈过这个问题，但结果不了了之，所以不得不移除。但是到了 [v10.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/10.0)，我又加上界面侧滑功能了，不过这次我换成了 [SmartSwipe](https://github.com/luckybilly/SmartSwipe) 来做，但是我又再一次失望了，这个框架在 Android 11 上面，如果 Activity 上有 WindowManager 正在显示，然后使用界面侧滑，那么会出现闪屏的情况，具体效果如下图：
+
+![](picture/help/Swipe.jpg)
+
+* 就这个情况我也联系过作者，并详细阐述了产生的原因和具体的复现步骤，但是我等了三天连个回复都没有，实属有些让我心寒，在等待的期间我看到 Github 的 issue 已经基本没有回复了，并且最后一次提交是在 13 个月前了，种种迹象都已经表明，所以经过慎重考虑，最终决定在 [v12.1 版本](https://github.com/getActivity/AndroidProject/releases/tag/12.1) 移除界面侧滑功能。
+
+#### 为什么没有用今日头条的适配方案
 
 * 关于屏幕适配方案，其实不能说头条的方案就是最好的，其实谷歌已经针对屏幕适配做了处理，就是 dp 和 sp ，而 dp 的计算转换是由屏幕的像素决定，系统只认 px 单位， dp 需要进行转换，比如 1dp 等于几个 px ，这个时候就需要基数进行转换，比如 1dp = 2px，这个基数就是 2。
 
@@ -146,7 +158,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 显然这种方式是不合理的，也非常地不人性化。网上这种方案可能主要就是为了解决把控件宽高写死之后，在某些字体上显示比较大的机型会出现字显示不全的问题，而这种把控件宽高写死的方式本身也是不合理的，应该在不得已的情况下才把控件的宽高写死，一般情况下我们应当使用自适应的方式，让控件自己测量自己的宽高，特别是在有显示字体的控件下，就更不应该把宽高写死。
 
-#### 为什么不用 DialogFragment 来防止内存泄漏
+#### 为什么没有用 DialogFragment 来防止内存泄漏
 
 * DialogFragment 的出现就是为了解决 Dialog 和 Activity 生命周期不同步导致的内存泄漏问题，在 AndroidProject 曾经引入过，也经过了很多个版本的更新迭代，不过在 [10.0](https://github.com/getActivity/AndroidProject/releases/tag/10.0) 版本后就被移除了，原因是 Dialog 虽然有坑，但是 DialogFragment 也有坑，可以说解决了一个问题又引发了各种问题。先来细数 我在 DialogFragment 上踩过的各种坑：
 
@@ -158,7 +170,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
     
 * 看过这些问题，你是不是和我一样，感觉这 DialogFragment 不是一般的坑，不过最终我放弃了使用 DialogFragment，并不是因为 DialogFragment 又出现了新问题，而是我想到了更好的方案来代替 DialogFragment，方案就是 Application.registerActivityLifecycleCallbacks，想必大家现在已经猜到我想干啥，和 DialogFragment 的作用一样，通过监听 Activity 的方式来管控 Dialog 的生命周期，但唯一不同的是，它不会出现刚刚说过 DialogFragment 的那些问题，这种方式在 AndroidProject 上迭代了几个版本过后，这期间没有发现新的问题，也没有收到别人反馈过这块的问题，证明这种方式是可行的。
 
-#### 为什么不用腾讯 X5 WebView
+#### 为什么没有用腾讯 X5 WebView
 
 * 首先我问大家一个问题，腾讯出品的 X5 WebView  就一定比原生 WebView 好吗？我觉得未必，我依稀记得 Android 9.0 还是 Android 10 刚出来的时候，我点了升级按钮，然后就发现微信和 QQ 的网页浏览卡得让我怀疑人生，不过后面突然某一天就变好了，从这件事可以得出两点结论：
 
@@ -168,7 +180,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 基于以上两点，我的个人建议是优先使用原生 WebView，如果不满足需求了，可以自行替换成 X5 WebView，当然不是说 X5 WebView 一定不好，用原生 WebView 一定就好，而是 AndroidProject 的目标是稳中求胜，另外一个是 AndroidProject 中有针对 WebView 做统一封装，后续替换成 X5 WebView 的成本还算是相对较低的。
 
-#### 为什么不用单 Activity 多 Fragment
+#### 为什么没有用单 Activity 多 Fragment
 
 * 这个问题在前几年是一个比较火热的话题，我表示很能理解，因为新鲜的事物总是能勾起人的好奇，让人忍不住试一试，但是我先问大家一个问题，单 Activity 多 Fragment 和写多个 Activity 有什么优点？大家第一个反应应该是每写一个页面都不需要在清单文件中注册了，但是这个真的是优点吗？我可以很明确地告诉大家，我已经写了那么多句代码，不差那句在清单文件注册的代码。那么究竟什么才是对我们有价值的？我觉得就两点，一是减少前期开发的工作量，二是降低后续维护的难度。所以省那一两句有前途吗？我们是差那一两句代码的人吗？如果这种模式能够帮助我们写好代码，这个当然是有价值的，非常值得一试的，否则就是纯属瞎扯淡。不仅如此，我个人觉得这种模式有很大的弊端，会引发很多问题，例如：
 
@@ -180,7 +192,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
     
 * 如果单 Activity 多 Fragment 不能为我们创造太大的价值时，这种模式根本就不值得我们去做，因为我们最终得到的，永远抵不上付出的。
 
-#### 为什么不用 ConstraintLayout 来写布局
+#### 为什么没有用 ConstraintLayout 来写布局
 
 * 大家如果有仔细观察的话，会发现 AndroidProject 其实没有用到 ConstraintLayout 布局，在这里谈谈我对这个布局的看法，约束布局有一个优点，没有布局嵌套，所以能减少测量次数，从而提升布局绘制的速度，但是优点也是它的缺点，正是因为没有布局嵌套，View 也就没有层级概念，所以它需要定义很多 ViewID 来约束相邻的 View 的位置，就算这个 View 我们在 Java 代码中没有用到，但是在约束布局中还是要定义。这样带来的弊端有几个：
 
@@ -200,9 +212,9 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * AndroidProject 其实一直有这样做，把很多组件都拆成了独立的框架，例如：权限请求框架 [XXPermissions](https://github.com/getActivity/XXPermissions)，网络请求框架 [EasyHttp](https://github.com/getActivity/EasyHttp)、吐司框架 [ToastUtils](https://github.com/getActivity/ToastUtils) 等等，我都是将它抽离在 AndroidProject 之外，作为一个单独的开源项目进行开发和维护，至于说为什么还有一些代码没有抽取出来，主要原因有几点：
 
-    1. 和业务的耦合性高，例如 Dialog 组件引用了很多基类（BaseDialog、BaseAdapter）
+    1. 和业务的耦合性高，例如 Dialog 组件引用了很多项目的基类，例如 **BaseDialog**、**BaseAdapter** 等
     
-    2. 业务有定制化需求，因为 Dialog 的 UI 风格要跟随项目的设计走，所以你懂的
+    2. 业务有定制化需求，因为 Dialog 的 UI 风格要跟随项目的设计走，所以代码如果在项目中，修改起来会非常方便，如果抽取到框架中，要怎么修改和统一 UI 风格呢？我个人认为框架不适合做 UI 定制化，因为每个产品的设计风格都不一样，就算开放再多的 API 给外部调用的人设置 UI 风格，也无法满足所有人的需求。
     
 * 基于以上几点，我并不认为所有的东西都适合抽取成框架给大家用，有些东西还是跟随 **AndroidProject** 一起更新比较好。当然像权限请求这种东西，我个人觉得抽成框架是比较合适的，因为它和业务的关联性不大，更重要的是，如果某一天你觉得 **XXPermissions** 做得不够好，你随时可以在 **AndroidProject** 替换掉它，并且整个过程不需要太大的改动。
 
@@ -220,7 +232,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * EventBus 我之前其实有加入过一版，只不过在 [v10.0](https://github.com/getActivity/AndroidProject/releases/tag/10.0) 版本上面移除了，原因很简单，它不是一个项目的必需品，我们用 EventBus 的初衷应该是，当需求在现有的基础上实现起来比较困难或者麻烦时，我们可以考虑用一用，但是到了实际项目中，会出现很多滥用的情况出现，在这里我建议大家，能用正常方式实现通讯的，尽量不要用 EventBus 实现。另外大家如果真的有需要，可以自行加入，集成也相对比较简单。
 
-#### 为什么不用 Retrofit 和 RxJava
+#### 为什么没有用 Retrofit 和 RxJava
 
 * 我想问大家一个问题，这两个框架搭配起来好用吗？可能大家的回答都不一致，但是我个人觉得不好用，接下来让我们分析一下 Retrofit 有什么问题：
 
@@ -268,7 +280,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 原生的 RecyclerView.Adapter 本身就支持多 type，只需要重写适配器的 getItemType 方法即可，具体用法不做过多介绍。
 
-#### 为什么不用 Dagger 框架
+#### 为什么没有用 Dagger 框架
 
 * 框架的学习和使用成本极高，但总体收益不高，不适用于大部分人，所以不会考虑加入。
 
@@ -286,4 +298,4 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 谈谈我对新技术的看法，首先我会思考这种新技术能解决什么痛点，这点非常重要，再好的技术创新，也必须得创造价值，否则就是在扯淡。有人肯定会问，什么样的技术才算有价值？对于我们 Android 程序员来讲，无非就围绕两点，开发和维护。要么在前期开发上，能发挥很大的作用，要么在后续维护上面，能体现它的优势。
 
-* 还有谷歌的新技术不一定都是好的，也有一些是 KPI 的产物，别忘了，他们也是程序员，他们也有 KPI 考核，为了年终奖和晋升，他们不得不卖力宣传，纵使他们知道这个东西有硬伤，但是他们也会推出来看看市场反应。所以我们看待一种新技术，不要太看重是否是大公司出品的，也不要太看重是哪个行业名人写的，我们应该要重点关注的是，产品的质量以及能带给我们带来哪些帮助，这个才是正确的技术价值观。
+* 还有谷歌的新技术不一定都是好的，也有一些是 **KPI 产物**，别忘了，他们也是打工的，他们也有 **KPI 考核**，为了年终奖和晋升，他们不得不卖力宣传，纵使他们知道这个东西有硬伤，但是他们也会推出来看看市场反应。所以我们看待一种新技术，不要太看重是否是大公司出品的，也不要太看重是哪个行业名人写的，我们应该要重点关注的是，产品的质量以及能带给我们带来哪些帮助，还有会带来哪些不好的影响，这个才是正确的技术价值观。

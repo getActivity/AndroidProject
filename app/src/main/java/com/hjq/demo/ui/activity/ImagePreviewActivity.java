@@ -138,11 +138,6 @@ public final class ImagePreviewActivity extends AppActivity
         return false;
     }
 
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
-
     /**
      * {@link ViewPager.OnPageChangeListener}
      */

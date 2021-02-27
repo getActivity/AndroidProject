@@ -13,7 +13,6 @@ import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
-import com.hjq.demo.action.SwipeAction;
 import com.hjq.demo.action.TitleBarAction;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
@@ -29,8 +28,7 @@ import okhttp3.Call;
  *    desc   : 业务 Activity 基类
  */
 public abstract class AppActivity extends BaseActivity
-        implements ToastAction, TitleBarAction,
-        SwipeAction, OnHttpListener<Object> {
+        implements ToastAction, TitleBarAction, OnHttpListener<Object> {
 
     /** 标题栏对象 */
     private TitleBar mTitleBar;

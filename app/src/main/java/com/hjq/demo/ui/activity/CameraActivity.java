@@ -80,7 +80,6 @@ public final class CameraActivity extends AppActivity {
         }
         if (XXPermissions.isGrantedPermission(this, new String[]{Permission.MANAGE_EXTERNAL_STORAGE, Permission.CAMERA})
                 && intent.resolveActivity(getPackageManager()) != null) {
-
             File file = getSerializable(IntentKey.FILE);
             if (file == null) {
                 toast(R.string.camera_image_error);

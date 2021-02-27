@@ -156,9 +156,4 @@ public final class HomeActivity extends AppActivity
         mViewPager.setAdapter(null);
         mBottomNavigationView.setOnNavigationItemSelectedListener(null);
     }
-
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
 }

@@ -16,11 +16,9 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.billy.android.swipe.SmartSwipeBack;
 import com.hjq.bar.TitleBar;
 import com.hjq.bar.initializer.LightBarInitializer;
 import com.hjq.demo.R;
-import com.hjq.demo.action.SwipeAction;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.http.model.RequestHandler;
@@ -76,7 +74,7 @@ public final class AppApplication extends Application {
      * 初始化一些第三方框架
      */
     public static void initSdk(Application application) {
-        // 设置权限请求调试模式
+        // 设置调试模式
         XXPermissions.setDebugMode(AppConfig.isDebug());
 
         // 初始化吐司
@@ -160,14 +158,6 @@ public final class AppApplication extends Application {
                 //.addHeader("time", "20191030")
                 // 启用配置
                 .into();
-
-        // Activity 侧滑返回
-        SmartSwipeBack.activitySlidingBack(application, activity -> {
-            if (activity instanceof SwipeAction) {
-                return ((SwipeAction) activity).isSwipeEnable();
-            }
-            return true;
-        });
 
         // 初始化日志打印
         if (AppConfig.isLogEnable()) {

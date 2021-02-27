@@ -155,7 +155,7 @@ public final class UpdateDialog {
             String channelId = "";
             // 适配 Android 8.0 通知渠道新特性
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel(getString(R.string.update_notification_channel_id), getString(R.string.update_notification_channel_name), NotificationManager.IMPORTANCE_HIGH);
+                NotificationChannel channel = new NotificationChannel(getString(R.string.update_notification_channel_id), getString(R.string.update_notification_channel_name), NotificationManager.IMPORTANCE_LOW);
                 channel.enableLights(false);
                 channel.enableVibration(false);
                 channel.setVibrationPattern(new long[]{0});
@@ -165,6 +165,7 @@ public final class UpdateDialog {
             }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext(), channelId)
+                    // 设置通知时间
                     .setWhen(System.currentTimeMillis())
                     // 设置通知标题
                     .setContentTitle(getString(R.string.app_name))
@@ -174,7 +175,9 @@ public final class UpdateDialog {
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.launcher_ic))
                     // 设置通知静音
                     .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE)
+                    // 设置震动频率
                     .setVibrate(new long[]{0})
+                    // 设置声音文件
                     .setSound(null)
                     // 设置通知的优先级
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -204,6 +207,8 @@ public final class UpdateDialog {
 
                         @Override
                         public void onProgress(File file, int progress) {
+                            mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
+                            mProgressView.setProgress(progress);
                             // 更新下载通知
                             notificationManager.notify(notificationId, notificationBuilder
                                     // 设置通知的文本
@@ -212,10 +217,10 @@ public final class UpdateDialog {
                                     .setProgress(100, progress, false)
                                     // 设置点击通知后是否自动消失
                                     .setAutoCancel(false)
+                                    // 是否正在交互中
+                                    .setOngoing(true)
                                     // 重新创建新的通知对象
                                     .build());
-                            mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
-                            mProgressView.setProgress(progress);
                         }
 
                         @Override
@@ -230,6 +235,8 @@ public final class UpdateDialog {
                                     .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), Intent.FILL_IN_ACTION))
                                     // 设置点击通知后是否自动消失
                                     .setAutoCancel(true)
+                                    // 是否正在交互中
+                                    .setOngoing(false)
                                     .build());
                             mUpdateView.setText(R.string.update_status_successful);
                             // 标记成下载完成

@@ -84,11 +84,12 @@ public final class DialogManager implements LifecycleEventObserver, BaseDialog.O
      */
 
     @Override
-    public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+    public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
         if (event != Lifecycle.Event.ON_DESTROY) {
             return;
         }
-        source.getLifecycle().removeObserver(this);
+        DIALOG_MANAGER.remove(lifecycleOwner);
+        lifecycleOwner.getLifecycle().removeObserver(this);
         clearShow();
     }
 }

@@ -306,8 +306,9 @@ public final class InputTextManager implements TextWatcher {
 
         /**
          * 输入发生了变化
+         *
          * @return          返回按钮的 Enabled 状态
          */
-        boolean onInputChange(InputTextManager helper);
+        boolean onInputChange(InputTextManager manager);
     }
 }

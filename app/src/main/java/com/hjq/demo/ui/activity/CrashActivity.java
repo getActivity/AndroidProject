@@ -240,11 +240,6 @@ public final class CrashActivity extends AppActivity {
     }
 
     @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
-
-    @Override
     public void onBackPressed() {
         // 按返回键重启应用
         onClick(findViewById(R.id.iv_crash_restart));

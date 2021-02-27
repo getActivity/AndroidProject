@@ -47,9 +47,10 @@ public interface StatusAction {
      */
     default void showComplete() {
         StatusLayout layout = getStatusLayout();
-        if (layout != null && layout.isShow()) {
-            layout.hide();
+        if (layout == null || !layout.isShow()) {
+            return;
         }
+        layout.hide();
     }
 
     /**

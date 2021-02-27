@@ -91,11 +91,6 @@ public final class SplashActivity extends AppActivity {
     }
 
     @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
-
-    @Override
     protected void initActivity() {
         // 问题及方案：https://www.cnblogs.com/net168/p/5722752.html
         // 如果当前 Activity 不是任务栈中的第一个 Activity

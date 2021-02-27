@@ -49,11 +49,6 @@ public final class GuideActivity extends AppActivity {
         mIndicatorView.setViewPager(mViewPager);
     }
 
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
-    }
-
     @SingleClick
     @Override
     public void onClick(View view) {

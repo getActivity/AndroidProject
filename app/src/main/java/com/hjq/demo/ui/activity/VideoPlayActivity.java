@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
-import com.hjq.demo.action.SwipeAction;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.widget.PlayerView;
@@ -25,7 +24,7 @@ import java.io.File;
  *    desc   : 视频播放界面
  */
 public final class VideoPlayActivity extends AppActivity
-        implements SwipeAction, PlayerView.onPlayListener {
+        implements PlayerView.onPlayListener {
 
     private PlayerView mPlayerView;
     private VideoPlayActivity.Builder mBuilder;
@@ -88,11 +87,6 @@ public final class VideoPlayActivity extends AppActivity
         return super.createStatusBarConfig()
                 // 隐藏状态栏和导航栏
                 .hideBar(BarHide.FLAG_HIDE_BAR);
-    }
-
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
     }
 
     /**
