@@ -36,10 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2018/12/02
- *    desc   : 对话框使用案例
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2018/12/02
+ * desc   : 对话框使用案例
  */
 public final class DialogActivity extends MyActivity {
 
@@ -421,7 +421,7 @@ public final class DialogActivity extends MyActivity {
                         // 版本名
                         .setVersionName("5.2.0")
                         // 是否强制更新
-                        .setForceUpdate(false)
+                        .setForceUpdate(true)
                         // 更新日志
                         .setUpdateLog("到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥")
                         // 下载 URL

@@ -48,7 +48,7 @@ android {
             // ZipAlign 优化
             zipAlignEnabled false
             // 设置混淆
-            minifyEnabled false
+            minifyEnabled true
             // 开发环境下的 BuglyId
             buildConfigField 'String', 'BUGLY_ID', '\"请自行替换 Bugly 上面的 AppID\"'
             signingConfig signingConfigs.config

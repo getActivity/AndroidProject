@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,14 +25,15 @@ import com.hjq.http.model.HttpMethod;
 import com.hjq.permissions.Permission;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import okhttp3.Call;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2019/03/20
- *    desc   : 升级对话框
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2019/03/20
+ * desc   : 升级对话框
  */
 public final class UpdateDialog {
 
@@ -45,18 +47,30 @@ public final class UpdateDialog {
         private final TextView mUpdateView;
         private final TextView mCloseView;
 
-        /** Apk 文件 */
+        /**
+         * Apk 文件
+         */
         private File mApkFile;
-        /** 下载地址 */
+        /**
+         * 下载地址
+         */
         private String mDownloadUrl;
-        /** 文件 MD5 */
+        /**
+         * 文件 MD5
+         */
         private String mFileMd5;
-        /** 是否强制更新 */
+        /**
+         * 是否强制更新
+         */
         private boolean mForceUpdate;
 
-        /** 当前是否下载中 */
+        /**
+         * 当前是否下载中
+         */
         private boolean mDownloading;
-        /** 当前是否下载完毕 */
+        /**
+         * 当前是否下载完毕
+         */
         private boolean mDownloadComplete;
 
         public Builder(Context context) {
@@ -190,6 +204,7 @@ public final class UpdateDialog {
                         public void onError(DownloadInfo info, Exception e) {
                             mUpdateView.setText(R.string.update_status_failed);
                             // 删除下载的文件
+                            Log.d("fuck", e.getLocalizedMessage());
                             info.getFile().delete();
                         }
 
