@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dl_crash_drawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:ignore="HardcodedText">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"

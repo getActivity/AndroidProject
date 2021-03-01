@@ -9,7 +9,9 @@
 
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:drawableSize="20dp"
+        app:title="@string/web_title" />
 
     <ProgressBar
         android:id="@+id/pb_browser_progress"
@@ -19,15 +21,16 @@
         android:progressDrawable="@drawable/progress_gradient_bg"
         android:visibility="gone" />
 
-    <com.hjq.demo.widget.HintLayout
+    <com.hjq.demo.widget.StatusLayout
         android:id="@+id/hl_browser_hint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/sl_browser_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:srlEnableHeaderTranslationContent="false"
             app:srlEnableLoadMore="false"
             app:srlEnablePreviewInEditMode="false"
             app:srlPrimaryColor="#444444">
@@ -37,8 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
-    </com.hjq.demo.widget.HintLayout>
+    </com.hjq.demo.widget.StatusLayout>
 
 </LinearLayout>

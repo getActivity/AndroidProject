@@ -43,7 +43,7 @@
             android:paddingVertical="13dp"
             android:singleLine="true"
             android:text="@string/common_cancel"
-            android:textColor="@color/colorCancel"
+            android:textColor="@color/common_cancel_text_color"
             android:textSize="14sp" />
 
     </androidx.cardview.widget.CardView>

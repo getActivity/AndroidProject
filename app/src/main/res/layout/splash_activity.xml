@@ -9,7 +9,7 @@
     tools:context=".ui.activity.SplashActivity">
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/iv_splash_lottie"
+        android:id="@+id/lav_splash_lottie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -18,12 +18,18 @@
         app:lottie_loop="false"
         app:lottie_rawRes="@raw/welcome" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.hjq.widget.view.SlantedTextView
         android:id="@+id/iv_splash_debug"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        app:srcCompat="@drawable/debug_ic" />
+        android:colorBackground="#b65656"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="DEBUG" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/iv_splash_name"

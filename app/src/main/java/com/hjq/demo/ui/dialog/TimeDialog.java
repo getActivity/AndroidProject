@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyAdapter;
-import com.hjq.demo.other.PickerLayoutManager;
+import com.hjq.demo.app.AppAdapter;
+import com.hjq.demo.manager.PickerLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +26,7 @@ import java.util.Calendar;
 public final class TimeDialog {
 
     public static final class Builder
-            extends UIDialog.Builder<Builder> implements Runnable {
+            extends CommonDialog.Builder<Builder> implements Runnable {
 
         private final RecyclerView mHourView;
         private final RecyclerView mMinuteView;
@@ -195,27 +195,23 @@ public final class TimeDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tv_ui_confirm:
-                    autoDismiss();
-                    if (mListener != null) {
-                        mListener.onSelected(getDialog(), mHourManager.getPickedPosition(), mMinuteManager.getPickedPosition(), mSecondManager.getPickedPosition());
-                    }
-                    break;
-                case R.id.tv_ui_cancel:
-                    autoDismiss();
-                    if (mListener != null) {
-                        mListener.onCancel(getDialog());
-                    }
-                    break;
-                default:
-                    break;
+        public void onClick(View view) {
+            int viewId = view.getId();
+            if (viewId == R.id.tv_ui_confirm) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onSelected(getDialog(), mHourManager.getPickedPosition(), mMinuteManager.getPickedPosition(), mSecondManager.getPickedPosition());
+                }
+            } else if (viewId == R.id.tv_ui_cancel) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onCancel(getDialog());
+                }
             }
         }
     }
 
-    private static final class PickerAdapter extends MyAdapter<String> {
+    private static final class PickerAdapter extends AppAdapter<String> {
 
         private PickerAdapter(Context context) {
             super(context);
@@ -227,7 +223,7 @@ public final class TimeDialog {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final TextView mPickerView;
 

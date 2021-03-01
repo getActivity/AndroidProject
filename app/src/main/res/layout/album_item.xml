@@ -7,7 +7,8 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingHorizontal="15dp"
-    android:paddingTop="15dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp"
     tools:context=".ui.dialog.AlbumDialog">
 
     <com.hjq.widget.view.ScaleImageView
@@ -15,6 +16,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="centerCrop"
+        android:translationZ="10dp"
         app:scaleRatio="0.95"
         tools:src="@drawable/logo_big_ic" />
 

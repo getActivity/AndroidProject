@@ -32,8 +32,7 @@ public final class OkHttpLoader implements ModelLoader<GlideUrl, InputStream> {
     }
 
     @Override
-    public LoadData<InputStream> buildLoadData(@NonNull GlideUrl model, int width, int height,
-                                               @NonNull Options options) {
+    public LoadData<InputStream> buildLoadData(@NonNull GlideUrl model, int width, int height, @NonNull Options options) {
         return new LoadData<>(model, new OkHttpFetcher(mFactory, model));
     }
 

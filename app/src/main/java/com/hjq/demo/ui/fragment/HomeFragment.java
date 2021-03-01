@@ -11,9 +11,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.gyf.immersionbar.ImmersionBar;
-import com.hjq.base.BaseFragmentAdapter;
+import com.hjq.base.FragmentPagerAdapter;
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyFragment;
+import com.hjq.demo.app.AppFragment;
+import com.hjq.demo.app.TitleBarFragment;
 import com.hjq.demo.ui.activity.HomeActivity;
 import com.hjq.demo.widget.XCollapsingToolbarLayout;
 
@@ -21,9 +22,9 @@ import com.hjq.demo.widget.XCollapsingToolbarLayout;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 项目炫酷效果示例
+ *    desc   : 首页 Fragment
  */
-public final class HomeFragment extends MyFragment<HomeActivity>
+public final class HomeFragment extends TitleBarFragment<HomeActivity>
         implements XCollapsingToolbarLayout.OnScrimsListener {
 
     private XCollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -35,8 +36,7 @@ public final class HomeFragment extends MyFragment<HomeActivity>
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-
-    private BaseFragmentAdapter<MyFragment> mPagerAdapter;
+    private FragmentPagerAdapter<AppFragment<?>> mPagerAdapter;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -59,10 +59,9 @@ public final class HomeFragment extends MyFragment<HomeActivity>
         mTabLayout = findViewById(R.id.tl_home_tab);
         mViewPager = findViewById(R.id.vp_home_pager);
 
-        mPagerAdapter = new BaseFragmentAdapter<>(this);
-        mPagerAdapter.addFragment(StatusFragment.newInstance(), "列表 A");
-        mPagerAdapter.addFragment(StatusFragment.newInstance(), "列表 B");
-        mPagerAdapter.addFragment(StatusFragment.newInstance(), "列表 C");
+        mPagerAdapter = new FragmentPagerAdapter<>(this);
+        mPagerAdapter.addFragment(StatusFragment.newInstance(), "列表演示");
+        mPagerAdapter.addFragment(BrowserFragment.newInstance("https://github.com/getActivity"), "网页演示");
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -85,7 +84,7 @@ public final class HomeFragment extends MyFragment<HomeActivity>
     }
 
     @Override
-    public boolean statusBarDarkFont() {
+    public boolean isStatusBarDarkFont() {
         return mCollapsingToolbarLayout.isScrimsShown();
     }
 
@@ -101,7 +100,7 @@ public final class HomeFragment extends MyFragment<HomeActivity>
             mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.black));
             mHintView.setBackgroundResource(R.drawable.home_search_bar_gray_bg);
             mHintView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.black60));
-            mSearchView.setSupportImageTintList(ColorStateList.valueOf(getColor(R.color.colorIcon)));
+            mSearchView.setSupportImageTintList(ColorStateList.valueOf(getColor(R.color.common_icon_color)));
             getStatusBarConfig().statusBarDarkFont(true).init();
         } else {
             mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.white));

@@ -1,50 +1,65 @@
 <resources>
 
+    <!-- 应用主题样式 -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- 窗口背景颜色 -->
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@color/common_window_background_color</item>
         <!-- 应用的主要色调，ActionBar Toolbar 默认使用该颜色 -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/common_primary_color</item>
         <!-- 应用的主要暗色调，状态栏默认使用该颜色 -->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/common_primary_dark_color</item>
         <!-- 应用的强调色，CheckBox RadioButton Switch 等一般控件的选中效果默认采用该颜色 -->
-        <item name="colorAccent">@color/colorAccent</item>
-        <!-- 默认文本颜色，Button、TextView 的文字颜色-->
-        <item name="android:textColor">@color/textColor</item>
+        <item name="colorAccent">@color/common_accent_color</item>
+        <!-- 默认文本颜色，Button、TextView 的文字颜色 -->
+        <item name="android:textColor">@color/common_text_color</item>
+        <!-- 默认字体大小，Button、TextView 的字体大小 -->
+        <item name="android:textSize">14sp</item>
         <!-- 默认提示颜色，Button、TextView 的提示文字颜色 -->
-        <item name="android:textColorHint">@color/textColorHint</item>
+        <item name="android:textColorHint">@color/common_text_hint_color</item>
         <!-- ActionMode 覆盖 Actionbar 不被顶下来 -->
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <!-- ActionMode 的颜色 -->
-        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeBackground">@color/common_primary_color</item>
         <!-- 解决 Android 5.1 及以上版本 Button 英文字符串自动变大写的问题 -->
         <item name="android:textAllCaps">false</item>
-        <!-- 默认隐藏输入法，开启这个选项后会导致输入对话框在关闭之后不能关闭软键盘   -->
+        <!-- 解决 ImageView 不能自动等比拉伸图片的问题 -->
+        <item name="android:adjustViewBounds">true</item>
+        <!-- 默认隐藏输入法，开启这个选项后会导致输入对话框在关闭之后不能关闭软键盘 -->
         <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
-        <!-- 关闭 RecyclerView ScrollView ViewPager 水波纹效果 -->
+        <!-- 关闭 RecyclerView NestedScrollView ViewPager 水波纹效果 -->
         <item name="android:overScrollMode">never</item>
     </style>
 
+    <!-- 全屏主题样式 -->
     <style name="FullScreenTheme" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <!-- 闪屏页主题样式 -->
+    <style name="SplashTheme" parent="FullScreenTheme">
+        <!-- https://www.jianshu.com/p/d0d907754603 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
     <!-- 默认圆角按钮样式 -->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:paddingStart">15dp</item>
-        <item name="android:paddingEnd">15dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white90</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:background">@drawable/button_round_selector</item>
         <item name="android:foreground">@null</item>
     </style>
 
     <!-- 不带圆角按钮样式 -->
     <style name="RectButtonStyle" parent="ButtonStyle">
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
         <item name="android:background">@drawable/button_rect_selector</item>
     </style>
 
@@ -64,29 +79,36 @@
     <style name="HorizontalLineStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/line_size</item>
-        <item name="android:background">@color/colorLine</item>
+        <item name="android:background">@color/common_line_color</item>
     </style>
 
     <!-- 默认垂直分割线样式 -->
     <style name="VerticalLineStyle">
         <item name="android:layout_width">@dimen/line_size</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/colorLine</item>
+        <item name="android:background">@color/common_line_color</item>
     </style>
 
-    <!-- 获取验证码样式 -->
+    <!-- 验证码按钮样式 -->
     <style name="CountdownViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/countdown_selector</item>
         <item name="android:layout_marginStart">15dp</item>
         <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:minWidth">90dp</item>
         <item name="android:gravity">center</item>
         <item name="android:text">@string/common_code_send</item>
         <item name="android:textColor">@drawable/countdown_color_selector</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- 底部导航栏字体样式 -->
+    <style name="BottomTabTextStyle" >
         <item name="android:textSize">12sp</item>
     </style>
 

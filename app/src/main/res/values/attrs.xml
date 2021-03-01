@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- 进度条 -->
-    <declare-styleable name="ProgressView">
-        <attr name="progressIndeterminate" format="boolean" />
-        <attr name="barColor" format="color" />
-        <attr name="rimColor" format="color" />
-        <attr name="rimWidth" format="dimension" />
-        <attr name="spinSpeed" format="float" />
-        <attr name="barSpinCycleTime" format="integer" />
-        <attr name="circleRadius" format="dimension" />
-        <attr name="fillRadius" format="boolean" />
-        <attr name="barWidth" format="dimension" />
-        <attr name="linearProgress" format="boolean" />
-    </declare-styleable>
+
 
 </resources>

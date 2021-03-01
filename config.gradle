@@ -1,12 +1,16 @@
 // 通用配置
 android {
 
-    compileSdkVersion 29
+    // 编译源码版本
+    compileSdkVersion 30
     defaultConfig {
+        // 最低安装版本
         minSdkVersion 21
-        targetSdkVersion 29
+        // 目标适配版本
+        targetSdkVersion 30
         versionName '1.0'
         versionCode 10
+        //versionCode new Date().format("yyyyMMdd") as int
     }
 
     // 支持 Java JDK 8
@@ -21,15 +25,29 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    // 代码警告配置
+    lintOptions {
+        // 禁用文本硬编码警告
+        disable 'HardcodedText'
+    }
+
+    // 可在 Studio 左侧 Build Variants 选项中切换默认的构建模式
+    buildTypes {
+        // 调试版本
+        debug {}
+        // 预览版本
+        preview {}
+        // 正式版本
+        release {}
+    }
 }
 
 dependencies {
-    // 依赖 libs 目录下所有 jar 包
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    // 依赖 libs 目录下所有 aar 包
-    implementation fileTree(include: ['*.aar'], dir: 'libs')
+    // 依赖 libs 目录下所有的 jar 和 aar 包
+    implementation fileTree(include: ["*.jar", '*.aar'], dir: "libs")
 
     // 谷歌兼容库：https://developer.android.google.cn/jetpack/androidx/releases/appcompat?hl=zh-cn
-    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
-    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
 }

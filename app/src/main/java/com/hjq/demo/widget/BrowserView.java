@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
@@ -22,29 +22,42 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseDialog;
 import com.hjq.base.action.ActivityAction;
 import com.hjq.demo.R;
+import com.hjq.demo.other.AppConfig;
+import com.hjq.demo.other.PermissionCallback;
 import com.hjq.demo.ui.dialog.HintDialog;
 import com.hjq.demo.ui.dialog.InputDialog;
 import com.hjq.demo.ui.dialog.MessageDialog;
-import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.hjq.toast.ToastUtils;
+import com.hjq.widget.layout.NestedScrollWebView;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2019/09/24
- *    desc   : 基于 WebView 封装
+ *    desc   : 基于原生 WebView 封装
  */
-public final class BrowserView extends WebView implements ActivityAction {
+public final class BrowserView extends NestedScrollWebView
+        implements LifecycleEventObserver, ActivityAction {
+
+    static {
+        // WebView 调试模式开关
+        WebView.setWebContentsDebuggingEnabled(AppConfig.isDebug());
+    }
 
     public BrowserView(Context context) {
         this(context, null);
@@ -93,10 +106,10 @@ public final class BrowserView extends WebView implements ActivityAction {
      *
      * doc：https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview
      */
-    public static Context getFixedContext(Context context) {
+    private static Context getFixedContext(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            // 这种写法返回的 Context 是 ContextImpl，而不是 Activity 或者 ContextWrapper
             // 为什么不用 ContextImpl，因为使用 ContextImpl 获取不到 Activity 对象，而 ContextWrapper 可以
+            // 这种写法返回的 Context 是 ContextImpl，而不是 Activity 或者 ContextWrapper
             // return context.createConfigurationContext(new Configuration());
             // 如果使用 ContextWrapper 还是导致崩溃，因为 Resources 对象冲突了
             // return new ContextWrapper(context);
@@ -121,31 +134,50 @@ public final class BrowserView extends WebView implements ActivityAction {
         return super.getUrl();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        resumeTimers();
+    /**
+     * 设置 WebView 生命管控（自动回调生命周期方法）
+     */
+    public void setLifecycleOwner(LifecycleOwner owner) {
+        owner.getLifecycle().addObserver(this);
     }
 
+    /**
+     * {@link LifecycleEventObserver}
+     */
+
     @Override
-    public void onPause() {
-        super.onPause();
-        pauseTimers();
+    public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+        switch (event) {
+            case ON_RESUME:
+                onResume();
+                resumeTimers();
+                break;
+            case ON_PAUSE:
+                onPause();
+                pauseTimers();
+                break;
+            case ON_DESTROY:
+                onDestroy();
+                break;
+            default:
+                break;
+        }
     }
 
+    /**
+     * 销毁 WebView
+     */
     public void onDestroy() {
-        ((ViewGroup) getParent()).removeView(this);
-        //清除历史记录
-        clearHistory();
-        //停止加载
+        // 停止加载网页
         stopLoading();
-        //加载一个空白页
-        loadUrl("about:blank");
+        // 清除历史记录
+        clearHistory();
+        // 取消监听引用
         setBrowserChromeClient(null);
         setBrowserViewClient(null);
-        //移除WebView所有的View对象
+        // 移除WebView所有的View对象
         removeAllViews();
-        //销毁此的WebView的内部状态
+        // 销毁此的WebView的内部状态
         destroy();
     }
 
@@ -154,7 +186,7 @@ public final class BrowserView extends WebView implements ActivityAction {
      */
     @Deprecated
     @Override
-    public void setWebViewClient(WebViewClient client) {
+    public void setWebViewClient(@NonNull WebViewClient client) {
         super.setWebViewClient(client);
     }
 
@@ -178,6 +210,36 @@ public final class BrowserView extends WebView implements ActivityAction {
     public static class BrowserViewClient extends WebViewClient {
 
         /**
+         * 网站证书校验错误
+         */
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            Context context = view.getContext();
+            if (context == null) {
+                return;
+            }
+
+            new MessageDialog.Builder(context)
+                    .setMessage(R.string.common_web_ssl_error_title)
+                    .setConfirm(R.string.common_web_ssl_error_allow)
+                    .setCancel(R.string.common_web_ssl_error_reject)
+                    .setCancelable(false)
+                    .setListener(new MessageDialog.OnListener() {
+
+                        @Override
+                        public void onConfirm(BaseDialog dialog) {
+                            handler.proceed();
+                        }
+
+                        @Override
+                        public void onCancel(BaseDialog dialog) {
+                            handler.cancel();
+                        }
+                    })
+                    .show();
+        }
+
+        /**
          * 同名 API 兼容
          */
         @TargetApi(Build.VERSION_CODES.M)
@@ -190,19 +252,12 @@ public final class BrowserView extends WebView implements ActivityAction {
             }
         }
 
+        /**
+         * 加载错误
+         */
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-        }
-
-        @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            // 注意一定要去除这行代码，否则设置无效。
-            //super.onReceivedSslError(view, handler, error);
-            // Android默认的处理方式
-            //handler.cancel();
-            // 接受所有网站的证书
-            handler.proceed();
         }
 
         /**
@@ -218,16 +273,50 @@ public final class BrowserView extends WebView implements ActivityAction {
          * 跳转到其他链接
          */
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Timber.i("WebView shouldOverrideUrlLoading：%s", url);
             String scheme = Uri.parse(url).getScheme();
-            if (scheme != null) {
-                scheme = scheme.toLowerCase();
+            if (scheme == null) {
+                return true;
             }
-            if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
-                view.loadUrl(url);
+            switch (scheme) {
+                // 如果这是跳链接操作
+                case "http":
+                case "https":
+                    view.loadUrl(url);
+                    break;
+                // 如果这是打电话操作
+                case "tel":
+                    dialing(view, url);
+                    break;
+                default:
+                    break;
             }
             // 已经处理该链接请求
             return true;
+        }
+
+        /**
+         * 跳转到拨号界面
+         */
+        protected void dialing(WebView view, String url) {
+            Context context = view.getContext();
+            if (context == null) {
+                return;
+            }
+
+            new MessageDialog.Builder(context)
+                    .setMessage(String.format(view.getResources().getString(R.string.common_web_call_phone_title), url.replace("tel:", "")))
+                    .setConfirm(R.string.common_web_call_phone_allow)
+                    .setCancel(R.string.common_web_call_phone_reject)
+                    .setCancelable(false)
+                    .setListener(dialog -> {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse(url));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    })
+                    .show();
         }
     }
 
@@ -247,9 +336,15 @@ public final class BrowserView extends WebView implements ActivityAction {
          */
         @Override
         public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-            new HintDialog.Builder(mWebView.getContext())
+            Activity activity = mWebView.getActivity();
+            if (activity == null) {
+                return false;
+            }
+
+            new HintDialog.Builder(activity)
                     .setIcon(HintDialog.ICON_WARNING)
                     .setMessage(message)
+                    .setCancelable(false)
                     .addOnDismissListener(dialog -> result.confirm())
                     .show();
             return true;
@@ -260,7 +355,12 @@ public final class BrowserView extends WebView implements ActivityAction {
          */
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-            new MessageDialog.Builder(mWebView.getContext())
+            Activity activity = mWebView.getActivity();
+            if (activity == null) {
+                return false;
+            }
+
+            new MessageDialog.Builder(activity)
                     .setMessage(message)
                     .setCancelable(false)
                     .setListener(new MessageDialog.OnListener() {
@@ -284,9 +384,15 @@ public final class BrowserView extends WebView implements ActivityAction {
          */
         @Override
         public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            new InputDialog.Builder(mWebView.getContext())
+            Activity activity = mWebView.getActivity();
+            if (activity == null) {
+                return false;
+            }
+
+            new InputDialog.Builder(activity)
                     .setContent(defaultValue)
                     .setHint(message)
+                    .setCancelable(false)
                     .setListener(new InputDialog.OnListener() {
 
                         @Override
@@ -304,7 +410,50 @@ public final class BrowserView extends WebView implements ActivityAction {
         }
 
         /**
-         * 网页弹出选择文件请求（测试地址：https://app.xunjiepdf.com/jpg2pdf/、http://www.script-tutorials.com/demos/199/index.html）
+         * 网页请求定位功能
+         * 测试地址：https://map.baidu.com/
+         */
+        @Override
+        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+            Activity activity = mWebView.getActivity();
+            if (activity == null) {
+                return;
+            }
+
+            new MessageDialog.Builder(activity)
+                    .setMessage(R.string.common_web_location_permission_title)
+                    .setConfirm(R.string.common_web_location_permission_allow)
+                    .setCancel(R.string.common_web_location_permission_reject)
+                    .setCancelable(false)
+                    .setListener(new MessageDialog.OnListener() {
+
+                        @Override
+                        public void onConfirm(BaseDialog dialog) {
+                            XXPermissions.with(activity)
+                                    .permission(Permission.ACCESS_FINE_LOCATION)
+                                    .permission(Permission.ACCESS_COARSE_LOCATION)
+                                    .request(new PermissionCallback() {
+
+                                        @Override
+                                        public void onGranted(List<String> permissions, boolean all) {
+                                            if (all) {
+                                                callback.invoke(origin, true, true);
+                                            }
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onCancel(BaseDialog dialog) {
+                            callback.invoke(origin, false, true);
+                        }
+                    })
+                    .show();
+        }
+
+        /**
+         * 网页弹出选择文件请求
+         * 测试地址：https://app.xunjiepdf.com/jpg2pdf/、http://www.script-tutorials.com/demos/199/index.html
          *
          * @param callback              文件选择回调
          * @param params                文件选择参数
@@ -313,31 +462,27 @@ public final class BrowserView extends WebView implements ActivityAction {
         @Override
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, FileChooserParams params) {
             Activity activity = mWebView.getActivity();
-            if (activity instanceof BaseActivity) {
-                XXPermissions.with(activity)
-                        .permission(Permission.Group.STORAGE)
-                        .request(new OnPermission() {
-                            @Override
-                            public void hasPermission(List<String> granted, boolean all) {
-                                if (all) {
-                                    openSystemFileChooser((BaseActivity) activity, callback, params);
-                                } else {
-                                    callback.onReceiveValue(null);
-                                }
-                            }
 
-                            @Override
-                            public void noPermission(List<String> denied, boolean quick) {
-                                callback.onReceiveValue(null);
-                                if (quick) {
-                                    ToastUtils.show(R.string.common_permission_fail);
-                                    XXPermissions.startPermissionActivity(activity, false);
-                                } else {
-                                    ToastUtils.show(R.string.common_permission_hint);
-                                }
-                            }
-                        });
+            if (!(activity instanceof BaseActivity)) {
+                return false;
             }
+
+            XXPermissions.with(activity)
+                    .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                    .request(new PermissionCallback() {
+                        @Override
+                        public void onGranted(List<String> permissions, boolean all) {
+                            if (all) {
+                                openSystemFileChooser((BaseActivity) activity, callback, params);
+                            }
+                        }
+
+                        @Override
+                        public void onDenied(List<String> permissions, boolean never) {
+                            super.onDenied(permissions, never);
+                            callback.onReceiveValue(null);
+                        }
+                    });
             return true;
         }
 
@@ -348,10 +493,10 @@ public final class BrowserView extends WebView implements ActivityAction {
             Intent intent = params.createIntent();
             String[] mimeTypes = params.getAcceptTypes();
             if (mimeTypes != null && mimeTypes.length > 0 && mimeTypes[0] != null && !"".equals(mimeTypes[0])) {
-                // 设置要过滤的文件类型
+                // 要过滤的文件类型
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
             }
-            // 设置是否是多选模式
+            // 是否是多选模式
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE);
             activity.startActivityForResult(Intent.createChooser(intent, params.getTitle()), (resultCode, data) -> {
                 Uri[] uris = null;
@@ -371,7 +516,7 @@ public final class BrowserView extends WebView implements ActivityAction {
                         }
                     }
                 }
-                // 不管用户最后有没有选择文件，最后还是调用 onReceiveValue，如果没有调用就会导致网页再次上传无响应
+                // 不管用户最后有没有选择文件，最后必须要调用 onReceiveValue，如果没有调用就会导致网页再次点击上传无响应
                 callback.onReceiveValue(uris);
             });
         }

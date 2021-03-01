@@ -29,9 +29,9 @@ import androidx.annotation.Nullable;
 @SuppressLint("RtlHardcoded")
 public final class ArrowDrawable extends Drawable {
 
-    private Builder mBuilder;
+    private final Builder mBuilder;
+    private final Paint mPaint;
     private Path mPath;
-    private Paint mPaint;
 
     private ArrowDrawable(Builder builder) {
         mBuilder = builder;
@@ -181,7 +181,7 @@ public final class ArrowDrawable extends Drawable {
     public static final class Builder {
 
         /** 上下文对象 */
-        private Context mContext;
+        private final Context mContext;
         /** 箭头高度 */
         private int mArrowHeight;
         /** 背景圆角大小 */

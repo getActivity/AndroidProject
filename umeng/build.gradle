@@ -1,10 +1,10 @@
-apply plugin: 'com.android.library'
-apply from: '../config.gradle'
+apply plugin : 'com.android.library'
+apply from : '../config.gradle'
 
 android {
 
     defaultConfig {
-        // 混淆配置
+        // 模块混淆配置
         consumerProguardFiles 'proguard-umeng.pro'
 
         // 清单占位符
@@ -23,7 +23,6 @@ android {
     }
 }
 
-// 友盟仓库：https://bintray.com/umsdk/release
 dependencies {
     // 友盟基础组件：https://bintray.com/umsdk/release/common
     implementation 'com.umeng.umsdk:common:2.2.5'

@@ -2,12 +2,10 @@ package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,12 +69,9 @@ public final class AddressDialog {
         public Builder(Context context) {
             super(context);
             setContentView(R.layout.address_dialog);
+            setHeight(getResources().getDisplayMetrics().heightPixels / 2);
 
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getSystemService(WindowManager.class).getDefaultDisplay().getMetrics(displayMetrics);
-            setHeight(displayMetrics.heightPixels / 2);
-
-            mViewPager = findViewById(R.id.vp_address_province);
+            mViewPager = findViewById(R.id.vp_address_pager);
             mAdapter = new RecyclerViewAdapter(context);
             mAdapter.setOnSelectListener(this);
             mViewPager.setAdapter(mAdapter);
@@ -134,7 +129,7 @@ public final class AddressDialog {
                 if (data != null && !data.isEmpty()) {
                     for (int i = 0; i < data.size(); i++) {
                         if (province.equals(data.get(i).getName())) {
-                            onSelected(0, i);
+                            selectedAddress(0, i, false);
                             break;
                         }
                     }
@@ -158,7 +153,7 @@ public final class AddressDialog {
                         if (city.equals(data.get(i).getName())) {
                             // 避开直辖市，因为选择省的时候已经自动跳过市区了
                             if (mAdapter.getItem(1).size() > 1) {
-                                onSelected(1, i);
+                                selectedAddress(1, i, false);
                             }
                             break;
                         }
@@ -188,28 +183,38 @@ public final class AddressDialog {
         /**
          * {@link RecyclerViewAdapter.OnSelectListener}
          */
-
-        @SuppressWarnings("all")
         @Override
         public void onSelected(int recyclerViewPosition, int clickItemPosition) {
-            switch (recyclerViewPosition) {
+            selectedAddress(recyclerViewPosition, clickItemPosition, true);
+        }
+
+        /**
+         * 选择地区
+         *
+         * @param type              类型（省、市、区）
+         * @param position          点击的位置
+         * @param smoothScroll      是否需要平滑滚动
+         */
+        @SuppressWarnings("all")
+        private void selectedAddress(int type, int position, boolean smoothScroll) {
+            switch (type) {
                 case 0:
                     // 记录当前选择的省份
-                    mProvince = mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getName();
+                    mProvince = mAdapter.getItem(type).get(position).getName();
                     mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mProvince);
 
                     mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
-                    mAdapter.addItem(AddressManager.getCityList(mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getNext()));
-                    mViewPager.setCurrentItem(recyclerViewPosition + 1);
+                    mAdapter.addItem(AddressManager.getCityList(mAdapter.getItem(type).get(position).getNext()));
+                    mViewPager.setCurrentItem(type + 1, smoothScroll);
 
                     // 如果当前选择的是直辖市，就直接跳过选择城市，直接选择区域
-                    if (mAdapter.getItem(recyclerViewPosition + 1).size() == 1) {
-                        onSelected(recyclerViewPosition + 1, 0);
+                    if (mAdapter.getItem(type + 1).size() == 1) {
+                        selectedAddress(type + 1, 0, false);
                     }
                     break;
                 case 1:
                     // 记录当前选择的城市
-                    mCity = mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getName();
+                    mCity = mAdapter.getItem(type).get(position).getName();
                     mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mCity);
 
                     if (mIgnoreArea) {
@@ -223,14 +228,14 @@ public final class AddressDialog {
 
                     } else {
                         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
-                        mAdapter.addItem(AddressManager.getAreaList(mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getNext()));
-                        mViewPager.setCurrentItem(recyclerViewPosition + 1);
+                        mAdapter.addItem(AddressManager.getAreaList(mAdapter.getItem(type).get(position).getNext()));
+                        mViewPager.setCurrentItem(type + 1, smoothScroll);
                     }
 
                     break;
                 case 2:
                     // 记录当前选择的区域
-                    mArea = mAdapter.getItem(recyclerViewPosition).get(clickItemPosition).getName();
+                    mArea = mAdapter.getItem(type).get(position).getName();
                     mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mArea);
 
                     if (mListener != null) {
@@ -254,8 +259,8 @@ public final class AddressDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            if (v == mCloseView) {
+        public void onClick(View view) {
+            if (view == mCloseView) {
                 dismiss();
                 if (mListener != null) {
                     mListener.onCancel(getDialog());
@@ -330,7 +335,7 @@ public final class AddressDialog {
         }
     }
 
-    private final static class RecyclerViewAdapter extends MyAdapter<List<AddressBean>> {
+    private final static class RecyclerViewAdapter extends AppAdapter<List<AddressBean>> {
 
         private OnSelectListener mListener;
 
@@ -344,13 +349,14 @@ public final class AddressDialog {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder implements OnItemClickListener {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder implements OnItemClickListener {
 
             private final AddressAdapter mAdapter;
 
             ViewHolder() {
                 super(new RecyclerView(getContext()));
                 RecyclerView recyclerView = (RecyclerView) getItemView();
+                recyclerView.setNestedScrollingEnabled(true);
                 recyclerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 mAdapter = new AddressAdapter(getContext());
                 mAdapter.setOnItemClickListener(this);
@@ -380,7 +386,7 @@ public final class AddressDialog {
         }
     }
 
-    private static final class AddressAdapter extends MyAdapter<AddressBean> {
+    private static final class AddressAdapter extends AppAdapter<AddressBean> {
 
         private AddressAdapter(Context context) {
             super(context);
@@ -402,7 +408,7 @@ public final class AddressDialog {
             return new ViewHolder(textView);
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final TextView mTextView;
 

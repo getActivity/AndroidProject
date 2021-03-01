@@ -1,11 +1,11 @@
 package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +16,7 @@ import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyAdapter;
+import com.hjq.demo.app.AppAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +35,7 @@ public final class MenuDialog {
             implements BaseAdapter.OnItemClickListener,
             View.OnLayoutChangeListener, Runnable {
 
+        @SuppressWarnings("rawtypes")
         private OnListener mListener;
         private boolean mAutoDismiss = true;
 
@@ -107,6 +108,7 @@ public final class MenuDialog {
             return this;
         }
 
+        @SuppressWarnings("rawtypes")
         public Builder setListener(OnListener listener) {
             mListener = listener;
             return this;
@@ -114,12 +116,12 @@ public final class MenuDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
             if (mAutoDismiss) {
                 dismiss();
             }
 
-            if (v == mCancelView) {
+            if (view == mCancelView) {
                 if (mListener != null) {
                     mListener.onCancel(getDialog());
                 }
@@ -172,14 +174,13 @@ public final class MenuDialog {
          *  获取屏幕的高度
          */
         private int getScreenHeight() {
-            WindowManager manager = getSystemService(WindowManager.class);
-            DisplayMetrics outMetrics = new DisplayMetrics();
-            manager.getDefaultDisplay().getMetrics(outMetrics);
+            Resources resources = getResources();
+            DisplayMetrics outMetrics = resources.getDisplayMetrics();
             return outMetrics.heightPixels;
         }
     }
 
-    private static final class MenuAdapter extends MyAdapter<Object> {
+    private static final class MenuAdapter extends AppAdapter<Object> {
 
         private MenuAdapter(Context context) {
             super(context);
@@ -191,7 +192,7 @@ public final class MenuDialog {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends MyAdapter.ViewHolder {
+        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
             private final TextView mTextView;
             private final View mLineView;

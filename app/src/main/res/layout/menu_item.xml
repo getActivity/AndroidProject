@@ -15,7 +15,7 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="13dp"
         android:singleLine="true"
-        android:textColor="@color/colorConfirm"
+        android:textColor="@color/common_confirm_text_color"
         android:textSize="14sp"
         tools:text="条目" />
 
@@ -24,6 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_size"
         android:layout_gravity="bottom"
-        android:background="@color/colorLine" />
+        android:background="@color/common_line_color" />
 
 </FrameLayout>

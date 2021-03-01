@@ -4,19 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
+import com.hjq.base.action.KeyboardAction;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -26,7 +30,11 @@ import java.util.Random;
  *    desc   : Activity 基类
  */
 public abstract class BaseActivity extends AppCompatActivity
-        implements ActivityAction, ClickAction, HandlerAction, BundleAction {
+        implements ActivityAction, ClickAction,
+        HandlerAction, BundleAction, KeyboardAction {
+
+    /** Activity 回调集合 */
+    private SparseArray<OnActivityCallback> mActivityCallbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,18 +78,22 @@ public abstract class BaseActivity extends AppCompatActivity
      */
     protected void initSoftKeyboard() {
         // 点击外部隐藏软键盘，提升用户体验
-        getContentView().setOnClickListener(v -> hideSoftKeyboard());
+        getContentView().setOnClickListener(v -> {
+            // 隐藏软键，避免内存泄漏
+            hideKeyboard(getCurrentFocus());
+        });
     }
 
     @Override
     protected void onDestroy() {
-        removeCallbacks();
         super.onDestroy();
+        removeCallbacks();
     }
 
     @Override
     public void finish() {
-        hideSoftKeyboard();
+        // 隐藏软键，避免内存泄漏
+        hideKeyboard(getCurrentFocus());
         super.finish();
     }
 
@@ -112,12 +124,35 @@ public abstract class BaseActivity extends AppCompatActivity
         return this;
     }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            // 这个 Fragment 必须是 BaseFragment 的子类，并且处于可见状态
+            if (!(fragment instanceof BaseFragment) ||
+                    fragment.getLifecycle().getCurrentState() != Lifecycle.State.RESUMED) {
+                continue;
+            }
+            // 将按键事件派发给 Fragment 进行处理
+            if (((BaseFragment<?>) fragment).dispatchKeyEvent(event)) {
+                // 如果 Fragment 拦截了这个事件，那么就不交给 Activity 处理
+                return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        // 隐藏软键，避免内存泄漏
+        hideKeyboard(getCurrentFocus());
+        // 查看源码得知 startActivity 最终也会调用 startActivityForResult
+        super.startActivityForResult(intent, requestCode, options);
+    }
+
     /**
      * startActivityForResult 方法优化
      */
-
-    private OnActivityCallback mActivityCallback;
-    private int mActivityRequestCode;
 
     public void startActivityForResult(Class<? extends Activity> clazz, OnActivityCallback callback) {
         startActivityForResult(new Intent(this, clazz), null, callback);
@@ -128,44 +163,24 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     public void startActivityForResult(Intent intent, @Nullable Bundle options, OnActivityCallback callback) {
-        // 回调还没有结束，所以不能再次调用此方法，这个方法只适合一对一回调，其他需求请使用原生的方法实现
-        if (mActivityCallback == null) {
-            mActivityCallback = callback;
-            // 随机生成请求码，这个请求码必须在 2 的 16 次幂以内，也就是 0 - 65535
-            mActivityRequestCode = new Random().nextInt((int) Math.pow(2, 16));
-            startActivityForResult(intent, mActivityRequestCode, options);
+        if (mActivityCallbacks == null) {
+            mActivityCallbacks = new SparseArray<>(1);
         }
+        // 请求码必须在 2 的 16 次方以内
+        int requestCode = new Random().nextInt((int) Math.pow(2, 16));
+        mActivityCallbacks.put(requestCode, callback);
+        startActivityForResult(intent, requestCode, options);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (mActivityCallback != null && mActivityRequestCode == requestCode) {
-            mActivityCallback.onActivityResult(resultCode, data);
-            mActivityCallback = null;
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        OnActivityCallback callback;
+        if (mActivityCallbacks != null && (callback = mActivityCallbacks.get(requestCode)) != null) {
+            callback.onActivityResult(resultCode, data);
+            mActivityCallbacks.remove(requestCode);
+            return;
         }
-    }
-
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
-        hideSoftKeyboard();
-        // 查看源码得知 startActivity 最终也会调用 startActivityForResult
-        super.startActivityForResult(intent, requestCode, options);
-    }
-
-    /**
-     * 隐藏软键盘
-     */
-    private void hideSoftKeyboard() {
-        // 隐藏软键盘，避免软键盘引发的内存泄露
-        View view = getCurrentFocus();
-        if (view != null) {
-            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (manager != null && manager.isActive(view)) {
-                manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public interface OnActivityCallback {

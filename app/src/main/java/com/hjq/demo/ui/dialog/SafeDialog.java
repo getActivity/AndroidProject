@@ -25,7 +25,7 @@ import com.hjq.widget.view.CountdownView;
 public final class SafeDialog {
 
     public static final class Builder
-            extends UIDialog.Builder<Builder> {
+            extends CommonDialog.Builder<Builder> {
 
         private final TextView mPhoneView;
         private final EditText mCodeView;
@@ -62,78 +62,73 @@ public final class SafeDialog {
 
         @SingleClick
         @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.cv_safe_countdown:
-                    if (true) {
-                        ToastUtils.show(R.string.common_code_send_hint);
-                        mCountdownView.start();
-                        setCancelable(false);
-                        return;
-                    }
+        public void onClick(View view) {
+            int viewId = view.getId();
+            if (viewId == R.id.cv_safe_countdown) {
+                if (true) {
+                    ToastUtils.show(R.string.common_code_send_hint);
+                    mCountdownView.start();
+                    setCancelable(false);
+                    return;
+                }
 
-                    // 获取验证码
-                    EasyHttp.post(this)
-                            .api(new GetCodeApi()
-                                    .setPhone(mPhoneNumber))
-                            .request(new OnHttpListener<HttpData<Void>>() {
+                // 获取验证码
+                EasyHttp.post(getDialog())
+                        .api(new GetCodeApi()
+                                .setPhone(mPhoneNumber))
+                        .request(new OnHttpListener<HttpData<Void>>() {
 
-                                @Override
-                                public void onSucceed(HttpData<Void> data) {
-                                    ToastUtils.show(R.string.common_code_send_hint);
-                                    mCountdownView.start();
-                                    setCancelable(false);
-                                }
+                            @Override
+                            public void onSucceed(HttpData<Void> data) {
+                                ToastUtils.show(R.string.common_code_send_hint);
+                                mCountdownView.start();
+                                setCancelable(false);
+                            }
 
-                                @Override
-                                public void onFail(Exception e) {
-                                    ToastUtils.show(e.getMessage());
-                                }
-                            });
-                    break;
-                case R.id.tv_ui_confirm:
-                    if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
-                        ToastUtils.show(R.string.common_code_error_hint);
-                        return;
-                    }
+                            @Override
+                            public void onFail(Exception e) {
+                                ToastUtils.show(e.getMessage());
+                            }
+                        });
+            } else if (viewId == R.id.tv_ui_confirm) {
+                if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
+                    ToastUtils.show(R.string.common_code_error_hint);
+                    return;
+                }
 
-                    if (true) {
-                        autoDismiss();
-                        if (mListener != null) {
-                            mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
-                        }
-                        return;
-                    }
-
-                    // 验证码校验
-                    EasyHttp.post(this)
-                            .api(new VerifyCodeApi()
-                                    .setPhone(mPhoneNumber)
-                                    .setCode(mCodeView.getText().toString()))
-                            .request(new OnHttpListener<HttpData<Void>>() {
-
-                                @Override
-                                public void onSucceed(HttpData<Void> data) {
-                                    autoDismiss();
-                                    if (mListener != null) {
-                                        mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onFail(Exception e) {
-                                    ToastUtils.show(e.getMessage());
-                                }
-                            });
-                    break;
-                case R.id.tv_ui_cancel:
+                if (true) {
                     autoDismiss();
                     if (mListener != null) {
-                        mListener.onCancel(getDialog());
+                        mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
                     }
-                    break;
-                default:
-                    break;
+                    return;
+                }
+
+                // 验证码校验
+                EasyHttp.post(getDialog())
+                        .api(new VerifyCodeApi()
+                                .setPhone(mPhoneNumber)
+                                .setCode(mCodeView.getText().toString()))
+                        .request(new OnHttpListener<HttpData<Void>>() {
+
+                            @Override
+                            public void onSucceed(HttpData<Void> data) {
+                                autoDismiss();
+                                if (mListener != null) {
+                                    mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
+                                }
+                            }
+
+                            @Override
+                            public void onFail(Exception e) {
+                                ToastUtils.show(e.getMessage());
+                            }
+                        });
+            } else if (viewId == R.id.tv_ui_cancel) {
+                autoDismiss();
+                if (mListener != null) {
+                    mListener.onCancel(getDialog());
+                }
             }
         }
     }

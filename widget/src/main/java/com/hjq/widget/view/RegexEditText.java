@@ -52,31 +52,29 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
 
         if (array.hasValue(R.styleable.RegexEditText_inputRegex)) {
             setInputRegex(array.getString(R.styleable.RegexEditText_inputRegex));
-        } else {
-            if (array.hasValue(R.styleable.RegexEditText_regexType)) {
-                int regexType = array.getInt(R.styleable.RegexEditText_regexType, 0);
-                switch (regexType) {
-                    case 0x01:
-                        setInputRegex(REGEX_MOBILE);
-                        break;
-                    case 0x02:
-                        setInputRegex(REGEX_CHINESE);
-                        break;
-                    case 0x03:
-                        setInputRegex(REGEX_ENGLISH);
-                        break;
-                    case 0x04:
-                        setInputRegex(REGEX_COUNT);
-                        break;
-                    case 0x05:
-                        setInputRegex(REGEX_NAME);
-                        break;
-                    case 0x06:
-                        setInputRegex(REGEX_NONNULL);
-                        break;
-                    default:
-                        break;
-                }
+        } else if (array.hasValue(R.styleable.RegexEditText_regexType)) {
+            int regexType = array.getInt(R.styleable.RegexEditText_regexType, 0);
+            switch (regexType) {
+                case 0x01:
+                    setInputRegex(REGEX_MOBILE);
+                    break;
+                case 0x02:
+                    setInputRegex(REGEX_CHINESE);
+                    break;
+                case 0x03:
+                    setInputRegex(REGEX_ENGLISH);
+                    break;
+                case 0x04:
+                    setInputRegex(REGEX_COUNT);
+                    break;
+                case 0x05:
+                    setInputRegex(REGEX_NAME);
+                    break;
+                case 0x06:
+                    setInputRegex(REGEX_NONNULL);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -152,35 +150,37 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
      * {@link InputFilter}
      *
      * @param source        新输入的字符串
-     * @param start         新输入的字符串起始下标，一般为0
-     * @param end           新输入的字符串终点下标，一般为source长度-1
+     * @param start         新输入的字符串起始下标
+     * @param end           新输入的字符串终点下标
      * @param dest          输入之前文本框内容
-     * @param destStart     原内容起始坐标，一般为0
-     * @param destEnd       原内容终点坐标，一般为dest长度-1
+     * @param destStart     在原内容上的起始坐标
+     * @param destEnd       在原内容上的终点坐标
      * @return              返回字符串将会加入到内容中
      */
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int destStart, int destEnd) {
-        if (mPattern != null) {
-            // 拼接出最终的字符串
-            String begin = dest.toString().substring(0, destStart);
-            String over = dest.toString().substring(destStart + (destEnd - destStart), destStart + (dest.toString().length() - begin.length()));
-            String result = begin + source + over;
+        if (mPattern == null) {
+            return source;
+        }
 
-            // 判断是插入还是删除
-            if (destStart > destEnd - 1) {
-                // 如果是插入字符
-                if (!mPattern.matcher(result).matches()) {
-                    // 如果不匹配就不让这个字符输入
-                    return "";
-                }
-            } else {
-                // 如果是删除字符
-                if (!mPattern.matcher(result).matches()) {
-                    // 如果不匹配则不让删除（删空操作除外）
-                    if (!"".equals(result)) {
-                        return dest.toString().substring(destStart, destEnd);
-                    }
+        // 拼接出最终的字符串
+        String begin = dest.toString().substring(0, destStart);
+        String over = dest.toString().substring(destStart + (destEnd - destStart), destStart + (dest.toString().length() - begin.length()));
+        String result = begin + source + over;
+
+        // 判断是插入还是删除
+        if (destStart > destEnd - 1) {
+            // 如果是插入字符
+            if (!mPattern.matcher(result).matches()) {
+                // 如果不匹配就不让这个字符输入
+                return "";
+            }
+        } else {
+            // 如果是删除字符
+            if (!mPattern.matcher(result).matches()) {
+                // 如果不匹配则不让删除（删空操作除外）
+                if (!"".equals(result)) {
+                    return dest.toString().substring(destStart, destEnd);
                 }
             }
         }

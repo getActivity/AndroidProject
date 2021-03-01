@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <!-- 适配Android 7.0文件意图 -->
-    <external-path
-        path="Android/data/com.hjq.demo/"
-        name="files_root" />
-    <external-path
-        path="."
-        name="external_storage_root" />
+    <!-- 代表设备的根目录 new File("/") -->
+    <root-path name="root" path="." />
+    <!-- context.getFilesDir() -->
+    <files-path name="files" path="." />
+    <!-- context.getCacheDir() -->
+    <cache-path name="cache" path="." />
+    <!-- context.getExternalFilesDirs() -->
+    <external-files-path name="name" path="path" />
+    <!-- context.getExternalCacheDirs() -->
+    <external-cache-path name="name" path="path" />
+    <!-- Environment.getExternalStorageDirectory() -->
+    <external-path name="external" path="." />
 </paths>

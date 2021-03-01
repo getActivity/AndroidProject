@@ -2,11 +2,8 @@ package com.hjq.demo.aop;
 
 import android.os.Looper;
 import android.os.Trace;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import com.hjq.demo.other.AppConfig;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -18,11 +15,13 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 import java.util.concurrent.TimeUnit;
 
+import timber.log.Timber;
+
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2019/12/06
- *    desc   : Debug 日志打印
+ *    desc   : Debug 日志切面
  */
 @Aspect
 public class DebugLogAspect {
@@ -68,7 +67,7 @@ public class DebugLogAspect {
         String methodName = codeSignature.getName();
         // 方法参数名集合
         String[] parameterNames = codeSignature.getParameterNames();
-        // 方法参数集合
+        // 方法参数值集合
         Object[] parameterValues = joinPoint.getArgs();
 
         //记录并打印方法的信息
@@ -118,10 +117,6 @@ public class DebugLogAspect {
      * @param lengthMillis      执行方法所需要的时间
      */
     private void exitMethod(ProceedingJoinPoint joinPoint, DebugLog debugLog, Object result, long lengthMillis) {
-        if (!AppConfig.isDebug()) {
-            return;
-        }
-
         Trace.endSection();
 
         Signature signature = joinPoint.getSignature();
@@ -147,6 +142,7 @@ public class DebugLogAspect {
     }
 
     private void log(String tag, String msg) {
-        Log.d(tag, msg);
+        Timber.tag(tag);
+        Timber.d(msg);
     }
 }

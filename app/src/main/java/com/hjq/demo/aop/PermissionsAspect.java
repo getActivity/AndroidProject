@@ -2,11 +2,9 @@ package com.hjq.demo.aop;
 
 import android.app.Activity;
 
-import com.hjq.demo.R;
-import com.hjq.demo.helper.ActivityStackManager;
-import com.hjq.permissions.OnPermission;
+import com.hjq.demo.manager.ActivityManager;
+import com.hjq.demo.other.PermissionCallback;
 import com.hjq.permissions.XXPermissions;
-import com.hjq.toast.ToastUtils;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -19,7 +17,7 @@ import java.util.List;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2019/12/06
- *    desc   : 权限申请处理
+ *    desc   : 权限申请切面
  */
 @Aspect
 public class PermissionsAspect {
@@ -35,16 +33,17 @@ public class PermissionsAspect {
      */
     @Around("method() && @annotation(permissions)")
     public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, Permissions permissions) {
-        Activity activity = ActivityStackManager.getInstance().getTopActivity();
+        Activity activity = ActivityManager.getInstance().getTopActivity();
         if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
             return;
         }
+
         XXPermissions.with(activity)
                 .permission(permissions.value())
-                .request(new OnPermission() {
+                .request(new PermissionCallback() {
 
                     @Override
-                    public void hasPermission(List<String> granted, boolean all) {
+                    public void onGranted(List<String> permissions, boolean all) {
                         if (all) {
                             try {
                                 // 获得权限，执行原方法
@@ -52,16 +51,6 @@ public class PermissionsAspect {
                             } catch (Throwable e) {
                                 e.printStackTrace();
                             }
-                        }
-                    }
-
-                    @Override
-                    public void noPermission(List<String> denied, boolean quick) {
-                        if (quick) {
-                            ToastUtils.show(R.string.common_permission_fail);
-                            XXPermissions.startPermissionActivity(activity, false);
-                        } else {
-                            ToastUtils.show(R.string.common_permission_hint);
                         }
                     }
                 });

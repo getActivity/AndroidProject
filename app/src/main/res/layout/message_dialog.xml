@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="15dp"
     android:layout_marginVertical="10dp"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:lineSpacingExtra="4dp"
     android:textColor="#333333"
     android:textSize="14sp"

@@ -1,20 +1,26 @@
 package com.hjq.demo.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.helper.InputTextHelper;
+import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.http.request.GetCodeApi;
 import com.hjq.demo.http.request.PhoneApi;
+import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
+import com.hjq.demo.ui.dialog.HintDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.hjq.toast.ToastUtils;
@@ -26,12 +32,16 @@ import com.hjq.widget.view.CountdownView;
  *    time   : 2019/04/20
  *    desc   : 设置手机号
  */
-public final class PhoneResetActivity extends MyActivity {
+public final class PhoneResetActivity extends AppActivity
+        implements TextView.OnEditorActionListener {
 
     @DebugLog
     public static void start(Context context, String code) {
         Intent intent = new Intent(context, PhoneResetActivity.class);
         intent.putExtra(IntentKey.CODE, code);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(intent);
     }
 
@@ -54,9 +64,12 @@ public final class PhoneResetActivity extends MyActivity {
         mCodeView = findViewById(R.id.et_phone_reset_code);
         mCountdownView = findViewById(R.id.cv_phone_reset_countdown);
         mCommitView = findViewById(R.id.btn_phone_reset_commit);
+
         setOnClickListener(mCountdownView, mCommitView);
 
-        InputTextHelper.with(this)
+        mCodeView.setOnEditorActionListener(this);
+
+        InputTextManager.with(this)
                 .addView(mPhoneView)
                 .addView(mCodeView)
                 .setMain(mCommitView)
@@ -70,10 +83,11 @@ public final class PhoneResetActivity extends MyActivity {
 
     @SingleClick
     @Override
-    public void onClick(View v) {
-        if (v == mCountdownView) {
+    public void onClick(View view) {
+        if (view == mCountdownView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
+                mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
                 toast(R.string.common_phone_input_error);
                 return;
             }
@@ -96,9 +110,10 @@ public final class PhoneResetActivity extends MyActivity {
                             mCountdownView.start();
                         }
                     });
-        } else if (v == mCommitView) {
+        } else if (view == mCommitView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
+                mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
                 toast(R.string.common_phone_input_error);
                 return;
             }
@@ -108,9 +123,16 @@ public final class PhoneResetActivity extends MyActivity {
                 return;
             }
 
+            // 隐藏软键盘
+            hideKeyboard(getCurrentFocus());
+
             if (true) {
-                toast(R.string.phone_reset_commit_succeed);
-                finish();
+                new HintDialog.Builder(this)
+                        .setIcon(HintDialog.ICON_FINISH)
+                        .setMessage(R.string.phone_reset_commit_succeed)
+                        .setDuration(2000)
+                        .addOnDismissListener(dialog -> finish())
+                        .show();
                 return;
             }
 
@@ -124,10 +146,27 @@ public final class PhoneResetActivity extends MyActivity {
 
                         @Override
                         public void onSucceed(HttpData<Void> data) {
-                            toast(R.string.phone_reset_commit_succeed);
-                            finish();
+                            new HintDialog.Builder(getActivity())
+                                    .setIcon(HintDialog.ICON_FINISH)
+                                    .setMessage(R.string.phone_reset_commit_succeed)
+                                    .setDuration(2000)
+                                    .addOnDismissListener(dialog -> finish())
+                                    .show();
                         }
                     });
         }
+    }
+
+    /**
+     * {@link TextView.OnEditorActionListener}
+     */
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
+            // 模拟点击提交按钮
+            onClick(mCommitView);
+            return true;
+        }
+        return false;
     }
 }

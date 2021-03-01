@@ -4,9 +4,9 @@ import androidx.core.content.ContextCompat;
 
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
-import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.ui.dialog.MenuDialog;
-import com.hjq.demo.widget.HintLayout;
+import com.hjq.demo.widget.StatusLayout;
 
 /**
  *    author : Android 轮子哥
@@ -14,10 +14,10 @@ import com.hjq.demo.widget.HintLayout;
  *    time   : 2019/04/17
  *    desc   : 加载使用案例
  */
-public final class StatusActivity extends MyActivity
+public final class StatusActivity extends AppActivity
         implements StatusAction {
 
-    private HintLayout mHintLayout;
+    private StatusLayout mStatusLayout;
 
     @Override
     protected int getLayoutId() {
@@ -26,7 +26,7 @@ public final class StatusActivity extends MyActivity
 
     @Override
     protected void initView() {
-        mHintLayout = findViewById(R.id.hl_status_hint);
+        mStatusLayout = findViewById(R.id.hl_status_hint);
     }
 
     @Override
@@ -50,7 +50,7 @@ public final class StatusActivity extends MyActivity
                             showEmpty();
                             break;
                         case 3:
-                            showLayout(ContextCompat.getDrawable(getActivity(), R.drawable.hint_order_ic), "暂无订单", null);
+                            showLayout(ContextCompat.getDrawable(getActivity(), R.drawable.status_order_ic), "暂无订单", null);
                             break;
                         default:
                             break;
@@ -60,7 +60,7 @@ public final class StatusActivity extends MyActivity
     }
 
     @Override
-    public HintLayout getHintLayout() {
-        return mHintLayout;
+    public StatusLayout getStatusLayout() {
+        return mStatusLayout;
     }
 }

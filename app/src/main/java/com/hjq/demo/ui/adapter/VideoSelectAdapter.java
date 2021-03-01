@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.demo.R;
-import com.hjq.demo.common.MyAdapter;
-import com.hjq.demo.helper.CacheDataManager;
+import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.http.glide.GlideApp;
+import com.hjq.demo.manager.CacheDataManager;
 import com.hjq.demo.ui.activity.VideoSelectActivity;
 import com.hjq.demo.widget.PlayerView;
 
@@ -25,7 +25,7 @@ import java.util.List;
  *    time   : 2020/03/01
  *    desc   : 视频选择适配器
  */
-public final class VideoSelectAdapter extends MyAdapter<VideoSelectActivity.VideoBean> {
+public final class VideoSelectAdapter extends AppAdapter<VideoSelectActivity.VideoBean> {
 
     private final List<VideoSelectActivity.VideoBean> mSelectVideo;
 
@@ -40,19 +40,19 @@ public final class VideoSelectAdapter extends MyAdapter<VideoSelectActivity.Vide
         return new ViewHolder();
     }
 
-    private final class ViewHolder extends MyAdapter.ViewHolder {
+    private final class ViewHolder extends AppAdapter<?>.ViewHolder {
 
-        private ImageView mImageView;
-        private CheckBox mCheckBox;
-        private TextView mDurationView;
-        private TextView mSizeView;
+        private final ImageView mImageView;
+        private final CheckBox mCheckBox;
+        private final TextView mDurationView;
+        private final TextView mSizeView;
 
         private ViewHolder() {
             super(R.layout.video_select_item);
-            mImageView = (ImageView) findViewById(R.id.iv_video_select_image);
-            mCheckBox = (CheckBox) findViewById(R.id.iv_video_select_check);
-            mDurationView = (TextView) findViewById(R.id.tv_video_select_duration);
-            mSizeView = (TextView) findViewById(R.id.tv_video_select_size);
+            mImageView = findViewById(R.id.iv_video_select_image);
+            mCheckBox = findViewById(R.id.iv_video_select_check);
+            mDurationView = findViewById(R.id.tv_video_select_duration);
+            mSizeView = findViewById(R.id.tv_video_select_size);
         }
 
         @Override
@@ -67,7 +67,7 @@ public final class VideoSelectAdapter extends MyAdapter<VideoSelectActivity.Vide
             // 获取视频的总时长
             mDurationView.setText(PlayerView.conversionTime((int) bean.getVideoDuration()));
 
-            // 获取视频的总大小
+            // 获取视频文件大小
             mSizeView.setText(CacheDataManager.getFormatSize(bean.getVideoSize()));
         }
     }

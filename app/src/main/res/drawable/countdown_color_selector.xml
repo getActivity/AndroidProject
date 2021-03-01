@@ -11,6 +11,6 @@
     <item android:color="@color/white" android:state_focused="true" />
 
     <!-- 默认状态 -->
-    <item android:color="@color/colorAccent" />
+    <item android:color="@color/common_accent_color" />
 
 </selector>

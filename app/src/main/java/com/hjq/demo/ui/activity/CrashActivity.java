@@ -2,19 +2,18 @@ package com.hjq.demo.ui.activity;
 
 import android.Manifest;
 import android.app.Application;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
-import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.core.view.GravityCompat;
@@ -22,9 +21,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
-import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyActivity;
+import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.permissions.Permission;
@@ -48,14 +47,11 @@ import java.util.regex.Pattern;
  *    time   : 2019/06/27
  *    desc   : 崩溃捕捉界面
  */
-public final class CrashActivity extends MyActivity {
+public final class CrashActivity extends AppActivity {
 
     /** 报错代码行数正则表达式 */
     private static final Pattern CODE_REGEX = Pattern.compile("\\(\\w+\\.\\w+:\\d+\\)");
-    /** 显示的时间格式 */
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
 
-    @DebugLog
     public static void start(Application application, Throwable throwable) {
         if (throwable == null) {
             return;
@@ -94,44 +90,38 @@ public final class CrashActivity extends MyActivity {
     @Override
     protected void initData() {
         Throwable throwable = getSerializable(IntentKey.OTHER);
-        if (throwable instanceof NullPointerException) {
-            mTitleView.setText("空指针异常");
-        } else if (throwable instanceof ClassCastException) {
-            mTitleView.setText("类型转换异常");
-        } else if (throwable instanceof ActivityNotFoundException) {
-            mTitleView.setText("活动跳转异常");
-        } else if (throwable instanceof IllegalArgumentException) {
-            mTitleView.setText("非法参数异常");
-        } else if (throwable instanceof IllegalStateException) {
-            mTitleView.setText("非法状态异常");
-        } else if (throwable instanceof WindowManager.BadTokenException) {
-            mTitleView.setText("窗口添加异常");
-        } else if (throwable instanceof StackOverflowError) {
-            mTitleView.setText("栈溢出");
-        } else if (throwable instanceof OutOfMemoryError) {
-            mTitleView.setText("内存溢出");
+        if (throwable == null) {
+            return;
         }
+
+        mTitleView.setText(throwable.getClass().getSimpleName());
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         throwable.printStackTrace(printWriter);
+        Throwable cause = throwable.getCause();
+        if (cause != null) {
+            cause.printStackTrace(printWriter);
+        }
         mStackTrace = stringWriter.toString();
         Matcher matcher = CODE_REGEX.matcher(mStackTrace);
-        SpannableString spannable = new SpannableString(mStackTrace);
-        for (int index = 0; matcher.find(); index++) {
-            // 不包含左括号（
-            int start = matcher.start() + "(".length();
-            // 不包含右括号 ）
-            int end = matcher.end() - ")".length();
-            // 设置前景
-            spannable.setSpan(new ForegroundColorSpan(index < 3 ? 0xFF287BDE : 0xFF999999), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            // 设置下划线
-            spannable.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder spannable = new SpannableStringBuilder(mStackTrace);
+        if (spannable.length() > 0) {
+            for (int index = 0; matcher.find(); index++) {
+                // 不包含左括号（
+                int start = matcher.start() + "(".length();
+                // 不包含右括号 ）
+                int end = matcher.end() - ")".length();
+                // 设置前景
+                spannable.setSpan(new ForegroundColorSpan(index < 3 ? 0xFF287BDE : 0xFF999999), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                // 设置下划线
+                spannable.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            mMessageView.setText(spannable);
         }
-        mMessageView.setText(spannable);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Resources res = getResources();
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
 
@@ -160,44 +150,33 @@ public final class CrashActivity extends MyActivity {
                 .append("\n目标资源：\t").append(targetResource);
 
         builder.append("\n安卓版本：\t").append(Build.VERSION.RELEASE)
-                .append("\nSDK\t版本：\t").append(Build.VERSION.SDK_INT)
-                .append("\nCPU\t架构：\t").append(Build.SUPPORTED_ABIS[0]);
+                .append("\nAPI 版本：\t").append(Build.VERSION.SDK_INT)
+                .append("\nCPU 架构：\t").append(Build.SUPPORTED_ABIS[0]);
 
         builder.append("\n应用版本：\t").append(AppConfig.getVersionName())
                 .append("\n版本代码：\t").append(AppConfig.getVersionCode());
 
         try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_PERMISSIONS);
-
-            builder.append("\n首次安装：\t").append(DATE_FORMAT.format(new Date(packageInfo.firstInstallTime)))
-                    .append("\n最近安装：\t").append(DATE_FORMAT.format(new Date(packageInfo.lastUpdateTime)))
-                    .append("\n崩溃时间：\t").append(DATE_FORMAT.format(new Date()));
+            builder.append("\n首次安装：\t").append(dateFormat.format(new Date(packageInfo.firstInstallTime)))
+                    .append("\n最近安装：\t").append(dateFormat.format(new Date(packageInfo.lastUpdateTime)))
+                    .append("\n崩溃时间：\t").append(dateFormat.format(new Date()));
 
             List<String> permissions = Arrays.asList(packageInfo.requestedPermissions);
 
-            if (permissions.contains(Permission.READ_EXTERNAL_STORAGE) || permissions.contains(Permission.WRITE_EXTERNAL_STORAGE)) {
-                builder.append("\n存储权限：\t");
-                if (XXPermissions.hasPermission(this, Permission.Group.STORAGE)) {
-                    builder.append("读、写");
-                } else {
-                    if (XXPermissions.hasPermission(this, Permission.READ_EXTERNAL_STORAGE)) {
-                        builder.append("读");
-                    } else if (XXPermissions.hasPermission(this, Permission.WRITE_EXTERNAL_STORAGE)) {
-                        builder.append("写");
-                    } else {
-                        builder.append("未获得");
-                    }
-                }
+            if (permissions.contains(Permission.MANAGE_EXTERNAL_STORAGE)) {
+                builder.append("\n存储权限：\t").append(XXPermissions.isGrantedPermission(this, Permission.MANAGE_EXTERNAL_STORAGE) ? "已获得" : "未获得");
             }
 
             if (permissions.contains(Permission.ACCESS_FINE_LOCATION) || permissions.contains(Permission.ACCESS_COARSE_LOCATION)) {
                 builder.append("\n定位权限：\t");
-                if (XXPermissions.hasPermission(this, Permission.Group.LOCATION)) {
+                if (XXPermissions.isGrantedPermission(this, Permission.Group.LOCATION)) {
                     builder.append("精确、粗略");
                 } else {
-                    if (XXPermissions.hasPermission(this, Permission.ACCESS_FINE_LOCATION)) {
+                    if (XXPermissions.isGrantedPermission(this, Permission.ACCESS_FINE_LOCATION)) {
                         builder.append("精确");
-                    } else if (XXPermissions.hasPermission(this, Permission.ACCESS_COARSE_LOCATION)) {
+                    } else if (XXPermissions.isGrantedPermission(this, Permission.ACCESS_COARSE_LOCATION)) {
                         builder.append("粗略");
                     } else {
                         builder.append("未获得");
@@ -206,25 +185,25 @@ public final class CrashActivity extends MyActivity {
             }
 
             if (permissions.contains(Permission.CAMERA)) {
-                builder.append("\n相机权限：\t").append(XXPermissions.hasPermission(this, Permission.CAMERA) ? "已获得" : "未获得");
+                builder.append("\n相机权限：\t").append(XXPermissions.isGrantedPermission(this, Permission.CAMERA) ? "已获得" : "未获得");
             }
 
             if (permissions.contains(Permission.RECORD_AUDIO)) {
-                builder.append("\n录音权限：\t").append(XXPermissions.hasPermission(this, Permission.RECORD_AUDIO) ? "已获得" : "未获得");
+                builder.append("\n录音权限：\t").append(XXPermissions.isGrantedPermission(this, Permission.RECORD_AUDIO) ? "已获得" : "未获得");
             }
 
             if (permissions.contains(Permission.SYSTEM_ALERT_WINDOW)) {
-                builder.append("\n悬浮窗权限：\t").append(XXPermissions.hasPermission(this, Permission.SYSTEM_ALERT_WINDOW) ? "已获得" : "未获得");
+                builder.append("\n悬浮窗权限：\t").append(XXPermissions.isGrantedPermission(this, Permission.SYSTEM_ALERT_WINDOW) ? "已获得" : "未获得");
             }
 
             if (permissions.contains(Permission.REQUEST_INSTALL_PACKAGES)) {
-                builder.append("\n安装包权限：\t").append(XXPermissions.hasPermission(this, Permission.REQUEST_INSTALL_PACKAGES) ? "已获得" : "未获得");
+                builder.append("\n安装包权限：\t").append(XXPermissions.isGrantedPermission(this, Permission.REQUEST_INSTALL_PACKAGES) ? "已获得" : "未获得");
             }
 
             if (permissions.contains(Manifest.permission.INTERNET)) {
                 builder.append("\n当前网络访问：\t");
 
-                new Thread(() -> {
+                ThreadPoolManager.getInstance().execute(() -> {
                     try {
                         InetAddress.getByName("www.baidu.com");
                         builder.append("正常");
@@ -232,7 +211,7 @@ public final class CrashActivity extends MyActivity {
                         builder.append("异常");
                     }
                     post(() -> mInfoView.setText(builder));
-                }).start();
+                });
 
             } else {
                 mInfoView.setText(builder);
@@ -243,31 +222,21 @@ public final class CrashActivity extends MyActivity {
 
     @SingleClick
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_crash_info:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
-            case R.id.iv_crash_share:
-                // 分享文本
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, mStackTrace);
-                startActivity(Intent.createChooser(intent, ""));
-                break;
-            case R.id.iv_crash_restart:
-                // 重启应用
-                startActivity(HomeActivity.class);
-                finish();
-                break;
-            default:
-                break;
+    public void onClick(View view) {
+        int viewId = view.getId();
+        if (viewId == R.id.iv_crash_info) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        } else if (viewId == R.id.iv_crash_share) {
+            // 分享文本
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, mStackTrace);
+            startActivity(Intent.createChooser(intent, ""));
+        } else if (viewId == R.id.iv_crash_restart) {
+            // 重启应用
+            RestartActivity.restart(this);
+            finish();
         }
-    }
-
-    @Override
-    public boolean isSwipeEnable() {
-        return false;
     }
 
     @Override

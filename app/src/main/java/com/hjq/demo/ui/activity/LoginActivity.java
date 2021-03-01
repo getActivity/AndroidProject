@@ -2,28 +2,33 @@ package com.hjq.demo.ui.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.common.MyActivity;
-import com.hjq.demo.helper.InputTextHelper;
+import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.http.request.LoginApi;
 import com.hjq.demo.http.response.LoginBean;
+import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.other.KeyboardWatcher;
+import com.hjq.demo.ui.fragment.MeFragment;
 import com.hjq.demo.wxapi.WXEntryActivity;
 import com.hjq.http.EasyConfig;
 import com.hjq.http.EasyHttp;
@@ -31,6 +36,9 @@ import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
+import com.hjq.widget.view.SubmitButton;
+
+import okhttp3.Call;
 
 /**
  *    author : Android 轮子哥
@@ -38,15 +46,19 @@ import com.hjq.umeng.UmengLogin;
  *    time   : 2018/10/18
  *    desc   : 登录界面
  */
-public final class LoginActivity extends MyActivity
+public final class LoginActivity extends AppActivity
         implements UmengLogin.OnLoginListener,
-        KeyboardWatcher.SoftKeyboardStateListener {
+        KeyboardWatcher.SoftKeyboardStateListener,
+        TextView.OnEditorActionListener {
 
     @DebugLog
     public static void start(Context context, String phone, String password) {
         Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(IntentKey.PHONE, phone);
         intent.putExtra(IntentKey.PASSWORD, password);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(intent);
     }
 
@@ -57,9 +69,7 @@ public final class LoginActivity extends MyActivity
     private EditText mPasswordView;
 
     private View mForgetView;
-    private Button mCommitView;
-
-    private View mBlankView;
+    private SubmitButton mCommitView;
 
     private View mOtherView;
     private View mQQView;
@@ -83,13 +93,15 @@ public final class LoginActivity extends MyActivity
         mPasswordView = findViewById(R.id.et_login_password);
         mForgetView = findViewById(R.id.tv_login_forget);
         mCommitView = findViewById(R.id.btn_login_commit);
-        mBlankView = findViewById(R.id.v_login_blank);
         mOtherView = findViewById(R.id.ll_login_other);
         mQQView = findViewById(R.id.iv_login_qq);
         mWeChatView = findViewById(R.id.iv_login_wechat);
+
         setOnClickListener(mForgetView, mCommitView, mQQView, mWeChatView);
 
-        InputTextHelper.with(this)
+        mPasswordView.setOnEditorActionListener(this);
+
+        InputTextManager.with(this)
                 .addView(mPhoneView)
                 .addView(mPasswordView)
                 .setMain(mCommitView)
@@ -98,14 +110,9 @@ public final class LoginActivity extends MyActivity
 
     @Override
     protected void initData() {
-
         postDelayed(() -> {
-            // 因为在小屏幕手机上面，因为计算规则的因素会导致动画效果特别夸张，所以不在小屏幕手机上面展示这个动画效果
-            if (mBlankView.getHeight() > mBodyLayout.getHeight()) {
-                // 只有空白区域的高度大于登录框区域的高度才展示动画
-                KeyboardWatcher.with(LoginActivity.this)
-                        .setListener(LoginActivity.this);
-            }
+            KeyboardWatcher.with(LoginActivity.this)
+                    .setListener(LoginActivity.this);
         }, 500);
 
         // 判断用户当前有没有安装 QQ
@@ -123,42 +130,51 @@ public final class LoginActivity extends MyActivity
             mOtherView.setVisibility(View.GONE);
         }
 
-        // 填充传入的手机号和密码
+        // 自动填充手机号和密码
         mPhoneView.setText(getString(IntentKey.PHONE));
         mPasswordView.setText(getString(IntentKey.PASSWORD));
     }
 
     @Override
-    public void onRightClick(View v) {
+    public void onRightClick(View view) {
         // 跳转到注册界面
-        startActivityForResult(RegisterActivity.class, (resultCode, data) -> {
+        RegisterActivity.start(this, mPhoneView.getText().toString(), mPasswordView.getText().toString(), (phone, password) -> {
             // 如果已经注册成功，就执行登录操作
-            if (resultCode == RESULT_OK && data != null) {
-                mPhoneView.setText(data.getStringExtra(IntentKey.PHONE));
-                mPasswordView.setText(data.getStringExtra(IntentKey.PASSWORD));
-                mPasswordView.setSelection(mPasswordView.getText().length());
-                onClick(mCommitView);
-            }
+            mPhoneView.setText(phone);
+            mPasswordView.setText(password);
+            mPasswordView.requestFocus();
+            mPasswordView.setSelection(mPasswordView.getText().length());
+            onClick(mCommitView);
         });
     }
 
     @SingleClick
     @Override
-    public void onClick(View v) {
-        if (v == mForgetView) {
+    public void onClick(View view) {
+        if (view == mForgetView) {
             startActivity(PasswordForgetActivity.class);
-        } else if (v == mCommitView) {
+            return;
+        }
+
+        if (view == mCommitView) {
             if (mPhoneView.getText().toString().length() != 11) {
+                mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
+                mCommitView.showError(3000);
                 toast(R.string.common_phone_input_error);
                 return;
             }
 
+            // 隐藏软键盘
+            hideKeyboard(getCurrentFocus());
+
             if (true) {
-                showDialog();
+                mCommitView.showProgress();
                 postDelayed(() -> {
-                    hideDialog();
-                    startActivity(HomeActivity.class);
-                    finish();
+                    mCommitView.showSucceed();
+                    postDelayed(() -> {
+                        HomeActivity.start(getContext(), MeFragment.class);
+                        finish();
+                    }, 1000);
                 }, 2000);
                 return;
             }
@@ -170,21 +186,45 @@ public final class LoginActivity extends MyActivity
                     .request(new HttpCallback<HttpData<LoginBean>>(this) {
 
                         @Override
+                        public void onStart(Call call) {
+                            mCommitView.showProgress();
+                        }
+
+                        @Override
+                        public void onEnd(Call call) {}
+
+                        @Override
                         public void onSucceed(HttpData<LoginBean> data) {
                             // 更新 Token
                             EasyConfig.getInstance()
                                     .addParam("token", data.getData().getToken());
-                            // 跳转到主页
-                            startActivity(HomeActivity.class);
-                            finish();
+                            postDelayed(() -> {
+                                mCommitView.showSucceed();
+                                postDelayed(() -> {
+                                    // 跳转到首页
+                                    HomeActivity.start(getContext(), MeFragment.class);
+                                    finish();
+                                }, 1000);
+                            }, 1000);
+                        }
+
+                        @Override
+                        public void onFail(Exception e) {
+                            super.onFail(e);
+                            postDelayed(() -> {
+                                mCommitView.showError(3000);
+                            }, 1000);
                         }
                     });
-        } else if (v == mQQView || v == mWeChatView) {
+            return;
+        }
+
+        if (view == mQQView || view == mWeChatView) {
             toast("记得改好第三方 AppID 和 AppKey，否则会调不起来哦");
             Platform platform;
-            if (v == mQQView) {
+            if (view == mQQView) {
                 platform = Platform.QQ;
-            } else if (v == mWeChatView) {
+            } else if (view == mWeChatView) {
                 platform = Platform.WECHAT;
                 toast("也别忘了改微信 " + WXEntryActivity.class.getSimpleName() + " 类所在的包名哦");
             } else {
@@ -213,6 +253,11 @@ public final class LoginActivity extends MyActivity
      */
     @Override
     public void onSucceed(Platform platform, UmengLogin.LoginData data) {
+        if (isFinishing() || isDestroyed()) {
+            // Glide：You cannot start a load for a destroyed activity
+            return;
+        }
+
         // 判断第三方登录的平台
         switch (platform) {
             case QQ:
@@ -260,58 +305,58 @@ public final class LoginActivity extends MyActivity
 
     @Override
     public void onSoftKeyboardOpened(int keyboardHeight) {
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        int[] location = new int[2];
-        // 获取这个 View 在屏幕中的坐标（左上角）
-        mBodyLayout.getLocationOnScreen(location);
-        //int x = location[0];
-        int y = location[1];
-        int bottom = screenHeight - (y + mBodyLayout.getHeight());
-        if (keyboardHeight > bottom){
-            // 执行位移动画
-            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mBodyLayout, "translationY", 0, -(keyboardHeight - bottom));
-            objectAnimator.setDuration(mAnimTime);
-            objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            objectAnimator.start();
-
-            // 执行缩小动画
-            mLogoView.setPivotX(mLogoView.getWidth() / 2f);
-            mLogoView.setPivotY(mLogoView.getHeight());
-            AnimatorSet animatorSet = new AnimatorSet();
-            ObjectAnimator scaleX = ObjectAnimator.ofFloat(mLogoView, "scaleX", 1.0f, mLogoScale);
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(mLogoView, "scaleY", 1.0f, mLogoScale);
-            ObjectAnimator translationY = ObjectAnimator.ofFloat(mLogoView, "translationY", 0.0f, -(keyboardHeight - bottom));
-            animatorSet.play(translationY).with(scaleX).with(scaleY);
-            animatorSet.setDuration(mAnimTime);
-            animatorSet.start();
-        }
-    }
-
-    @Override
-    public void onSoftKeyboardClosed() {
         // 执行位移动画
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mBodyLayout, "translationY", mBodyLayout.getTranslationY(), 0);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mBodyLayout, "translationY", 0, -mCommitView.getHeight());
         objectAnimator.setDuration(mAnimTime);
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         objectAnimator.start();
 
-        if (mLogoView.getTranslationY() == 0){
-            return;
-        }
-        // 执行放大动画
+        // 执行缩小动画
         mLogoView.setPivotX(mLogoView.getWidth() / 2f);
         mLogoView.setPivotY(mLogoView.getHeight());
         AnimatorSet animatorSet = new AnimatorSet();
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(mLogoView, "scaleX", mLogoScale, 1.0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(mLogoView, "scaleY", mLogoScale, 1.0f);
-        ObjectAnimator translationY = ObjectAnimator.ofFloat(mLogoView, "translationY", mLogoView.getTranslationY(), 0);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(mLogoView, "scaleX", 1f, mLogoScale);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(mLogoView, "scaleY", 1f, mLogoScale);
+        ObjectAnimator translationY = ObjectAnimator.ofFloat(mLogoView, "translationY", 0f, -mCommitView.getHeight());
         animatorSet.play(translationY).with(scaleX).with(scaleY);
         animatorSet.setDuration(mAnimTime);
         animatorSet.start();
     }
 
     @Override
-    public boolean isSwipeEnable() {
+    public void onSoftKeyboardClosed() {
+        // 执行位移动画
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mBodyLayout, "translationY", mBodyLayout.getTranslationY(), 0f);
+        objectAnimator.setDuration(mAnimTime);
+        objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        objectAnimator.start();
+
+        if (mLogoView.getTranslationY() == 0) {
+            return;
+        }
+
+        // 执行放大动画
+        mLogoView.setPivotX(mLogoView.getWidth() / 2f);
+        mLogoView.setPivotY(mLogoView.getHeight());
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(mLogoView, "scaleX", mLogoScale, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(mLogoView, "scaleY", mLogoScale, 1f);
+        ObjectAnimator translationY = ObjectAnimator.ofFloat(mLogoView, "translationY", mLogoView.getTranslationY(), 0f);
+        animatorSet.play(translationY).with(scaleX).with(scaleY);
+        animatorSet.setDuration(mAnimTime);
+        animatorSet.start();
+    }
+
+    /**
+     * {@link TextView.OnEditorActionListener}
+     */
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
+            // 模拟点击登录按钮
+            onClick(mCommitView);
+            return true;
+        }
         return false;
     }
 }

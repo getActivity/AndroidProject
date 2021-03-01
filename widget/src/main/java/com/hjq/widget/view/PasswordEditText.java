@@ -1,6 +1,5 @@
 package com.hjq.widget.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
@@ -31,8 +30,8 @@ public final class PasswordEditText extends RegexEditText
     private final Drawable mVisibleDrawable;
     private final Drawable mInvisibleDrawable;
 
-    private OnTouchListener mOnTouchListener;
-    private OnFocusChangeListener mOnFocusChangeListener;
+    private OnTouchListener mTouchListener;
+    private OnFocusChangeListener mFocusChangeListener;
 
     public PasswordEditText(Context context) {
         this(context, null);
@@ -43,7 +42,6 @@ public final class PasswordEditText extends RegexEditText
     }
 
     @SuppressWarnings("all")
-    @SuppressLint("ClickableViewAccessibility")
     public PasswordEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
@@ -93,12 +91,12 @@ public final class PasswordEditText extends RegexEditText
 
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener onFocusChangeListener) {
-        mOnFocusChangeListener = onFocusChangeListener;
+        mFocusChangeListener = onFocusChangeListener;
     }
 
     @Override
     public void setOnTouchListener(OnTouchListener onTouchListener) {
-        mOnTouchListener = onTouchListener;
+        mTouchListener = onTouchListener;
     }
 
     /**
@@ -112,8 +110,8 @@ public final class PasswordEditText extends RegexEditText
         } else {
             setDrawableVisible(false);
         }
-        if (mOnFocusChangeListener != null) {
-            mOnFocusChangeListener.onFocusChange(view, hasFocus);
+        if (mFocusChangeListener != null) {
+            mFocusChangeListener.onFocusChange(view, hasFocus);
         }
     }
 
@@ -122,10 +120,25 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        int x = (int) motionEvent.getX();
-        if (mCurrentDrawable.isVisible() && x > getWidth() - getPaddingRight() - mCurrentDrawable.getIntrinsicWidth()) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+    public boolean onTouch(View view, MotionEvent event) {
+        int x = (int) event.getX();
+
+        // 是否触摸了 Drawable
+        boolean touchDrawable = false;
+        // 获取布局方向
+        int layoutDirection = getLayoutDirection();
+        if (layoutDirection == LAYOUT_DIRECTION_LTR) {
+            // 从左往右
+            touchDrawable = x > getWidth() - mCurrentDrawable.getIntrinsicWidth() - getPaddingEnd() &&
+                    x < getWidth() - getPaddingEnd();
+        } else if (layoutDirection == LAYOUT_DIRECTION_RTL) {
+            // 从右往左
+            touchDrawable = x > getPaddingStart() &&
+                    x < getPaddingStart() + mCurrentDrawable.getIntrinsicWidth();
+        }
+
+        if (mCurrentDrawable.isVisible() && touchDrawable) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (mCurrentDrawable == mVisibleDrawable) {
                     mCurrentDrawable = mInvisibleDrawable;
                     // 密码可见
@@ -144,7 +157,7 @@ public final class PasswordEditText extends RegexEditText
             }
             return true;
         }
-        return mOnTouchListener != null && mOnTouchListener.onTouch(view, motionEvent);
+        return mTouchListener != null && mTouchListener.onTouch(view, event);
     }
 
     /**

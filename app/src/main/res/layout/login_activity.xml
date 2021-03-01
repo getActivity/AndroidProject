@@ -16,7 +16,7 @@
         android:layout_height="50dp"
         app:backButton="false"
         app:barStyle="transparent"
-        app:rightColor="@color/colorAccent"
+        app:rightColor="@color/common_accent_color"
         app:rightTitle="@string/login_register"
         app:title="" />
 
@@ -57,8 +57,9 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="20dp"
             android:hint="@string/common_password_input_error"
+            android:imeOptions="actionDone"
             android:maxLength="20"
-            android:maxLines="1" />
+            android:singleLine="true" />
 
         <View
             style="@style/HorizontalLineStyle"
@@ -73,9 +74,9 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="60dp"
             android:text="@string/login_forget"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/common_accent_color" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.hjq.widget.view.SubmitButton
             android:id="@+id/btn_login_commit"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
@@ -87,7 +88,6 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/v_login_blank"
         android:layout_width="wrap_content"
         android:layout_height="0px"
         android:layout_weight="5" />

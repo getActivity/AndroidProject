@@ -1,34 +1,47 @@
+// AndroidProject 版本：v12.1
+// 发布日期：2021 年 02 月 27 日
 buildscript {
 
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://jitpack.io' }
         jcenter()
         google()
-        maven { url 'https://jitpack.io' }
     }
 
     // Studio 插件推荐：https://github.com/getActivity/StudioPlugins
     dependencies {
+        // noinspection GradleDependency
         classpath 'com.android.tools.build:gradle:3.6.3'
         // AOP 配置插件：https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx
         classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
-        // 资源混淆插件：https://github.com/shwenzhang/AndResGuard
-        classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.17'
     }
 }
 
 allprojects {
     repositories {
+        // 阿里云云效仓库，提升编译速度：https://maven.aliyun.com/mvn/guide
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://jitpack.io' }
+        // 友盟仓库：https://bintray.com/umsdk/release
+        maven { url 'https://dl.bintray.com/umsdk/release' }
         jcenter()
         google()
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
-        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
-        maven { url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/nexus/content/repositories/central/' }
-        maven { url 'https://dl.bintray.com/getactivity/maven/' }
-        maven { url 'https://dl.bintray.com/umsdk/release' }
-        maven { url 'https://maven.google.com' }
-        maven { url 'https://jitpack.io' }
+    }
+
+    tasks.withType(JavaCompile) {
+        // 设置全局编码
+        options.encoding = 'UTF-8'
+    }
+    tasks.withType(Javadoc) {
+        // 设置文档编码
+        options {
+            encoding 'UTF-8'
+            charSet 'UTF-8'
+            links 'http://docs.oracle.com/javase/7/docs/api'
+        }
     }
 }
 

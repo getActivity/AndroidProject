@@ -12,8 +12,8 @@
         <clip>
             <shape>
                 <gradient
-                    android:centerColor="@color/colorAccent"
-                    android:endColor="@color/colorButtonPressed"
+                    android:centerColor="@color/common_accent_color"
+                    android:endColor="@color/common_button_pressed_color"
                     android:startColor="@color/transparent" />
             </shape>
         </clip>
