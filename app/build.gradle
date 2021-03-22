@@ -1,6 +1,6 @@
-apply plugin : 'com.android.application'
-apply plugin : 'android-aspectjx'
-apply from : '../config.gradle'
+apply plugin: 'com.android.application'
+apply plugin: 'android-aspectjx'
+apply from: '../config.gradle'
 
 // Android 代码规范文档：https://github.com/getActivity/AndroidCodeStandard
 android {
@@ -40,11 +40,11 @@ android {
             debuggable true
             jniDebuggable true
             // 压缩对齐开关
-            zipAlignEnabled false
+            zipAlignEnabled true
             // 移除无用的资源
-            shrinkResources false
+            shrinkResources true
             // 代码混淆开关
-            minifyEnabled false
+            minifyEnabled true
             // 签名信息配置
             signingConfig signingConfigs.config
             // 日志打印开关
@@ -54,7 +54,7 @@ android {
             // 测试服务器的主机地址
             buildConfigField('String', 'HOST_URL', '"https://www.test.baidu.com/"')
             // 设置清单占位符
-            manifestPlaceholders = ['app_name' : '安卓技术中台 Debug 版']
+            manifestPlaceholders = ['app_name': '安卓技术中台 Debug 版']
             // 调试模式下只保留一种架构的 so 库，提升打包速度
             ndk {
                 abiFilters 'armeabi-v7a'
@@ -65,7 +65,7 @@ android {
         preview {
             applicationIdSuffix ''
             // 设置清单占位符
-            manifestPlaceholders = ['app_name' : '安卓技术中台 Preview 版']
+            manifestPlaceholders = ['app_name': '安卓技术中台 Preview 版']
         }
 
         release {
@@ -87,7 +87,7 @@ android {
             // 正式服务器的主机地址
             buildConfigField('String', 'HOST_URL', '"https://www.baidu.com/"')
             // 设置清单占位符
-            manifestPlaceholders = ['app_name' : '@string/app_name']
+            manifestPlaceholders = ['app_name': '@string/app_name']
             // 仅保留两种架构的 so 库，根据 Bugly 统计得出
             ndk {
                 // armeabi：万金油架构平台（占用率：0%）
