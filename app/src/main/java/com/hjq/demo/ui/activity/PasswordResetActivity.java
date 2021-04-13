@@ -106,7 +106,7 @@ public final class PasswordResetActivity extends AppActivity
             }
 
             // 重置密码
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new PasswordApi()
                             .setPhone(mPhoneNumber)
                             .setCode(mVerifyCode)
@@ -122,7 +122,7 @@ public final class PasswordResetActivity extends AppActivity
                                     .addOnDismissListener(dialog -> finish())
                                     .show();
                         }
-                    });
+                    });*/
         }
     }
 

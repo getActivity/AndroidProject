@@ -179,7 +179,7 @@ public final class LoginActivity extends AppActivity
                 return;
             }
 
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new LoginApi()
                             .setPhone(mPhoneView.getText().toString())
                             .setPassword(mPasswordView.getText().toString()))
@@ -215,7 +215,7 @@ public final class LoginActivity extends AppActivity
                                 mCommitView.showError(3000);
                             }, 1000);
                         }
-                    });
+                    });*/
             return;
         }
 

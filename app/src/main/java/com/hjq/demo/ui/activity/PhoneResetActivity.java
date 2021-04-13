@@ -99,7 +99,7 @@ public final class PhoneResetActivity extends AppActivity
             }
 
             // 获取验证码
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
                     .request(new HttpCallback<HttpData<Void>>(this) {
@@ -109,7 +109,7 @@ public final class PhoneResetActivity extends AppActivity
                             toast(R.string.common_code_send_hint);
                             mCountdownView.start();
                         }
-                    });
+                    });*/
         } else if (view == mCommitView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
@@ -137,7 +137,7 @@ public final class PhoneResetActivity extends AppActivity
             }
 
             // 更换手机号
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new PhoneApi()
                             .setPreCode(mVerifyCode)
                             .setPhone(mPhoneView.getText().toString())
@@ -153,7 +153,7 @@ public final class PhoneResetActivity extends AppActivity
                                     .addOnDismissListener(dialog -> finish())
                                     .show();
                         }
-                    });
+                    });*/
         }
     }
 

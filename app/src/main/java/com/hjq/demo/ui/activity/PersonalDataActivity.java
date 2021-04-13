@@ -221,7 +221,7 @@ public final class PersonalDataActivity extends AppActivity {
             return;
         }
 
-        EasyHttp.post(this)
+        /*EasyHttp.post(this)
                 .api(new UpdateImageApi()
                         .setImage(file))
                 .request(new HttpCallback<HttpData<String>>(PersonalDataActivity.this) {
@@ -237,7 +237,7 @@ public final class PersonalDataActivity extends AppActivity {
                             file.delete();
                         }
                     }
-                });
+                });*/
     }
 
     /**
