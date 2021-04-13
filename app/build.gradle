@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-aspectjx'
 apply from: '../config.gradle'
+apply plugin: 'bugly'
+bugly {
+    appId = "111e85df81"
+    appKey = "57d67920-f7ef-432a-b938-f3101960e677"
+    debug = true
+}
 
 // Android 代码规范文档：https://github.com/getActivity/AndroidCodeStandard
 android {
