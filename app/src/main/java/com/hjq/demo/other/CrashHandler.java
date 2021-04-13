@@ -8,14 +8,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.hjq.demo.ui.activity.CrashActivity;
-import com.hjq.demo.ui.activity.HomeActivity;
-import com.hjq.demo.ui.activity.LoginActivity;
 import com.hjq.demo.ui.activity.RestartActivity;
-import com.hjq.demo.ui.activity.SplashActivity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  *    author : Android 轮子哥

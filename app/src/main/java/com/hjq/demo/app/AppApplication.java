@@ -21,15 +21,12 @@ import com.hjq.bar.initializer.LightBarInitializer;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.http.glide.GlideApp;
-import com.hjq.demo.http.model.RequestHandler;
-import com.hjq.demo.http.model.RequestServer;
 import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.other.CrashHandler;
 import com.hjq.demo.other.DebugLoggerTree;
 import com.hjq.demo.other.SmartBallPulseFooter;
 import com.hjq.demo.other.ToastInterceptor;
-import com.hjq.http.EasyConfig;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.ToastBlackStyle;
@@ -143,21 +140,6 @@ public final class AppApplication extends Application {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
 
-        EasyConfig.with(okHttpClient)
-                // 是否打印日志
-                .setLogEnabled(AppConfig.isLogEnable())
-                // 设置服务器配置
-                .setServer(new RequestServer())
-                // 设置请求处理策略
-                .setHandler(new RequestHandler(application))
-                // 设置请求重试次数
-                .setRetryCount(1)
-                // 添加全局请求参数
-                //.addParam("token", "6666666")
-                // 添加全局请求头
-                //.addHeader("time", "20191030")
-                // 启用配置
-                .into();
 
         // 初始化日志打印
         if (AppConfig.isLogEnable()) {

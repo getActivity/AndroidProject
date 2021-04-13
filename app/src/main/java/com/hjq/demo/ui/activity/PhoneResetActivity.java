@@ -15,14 +15,9 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.PhoneApi;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.ui.dialog.HintDialog;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.toast.ToastUtils;
 import com.hjq.widget.view.CountdownView;
 

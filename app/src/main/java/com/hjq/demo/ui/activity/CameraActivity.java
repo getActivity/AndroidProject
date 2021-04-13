@@ -14,7 +14,6 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;

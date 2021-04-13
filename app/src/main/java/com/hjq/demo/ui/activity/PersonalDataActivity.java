@@ -19,13 +19,9 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.glide.GlideApp;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.UpdateImageApi;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.ui.dialog.AddressDialog;
 import com.hjq.demo.ui.dialog.InputDialog;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.layout.SettingBar;
 
 import java.io.File;

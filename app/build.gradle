@@ -146,7 +146,7 @@ dependencies {
     implementation 'com.hjq:toast:8.8'
 
     // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation 'com.hjq:http:9.0'
+//    implementation 'com.hjq:http:9.0' 淘汰不用
     // OkHttp 框架：https://github.com/square/okhttp
     // noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:3.12.12'

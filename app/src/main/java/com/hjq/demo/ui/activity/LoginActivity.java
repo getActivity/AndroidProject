@@ -22,23 +22,15 @@ import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.glide.GlideApp;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.LoginApi;
-import com.hjq.demo.http.response.LoginBean;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.other.KeyboardWatcher;
 import com.hjq.demo.ui.fragment.MeFragment;
 import com.hjq.demo.wxapi.WXEntryActivity;
-import com.hjq.http.EasyConfig;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
 import com.hjq.widget.view.SubmitButton;
-
-import okhttp3.Call;
 
 /**
  *    author : Android 轮子哥
