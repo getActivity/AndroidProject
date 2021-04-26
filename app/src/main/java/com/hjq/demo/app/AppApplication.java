@@ -34,15 +34,16 @@ import com.hjq.umeng.UmengClient;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.mmkv.MMKV;
 
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2018/10/18
- *    desc   : 应用入口
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2018/10/18
+ * desc   : 应用入口
  */
 public final class AppApplication extends Application {
 
@@ -50,7 +51,12 @@ public final class AppApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        init();
         initSdk(this);
+    }
+
+    private void init() {
+        MMKV.initialize(this);
     }
 
     @Override
