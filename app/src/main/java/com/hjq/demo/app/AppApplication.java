@@ -31,7 +31,7 @@ import com.hjq.permissions.XXPermissions;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.ToastBlackStyle;
 import com.hjq.umeng.UmengClient;
-import com.scwang.smart.refresh.header.MaterialHeader;
+import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mmkv.MMKV;
@@ -122,7 +122,7 @@ public final class AppApplication extends Application {
 
         // 设置全局的 Header 构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator((context, layout) ->
-                new MaterialHeader(context).setColorSchemeColors(ContextCompat.getColor(context, R.color.common_accent_color)));
+                new ClassicsHeader(context).setAccentColor(ContextCompat.getColor(context, R.color.common_accent_color)));
         // 设置全局的 Footer 构建器
         SmartRefreshLayout.setDefaultRefreshFooterCreator((context, layout) -> new SmartBallPulseFooter(context));
         // 设置全局初始化器
