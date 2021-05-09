@@ -16,18 +16,10 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.RegisterApi;
-import com.hjq.demo.http.response.RegisterBean;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.view.CountdownView;
 import com.hjq.widget.view.SubmitButton;
-
-import okhttp3.Call;
 
 /**
  *    author : Android 轮子哥
@@ -122,7 +114,7 @@ public final class RegisterActivity extends AppActivity
             }
 
             // 获取验证码
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
                     .request(new HttpCallback<HttpData<Void>>(this) {
@@ -138,7 +130,7 @@ public final class RegisterActivity extends AppActivity
                             super.onFail(e);
                             mCountdownView.start();
                         }
-                    });
+                    });*/
         } else if (view == mCommitView) {
             if (mPhoneView.getText().toString().length() != 11) {
                 mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
@@ -180,7 +172,7 @@ public final class RegisterActivity extends AppActivity
             }
 
             // 提交注册
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new RegisterApi()
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString())
@@ -215,7 +207,7 @@ public final class RegisterActivity extends AppActivity
                                 mCommitView.showError(3000);
                             }, 1000);
                         }
-                    });
+                    });*/
         }
     }
 

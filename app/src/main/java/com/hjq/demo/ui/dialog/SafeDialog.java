@@ -8,11 +8,6 @@ import android.widget.TextView;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.VerifyCodeApi;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.OnHttpListener;
 import com.hjq.toast.ToastUtils;
 import com.hjq.widget.view.CountdownView;
 
@@ -73,7 +68,7 @@ public final class SafeDialog {
                 }
 
                 // 获取验证码
-                EasyHttp.post(getDialog())
+                /*EasyHttp.post(getDialog())
                         .api(new GetCodeApi()
                                 .setPhone(mPhoneNumber))
                         .request(new OnHttpListener<HttpData<Void>>() {
@@ -89,7 +84,7 @@ public final class SafeDialog {
                             public void onFail(Exception e) {
                                 ToastUtils.show(e.getMessage());
                             }
-                        });
+                        });*/
             } else if (viewId == R.id.tv_ui_confirm) {
                 if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
                     ToastUtils.show(R.string.common_code_error_hint);
@@ -105,7 +100,7 @@ public final class SafeDialog {
                 }
 
                 // 验证码校验
-                EasyHttp.post(getDialog())
+                /*EasyHttp.post(getDialog())
                         .api(new VerifyCodeApi()
                                 .setPhone(mPhoneNumber)
                                 .setCode(mCodeView.getText().toString()))
@@ -123,7 +118,7 @@ public final class SafeDialog {
                             public void onFail(Exception e) {
                                 ToastUtils.show(e.getMessage());
                             }
-                        });
+                        });*/
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
                 if (mListener != null) {

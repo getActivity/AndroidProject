@@ -15,13 +15,9 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.PasswordApi;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.ui.dialog.HintDialog;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 
 /**
  *    author : Android 轮子哥
@@ -106,7 +102,7 @@ public final class PasswordResetActivity extends AppActivity
             }
 
             // 重置密码
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new PasswordApi()
                             .setPhone(mPhoneNumber)
                             .setCode(mVerifyCode)
@@ -122,7 +118,7 @@ public final class PasswordResetActivity extends AppActivity
                                     .addOnDismissListener(dialog -> finish())
                                     .show();
                         }
-                    });
+                    });*/
         }
     }
 

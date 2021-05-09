@@ -12,12 +12,7 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.UserInfoApi;
-import com.hjq.demo.http.response.UserInfoBean;
 import com.hjq.demo.other.AppConfig;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.view.SlantedTextView;
 
 /**
@@ -65,7 +60,7 @@ public final class SplashActivity extends AppActivity {
             return;
         }
         // 刷新用户信息
-        EasyHttp.post(this)
+        /*EasyHttp.post(this)
                 .api(new UserInfoApi())
                 .request(new HttpCallback<HttpData<UserInfoBean>>(this) {
 
@@ -73,7 +68,7 @@ public final class SplashActivity extends AppActivity {
                     public void onSucceed(HttpData<UserInfoBean> data) {
 
                     }
-                });
+                });*/
     }
 
     @NonNull

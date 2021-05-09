@@ -15,14 +15,9 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.PhoneApi;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.ui.dialog.HintDialog;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.toast.ToastUtils;
 import com.hjq.widget.view.CountdownView;
 
@@ -99,7 +94,7 @@ public final class PhoneResetActivity extends AppActivity
             }
 
             // 获取验证码
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
                     .request(new HttpCallback<HttpData<Void>>(this) {
@@ -109,7 +104,7 @@ public final class PhoneResetActivity extends AppActivity
                             toast(R.string.common_code_send_hint);
                             mCountdownView.start();
                         }
-                    });
+                    });*/
         } else if (view == mCommitView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
@@ -137,7 +132,7 @@ public final class PhoneResetActivity extends AppActivity
             }
 
             // 更换手机号
-            EasyHttp.post(this)
+            /*EasyHttp.post(this)
                     .api(new PhoneApi()
                             .setPreCode(mVerifyCode)
                             .setPhone(mPhoneView.getText().toString())
@@ -153,7 +148,7 @@ public final class PhoneResetActivity extends AppActivity
                                     .addOnDismissListener(dialog -> finish())
                                     .show();
                         }
-                    });
+                    });*/
         }
     }
 

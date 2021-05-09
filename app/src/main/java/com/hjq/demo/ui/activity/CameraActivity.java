@@ -14,7 +14,6 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.DebugLog;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.other.IntentKey;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -25,10 +24,10 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2019/12/18
- *    desc   : 拍摄图片、视频
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2019/12/18
+ * desc   : 拍摄图片、视频
  */
 public final class CameraActivity extends AppActivity {
 
@@ -91,7 +90,7 @@ public final class CameraActivity extends AppActivity {
             Uri imageUri;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // 通过 FileProvider 创建一个 Content 类型的 Uri 文件
-                imageUri = FileProvider.getUriForFile(this, AppConfig.getPackageName() + ".provider", file);
+                imageUri = FileProvider.getUriForFile(this, getApplication().getPackageName() + ".provider", file);
             } else {
                 imageUri = Uri.fromFile(file);
             }
@@ -137,13 +136,14 @@ public final class CameraActivity extends AppActivity {
         /**
          * 选择回调
          *
-         * @param file          文件
+         * @param file 文件
          */
         void onSelected(File file);
 
         /**
          * 取消回调
          */
-        default void onCancel() {}
+        default void onCancel() {
+        }
     }
 }

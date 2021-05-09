@@ -15,29 +15,33 @@ import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.action.TitleBarAction;
 import com.hjq.demo.action.ToastAction;
-import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.ui.dialog.WaitDialog;
-import com.hjq.http.listener.OnHttpListener;
-
-import okhttp3.Call;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2018/10/18
- *    desc   : 业务 Activity 基类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2018/10/18
+ * desc   : 业务 Activity 基类
  */
 public abstract class AppActivity extends BaseActivity
-        implements ToastAction, TitleBarAction, OnHttpListener<Object> {
+        implements ToastAction, TitleBarAction {
 
-    /** 标题栏对象 */
+    /**
+     * 标题栏对象
+     */
     private TitleBar mTitleBar;
-    /** 状态栏沉浸 */
+    /**
+     * 状态栏沉浸
+     */
     private ImmersionBar mImmersionBar;
 
-    /** 加载对话框 */
+    /**
+     * 加载对话框
+     */
     private BaseDialog mDialog;
-    /** 对话框数量 */
+    /**
+     * 对话框数量
+     */
     private int mDialogTotal;
 
     /**
@@ -184,31 +188,6 @@ public abstract class AppActivity extends BaseActivity
         overridePendingTransition(R.anim.left_in_activity, R.anim.left_out_activity);
     }
 
-    /**
-     * {@link OnHttpListener}
-     */
-
-    @Override
-    public void onStart(Call call) {
-        showDialog();
-    }
-
-    @Override
-    public void onSucceed(Object result) {
-        if (result instanceof HttpData) {
-            toast(((HttpData<?>) result).getMessage());
-        }
-    }
-
-    @Override
-    public void onFail(Exception e) {
-        toast(e.getMessage());
-    }
-
-    @Override
-    public void onEnd(Call call) {
-        hideDialog();
-    }
 
     @Override
     protected void onDestroy() {
