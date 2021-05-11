@@ -1,6 +1,7 @@
 package com.hjq.demo.ui.activity;
 
 import android.content.Intent;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -119,6 +120,10 @@ public final class DialogActivity extends AppActivity {
                     .setCancel(getString(R.string.common_cancel))
                     // 设置点击按钮后不关闭对话框
                     //.setAutoDismiss(false)
+                    // 设置输入类型
+                    .setInputType(InputType.TYPE_CLASS_NUMBER)
+                    // 设置输入限制
+                    .setDigits("012345")
                     .setListener(new InputDialog.OnListener() {
 
                         @Override
