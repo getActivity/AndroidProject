@@ -27,7 +27,7 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
         // 友盟仓库：https://bintray.com/umsdk/release
-        maven { url 'https://dl.bintray.com/umsdk/release' }
+        maven { url 'https://repo1.maven.org/maven2/' }
 //        jcenter()
         google()
     }

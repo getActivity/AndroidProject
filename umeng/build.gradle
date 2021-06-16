@@ -25,10 +25,10 @@ android {
 
 dependencies {
     // 友盟基础组件：https://bintray.com/umsdk/release/common
-    implementation 'com.umeng.umsdk:common:2.2.5'
+    implementation 'com.umeng.umsdk:common:9.3.8'
 
     // 友盟统计：https://bintray.com/umsdk/release/analytics
-    implementation 'com.umeng.umsdk:analytics:8.1.6'
+//    implementation 'com.umeng.umsdk:analytics:8.1.6'
 
     // 友盟社会化：https://bintray.com/umsdk/release/share-core
     //implementation 'com.umeng.umsdk:share-core:6.9.8'
