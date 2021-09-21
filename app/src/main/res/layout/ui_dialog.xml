@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="260dp"
+    android:layout_width="@dimen/dp_240"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardBackgroundColor="@color/white"
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="20dp">
+        android:paddingTop="@dimen/dp_20">
 
         <com.hjq.widget.view.SmartTextView
             android:id="@+id/tv_ui_title"
@@ -23,14 +23,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textColor="#333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold"
             tools:text="标题" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp_10"
             android:background="@color/common_line_color" />
 
         <LinearLayout
@@ -46,10 +46,10 @@
                 android:background="@drawable/transparent_selector"
                 android:focusable="true"
                 android:gravity="center"
-                android:paddingVertical="15dp"
+                android:paddingVertical="@dimen/dp_15"
                 android:text="@string/common_cancel"
                 android:textColor="@color/common_cancel_text_color"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp_14" />
 
             <View
                 android:id="@+id/v_ui_line"
@@ -65,10 +65,10 @@
                 android:background="@drawable/transparent_selector"
                 android:focusable="true"
                 android:gravity="center"
-                android:paddingVertical="15dp"
+                android:paddingVertical="@dimen/dp_15"
                 android:text="@string/common_confirm"
                 android:textColor="@color/common_confirm_text_color"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp_14" />
         </LinearLayout>
 
     </LinearLayout>

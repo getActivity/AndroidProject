@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="@dimen/dp_40"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
         app:lottie_rawRes="@raw/welcome" />
@@ -24,10 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:colorBackground="#b65656"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp"
+        android:paddingHorizontal="@dimen/dp_15"
+        android:paddingVertical="@dimen/dp_10"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/sp_12"
         android:textStyle="bold"
         tools:text="DEBUG" />
 
@@ -36,11 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginBottom="@dimen/dp_30"
         android:text="@string/app_name"
         android:textColor="@color/black60"
-        android:textSize="18sp"
+        android:textSize="@dimen/sp_18"
         android:textStyle="bold" />
 
 </FrameLayout>

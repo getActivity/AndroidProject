@@ -16,9 +16,8 @@ import androidx.annotation.NonNull;
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
 import com.hjq.demo.aop.CheckNet;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.widget.BrowserView;
 import com.hjq.demo.widget.StatusLayout;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -34,14 +33,16 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 public final class BrowserActivity extends AppActivity
         implements StatusAction, OnRefreshListener {
 
+    private static final String INTENT_KEY_IN_URL = "url";
+
     @CheckNet
-    @DebugLog
+    @Log
     public static void start(Context context, String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
         Intent intent = new Intent(context, BrowserActivity.class);
-        intent.putExtra(IntentKey.URL, url);
+        intent.putExtra(INTENT_KEY_IN_URL, url);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -75,9 +76,9 @@ public final class BrowserActivity extends AppActivity
     protected void initData() {
         showLoading();
 
-        mBrowserView.setBrowserViewClient(new MyBrowserViewClient());
-        mBrowserView.setBrowserChromeClient(new MyBrowserChromeClient(mBrowserView));
-        mBrowserView.loadUrl(getString(IntentKey.URL));
+        mBrowserView.setBrowserViewClient(new AppBrowserViewClient());
+        mBrowserView.setBrowserChromeClient(new AppBrowserChromeClient(mBrowserView));
+        mBrowserView.loadUrl(getString(INTENT_KEY_IN_URL));
     }
 
     @Override
@@ -117,7 +118,7 @@ public final class BrowserActivity extends AppActivity
         reload();
     }
 
-    private class MyBrowserViewClient extends BrowserView.BrowserViewClient {
+    private class AppBrowserViewClient extends BrowserView.BrowserViewClient {
 
         /**
          * 网页加载错误时回调，这个方法会在 onPageFinished 之前调用
@@ -125,7 +126,7 @@ public final class BrowserActivity extends AppActivity
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             // 这里为什么要用延迟呢？因为加载出错之后会先调用 onReceivedError 再调用 onPageFinished
-            post(() -> showError(v -> reload()));
+            post(() -> showError(listener -> reload()));
         }
 
         /**
@@ -147,9 +148,9 @@ public final class BrowserActivity extends AppActivity
         }
     }
 
-    private class MyBrowserChromeClient extends BrowserView.BrowserChromeClient {
+    private class AppBrowserChromeClient extends BrowserView.BrowserChromeClient {
 
-        private MyBrowserChromeClient(BrowserView view) {
+        private AppBrowserChromeClient(BrowserView view) {
             super(view);
         }
 
@@ -158,16 +159,18 @@ public final class BrowserActivity extends AppActivity
          */
         @Override
         public void onReceivedTitle(WebView view, String title) {
-            if (title != null) {
-                setTitle(title);
+            if (title == null) {
+                return;
             }
+            setTitle(title);
         }
 
         @Override
         public void onReceivedIcon(WebView view, Bitmap icon) {
-            if (icon != null) {
-                setRightIcon(new BitmapDrawable(getResources(), icon));
+            if (icon == null) {
+                return;
             }
+            setRightIcon(new BitmapDrawable(getResources(), icon));
         }
 
         /**

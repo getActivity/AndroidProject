@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- 应用主题样式 -->
@@ -13,7 +14,7 @@
         <!-- 默认文本颜色，Button、TextView 的文字颜色 -->
         <item name="android:textColor">@color/common_text_color</item>
         <!-- 默认字体大小，Button、TextView 的字体大小 -->
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/sp_14</item>
         <!-- 默认提示颜色，Button、TextView 的提示文字颜色 -->
         <item name="android:textColorHint">@color/common_text_hint_color</item>
         <!-- ActionMode 覆盖 Actionbar 不被顶下来 -->
@@ -29,6 +30,8 @@
         <!--<item name="android:windowSoftInputMode">stateHidden</item>-->
         <!-- 关闭 RecyclerView NestedScrollView ViewPager 水波纹效果 -->
         <item name="android:overScrollMode">never</item>
+        <!-- 关闭 TextView 自带的文字间距 -->
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- 全屏主题样式 -->
@@ -43,36 +46,38 @@
         <item name="android:windowDisablePreview">true</item>
     </style>
 
-    <!-- 默认圆角按钮样式 -->
+    <!-- 默认按钮样式 -->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">20dp</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">@dimen/dp_20</item>
+        <item name="android:paddingEnd">@dimen/dp_20</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:paddingBottom">@dimen/dp_10</item>
+        <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:textColor">@color/white90</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/button_round_selector</item>
+        <item name="android:background">@drawable/button_circle_selector</item>
         <item name="android:foreground">@null</item>
     </style>
 
-    <!-- 不带圆角按钮样式 -->
+    <!-- 直角按钮样式 -->
     <style name="RectButtonStyle" parent="ButtonStyle">
-        <item name="android:paddingStart">15dp</item>
-        <item name="android:paddingEnd">15dp</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
+        <item name="android:paddingTop">@dimen/dp_5</item>
+        <item name="android:paddingBottom">@dimen/dp_5</item>
         <item name="android:background">@drawable/button_rect_selector</item>
     </style>
 
     <!-- 默认文本框样式 -->
     <style name="EditTextStyle">
         <item name="android:background">@null</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/sp_15</item>
         <item name="android:textColorHint">#A4A4A4</item>
         <item name="android:textColor">#333333</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingStart">10dp</item>
-        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:paddingBottom">@dimen/dp_10</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
     </style>
 
     <!-- 默认水平分割线样式 -->
@@ -94,22 +99,17 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/countdown_selector</item>
-        <item name="android:layout_marginStart">15dp</item>
-        <item name="android:layout_marginEnd">15dp</item>
-        <item name="android:paddingStart">5dp</item>
-        <item name="android:paddingEnd">5dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:minWidth">90dp</item>
+        <item name="android:layout_marginStart">@dimen/dp_15</item>
+        <item name="android:layout_marginEnd">@dimen/dp_15</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:paddingBottom">@dimen/dp_10</item>
+        <item name="android:minWidth">@dimen/dp_90</item>
         <item name="android:gravity">center</item>
         <item name="android:text">@string/common_code_send</item>
         <item name="android:textColor">@drawable/countdown_color_selector</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <!-- 底部导航栏字体样式 -->
-    <style name="BottomTabTextStyle" >
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/sp_12</item>
     </style>
 
 </resources>

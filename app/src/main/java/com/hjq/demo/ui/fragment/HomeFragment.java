@@ -7,15 +7,16 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.FragmentPagerAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppFragment;
 import com.hjq.demo.app.TitleBarFragment;
 import com.hjq.demo.ui.activity.HomeActivity;
+import com.hjq.demo.ui.adapter.TabAdapter;
 import com.hjq.demo.widget.XCollapsingToolbarLayout;
 
 /**
@@ -25,7 +26,8 @@ import com.hjq.demo.widget.XCollapsingToolbarLayout;
  *    desc   : 首页 Fragment
  */
 public final class HomeFragment extends TitleBarFragment<HomeActivity>
-        implements XCollapsingToolbarLayout.OnScrimsListener {
+        implements TabAdapter.OnTabListener, ViewPager.OnPageChangeListener,
+        XCollapsingToolbarLayout.OnScrimsListener {
 
     private XCollapsingToolbarLayout mCollapsingToolbarLayout;
     private Toolbar mToolbar;
@@ -34,8 +36,10 @@ public final class HomeFragment extends TitleBarFragment<HomeActivity>
     private TextView mHintView;
     private AppCompatImageView mSearchView;
 
-    private TabLayout mTabLayout;
+    private RecyclerView mTabView;
     private ViewPager mViewPager;
+
+    private TabAdapter mTabAdapter;
     private FragmentPagerAdapter<AppFragment<?>> mPagerAdapter;
 
     public static HomeFragment newInstance() {
@@ -56,14 +60,17 @@ public final class HomeFragment extends TitleBarFragment<HomeActivity>
         mHintView = findViewById(R.id.tv_home_hint);
         mSearchView = findViewById(R.id.iv_home_search);
 
-        mTabLayout = findViewById(R.id.tl_home_tab);
+        mTabView = findViewById(R.id.rv_home_tab);
         mViewPager = findViewById(R.id.vp_home_pager);
 
         mPagerAdapter = new FragmentPagerAdapter<>(this);
         mPagerAdapter.addFragment(StatusFragment.newInstance(), "列表演示");
         mPagerAdapter.addFragment(BrowserFragment.newInstance("https://github.com/getActivity"), "网页演示");
         mViewPager.setAdapter(mPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(this);
+
+        mTabAdapter = new TabAdapter(getAttachActivity());
+        mTabView.setAdapter(mTabAdapter);
 
         // 给这个 ToolBar 设置顶部内边距，才能和 TitleBar 进行对齐
         ImmersionBar.setTitleBar(getAttachActivity(), mToolbar);
@@ -74,7 +81,9 @@ public final class HomeFragment extends TitleBarFragment<HomeActivity>
 
     @Override
     protected void initData() {
-
+        mTabAdapter.addItem("列表演示");
+        mTabAdapter.addItem("网页演示");
+        mTabAdapter.setOnTabListener(this);
     }
 
     @Override
@@ -89,6 +98,34 @@ public final class HomeFragment extends TitleBarFragment<HomeActivity>
     }
 
     /**
+     * {@link TabAdapter.OnTabListener}
+     */
+
+    @Override
+    public boolean onTabSelected(RecyclerView recyclerView, int position) {
+        mViewPager.setCurrentItem(position);
+        return true;
+    }
+
+    /**
+     * {@link ViewPager.OnPageChangeListener}
+     */
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+    @Override
+    public void onPageSelected(int position) {
+        if (mTabAdapter == null) {
+            return;
+        }
+        mTabAdapter.setSelectedPosition(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {}
+
+    /**
      * CollapsingToolbarLayout 渐变回调
      *
      * {@link XCollapsingToolbarLayout.OnScrimsListener}
@@ -96,18 +133,18 @@ public final class HomeFragment extends TitleBarFragment<HomeActivity>
     @SuppressLint("RestrictedApi")
     @Override
     public void onScrimsStateChange(XCollapsingToolbarLayout layout, boolean shown) {
-        if (shown) {
-            mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.black));
-            mHintView.setBackgroundResource(R.drawable.home_search_bar_gray_bg);
-            mHintView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.black60));
-            mSearchView.setSupportImageTintList(ColorStateList.valueOf(getColor(R.color.common_icon_color)));
-            getStatusBarConfig().statusBarDarkFont(true).init();
-        } else {
-            mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.white));
-            mHintView.setBackgroundResource(R.drawable.home_search_bar_transparent_bg);
-            mHintView.setTextColor(ContextCompat.getColor(getAttachActivity(), R.color.white60));
-            mSearchView.setSupportImageTintList(ColorStateList.valueOf(getColor(R.color.white)));
-            getStatusBarConfig().statusBarDarkFont(false).init();
-        }
+        getStatusBarConfig().statusBarDarkFont(shown).init();
+        mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), shown ? R.color.black : R.color.white));
+        mHintView.setBackgroundResource(shown ? R.drawable.home_search_bar_gray_bg : R.drawable.home_search_bar_transparent_bg);
+        mHintView.setTextColor(ContextCompat.getColor(getAttachActivity(), shown ? R.color.black60 : R.color.white60));
+        mSearchView.setSupportImageTintList(ColorStateList.valueOf(getColor(shown ? R.color.common_icon_color : R.color.white)));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewPager.setAdapter(null);
+        mViewPager.removeOnPageChangeListener(this);
+        mTabAdapter.setOnTabListener(null);
     }
 }

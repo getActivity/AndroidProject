@@ -11,7 +11,7 @@ import okhttp3.Call;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 业务 Fragment 基类
+ *    desc   : Fragment 业务基类
  */
 public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
         implements ToastAction, OnHttpListener<Object> {
@@ -21,11 +21,10 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
      */
     public boolean isShowDialog() {
         A activity = getAttachActivity();
-        if (activity != null) {
-            return activity.isShowDialog();
+        if (activity == null) {
+            return false;
         }
-
-        return false;
+        return activity.isShowDialog();
     }
 
     /**
@@ -33,9 +32,10 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
      */
     public void showDialog() {
         A activity = getAttachActivity();
-        if (activity != null) {
-            activity.showDialog();
+        if (activity == null) {
+            return;
         }
+        activity.showDialog();
     }
 
     /**
@@ -43,9 +43,10 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
      */
     public void hideDialog() {
         A activity = getAttachActivity();
-        if (activity != null) {
-            activity.hideDialog();
+        if (activity == null) {
+            return;
         }
+        activity.hideDialog();
     }
 
     /**
@@ -59,9 +60,10 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
 
     @Override
     public void onSucceed(Object result) {
-        if (result instanceof HttpData) {
-            toast(((HttpData<?>) result).getMessage());
+        if (!(result instanceof HttpData)) {
+            return;
         }
+        toast(((HttpData<?>) result).getMessage());
     }
 
     @Override

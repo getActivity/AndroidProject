@@ -1,6 +1,5 @@
 package com.hjq.demo.ui.fragment;
 
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -76,8 +75,7 @@ public final class MessageFragment extends TitleBarFragment<HomeActivity> {
             mImageView.setVisibility(View.VISIBLE);
             GlideApp.with(this)
                     .load("https://www.baidu.com/img/bd_logo.png")
-                    .transform(new RoundedCorners((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                            20, getResources().getDisplayMetrics())))
+                    .transform(new RoundedCorners((int) getResources().getDimension(R.dimen.dp_20)))
                     .into(mImageView);
 
         } else if (viewId == R.id.btn_message_toast) {
@@ -90,15 +88,21 @@ public final class MessageFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_message_setting) {
 
-            XXPermissions.startApplicationDetails(this);
+            XXPermissions.startPermissionActivity(this);
 
         } else if (viewId == R.id.btn_message_black) {
 
-            getAttachActivity().getStatusBarConfig().statusBarDarkFont(true).init();
+            getAttachActivity()
+                    .getStatusBarConfig()
+                    .statusBarDarkFont(true)
+                    .init();
 
         } else if (viewId == R.id.btn_message_white) {
 
-            getAttachActivity().getStatusBarConfig().statusBarDarkFont(false).init();
+            getAttachActivity()
+                    .getStatusBarConfig()
+                    .statusBarDarkFont(false)
+                    .init();
 
         } else if (viewId == R.id.btn_message_tab) {
 

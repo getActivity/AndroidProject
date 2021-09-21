@@ -8,14 +8,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.hjq.demo.ui.activity.CrashActivity;
-import com.hjq.demo.ui.activity.HomeActivity;
-import com.hjq.demo.ui.activity.LoginActivity;
 import com.hjq.demo.ui.activity.RestartActivity;
-import com.hjq.demo.ui.activity.SplashActivity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  *    author : Android 轮子哥
@@ -29,14 +22,14 @@ public final class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String CRASH_FILE_NAME = "crash_file";
     /** Crash 时间记录 */
     private static final String KEY_CRASH_TIME = "key_crash_time";
-    
+
     /**
      * 注册 Crash 监听
      */
     public static void register(Application application) {
         Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(application));
     }
-    
+
     private final Application mApplication;
     private final Thread.UncaughtExceptionHandler mNextHandler;
 
@@ -61,11 +54,13 @@ public final class CrashHandler implements Thread.UncaughtExceptionHandler {
         // 致命异常标记：如果上次崩溃的时间距离当前崩溃小于 5 分钟，那么判定为致命异常
         boolean deadlyCrash = currentCrashTime - lastCrashTime < 1000 * 60 * 5;
 
-        // 如果是致命的异常，或者是调试模式下
-        if (deadlyCrash || AppConfig.isDebug()) {
+        if (AppConfig.isDebug()) {
             CrashActivity.start(mApplication, throwable);
         } else {
-            RestartActivity.start(mApplication);
+            if (!deadlyCrash) {
+                // 如果不是致命的异常就自动重启应用
+                RestartActivity.start(mApplication);
+            }
         }
 
         // 不去触发系统的崩溃处理（com.android.internal.os.RuntimeInit$KillApplicationHandler）

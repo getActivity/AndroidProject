@@ -21,10 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="20dp">
+        android:paddingStart="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_20">
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/iv_video_select_check"
@@ -43,8 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/black30"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp">
+        android:paddingHorizontal="@dimen/dp_15"
+        android:paddingVertical="@dimen/dp_10">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_video_select_duration"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             tools:text="10:00" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             tools:text="10.24M" />
     </FrameLayout>
 

@@ -9,13 +9,14 @@ import androidx.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
+import com.hjq.demo.R;
 import com.hjq.demo.action.TitleBarAction;
 
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2020/10/31
- *    desc   : 带标题栏的 Fragment 基类
+ *    desc   : 带标题栏的 Fragment 业务基类
  */
 public abstract class TitleBarFragment<A extends AppActivity> extends AppFragment<A>
         implements TitleBarAction {
@@ -28,18 +29,20 @@ public abstract class TitleBarFragment<A extends AppActivity> extends AppFragmen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // 设置标题栏沉浸
-        if (isStatusBarEnabled() && getTitleBar() != null) {
-            ImmersionBar.setTitleBar(this, getTitleBar());
-        }
 
+        // 设置标题栏点击监听
         if (getTitleBar() != null) {
             getTitleBar().setOnTitleBarListener(this);
         }
 
-        // 初始化沉浸式状态栏
         if (isStatusBarEnabled()) {
+            // 初始化沉浸式状态栏
             getStatusBarConfig().init();
+
+            if (getTitleBar() != null) {
+                // 设置标题栏沉浸
+                ImmersionBar.setTitleBar(this, getTitleBar());
+            }
         }
     }
 
@@ -79,7 +82,7 @@ public abstract class TitleBarFragment<A extends AppActivity> extends AppFragmen
                 // 默认状态栏字体颜色为黑色
                 .statusBarDarkFont(isStatusBarDarkFont())
                 // 指定导航栏背景颜色
-                .navigationBarColor(android.R.color.white)
+                .navigationBarColor(R.color.white)
                 // 状态栏字体和导航栏内容自动变色，必须指定状态栏颜色和导航栏颜色才可以自动变色
                 .autoDarkModeEnable(true, 0.2f);
     }

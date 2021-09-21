@@ -5,12 +5,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.http.api.GetCodeApi;
+import com.hjq.demo.http.api.VerifyCodeApi;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.VerifyCodeApi;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnHttpListener;
 import com.hjq.toast.ToastUtils;
@@ -31,6 +33,7 @@ public final class SafeDialog {
         private final EditText mCodeView;
         private final CountdownView mCountdownView;
 
+        @Nullable
         private OnListener mListener;
 
         /** 当前手机号 */
@@ -98,9 +101,10 @@ public final class SafeDialog {
 
                 if (true) {
                     autoDismiss();
-                    if (mListener != null) {
-                        mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
+                    if (mListener == null) {
+                        return;
                     }
+                    mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
                     return;
                 }
 
@@ -114,9 +118,10 @@ public final class SafeDialog {
                             @Override
                             public void onSucceed(HttpData<Void> data) {
                                 autoDismiss();
-                                if (mListener != null) {
-                                    mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
+                                if (mListener == null) {
+                                    return;
                                 }
+                                mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
                             }
 
                             @Override
@@ -126,9 +131,10 @@ public final class SafeDialog {
                         });
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
     }

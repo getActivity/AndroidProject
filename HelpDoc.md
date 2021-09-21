@@ -44,13 +44,13 @@
 
 * [为什么没有关于列表多 type 的封装](#为什么没有关于列表多-type-的封装)
 
-* [为什么没有用 Dagger 框架](#为什么没有用-dagger-框架)
-
 * [这不就是一个模板工程换成我也能写一个](#这不就是一个模板工程换成我也能写一个)
 
-* [轮子哥你怎么看待层出不穷的新技术](#轮子哥你怎么看待层出不穷的新技术)
+* [假设 AndroidProject 更新了该怎么升级它](#假设-androidproject-更新了该怎么升级它)
 
-* [为什么没有集成界面侧滑功能](#为什么没有集成界面侧滑功能)
+* [为什么不用谷歌 ActivityResultContracts](#为什么不用谷歌-activityresultcontracts)
+
+* [轮子哥你怎么看待层出不穷的新技术](#轮子哥你怎么看待层出不穷的新技术)
 
 #### 为什么没有用 MVP
 
@@ -68,7 +68,7 @@
 
 * ButterKnife 最大的缺点是还会自动生成 ViewBinding 类，就算在类中只使用了一个 BindView，它也会生成这个类，其实这样是不太好的。
 
-* 另外一个点，将 Android Studio 升级到 4.1 之后，会出现以下提示，这个是因为 Gradle 插件在 5.0 之后的版本中，View ID 将不会以常量的形式存在，所以不能将其定义在 `BindView` 注解或者在 `switch case` 块中。
+* 另外一个点，将 Android Studio 升级到 4.1 之后，会出现以下提示，这个是因为 Gradle 在 5.0 之后的版本，View ID 将不会以常量的形式存在，所以不能将其定义在 `BindView` 注解或者在 `switch case` 块中。
 
 ```text
 Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation
@@ -126,29 +126,31 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 关于屏幕适配方案，其实不能说头条的方案就是最好的，其实谷歌已经针对屏幕适配做了处理，就是 dp 和 sp ，而 dp 的计算转换是由屏幕的像素决定，系统只认 px 单位， dp 需要进行转换，比如 1dp 等于几个 px ，这个时候就需要基数进行转换，比如 1dp = 2px，这个基数就是 2。
 
-	* ldpi：1dp=0.75px
-	
-	* mdpi：1dp=1px
-	
-	* hdpi：1dp=1.5px
-	 
-	* xhdpi：1dp=2px
-	
-	* xxhdpi：1dp=3px
-	
-	* xxxhdpi：1dp=4px
+```text
+ldpi：1dp=0.75px
+
+mdpi：1dp=1px
+
+hdpi：1dp=1.5px
+ 
+xhdpi：1dp=2px
+
+xxhdpi：1dp=3px
+
+xxxhdpi：1dp=4px
+```
 	
 * 这个是谷歌对屏幕适配的一种默认方式，厂商也可以根据需要去修改默认的基数，从而达到最优的显示效果。
 
-* 谷歌的屏幕适配方案也不是百分之一百完美的，其实会存在一些需求不能满足的问题。谷歌的设计理念是屏幕越大显示的东西越多，这种想法并没有错，但有些 APP 可能对这块会有要求，希望根据屏幕大小对控件进行百分比压缩。这个时候谷歌那套适配方案的设计已经和需求完全不一致了。
+* 谷歌的屏幕适配方案也不是百分之一百完美的，其实会存在一些需求不能满足的问题。谷歌的设计理念是屏幕越大显示的东西越多，这种想法并没有错，但有些 App 可能对这块会有要求，希望根据屏幕大小对控件进行百分比压缩。这个时候谷歌那套适配方案的设计已经和需求完全不一致了。
 
-* 那什么样的 App 才会有那样的需求呢？现在手机的屏幕大多在 5 - 6寸，而平板大多在 8 - 10 寸，也就是说我们只适配手机的话，只需要针对 5 - 6 寸的，并且它们的分辨率都差不多，其实用谷歌那种方案是最优的，如果我们需要适配平板的话，一般都会要求对控件进行百分比压缩，这个时候谷歌那套方案会把原先在手机显示的控件在平板上面变大一点，这样就会导致屏幕剩余的空间过大，导致控件显示出来的效果比较小，而如果采用百分比对控件压缩的方式，能比较好地控制 APP 在不同屏幕下显示的效果。
+* 那什么样的 App 才会有那样的需求呢？现在手机的屏幕大多在 5 - 6寸，而平板大多在 8 - 10 寸，也就是说我们只适配手机的话，只需要针对 5 - 6 寸的，并且它们的分辨率都差不多，其实用谷歌那种方案是最优的，如果我们需要适配平板的话，一般都会要求对控件进行百分比压缩，这个时候谷歌那套方案会把原先在手机显示的控件在平板上面变大一点，这样就会导致屏幕剩余的空间过大，导致控件显示出来的效果比较小，而如果采用百分比对控件压缩的方式，能比较好地控制 App 在不同屏幕下显示的效果。
 
-* 另外谈谈我的经历，我自己之前的公司主要是做平板上面的应用，所以也用过 [AutoSize 框架](https://github.com/JessYanCoding/AndroidAutoSize)，一年多的使用体验下来，发现这个框架 Bug 还算是比较多的，例如框架会偶尔出现机型适配失效，重写了 **getResources** 方法情况之后出现的情况少了一些，但是仍然还有一些奇奇怪怪的问题，这里就不一一举例了，最后总结下来就是框架还不够成熟，但是框架的思想还是很不错的。我后面换了一家公司，也是做平板应用，项目用的是用[通配符的适配方案](https://github.com/wildma/ScreenAdaptation)，跟 AutoSize 相对比，没有了那些奇奇怪怪的问题，但是对项目的侵入性高。这两种方案各有优缺点，大家看着选择。
+* 另外谈谈我的经历，我自己之前的公司主要是做平板上面的应用，所以也用过 [AutoSize 框架](https://github.com/JessYanCoding/AndroidAutoSize)，一年多的使用体验下来，发现这个框架 Bug 还算是比较多的，例如框架会偶尔出现机型适配失效，重写了 **getResources** 方法情况之后出现的情况少了一些，但是仍然还有一些奇奇怪怪的问题，这里就不一一举例了，最后总结下来就是框架还不够成熟，但是框架的思想还是很不错的。我后面换了一家公司，也是做平板应用，项目用的是用[通配符的适配方案](https://github.com/wildma/ScreenAdaptation)，跟 AutoSize 相对比，没有了那些奇奇怪怪的问题，但是代码的侵入性比较高。这两种方案各有优缺点，大家看着选择。
 
-* 最后我对屏幕适配方案进行了总结，如果我们不适配平板的情况下，使用谷歌原生那套方案的效果是最优的；如果需要适配平板，并且在要求手机和平板显示的效果一致的时候，可以换成百分比那种适配方案。
+![](picture/help/vote2.jpg)
 
-* 这个是我认为比较好的方式，手机和平板的应用我也都做过，尽管这样我说得也不一定是最好的，大家如果有更好的想法也欢迎和我交流。
+* 在这块我也发起过群投票，相比谷歌的适配方案，大多数人更认同那种百分比适配方案，秉承着少数服从多数的理念，我在 AndroidProject [v13.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/13.0) 加入了通配符的适配方案。虽然有一部分人不认同，但是我想跟这些人说的是：我的每一个决定都是十分谨慎的，因为这其中涉及到许多人的利益，AndroidProject 虽然是我创造的，但是它早就不是我一个人的了，而是大家的，每个重要的决定我都会考虑再三才会去做，在做决定的时候我会把大众的利益放在第一位，把自己的利益放在最后一位，所以大家唯一能做的是，相信我的选择。或许你可能觉得这样不太对，也随时欢迎你提出不同的意见给到我，我不认为自己做的决定一定都是对的，但是我会一直朝着对的方向前进。
 
 #### 字体大小为什么不用 dp 而用 sp
 
@@ -160,14 +162,14 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 #### 为什么没有用 DialogFragment 来防止内存泄漏
 
-* DialogFragment 的出现就是为了解决 Dialog 和 Activity 生命周期不同步导致的内存泄漏问题，在 AndroidProject 曾经引入过，也经过了很多个版本的更新迭代，不过在 [10.0](https://github.com/getActivity/AndroidProject/releases/tag/10.0) 版本后就被移除了，原因是 Dialog 虽然有坑，但是 DialogFragment 也有坑，可以说解决了一个问题又引发了各种问题。先来细数 我在 DialogFragment 上踩过的各种坑：
+* DialogFragment 的出现就是为了解决 Dialog 和 Activity 生命周期不同步导致的内存泄漏问题，在 AndroidProject 曾经引入过，也经过了很多个版本的更新迭代，不过在 [10.0](https://github.com/getActivity/AndroidProject/releases/tag/10.0) 版本后就被移除了，原因是 Dialog 虽然有坑，但是 DialogFragment 也有坑，可以说解决了一个问题又引发了各种问题。先来细数我在 DialogFragment 上踩过的各种坑：
 
     1. DialogFragment 会占用 Dialog 的 Cancel 和 Dismiss 监听，为了就是在 Dialog 消失之后将自己（Fragment）从 Activity 上移除，这样的操作看起很合理，但是会引发一个问题，那么就是会导致我们原先给 Dialog 设置的 Cancel 和 Dismiss 监听被覆盖掉，间接导致我们无法使用这个监听，因为 Dialog 的监听器只能有一个观察者，而 AndroidProject 前期解决这个问题的方式是：将 Dialog 的监听器使用的观察者模式，从一对一改造成一对多，也就是一个被观察者可以有很多个观察者，由此来解决这个问题。
  
     2. DialogFragment 的显示和隐藏操作都不能在后台中进行，否则会出现一个报错 `java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState`，这个是因为 DialogFragment 的 show 和 dismiss 方法使用了 FragmentTransaction.commit 方法，这个 commit 方法会触发对 Activity 状态的检查，如果 Activity 的状态已经保存了（即已经调用了 onSaveInstanceState 方法），这个时候把 Fragment commit 到 Activity 上会抛出异常，这种场景在执行异步操作（例如请求网络）未结束前，用户手动将 App 返回到桌面，然后异步操作执行完毕，下一步就是回调异步监听器，这个时候我们的 App 已经处于后台状态，那么我们如果在监听回调中 show 或 dismiss DialogFragment，那么就会触发这个异常。AndroidProject 前期对于这个问题的解决方案是重写 DialogFragment.show 方法，加一个对 Activity 的状态判断，如果 Activity 处于后台状态，那么不去调用 super.show()，但是这样会导致一个问题，虽然解决了崩溃的问题，但是又会导致 Dialog 没显示出来，而重写 DialogFragment.dismiss 方法，直接调用 dismissAllowingStateLoss 方法，因为这个方法不会去检查 Activity 的状态。虽然这种解决方式不够完美，但却是我那个时候能想到的最好方法。
-    
+
     3. 最后一个问题是关于 DialogFragment 屏幕旋转的问题，首先 DialogFragment 是通过自身 onCreateDialog 方法来获取 Dialog 对象的，但是如果我们直接通过外层给 DialogFragment 传入 Dialog 的对象时，这样的代码逻辑貌似没有问题，但是在用户进行屏幕旋转，而刚好我们的应用没有固定屏幕方向时，DialogFragment 对象会跟随 Activity 销毁重建，因为它本身就是一个 Fragment，但是会导致之前的外层传入 Dialog 对象被回收并置空，然后再调用到 onCreateDialog 方法时，返回的是一个空对象的 Dialog，那么就会直接 DialogFragment 内部引发空指针异常，而 AndroidProject 前期解决这个问题的方案是，重写 onActivityCreated，赶在 onCreateDialog 方法调用之前，先判断 DialogFragment 对象内部持有的 Dialog 是否为空，如果是一个空对象，那么就将自己 dismissAllowingStateLoss 掉。
-    
+
 * 看过这些问题，你是不是和我一样，感觉这 DialogFragment 不是一般的坑，不过最终我放弃了使用 DialogFragment，并不是因为 DialogFragment 又出现了新问题，而是我想到了更好的方案来代替 DialogFragment，方案就是 Application.registerActivityLifecycleCallbacks，想必大家现在已经猜到我想干啥，和 DialogFragment 的作用一样，通过监听 Activity 的方式来管控 Dialog 的生命周期，但唯一不同的是，它不会出现刚刚说过 DialogFragment 的那些问题，这种方式在 AndroidProject 上迭代了几个版本过后，这期间没有发现新的问题，也没有收到别人反馈过这块的问题，证明这种方式是可行的。
 
 #### 为什么没有用腾讯 X5 WebView
@@ -185,11 +187,11 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 * 这个问题在前几年是一个比较火热的话题，我表示很能理解，因为新鲜的事物总是能勾起人的好奇，让人忍不住试一试，但是我先问大家一个问题，单 Activity 多 Fragment 和写多个 Activity 有什么优点？大家第一个反应应该是每写一个页面都不需要在清单文件中注册了，但是这个真的是优点吗？我可以很明确地告诉大家，我已经写了那么多句代码，不差那句在清单文件注册的代码。那么究竟什么才是对我们有价值的？我觉得就两点，一是减少前期开发的工作量，二是降低后续维护的难度。所以省那一两句有前途吗？我们是差那一两句代码的人吗？如果这种模式能够帮助我们写好代码，这个当然是有价值的，非常值得一试的，否则就是纯属瞎扯淡。不仅如此，我个人觉得这种模式有很大的弊端，会引发很多问题，例如：
 
     1. 有的页面是全屏有的页面是非全屏，有的页面是固定竖屏有的页面是横屏，进入时怎么切换？返回时怎么切换回来？然后又该怎么去做统一的封装？
-    
+
     2. 不同 Fragment 之间应该怎样通讯？Activity 有 onActivityResult 方法可以用，但是 Fragment 有什么方法可以用？还是全用 EventBus 来处理？如果是这样做会不会太低效了？每次都要写一个 Event 类，并且在代码中找起来是不是也不太好找？
-    
+
     3. 如何保证这个 Activity 被系统回收之后，然后引发重建操作，又该如何保证这个 Activity 中的多个 Fragment 之间的回退栈是否正常？假设这个 Activity 里面有 10 个Fragment，一下子引发 10 个 Fragment 创建是否会对内存和性能造成影响呢？
-    
+
 * 如果单 Activity 多 Fragment 不能为我们创造太大的价值时，这种模式根本就不值得我们去做，因为我们最终得到的，永远抵不上付出的。
 
 #### 为什么没有用 ConstraintLayout 来写布局
@@ -197,7 +199,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 * 大家如果有仔细观察的话，会发现 AndroidProject 其实没有用到 ConstraintLayout 布局，在这里谈谈我对这个布局的看法，约束布局有一个优点，没有布局嵌套，所以能减少测量次数，从而提升布局绘制的速度，但是优点也是它的缺点，正是因为没有布局嵌套，View 也就没有层级概念，所以它需要定义很多 ViewID 来约束相邻的 View 的位置，就算这个 View 我们在 Java 代码中没有用到，但是在约束布局中还是要定义。这样带来的弊端有几个：
 
     1. 我们每次都要想好这个 ViewID 的名称叫什么，这个就有点烧脑筋了，既要符合代码规范，也要明确和突出其作用。
-    
+
     2. 要考虑好每个 View 上下左右之间的约束关系，否则就会容易出现越界的情况，例如一个 TextView 设计图上有 5 个字，但是后台返回了 10 个字，这个时候 TextView 的控件宽度会被拉长，如果没有设置好右边的约束，极有可能出现遮盖右边 View 的情况。
 
     3. View 之间的关系会变得复杂起来，具体表现为布局一旦发生变更，例如删除或增加某一个 View，都会影响整个 ConstraintLayout 布局，因为很多约束关系会因此发生改变，并且在布局预览中就会变得错乱起来，简单通俗点来讲就是，你拆了一块瓦，很可能会导致房倒屋塌。
@@ -213,9 +215,9 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 * AndroidProject 其实一直有这样做，把很多组件都拆成了独立的框架，例如：权限请求框架 [XXPermissions](https://github.com/getActivity/XXPermissions)，网络请求框架 [EasyHttp](https://github.com/getActivity/EasyHttp)、吐司框架 [ToastUtils](https://github.com/getActivity/ToastUtils) 等等，我都是将它抽离在 AndroidProject 之外，作为一个单独的开源项目进行开发和维护，至于说为什么还有一些代码没有抽取出来，主要原因有几点：
 
     1. 和业务的耦合性高，例如 Dialog 组件引用了很多项目的基类，例如 **BaseDialog**、**BaseAdapter** 等
-    
+
     2. 业务有定制化需求，因为 Dialog 的 UI 风格要跟随项目的设计走，所以代码如果在项目中，修改起来会非常方便，如果抽取到框架中，要怎么修改和统一 UI 风格呢？我个人认为框架不适合做 UI 定制化，因为每个产品的设计风格都不一样，就算开放再多的 API 给外部调用的人设置 UI 风格，也无法满足所有人的需求。
-    
+
 * 基于以上几点，我并不认为所有的东西都适合抽取成框架给大家用，有些东西还是跟随 **AndroidProject** 一起更新比较好。当然像权限请求这种东西，我个人觉得抽成框架是比较合适的，因为它和业务的关联性不大，更重要的是，如果某一天你觉得 **XXPermissions** 做得不够好，你随时可以在 **AndroidProject** 替换掉它，并且整个过程不需要太大的改动。
 
 #### 为什么最低兼容到 Android 5
@@ -237,7 +239,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 * 我想问大家一个问题，这两个框架搭配起来好用吗？可能大家的回答都不一致，但是我个人觉得不好用，接下来让我们分析一下 Retrofit 有什么问题：
 
     1. 功能太少：如果你用过 Retrofit，一说到功能这个词，我相信你的脑海中第一个想到能不能用 OkHttp 的拦截器来实现，没错常用的功能 Retrofit 都没有封装，例如最常用的功能有：添加通用请求头和参数、请求和响应的日志打印、动态 Host 及多域名配置，Retrofit 统统都没有，需要自己去实现。有时候我在想，如果 Retrofit 没有 **Square 公司背书**，现在应该估计不会有多少人用吧。
-    
+
     2. 不够灵活：Retrofit 其实是支持上传的，但是有一个缺点，不能获取进度监听，只能获取到成功和失败。当然网上也有一些解决方案，例如通过设置拦截器，来对 RequestBody 进行二次包装来获取上传进度，但是整个实现的过程十分地麻烦，在 Retrofit 上也没有给出一个好的方案，明明可以由 Retrofit 来做的事，为什么要分发到每个开发者上面。
 
     3. 学习成本高：Retrofit 主要的学习成本来源于它的注解，我现在把它里面所有注解罗列出来：@Url、@Body、@Field、@FieldMap、@FormUrlEncoded、@Header、@HeaderMap、@Headers、@HTTP、@Multipart、@Part、@PartMap、@Path、@Query、@QueryMap、@QueryName、@Streaming。我们了解过多少个注解的作用？这个时候大多数人肯定会说，我都是按照别人的写法复制一遍，具体有什么作用我还真的不知道。其实这个是学习成本高带来的弊端，人们往往只会记住最常用的那几个。
@@ -260,7 +262,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 常用的图片加载框架无非就两种，最常用的是 Glide，其次是 Fresco。我曾做过一个技术调研：
 
-![](picture/help/image.jpg)
+![](picture/help/vote1.jpg)
 
 * 无疑 Glide 已成大家最喜爱的图片加载框架，当然也有人使用 Fresco，但是占比极少。
 
@@ -280,10 +282,6 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 原生的 RecyclerView.Adapter 本身就支持多 type，只需要重写适配器的 getItemType 方法即可，具体用法不做过多介绍。
 
-#### 为什么没有用 Dagger 框架
-
-* 框架的学习和使用成本极高，但总体收益不高，不适用于大部分人，所以不会考虑加入。
-
 #### 这不就是一个模板工程换成我也能写一个
 
 * 想把 AndroidProject 做出来并不难，我当时只花了一两个星期，而做好它需要无限的时间和精力，我花了两年多的时间仍然还在半路之上，尽管有很多人认为它很好用，没有任何 Bug，但是在我看来还不够，因为每个人衡量标准的程度不同，我的标准是随着时间的推移和技术的提升而不断提高。具体付出了多少努力，[可以先让我们看一组数据](https://github.com/getActivity/AndroidProject/graphs/contributors)：
@@ -292,9 +290,108 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * 与其说 AndroidProject 做的是模板工程，但实际我在架构设计上花费的时间和精力会更多，其实这两者我都有在做，因为我的目的只有一个，能够帮助大家更好地开发和维护项目。具体 AndroidProject 在代码设计上有什么亮点，这里我建议你看一下里面的代码，我相信你看完后会有收获的，后面我可能也会出一篇文章具体讲述 AndroidProject 的亮点。
 
+#### 假设 AndroidProject 更新了该怎么升级它
+
+* 原因和解释：首先纠正一点，AndroidProject 严格意义上来说，不是框架一种，而属于架构一种，架构升级本身就是一件大事，并且存在很多未知的风险点，我不推荐已使用 AndroidProject 开发的项目去做升级，因为开发和测试的成本极其高，间接能为业务带来价值其实很低，很多时候我知道大家很喜欢 AndroidProject 的代码，想用到公司项目中去，但是我仍然不推荐你那么做，假设这是你的个人项目可以那么做，但是公司项目最好不要，因为公司和你都是要靠这个项目赚钱，谁也不希望项目出现问题，如果是公司要开发人员重构公司项目，也可以考虑那么做，毕竟这个时候的风险公司已经承担了大部分了，接下来的话只需要服从公司安排即可。
+
+* 更新的方式：由于 AndroidProject 不是一个单独的框架那么简单，无法通过更新远程依赖的方式进行升级，所以只能通过替换代码的形式进行更新，需要注意的是，代码覆盖完需要经过严格的自测及测试，测试是做这件事情的关键流程，需要重视起来，对每一处功能进行详细测试，一定要详细，特别涉及到主流程的功能。
+
+#### 为什么不用谷歌 ActivityResultContracts
+
+* ActivityResultContract是 Activity 1.2.0-alpha02 和 Fragment 1.3.0-alpha02 中新追加的新 API，但是在此之前 AndroidProject 早已经对 onActivityResult 回调进行了封装，详情请见 BaseActivity
+
+```java
+public abstract class BaseActivity extends AppCompatActivity {
+
+    /** Activity 回调集合 */
+    private SparseArray<OnActivityCallback> mActivityCallbacks;
+
+    /**
+     * startActivityForResult 方法优化
+     */
+
+    public void startActivityForResult(Class<? extends Activity> clazz, OnActivityCallback callback) {
+        startActivityForResult(new Intent(this, clazz), null, callback);
+    }
+
+    public void startActivityForResult(Intent intent, OnActivityCallback callback) {
+        startActivityForResult(intent, null, callback);
+    }
+
+    public void startActivityForResult(Intent intent, @Nullable Bundle options, OnActivityCallback callback) {
+        if (mActivityCallbacks == null) {
+            mActivityCallbacks = new SparseArray<>(1);
+        }
+        // 请求码必须在 2 的 16 次方以内
+        int requestCode = new Random().nextInt((int) Math.pow(2, 16));
+        mActivityCallbacks.put(requestCode, callback);
+        startActivityForResult(intent, requestCode, options);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        OnActivityCallback callback;
+        if (mActivityCallbacks != null && (callback = mActivityCallbacks.get(requestCode)) != null) {
+            callback.onActivityResult(resultCode, data);
+            mActivityCallbacks.remove(requestCode);
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public interface OnActivityCallback {
+
+        /**
+         * 结果回调
+         *
+         * @param resultCode        结果码
+         * @param data              数据
+         */
+        void onActivityResult(int resultCode, @Nullable Intent data);
+    }
+}
+```
+
+* 至于要不要换成谷歌出的那种呢？我们先来对比这两种的方式的用法
+
+```java
+// Google 的用法
+registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    @Override
+    public void onActivityResult(ActivityResult result) {
+        Intent data = result.getData();
+        int resultCode = result.getResultCode();
+    }
+}).launch(new Intent(this, HomeActivity.class));
+```
+
+---
+
+```java
+// AndroidProject 的用法
+startActivityForResult(HomeActivity.class, new OnActivityCallback() {
+    @Override
+    public void onActivityResult(int resultCode, @Nullable Intent data) {
+        
+    }
+});
+```
+
+* 对这两种经过对比，得出结论如下：
+
+    1. 谷歌原生的没有 AndroidProject 封装得那么人性化，谷歌那种方式调用稍微麻烦一点
+
+    2. 谷歌那种方式直接集成进 AndroidX 包的，要比直接在 BaseActivity 中封装要好
+
+    3. AndroidProject 封装 onActivityResult 回调至少要比谷歌要早一两年，并非谷歌之后的产物
+
+    4. 之前使用 AndroidProject 的人群已经习惯和记忆了那种方式，所以 API 不能删也不能改
+
+* 所以并不是我不想用，而是谷歌封装得还不够好，至少在我看来还不够好，抛去 AndroidProject 封装的时间早不说，谷歌封装出来的效果也是强差人意，我感觉谷歌工程师的封装得越来越敷衍了，看起来像是在完成任务，而不是在做好一件事。
+
 #### 轮子哥你怎么看待层出不穷的新技术
 
-* 新东西的出现总能引起别人的好奇和尝试，但是我建议有兴趣的人可以学一下，但是如果要应用到项目中，我个人建议还是慎重，因为纵观历史，我们不难发现，技术创新虽然很受欢迎，但是大多数都经不住时间的考验，最终一个个气尽倒下，这是因为很多新技术，表面看起来很美好，但实际上一入坑深似海。当然也有一些优秀的技术创新活了下来，但是毕竟占的是少数。
+* 新东西的出现总能引起别人的好奇和尝试，但是我建议有兴趣的人可以学一下，但是如果要应用到项目中，我个人建议还是要慎重，因为纵观历史，我们不难发现，技术创新虽然很受欢迎，但是大多数都经不住时间的考验，最终一个个气尽倒下，这是因为很多新技术，表面看起来很美好，但实际上一入坑深似海。当然也有一些优秀的技术创新活了下来，但是毕竟占的是少数。
 
 * 谈谈我对新技术的看法，首先我会思考这种新技术能解决什么痛点，这点非常重要，再好的技术创新，也必须得创造价值，否则就是在扯淡。有人肯定会问，什么样的技术才算有价值？对于我们 Android 程序员来讲，无非就围绕两点，开发和维护。要么在前期开发上，能发挥很大的作用，要么在后续维护上面，能体现它的优势。
 

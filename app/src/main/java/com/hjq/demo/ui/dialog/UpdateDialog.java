@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,6 +75,9 @@ public final class UpdateDialog {
             mUpdateView = findViewById(R.id.tv_update_update);
             mCloseView = findViewById(R.id.tv_update_close);
             setOnClickListener(mUpdateView, mCloseView);
+
+            // 让 TextView 支持滚动
+            mContentView.setMovementMethod(new ScrollingMovementMethod());
         }
 
         /**
@@ -145,7 +149,7 @@ public final class UpdateDialog {
          * 下载 Apk
          */
         @CheckNet
-        @Permissions({Permission.MANAGE_EXTERNAL_STORAGE})
+        @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.REQUEST_INSTALL_PACKAGES})
         private void downloadApk() {
             // 设置对话框不能被取消
             setCancelable(false);
@@ -183,7 +187,7 @@ public final class UpdateDialog {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             // 创建要下载的文件对象
-            mApkFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            mApkFile = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                     getString(R.string.app_name) + "_v" + mNameView.getText().toString() + ".apk");
             EasyHttp.download(getDialog())
                     .method(HttpMethod.GET)

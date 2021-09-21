@@ -10,14 +10,14 @@
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:drawableSize="20dp"
+        app:rightIconHeight="@dimen/dp_20"
         app:title="@string/web_title" />
 
     <ProgressBar
         android:id="@+id/pb_browser_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="@dimen/dp_3"
         android:progressDrawable="@drawable/progress_gradient_bg"
         android:visibility="gone" />
 

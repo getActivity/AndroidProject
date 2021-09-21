@@ -12,15 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hjq.demo.R;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.GetCodeApi;
+import com.hjq.demo.http.api.PhoneApi;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.PhoneApi;
 import com.hjq.demo.manager.InputTextManager;
-import com.hjq.demo.other.IntentKey;
-import com.hjq.demo.ui.dialog.HintDialog;
+import com.hjq.demo.ui.dialog.TipsDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.hjq.toast.ToastUtils;
@@ -35,10 +34,12 @@ import com.hjq.widget.view.CountdownView;
 public final class PhoneResetActivity extends AppActivity
         implements TextView.OnEditorActionListener {
 
-    @DebugLog
+    private static final String INTENT_KEY_IN_CODE = "code";
+
+    @Log
     public static void start(Context context, String code) {
         Intent intent = new Intent(context, PhoneResetActivity.class);
-        intent.putExtra(IntentKey.CODE, code);
+        intent.putExtra(INTENT_KEY_IN_CODE, code);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -78,7 +79,7 @@ public final class PhoneResetActivity extends AppActivity
 
     @Override
     protected void initData() {
-        mVerifyCode = getString(IntentKey.CODE);
+        mVerifyCode = getString(INTENT_KEY_IN_CODE);
     }
 
     @SingleClick
@@ -127,8 +128,8 @@ public final class PhoneResetActivity extends AppActivity
             hideKeyboard(getCurrentFocus());
 
             if (true) {
-                new HintDialog.Builder(this)
-                        .setIcon(HintDialog.ICON_FINISH)
+                new TipsDialog.Builder(this)
+                        .setIcon(TipsDialog.ICON_FINISH)
                         .setMessage(R.string.phone_reset_commit_succeed)
                         .setDuration(2000)
                         .addOnDismissListener(dialog -> finish())
@@ -146,8 +147,8 @@ public final class PhoneResetActivity extends AppActivity
 
                         @Override
                         public void onSucceed(HttpData<Void> data) {
-                            new HintDialog.Builder(getActivity())
-                                    .setIcon(HintDialog.ICON_FINISH)
+                            new TipsDialog.Builder(getActivity())
+                                    .setIcon(TipsDialog.ICON_FINISH)
                                     .setMessage(R.string.phone_reset_commit_succeed)
                                     .setDuration(2000)
                                     .addOnDismissListener(dialog -> finish())

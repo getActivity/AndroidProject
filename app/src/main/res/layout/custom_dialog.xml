@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="@dimen/dp_15"
     app:cardElevation="0px">
 
     <LinearLayout
@@ -15,21 +15,21 @@
         android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingHorizontal="25dp"
-        android:paddingVertical="15dp">
+        android:paddingHorizontal="@dimen/dp_25"
+        android:paddingVertical="@dimen/dp_15">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:src="@drawable/logo_big_ic" />
+            android:layout_width="@dimen/dp_90"
+            android:layout_height="@dimen/dp_90"
+            app:srcCompat="@drawable/logo_big_ic" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp_10"
             android:gravity="center_horizontal"
             android:text="恭喜你获得成就：\n发现一款超级好用的对话框组件"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -37,8 +37,8 @@
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:minWidth="150dp"
+            android:layout_marginTop="@dimen/dp_15"
+            android:minWidth="@dimen/dp_150"
             android:text="我晓得啦"  />
 
     </LinearLayout>

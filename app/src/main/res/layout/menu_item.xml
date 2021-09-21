@@ -12,11 +12,11 @@
         android:layout_height="match_parent"
         android:background="@drawable/transparent_selector"
         android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="13dp"
+        android:paddingHorizontal="@dimen/dp_15"
+        android:paddingVertical="@dimen/dp_13"
         android:singleLine="true"
         android:textColor="@color/common_confirm_text_color"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         tools:text="条目" />
 
     <View

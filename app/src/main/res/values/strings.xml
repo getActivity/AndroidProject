@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">安卓技术中台</string>
 
+    <!-- 通用的 -->
     <string name="common_loading">加载中&#8230;</string>
+
+    <string name="common_unknown_error">未知错误</string>
 
     <string name="common_confirm">确定</string>
     <string name="common_cancel">取消</string>
@@ -14,10 +17,13 @@
     <string name="common_minute">分</string>
     <string name="common_second">秒</string>
 
-    <!-- 通用的 -->
     <string name="common_crash_hint">应用出了点小意外，正在重新启动</string>
 
     <string name="common_network_error">当前网络不可用，请检查网络设置</string>
+
+    <string name="common_video_error_not_support">该视频不适合在此设备上播放</string>
+    <string name="common_video_error_unknown">无法播放此视频</string>
+    <string name="common_video_error_supplement">错误类型：%d，错误代码：%d</string>
 
     <string name="common_phone_input_hint">请输入手机号码</string>
     <string name="common_phone_input_error">手机号输入不正确</string>
@@ -78,7 +84,7 @@
     <string name="http_loading">加载中&#8230;</string>
 
     <string name="http_unknown_error">请求出错，未知错误</string>
-    <string name="http_account_error">账号异常，请重新登录</string>
+    <string name="http_token_error">登录失效，请重新登录</string>
     <string name="http_data_explain_error">数据解析异常，请稍后</string>
     <string name="http_server_out_time">服务器请求超时，请稍后再试</string>
     <string name="http_network_error">请求失败，请检查网络设置</string>
@@ -88,8 +94,9 @@
 
     <!-- 状态布局 -->
     <string name="status_layout_no_data">空空如也</string>
-    <string name="status_layout_error_request">请求出错，点击重试</string>
-    <string name="status_layout_error_network">网络错误，点击重试</string>
+    <string name="status_layout_error_request">请求出错，请重试</string>
+    <string name="status_layout_error_network">网络错误，请重试</string>
+    <string name="status_layout_retry">重试</string>
 
     <!-- 地区对话框 -->
     <string name="address_title">请选择地区</string>
@@ -185,7 +192,7 @@
     <string name="about_title">关于我们</string>
     <string name="about_author"><font color="#85b84f">Android</font> 轮子哥</string>
 
-    <string name="about_copyright">Copyright © 2018 &#8211; 2020</string>
+    <string name="about_copyright">Copyright © 2018 &#8211; 2021</string>
 
     <!-- 忘记密码 -->
     <string name="password_forget_title">忘记密码</string>
@@ -231,6 +238,9 @@
 
     <string name="image_select_error">无法选中，该图片已经被删除</string>
 
+    <!-- 裁剪图片 -->
+    <string name="image_crop_error_not_support">裁剪失败，当前手机不支持裁剪图片</string>
+
     <!-- 视频选择 -->
     <string name="video_select_title">视频选择</string>
     <string name="video_select_all">所有视频</string>
@@ -241,7 +251,7 @@
 
     <string name="video_select_error">无法选中，该视频已经被删除</string>
 
-    <!-- 拍照 -->
+    <!-- 拍照和拍摄 -->
     <string name="camera_launch_fail">无法启动相机</string>
     <string name="camera_image_error">目标地址错误</string>
 

@@ -26,4 +26,18 @@ public class HttpData<T> {
     public T getData() {
         return data;
     }
+
+    /**
+     * 是否请求成功
+     */
+    public boolean isRequestSucceed() {
+        return code == 200;
+    }
+
+    /**
+     * 是否 Token 失效
+     */
+    public boolean isTokenFailure() {
+        return code == 1001;
+    }
 }

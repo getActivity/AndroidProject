@@ -14,6 +14,7 @@ import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.ui.activity.LoginActivity;
 import com.hjq.gson.factory.GsonFactory;
 import com.hjq.http.EasyLog;
+import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestHandler;
 import com.hjq.http.exception.CancelException;
 import com.hjq.http.exception.DataException;
@@ -24,6 +25,7 @@ import com.hjq.http.exception.ResultException;
 import com.hjq.http.exception.ServerException;
 import com.hjq.http.exception.TimeoutException;
 import com.hjq.http.exception.TokenException;
+import com.tencent.mmkv.MMKV;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,13 +50,15 @@ import okhttp3.ResponseBody;
 public final class RequestHandler implements IRequestHandler {
 
     private final Application mApplication;
+    private final MMKV mMmkv;
 
     public RequestHandler(Application application) {
         mApplication = application;
+        mMmkv = MMKV.mmkvWithID("http_cache_id");
     }
 
     @Override
-    public Object requestSucceed(LifecycleOwner lifecycle, Response response, Type type) throws Exception {
+    public Object requestSucceed(LifecycleOwner lifecycle, IRequestApi api, Response response, Type type) throws Exception {
 
         if (Response.class.equals(type)) {
             return response;
@@ -122,12 +126,15 @@ public final class RequestHandler implements IRequestHandler {
 
         if (result instanceof HttpData) {
             HttpData<?> model = (HttpData<?>) result;
-            if (model.getCode() == 0) {
+
+            if (model.isRequestSucceed()) {
                 // 代表执行成功
                 return result;
-            } else if (model.getCode() == 1001) {
+            }
+
+            if (model.isTokenFailure()) {
                 // 代表登录失效，需要重新登录
-                throw new TokenException(mApplication.getString(R.string.http_account_error));
+                throw new TokenException(mApplication.getString(R.string.http_token_error));
             }
 
             // 代表执行失败
@@ -137,7 +144,7 @@ public final class RequestHandler implements IRequestHandler {
     }
 
     @Override
-    public Exception requestFail(LifecycleOwner lifecycle,  Exception e) {
+    public Exception requestFail(LifecycleOwner lifecycle, IRequestApi api, Exception e) {
         // 判断这个异常是不是自己抛的
         if (e instanceof HttpException) {
             if (e instanceof TokenException) {
@@ -146,7 +153,7 @@ public final class RequestHandler implements IRequestHandler {
                 Intent intent = new Intent(application, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 application.startActivity(intent);
-                // 销毁除了登录页之外的界面
+                // 销毁除了登录页之外的 Activity
                 ActivityManager.getInstance().finishAllActivities(LoginActivity.class);
             }
             return e;
@@ -159,13 +166,13 @@ public final class RequestHandler implements IRequestHandler {
         if (e instanceof UnknownHostException) {
             NetworkInfo info = ((ConnectivityManager) mApplication.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
             // 判断网络是否连接
-            if (info != null && info.isConnected()) {
-                // 有连接就是服务器的问题
-                return new ServerException(mApplication.getString(R.string.http_server_error), e);
+            if (info == null || !info.isConnected()) {
+                // 没有连接就是网络异常
+                return new NetworkException(mApplication.getString(R.string.http_network_error), e);
             }
 
-            // 没有连接就是网络异常
-            return new NetworkException(mApplication.getString(R.string.http_network_error), e);
+            // 有连接就是服务器的问题
+            return new ServerException(mApplication.getString(R.string.http_server_error), e);
         }
 
         if (e instanceof IOException) {
@@ -174,5 +181,33 @@ public final class RequestHandler implements IRequestHandler {
         }
 
         return new HttpException(e.getMessage(), e);
+    }
+
+    @Override
+    public Object readCache(LifecycleOwner lifecycle, IRequestApi api, Type type) {
+        String cacheKey = GsonFactory.getSingletonGson().toJson(api);
+        String cacheValue = mMmkv.getString(cacheKey, null);
+        if (cacheValue == null || "".equals(cacheValue) || "{}".equals(cacheValue)) {
+            return null;
+        }
+        EasyLog.print("---------- cacheKey ----------");
+        EasyLog.json(cacheKey);
+        EasyLog.print("---------- cacheValue ----------");
+        EasyLog.json(cacheValue);
+        return GsonFactory.getSingletonGson().fromJson(cacheValue, type);
+    }
+
+    @Override
+    public boolean writeCache(LifecycleOwner lifecycle, IRequestApi api, Response response, Object result) {
+        String cacheKey = GsonFactory.getSingletonGson().toJson(api);
+        String cacheValue = GsonFactory.getSingletonGson().toJson(result);
+        if (cacheValue == null || "".equals(cacheValue) || "{}".equals(cacheValue)) {
+            return false;
+        }
+        EasyLog.print("---------- cacheKey ----------");
+        EasyLog.json(cacheKey);
+        EasyLog.print("---------- cacheValue ----------");
+        EasyLog.json(cacheValue);
+        return mMmkv.putString(cacheKey, cacheValue).commit();
     }
 }

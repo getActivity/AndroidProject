@@ -21,10 +21,10 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_person_data_avatar"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="@dimen/dp_110"
+            android:layout_height="@dimen/dp_110"
             android:layout_gravity="end|center_vertical"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/dp_20"
             android:scaleType="centerCrop"
             tools:src="@drawable/avatar_placeholder_ic" />
 
@@ -34,7 +34,7 @@
         android:id="@+id/sb_person_data_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
         app:bar_leftText="@string/personal_data_id"
         tools:bar_rightText="880634" />
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:bar_leftText="@string/personal_data_name"
-        app:bar_rightHint="@string/personal_data_name_hint"
+        app:bar_rightTextHint="@string/personal_data_name_hint"
         tools:bar_rightText="Android 轮子哥" />
 
     <com.hjq.widget.layout.SettingBar
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:bar_leftText="@string/personal_data_address"
-        app:bar_rightHint="@string/personal_data_address_hint"
-        app:bar_rightIcon="@drawable/arrows_right_ic" />
+        app:bar_rightDrawable="@drawable/arrows_right_ic"
+        app:bar_rightTextHint="@string/personal_data_address_hint" />
 
 </LinearLayout>

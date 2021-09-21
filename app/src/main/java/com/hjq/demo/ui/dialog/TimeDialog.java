@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseDialog;
@@ -26,7 +27,7 @@ import java.util.Calendar;
 public final class TimeDialog {
 
     public static final class Builder
-            extends CommonDialog.Builder<Builder> implements Runnable {
+            extends CommonDialog.Builder<Builder> {
 
         private final RecyclerView mHourView;
         private final RecyclerView mMinuteView;
@@ -40,6 +41,7 @@ public final class TimeDialog {
         private final PickerAdapter mMinuteAdapter;
         private final PickerAdapter mSecondAdapter;
 
+        @Nullable
         private OnListener mListener;
 
         @SuppressWarnings("all")
@@ -97,27 +99,6 @@ public final class TimeDialog {
             setHour(calendar.get(Calendar.HOUR_OF_DAY));
             setMinute(calendar.get(Calendar.MINUTE));
             setSecond(calendar.get(Calendar.SECOND));
-
-            postDelayed(this, 1000);
-        }
-
-        @Override
-        public void run() {
-            if (mHourView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
-                    mMinuteView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
-                    mSecondView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, mHourManager.getPickedPosition());
-                calendar.set(Calendar.MINUTE, mMinuteManager.getPickedPosition());
-                calendar.set(Calendar.SECOND, mSecondManager.getPickedPosition());
-                if (System.currentTimeMillis() - calendar.getTimeInMillis() < 3000) {
-                    calendar = Calendar.getInstance();
-                    setHour(calendar.get(Calendar.HOUR_OF_DAY));
-                    setMinute(calendar.get(Calendar.MINUTE));
-                    setSecond(calendar.get(Calendar.SECOND));
-                    postDelayed(this, 1000);
-                }
-            }
         }
 
         public Builder setListener(OnListener listener) {
@@ -156,8 +137,8 @@ public final class TimeDialog {
             int index = hour;
             if (index < 0 || hour == 24) {
                 index = 0;
-            } else if (index > mHourAdapter.getItemCount() - 1) {
-                index = mHourAdapter.getItemCount() - 1;
+            } else if (index > mHourAdapter.getCount() - 1) {
+                index = mHourAdapter.getCount() - 1;
             }
             mHourView.scrollToPosition(index);
             return this;
@@ -171,8 +152,8 @@ public final class TimeDialog {
             int index = minute;
             if (index < 0) {
                 index = 0;
-            } else if (index > mMinuteAdapter.getItemCount() - 1) {
-                index = mMinuteAdapter.getItemCount() - 1;
+            } else if (index > mMinuteAdapter.getCount() - 1) {
+                index = mMinuteAdapter.getCount() - 1;
             }
             mMinuteView.scrollToPosition(index);
             return this;
@@ -186,8 +167,8 @@ public final class TimeDialog {
             int index = second;
             if (index < 0) {
                 index = 0;
-            } else if (index > mSecondAdapter.getItemCount() - 1) {
-                index = mSecondAdapter.getItemCount() - 1;
+            } else if (index > mSecondAdapter.getCount() - 1) {
+                index = mSecondAdapter.getCount() - 1;
             }
             mSecondView.scrollToPosition(index);
             return this;
@@ -199,14 +180,16 @@ public final class TimeDialog {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onSelected(getDialog(), mHourManager.getPickedPosition(), mMinuteManager.getPickedPosition(), mSecondManager.getPickedPosition());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onSelected(getDialog(), mHourManager.getPickedPosition(), mMinuteManager.getPickedPosition(), mSecondManager.getPickedPosition());
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
     }
@@ -229,7 +212,7 @@ public final class TimeDialog {
 
             ViewHolder() {
                 super(R.layout.picker_item);
-                mPickerView = (TextView) findViewById(R.id.tv_picker_name);
+                mPickerView = findViewById(R.id.tv_picker_name);
             }
 
             @Override

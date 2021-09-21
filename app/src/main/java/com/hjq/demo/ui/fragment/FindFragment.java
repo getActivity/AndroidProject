@@ -1,6 +1,5 @@
 package com.hjq.demo.ui.fragment;
 
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -54,14 +53,14 @@ public final class FindFragment extends TitleBarFragment<HomeActivity>
     protected void initData() {
         // 显示圆形的 ImageView
         GlideApp.with(this)
-                .load(R.drawable.example_bg)
+                .load(R.drawable.update_app_top_bg)
                 .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
                 .into(mCircleView);
 
         // 显示圆角的 ImageView
         GlideApp.with(this)
-                .load(R.drawable.example_bg)
-                .transform(new MultiTransformation<>(new CenterCrop(), new RoundedCorners((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()))))
+                .load(R.drawable.update_app_top_bg)
+                .transform(new MultiTransformation<>(new CenterCrop(), new RoundedCorners((int) getResources().getDimension(R.dimen.dp_10))))
                 .into(mCornerView);
     }
 

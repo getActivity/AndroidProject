@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ public final class PayPasswordDialog {
         /** 输入键盘文本 */
         private static final String[] KEYBOARD_TEXT = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", ""};
 
+        @Nullable
         private OnListener mListener;
         private boolean mAutoDismiss = true;
         private final LinkedList<String> mRecordList = new LinkedList<>();
@@ -139,9 +141,10 @@ public final class PayPasswordDialog {
                             for (String s : mRecordList) {
                                 password.append(s);
                             }
-                            if (mListener != null) {
-                                mListener.onCompleted(getDialog(), password.toString());
+                            if (mListener == null) {
+                                return;
                             }
+                            mListener.onCompleted(getDialog(), password.toString());
                         }, 300);
                     }
                     break;
@@ -157,9 +160,10 @@ public final class PayPasswordDialog {
                     dismiss();
                 }
 
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
     }

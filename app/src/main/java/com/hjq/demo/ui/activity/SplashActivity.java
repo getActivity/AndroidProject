@@ -12,9 +12,8 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.UserInfoApi;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.UserInfoApi;
-import com.hjq.demo.http.response.UserInfoBean;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
@@ -67,10 +66,10 @@ public final class SplashActivity extends AppActivity {
         // 刷新用户信息
         EasyHttp.post(this)
                 .api(new UserInfoApi())
-                .request(new HttpCallback<HttpData<UserInfoBean>>(this) {
+                .request(new HttpCallback<HttpData<UserInfoApi.Bean>>(this) {
 
                     @Override
-                    public void onSucceed(HttpData<UserInfoBean> data) {
+                    public void onSucceed(HttpData<UserInfoApi.Bean> data) {
 
                     }
                 });

@@ -16,14 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="20dp" >
+        android:layout_marginBottom="@dimen/dp_20" >
 
         <me.relex.circleindicator.CircleIndicator
             android:id="@+id/ci_image_preview_indicator"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/dp_50"
             android:visibility="invisible"
             app:ci_drawable="@drawable/image_preview_indicator"
+            app:ci_height="@dimen/dp_5"
+            app:ci_margin="@dimen/dp_5"
+            app:ci_width="@dimen/dp_5"
             tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -32,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/panda"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:visibility="invisible"
             tools:text="1/10"
             tools:visibility="visible" />

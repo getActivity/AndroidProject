@@ -12,14 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hjq.demo.R;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.PasswordApi;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.PasswordApi;
 import com.hjq.demo.manager.InputTextManager;
-import com.hjq.demo.other.IntentKey;
-import com.hjq.demo.ui.dialog.HintDialog;
+import com.hjq.demo.ui.dialog.TipsDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 
@@ -32,11 +31,14 @@ import com.hjq.http.listener.HttpCallback;
 public final class PasswordResetActivity extends AppActivity
         implements TextView.OnEditorActionListener {
 
-    @DebugLog
+    private static final String INTENT_KEY_IN_PHONE = "phone";
+    private static final String INTENT_KEY_IN_CODE = "code";
+
+    @Log
     public static void start(Context context, String phone, String code) {
         Intent intent = new Intent(context, PasswordResetActivity.class);
-        intent.putExtra(IntentKey.PHONE, phone);
-        intent.putExtra(IntentKey.CODE, code);
+        intent.putExtra(INTENT_KEY_IN_PHONE, phone);
+        intent.putExtra(INTENT_KEY_IN_CODE, code);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -76,8 +78,8 @@ public final class PasswordResetActivity extends AppActivity
 
     @Override
     protected void initData() {
-        mPhoneNumber = getString(IntentKey.PHONE);
-        mVerifyCode = getString(IntentKey.CODE);
+        mPhoneNumber = getString(INTENT_KEY_IN_PHONE);
+        mVerifyCode = getString(INTENT_KEY_IN_CODE);
     }
 
     @SingleClick
@@ -96,8 +98,8 @@ public final class PasswordResetActivity extends AppActivity
             hideKeyboard(getCurrentFocus());
 
             if (true) {
-                new HintDialog.Builder(this)
-                        .setIcon(HintDialog.ICON_FINISH)
+                new TipsDialog.Builder(this)
+                        .setIcon(TipsDialog.ICON_FINISH)
                         .setMessage(R.string.password_reset_success)
                         .setDuration(2000)
                         .addOnDismissListener(dialog -> finish())
@@ -115,8 +117,8 @@ public final class PasswordResetActivity extends AppActivity
 
                         @Override
                         public void onSucceed(HttpData<Void> data) {
-                            new HintDialog.Builder(getActivity())
-                                    .setIcon(HintDialog.ICON_FINISH)
+                            new TipsDialog.Builder(getActivity())
+                                    .setIcon(TipsDialog.ICON_FINISH)
                                     .setMessage(R.string.password_reset_success)
                                     .setDuration(2000)
                                     .addOnDismissListener(dialog -> finish())

@@ -11,8 +11,7 @@
 
     <!-- 外部存储 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
     <!-- 拍照权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -41,6 +40,11 @@
         tools:ignore="AllowBackup,LockedOrientationActivity"
         tools:replace="android:allowBackup,android:supportsRtl"
         tools:targetApi="n">
+
+        <!-- 表示当前已经适配了分区存储 -->
+        <meta-data
+            android:name="ScopedStorage"
+            android:value="true" />
 
         <!-- 适配 Android 7.0 文件意图 -->
         <provider
@@ -88,13 +92,15 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- 注册页 -->
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- 崩溃展示（必须在独立进程） -->
         <activity
@@ -121,21 +127,24 @@
             android:name=".ui.activity.PasswordForgetActivity"
             android:label="@string/password_forget_title"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- 重置密码 -->
         <activity
             android:name=".ui.activity.PasswordResetActivity"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- 更换手机 -->
         <activity
             android:name=".ui.activity.PhoneResetActivity"
             android:label="@string/phone_reset_title"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- 关于我们 -->
         <activity
@@ -164,6 +173,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+        <!-- 图片裁剪 -->
+        <activity
+            android:name=".ui.activity.ImageCropActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
         <!-- 图片选择 -->
         <activity
             android:name=".ui.activity.ImageSelectActivity"
@@ -177,9 +192,22 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
-        <!-- 播放视频 -->
+        <!-- 播放视频（自适应方向） -->
         <activity
             android:name=".ui.activity.VideoPlayActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/FullScreenTheme" />
+
+        <!-- 播放视频（竖屏方向） -->
+        <activity
+            android:name=".ui.activity.VideoPlayActivity$Portrait"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme" />
+
+        <!-- 播放视频（横屏方向） -->
+        <activity
+            android:name=".ui.activity.VideoPlayActivity$Landscape"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:theme="@style/FullScreenTheme" />
@@ -201,6 +229,13 @@
             android:name=".ui.activity.StatusActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
+        <!-- 微信回调（请注意这个 Activity 放置的包名要和当前项目的包名保持一致，否则将不能正常回调） -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
     </application>
 
@@ -226,7 +261,7 @@
             <action android:name="android.intent.action.DIAL" />
         </intent>
 
-        <!-- 分享意图：Intent.ACTION_SEND -->
+        <!-- 调起分享意图：Intent.ACTION_SEND -->
         <intent>
             <action android:name="android.intent.action.SEND" />
         </intent>
@@ -234,6 +269,11 @@
         <!-- 调起其他页面意图：Intent.ACTION_VIEW -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
+        </intent>
+
+        <!-- 调起系统文件选择器：Intent.ACTION_GET_CONTENT -->
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
         </intent>
     </queries>
 

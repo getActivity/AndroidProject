@@ -2,20 +2,20 @@
 #-ignorewarning
 
 # 混淆保护自己项目的部分代码以及引用的第三方jar包
-#-libraryjars libs/umeng-analytics-v5.2.4.jar
+#-libraryjars libs/xxxxxxxxx.jar
 
-# 不混淆这些包下的字段名
--keepclassmembernames class com.hjq.demo.http.request.** {
+# 不混淆这个包下的类
+-keep class com.hjq.demo.http.api.** {
     <fields>;
 }
--keepclassmembernames class com.hjq.demo.http.response.** {
+-keep class com.hjq.demo.http.response.** {
     <fields>;
 }
--keepclassmembernames class com.hjq.demo.http.model.** {
+-keep class com.hjq.demo.http.model.** {
     <fields>;
 }
 
-# 不混淆被 DebugLog 注解的方法信息
+# 不混淆被 Log 注解的方法信息
 -keepclassmembernames class ** {
-    @com.hjq.demo.aop.DebugLog <methods>;
+    @com.hjq.demo.aop.Log <methods>;
 }

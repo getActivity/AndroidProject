@@ -30,7 +30,8 @@ public final class DateDialog {
 
     public static final class Builder
             extends CommonDialog.Builder<Builder>
-            implements PickerLayoutManager.OnPickerListener {
+            implements Runnable,
+            PickerLayoutManager.OnPickerListener {
 
         private final int mStartYear;
 
@@ -162,11 +163,11 @@ public final class DateDialog {
             int index = year - mStartYear;
             if (index < 0) {
                 index = 0;
-            } else if (index > mYearAdapter.getItemCount() - 1) {
-                index = mYearAdapter.getItemCount() - 1;
+            } else if (index > mYearAdapter.getCount() - 1) {
+                index = mYearAdapter.getCount() - 1;
             }
             mYearView.scrollToPosition(index);
-            onPicked(mYearView, index);
+            refreshMonthMaximumDay();
             return this;
         }
 
@@ -178,11 +179,11 @@ public final class DateDialog {
             int index = month - 1;
             if (index < 0) {
                 index = 0;
-            } else if (index > mMonthAdapter.getItemCount() - 1) {
-                index = mMonthAdapter.getItemCount() - 1;
+            } else if (index > mMonthAdapter.getCount() - 1) {
+                index = mMonthAdapter.getCount() - 1;
             }
             mMonthView.scrollToPosition(index);
-            onPicked(mMonthView, index);
+            refreshMonthMaximumDay();
             return this;
         }
 
@@ -194,34 +195,12 @@ public final class DateDialog {
             int index = day - 1;
             if (index < 0) {
                 index = 0;
-            } else if (index > mDayAdapter.getItemCount() - 1) {
-                index = mDayAdapter.getItemCount() - 1;
+            } else if (index > mDayAdapter.getCount() - 1) {
+                index = mDayAdapter.getCount() - 1;
             }
             mDayView.scrollToPosition(index);
-            onPicked(mDayView, index);
+            refreshMonthMaximumDay();
             return this;
-        }
-
-        /**
-         * {@link PickerLayoutManager.OnPickerListener}
-         * 
-         * @param recyclerView              RecyclerView 对象
-         * @param position                  当前滚动的位置
-         */
-        @Override
-        public void onPicked(RecyclerView recyclerView, int position) {
-            // 获取这个月最多有多少天
-            Calendar calendar = Calendar.getInstance(Locale.CHINA);
-            calendar.set(mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition(), 1);
-
-            int day = calendar.getActualMaximum(Calendar.DATE);
-            if (mDayAdapter.getItemCount() != day) {
-                ArrayList<String> dayData = new ArrayList<>(day);
-                for (int i = 1; i <= day; i++) {
-                    dayData.add(i + " " + getString(R.string.common_day));
-                }
-                mDayAdapter.setData(dayData);
-            }
         }
 
         @SingleClick
@@ -230,15 +209,55 @@ public final class DateDialog {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onSelected(getDialog(), mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition() + 1, mDayManager.getPickedPosition() + 1);
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onSelected(getDialog(),
+                        mStartYear + mYearManager.getPickedPosition(),
+                        mMonthManager.getPickedPosition() + 1,
+                        mDayManager.getPickedPosition() + 1);
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
+        }
+
+        /**
+         * {@link PickerLayoutManager.OnPickerListener}
+         *
+         * @param recyclerView              RecyclerView 对象
+         * @param position                  当前滚动的位置
+         */
+        @Override
+        public void onPicked(RecyclerView recyclerView, int position) {
+            refreshMonthMaximumDay();
+        }
+
+        @Override
+        public void run() {
+            // 获取这个月最多有多少天
+            Calendar calendar = Calendar.getInstance(Locale.CHINA);
+            calendar.set(mStartYear + mYearManager.getPickedPosition(), mMonthManager.getPickedPosition(), 1);
+
+            int day = calendar.getActualMaximum(Calendar.DATE);
+            if (mDayAdapter.getCount() != day) {
+                ArrayList<String> dayData = new ArrayList<>(day);
+                for (int i = 1; i <= day; i++) {
+                    dayData.add(i + " " + getString(R.string.common_day));
+                }
+                mDayAdapter.setData(dayData);
+            }
+        }
+
+        /**
+         * 刷新每个月天最大天数
+         */
+        private void refreshMonthMaximumDay() {
+            mYearView.removeCallbacks(this);
+            mYearView.post(this);
         }
 
         private static final class PickerAdapter extends AppAdapter<String> {
@@ -259,7 +278,7 @@ public final class DateDialog {
 
                 ViewHolder() {
                     super(R.layout.picker_item);
-                    mPickerView = (TextView) findViewById(R.id.tv_picker_name);
+                    mPickerView = findViewById(R.id.tv_picker_name);
                 }
 
                 @Override

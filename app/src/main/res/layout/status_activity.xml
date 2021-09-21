@@ -21,7 +21,8 @@
             android:name="com.hjq.demo.ui.fragment.StatusFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:ignore="MissingId" />
+            tools:ignore="MissingId"
+            tools:layout="@layout/status_fragment" />
 
     </com.hjq.demo.widget.StatusLayout>
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
@@ -34,6 +35,7 @@ public final class ListPopup {
             implements BaseAdapter.OnItemClickListener {
 
         @SuppressWarnings("rawtypes")
+        @Nullable
         private OnListener mListener;
         private boolean mAutoDismiss = true;
 
@@ -53,7 +55,7 @@ public final class ListPopup {
             new ArrowDrawable.Builder(context)
                     .setArrowOrientation(Gravity.TOP)
                     .setArrowGravity(Gravity.CENTER)
-                    .setShadowSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()))
+                    .setShadowSize((int) getResources().getDimension(R.dimen.dp_10))
                     .setBackgroundColor(0xFFFFFFFF)
                     .apply(recyclerView);
         }
@@ -112,9 +114,10 @@ public final class ListPopup {
                 dismiss();
             }
 
-            if (mListener != null) {
-                mListener.onSelected(getPopupWindow(), position, mAdapter.getItem(position));
+            if (mListener == null) {
+                return;
             }
+            mListener.onSelected(getPopupWindow(), position, mAdapter.getItem(position));
         }
     }
 
@@ -138,16 +141,17 @@ public final class ListPopup {
                 super(new TextView(getContext()));
                 mTextView = (TextView) getItemView();
                 mTextView.setTextColor(getColor(R.color.black50));
-                mTextView.setTextSize(16);
+                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.sp_16));
             }
 
             @Override
             public void onBindView(int position) {
                 mTextView.setText(getItem(position).toString());
-                mTextView.setPaddingRelative((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, position == 0 ? 12 : 0, getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()));
+
+                mTextView.setPaddingRelative((int) getResources().getDimension(R.dimen.dp_12),
+                        (position == 0 ? (int) getResources().getDimension(R.dimen.dp_12) : 0),
+                        (int) getResources().getDimension(R.dimen.dp_12),
+                        (int) getResources().getDimension(R.dimen.dp_10));
             }
         }
     }
