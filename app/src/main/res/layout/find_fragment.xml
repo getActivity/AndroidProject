@@ -18,6 +18,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/ll_find"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -276,6 +277,7 @@
 
             <com.hjq.widget.view.RegexEditText
                 style="@style/EditTextStyle"
+                android:id="@+id/edit_tel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp_40"

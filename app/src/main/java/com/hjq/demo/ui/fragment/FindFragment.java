@@ -1,7 +1,10 @@
 package com.hjq.demo.ui.fragment;
 
+import android.content.Context;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -28,6 +31,8 @@ public final class FindFragment extends TitleBarFragment<HomeActivity>
     private ImageView mCornerView;
     private SwitchButton mSwitchButton;
     private CountdownView mCountdownView;
+    private LinearLayout llFind;
+    private com.hjq.widget.view.RegexEditText  edit_tel;
 
     public static FindFragment newInstance() {
         return new FindFragment();
@@ -44,8 +49,10 @@ public final class FindFragment extends TitleBarFragment<HomeActivity>
         mCornerView = findViewById(R.id.iv_find_corner);
         mSwitchButton = findViewById(R.id.sb_find_switch);
         mCountdownView = findViewById(R.id.cv_find_countdown);
+        edit_tel = findViewById(R.id.edit_tel);
+        llFind = findViewById(R.id.ll_find);
         setOnClickListener(mCountdownView);
-
+        setOnClickListener(llFind);
         mSwitchButton.setOnCheckedChangeListener(this);
     }
 
@@ -70,6 +77,9 @@ public final class FindFragment extends TitleBarFragment<HomeActivity>
         if (view == mCountdownView) {
             toast(R.string.common_code_send_hint);
             mCountdownView.start();
+        } else if (view == llFind) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(edit_tel.getWindowToken(), 0);
         }
     }
 
