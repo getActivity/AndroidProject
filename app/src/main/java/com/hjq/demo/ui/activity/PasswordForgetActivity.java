@@ -11,7 +11,12 @@ import android.widget.TextView;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.GetCodeApi;
+import com.hjq.demo.http.api.VerifyCodeApi;
+import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.InputTextManager;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.view.CountdownView;
 
 /**
@@ -76,7 +81,7 @@ public final class PasswordForgetActivity extends AppActivity
             hideKeyboard(getCurrentFocus());
 
             // 获取验证码
-            /*EasyHttp.post(this)
+            EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
                     .request(new HttpCallback<HttpData<Void>>(this) {
@@ -86,7 +91,7 @@ public final class PasswordForgetActivity extends AppActivity
                             toast(R.string.common_code_send_hint);
                             mCountdownView.start();
                         }
-                    });*/
+                    });
         } else if (view == mCommitView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
@@ -108,7 +113,7 @@ public final class PasswordForgetActivity extends AppActivity
             }
 
             // 验证码校验
-            /*EasyHttp.post(this)
+            EasyHttp.post(this)
                     .api(new VerifyCodeApi()
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString()))
@@ -119,7 +124,7 @@ public final class PasswordForgetActivity extends AppActivity
                             PasswordResetActivity.start(getActivity(), mPhoneView.getText().toString(), mCodeView.getText().toString());
                             finish();
                         }
-                    });*/
+                    });
         }
     }
 

@@ -11,20 +11,23 @@
         android:id="@+id/vp_guide_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="30dp" />
+        android:paddingBottom="@dimen/dp_30" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="@dimen/dp_30">
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/cv_guide_indicator"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/dp_50"
             app:ci_drawable="@drawable/guide_indicator_selected"
-            app:ci_drawable_unselected="@drawable/guide_indicator_unselected" />
+            app:ci_drawable_unselected="@drawable/guide_indicator_unselected"
+            app:ci_height="@dimen/dp_5"
+            app:ci_margin="@dimen/dp_5"
+            app:ci_width="@dimen/dp_5" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_guide_complete"
@@ -32,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:minWidth="160dp"
+            android:minWidth="@dimen/dp_160"
             android:text="了解详情"
             android:visibility="invisible" />
 

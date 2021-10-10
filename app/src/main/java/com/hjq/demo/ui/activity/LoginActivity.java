@@ -15,22 +15,30 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.LoginApi;
 import com.hjq.demo.http.glide.GlideApp;
+import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.InputTextManager;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.other.KeyboardWatcher;
-import com.hjq.demo.ui.fragment.MeFragment;
+import com.hjq.demo.ui.fragment.MineFragment;
 import com.hjq.demo.wxapi.WXEntryActivity;
+import com.hjq.http.EasyConfig;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
 import com.hjq.widget.view.SubmitButton;
+
+import okhttp3.Call;
 
 /**
  *    author : Android 轮子哥
@@ -43,11 +51,14 @@ public final class LoginActivity extends AppActivity
         KeyboardWatcher.SoftKeyboardStateListener,
         TextView.OnEditorActionListener {
 
-    @DebugLog
+    private static final String INTENT_KEY_IN_PHONE = "phone";
+    private static final String INTENT_KEY_IN_PASSWORD = "password";
+
+    @Log
     public static void start(Context context, String phone, String password) {
         Intent intent = new Intent(context, LoginActivity.class);
-        intent.putExtra(IntentKey.PHONE, phone);
-        intent.putExtra(IntentKey.PASSWORD, password);
+        intent.putExtra(INTENT_KEY_IN_PHONE, phone);
+        intent.putExtra(INTENT_KEY_IN_PASSWORD, password);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -123,14 +134,15 @@ public final class LoginActivity extends AppActivity
         }
 
         // 自动填充手机号和密码
-        mPhoneView.setText(getString(IntentKey.PHONE));
-        mPasswordView.setText(getString(IntentKey.PASSWORD));
+        mPhoneView.setText(getString(INTENT_KEY_IN_PHONE));
+        mPasswordView.setText(getString(INTENT_KEY_IN_PASSWORD));
     }
 
     @Override
     public void onRightClick(View view) {
         // 跳转到注册界面
-        RegisterActivity.start(this, mPhoneView.getText().toString(), mPasswordView.getText().toString(), (phone, password) -> {
+        RegisterActivity.start(this, mPhoneView.getText().toString(),
+                mPasswordView.getText().toString(), (phone, password) -> {
             // 如果已经注册成功，就执行登录操作
             mPhoneView.setText(phone);
             mPasswordView.setText(password);
@@ -164,18 +176,18 @@ public final class LoginActivity extends AppActivity
                 postDelayed(() -> {
                     mCommitView.showSucceed();
                     postDelayed(() -> {
-                        HomeActivity.start(getContext(), MeFragment.class);
+                        HomeActivity.start(getContext(), MineFragment.class);
                         finish();
                     }, 1000);
                 }, 2000);
                 return;
             }
 
-            /*EasyHttp.post(this)
+            EasyHttp.post(this)
                     .api(new LoginApi()
                             .setPhone(mPhoneView.getText().toString())
                             .setPassword(mPasswordView.getText().toString()))
-                    .request(new HttpCallback<HttpData<LoginBean>>(this) {
+                    .request(new HttpCallback<HttpData<LoginApi.Bean>>(this) {
 
                         @Override
                         public void onStart(Call call) {
@@ -186,7 +198,7 @@ public final class LoginActivity extends AppActivity
                         public void onEnd(Call call) {}
 
                         @Override
-                        public void onSucceed(HttpData<LoginBean> data) {
+                        public void onSucceed(HttpData<LoginApi.Bean> data) {
                             // 更新 Token
                             EasyConfig.getInstance()
                                     .addParam("token", data.getData().getToken());
@@ -194,7 +206,7 @@ public final class LoginActivity extends AppActivity
                                 mCommitView.showSucceed();
                                 postDelayed(() -> {
                                     // 跳转到首页
-                                    HomeActivity.start(getContext(), MeFragment.class);
+                                    HomeActivity.start(getContext(), MineFragment.class);
                                     finish();
                                 }, 1000);
                             }, 1000);
@@ -207,12 +219,12 @@ public final class LoginActivity extends AppActivity
                                 mCommitView.showError(3000);
                             }, 1000);
                         }
-                    });*/
+                    });
             return;
         }
 
         if (view == mQQView || view == mWeChatView) {
-            toast("记得改好第三方 AppID 和 AppKey，否则会调不起来哦");
+            toast("记得改好第三方 AppID 和 Secret，否则会调不起来哦");
             Platform platform;
             if (view == mQQView) {
                 platform = Platform.QQ;
@@ -229,7 +241,7 @@ public final class LoginActivity extends AppActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // 友盟登录回调
+        // 友盟回调
         UmengClient.onActivityResult(this, requestCode, resultCode, data);
     }
 
@@ -265,9 +277,10 @@ public final class LoginActivity extends AppActivity
                 .circleCrop()
                 .into(mLogoView);
 
-        toast("昵称：" + data.getName() + "\n" + "性别：" + data.getSex());
-        toast("id：" + data.getId());
-        toast("token：" + data.getToken());
+        toast("昵称：" + data.getName() + "\n" +
+                "性别：" + data.getSex() + "\n" +
+                "id：" + data.getId() + "\n" +
+                "token：" + data.getToken());
     }
 
     /**
@@ -279,16 +292,6 @@ public final class LoginActivity extends AppActivity
     @Override
     public void onError(Platform platform, Throwable t) {
         toast("第三方登录出错：" + t.getMessage());
-    }
-
-    /**
-     * 授权取消的回调
-     *
-     * @param platform      平台名称
-     */
-    @Override
-    public void onCancel(Platform platform) {
-        toast("取消第三方登录");
     }
 
     /**
@@ -350,5 +353,13 @@ public final class LoginActivity extends AppActivity
             return true;
         }
         return false;
+    }
+
+    @NonNull
+    @Override
+    protected ImmersionBar createStatusBarConfig() {
+        return super.createStatusBarConfig()
+                // 指定导航栏背景颜色
+                .navigationBarColor(R.color.white);
     }
 }

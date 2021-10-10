@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.annotation.ColorInt;
@@ -19,7 +18,6 @@ import com.scwang.smart.refresh.layout.api.RefreshFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 import com.scwang.smart.refresh.layout.simple.SimpleComponent;
-import com.scwang.smart.refresh.layout.util.SmartUtil;
 
 /**
  *    author : 树朾 & Android 轮子哥
@@ -55,7 +53,7 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
     public SmartBallPulseFooter(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
 
-        setMinimumHeight(SmartUtil.dp2px(60));
+        setMinimumHeight((int) getResources().getDimension(R.dimen.dp_60));
 
         mPaint = new Paint();
         mPaint.setColor(Color.WHITE);
@@ -64,8 +62,8 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
 
         mSpinnerStyle = SpinnerStyle.Translate;
 
-        mCircleSpacing = SmartUtil.dp2px(2);
-        mPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
+        mCircleSpacing = getResources().getDimension(R.dimen.dp_2);
+        mPaint.setTextSize(getResources().getDimension(R.dimen.sp_14));
         mTextWidth = mPaint.measureText(getContext().getString(R.string.common_no_more_data));
     }
 
@@ -76,7 +74,7 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
         if (mNoMoreData) {
             mPaint.setColor(0xFF898989);
             canvas.drawText(getContext().getString(R.string.common_no_more_data),(width - mTextWidth) / 2,(height - mPaint.getTextSize()) / 2, mPaint);
-        } else{
+        } else {
             float radius = (Math.min(width, height) - mCircleSpacing * 2) / 7;
             float x = width / 2f - (radius * 2 + mCircleSpacing);
             float y = height / 2f;

@@ -1,4 +1,4 @@
 include ':app'
-include ':base'
-include ':widget'
-include ':umeng'
+include ':library:base'
+include ':library:widget'
+include ':library:umeng'

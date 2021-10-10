@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
@@ -31,6 +32,7 @@ public final class AlbumDialog {
             extends BaseDialog.Builder<Builder>
             implements BaseAdapter.OnItemClickListener {
 
+        @Nullable
         private OnListener mListener;
 
         private final RecyclerView mRecyclerView;

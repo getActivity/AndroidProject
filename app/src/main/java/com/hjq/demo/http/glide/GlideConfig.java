@@ -61,9 +61,9 @@ public final class GlideConfig extends AppGlideModule {
 
         builder.setDefaultRequestOptions(new RequestOptions()
                 // 设置默认加载中占位图
-                .placeholder(R.drawable.image_loading_bg)
+                .placeholder(R.drawable.image_loading_ic)
                 // 设置默认加载出错占位图
-                .error(R.drawable.image_error_bg));
+                .error(R.drawable.image_error_ic));
     }
 
     /*@Override

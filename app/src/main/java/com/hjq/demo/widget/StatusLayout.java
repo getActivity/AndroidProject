@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -34,6 +35,10 @@ public final class StatusLayout extends FrameLayout {
     private LottieAnimationView mLottieView;
     /** 提示文本 */
     private TextView mTextView;
+    /** 重试按钮 */
+    private TextView mRetryView;
+    /** 重试监听 */
+    private OnRetryListener mListener;
 
     public StatusLayout(@NonNull Context context) {
         this(context, null);
@@ -44,15 +49,7 @@ public final class StatusLayout extends FrameLayout {
     }
 
     public StatusLayout(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
-
-    public StatusLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-
-        setClickable(true);
-        setFocusable(true);
-        setFocusableInTouchMode(true);
+        super(context, attrs, defStyleAttr);
     }
 
     /**
@@ -68,6 +65,7 @@ public final class StatusLayout extends FrameLayout {
         if (isShow()) {
             return;
         }
+        mRetryView.setVisibility(mListener == null ? View.INVISIBLE : View.VISIBLE);
         // 显示布局
         mMainLayout.setVisibility(VISIBLE);
     }
@@ -147,23 +145,53 @@ public final class StatusLayout extends FrameLayout {
 
         mLottieView = mMainLayout.findViewById(R.id.iv_status_icon);
         mTextView = mMainLayout.findViewById(R.id.iv_status_text);
+        mRetryView = mMainLayout.findViewById(R.id.iv_status_retry);
 
         if (mMainLayout.getBackground() == null) {
             // 默认使用 windowBackground 作为背景
             TypedArray typedArray = getContext().obtainStyledAttributes(new int[]{android.R.attr.windowBackground});
             mMainLayout.setBackground(typedArray.getDrawable(0));
+            mMainLayout.setClickable(true);
             typedArray.recycle();
         }
+
+        mRetryView.setOnClickListener(mClickWrapper);
 
         addView(mMainLayout);
     }
 
-    @Override
-    public void setOnClickListener(@Nullable OnClickListener l) {
+    /**
+     * 设置重试监听器
+     */
+    public void setOnRetryListener(OnRetryListener listener) {
+        mListener = listener;
         if (isShow()) {
-            mMainLayout.setOnClickListener(l);
-        } else {
-            super.setOnClickListener(l);
+            mRetryView.setVisibility(mListener == null ? View.INVISIBLE : View.VISIBLE);
         }
+    }
+
+    /**
+     * 点击事件包装类
+     */
+    private final OnClickListener mClickWrapper = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if (mListener == null) {
+                return;
+            }
+            mListener.onRetry(StatusLayout.this);
+        }
+    };
+
+    /**
+     * 重试监听器
+     */
+    public interface OnRetryListener {
+
+        /**
+         * 点击了重试
+         */
+        void onRetry(StatusLayout layout);
     }
 }

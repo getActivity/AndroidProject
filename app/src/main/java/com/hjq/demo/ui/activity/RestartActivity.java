@@ -29,9 +29,7 @@ public final class RestartActivity extends AppActivity {
     }
 
     @Override
-    protected void initView() {
-
-    }
+    protected void initView() {}
 
     @Override
     protected void initData() {

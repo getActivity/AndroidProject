@@ -6,14 +6,14 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="5dp"
-    android:paddingBottom="15dp"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_15"
     tools:context=".ui.dialog.ShareDialog">
 
     <com.hjq.widget.view.ScaleImageView
         android:id="@+id/iv_share_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
         app:scaleRatio="1.2"
         tools:src="@mipmap/launcher_ic" />
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#666666"
-        android:textSize="12sp"
+        android:textSize="@dimen/sp_12"
         tools:text="分享平台" />
 
 </LinearLayout>

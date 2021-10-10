@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.hjq.base.BaseDialog;
@@ -21,6 +22,7 @@ public final class MessageDialog {
     public static final class Builder
             extends CommonDialog.Builder<Builder> {
 
+        @Nullable
         private OnListener mListener;
 
         private final TextView mMessageView;
@@ -59,14 +61,16 @@ public final class MessageDialog {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onConfirm(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onConfirm(getDialog());
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
     }

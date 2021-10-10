@@ -3,6 +3,8 @@ package com.hjq.demo.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,7 +14,6 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.widget.PlayerView;
 
 import java.io.File;
@@ -23,8 +24,10 @@ import java.io.File;
  *    time   : 2020/02/16
  *    desc   : 视频播放界面
  */
-public final class VideoPlayActivity extends AppActivity
-        implements PlayerView.onPlayListener {
+public class VideoPlayActivity extends AppActivity
+        implements PlayerView.OnPlayListener {
+
+    public static final String INTENT_KEY_PARAMETERS = "parameters";
 
     private PlayerView mPlayerView;
     private VideoPlayActivity.Builder mBuilder;
@@ -43,20 +46,22 @@ public final class VideoPlayActivity extends AppActivity
 
     @Override
     protected void initData() {
-        mBuilder = getParcelable(IntentKey.VIDEO);
+        mBuilder = getParcelable(INTENT_KEY_PARAMETERS);
         if (mBuilder == null) {
             throw new IllegalArgumentException("are you ok?");
         }
+
         mPlayerView.setVideoTitle(mBuilder.getVideoTitle());
         mPlayerView.setVideoSource(mBuilder.getVideoSource());
         mPlayerView.setGestureEnabled(mBuilder.isGestureEnabled());
+
         if (mBuilder.isAutoPlay()) {
             mPlayerView.start();
         }
     }
 
     /**
-     * {@link PlayerView.onPlayListener}
+     * {@link PlayerView.OnPlayListener}
      */
     @Override
     public void onClickBack(PlayerView view) {
@@ -72,11 +77,20 @@ public final class VideoPlayActivity extends AppActivity
     }
 
     @Override
+    public void onPlayProgress(PlayerView view) {
+        // 记录播放进度
+        mBuilder.setPlayProgress(view.getProgress());
+    }
+
+    @Override
     public void onPlayEnd(PlayerView view) {
         if (mBuilder.isLoopPlay()) {
             mPlayerView.setProgress(0);
             mPlayerView.start();
-        } else if (mBuilder.isAutoOver()) {
+            return;
+        }
+
+        if (mBuilder.isAutoOver()) {
             finish();
         }
     }
@@ -89,118 +103,160 @@ public final class VideoPlayActivity extends AppActivity
                 .hideBar(BarHide.FLAG_HIDE_BAR);
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // 保存播放进度
+        outState.putParcelable(INTENT_KEY_PARAMETERS, mBuilder);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // 读取播放进度
+        mBuilder = savedInstanceState.getParcelable(INTENT_KEY_PARAMETERS);
+    }
+
+    /** 竖屏播放 */
+    public static final class Portrait extends VideoPlayActivity {}
+
+    /** 横屏播放 */
+    public static final class Landscape extends VideoPlayActivity {}
+
     /**
      * 播放参数构建
      */
     public static final class Builder implements Parcelable {
 
         /** 视频源 */
-        private String mVideoSource;
+        private String videoSource;
         /** 视频标题 */
-        private String mVideoTitle;
+        private String videoTitle;
+
         /** 播放进度 */
-        private int mPlayProgress;
+        private int playProgress;
         /** 手势开关 */
-        private boolean mGestureEnabled = true;
+        private boolean gestureEnabled = true;
         /** 循环播放 */
-        private boolean mLoopPlay = false;
+        private boolean loopPlay = false;
         /** 自动播放 */
-        private boolean mAutoPlay = true;
+        private boolean autoPlay = true;
         /** 播放完关闭 */
-        private boolean mAutoOver = true;
+        private boolean autoOver = true;
+
+        /** 播放方向 */
+        private int activityOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
         public Builder() {}
 
         protected Builder(Parcel in) {
-            mVideoSource = in.readString();
-            mVideoTitle = in.readString();
-            mPlayProgress = in.readInt();
-            mGestureEnabled = in.readByte() != 0;
-            mLoopPlay = in.readByte() != 0;
-            mAutoPlay = in.readByte() != 0;
-            mAutoOver = in.readByte() != 0;
+            videoSource = in.readString();
+            videoTitle = in.readString();
+            activityOrientation = in.readInt();
+
+            playProgress = in.readInt();
+            gestureEnabled = in.readByte() != 0;
+            loopPlay = in.readByte() != 0;
+            autoPlay = in.readByte() != 0;
+            autoOver = in.readByte() != 0;
         }
 
         public Builder setVideoSource(File file) {
-            mVideoSource = file.getPath();
-            if (mVideoTitle == null) {
-                mVideoTitle = file.getName();
+            videoSource = file.getPath();
+            if (videoTitle == null) {
+                videoTitle = file.getName();
             }
             return this;
         }
 
         public Builder setVideoSource(String url) {
-            mVideoSource = url;
+            videoSource = url;
             return this;
         }
 
         private String getVideoSource() {
-            return mVideoSource;
+            return videoSource;
         }
 
         public Builder setVideoTitle(String title) {
-            mVideoTitle = title;
+            videoTitle = title;
             return this;
         }
 
         private String getVideoTitle() {
-            return mVideoTitle;
+            return videoTitle;
         }
 
         public Builder setPlayProgress(int progress) {
-            mPlayProgress = progress;
+            playProgress = progress;
             return this;
         }
 
         private int getPlayProgress() {
-            return mPlayProgress;
+            return playProgress;
         }
 
         public Builder setGestureEnabled(boolean enabled) {
-            mGestureEnabled = enabled;
+            gestureEnabled = enabled;
             return this;
         }
 
         private boolean isGestureEnabled() {
-            return mGestureEnabled;
+            return gestureEnabled;
         }
 
         public Builder setLoopPlay(boolean enabled) {
-            mLoopPlay = enabled;
+            loopPlay = enabled;
             return this;
         }
 
         private boolean isLoopPlay() {
-            return mLoopPlay;
+            return loopPlay;
         }
 
         public Builder setAutoPlay(boolean enabled) {
-            mAutoPlay = enabled;
+            autoPlay = enabled;
             return this;
         }
 
         public boolean isAutoPlay() {
-            return mAutoPlay;
+            return autoPlay;
         }
 
         public Builder setAutoOver(boolean enabled) {
-            mAutoOver = enabled;
+            autoOver = enabled;
             return this;
         }
 
         private boolean isAutoOver() {
-            return mAutoOver;
+            return autoOver;
+        }
+
+        public Builder setActivityOrientation(int orientation) {
+            activityOrientation = orientation;
+            return this;
         }
 
         public void start(Context context) {
-            Intent intent = new Intent(context, VideoPlayActivity.class);
-            intent.putExtra(IntentKey.VIDEO, this);
+            Intent intent = new Intent();
+            switch (activityOrientation) {
+                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                    intent.setClass(context, VideoPlayActivity.Landscape.class);
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                    intent.setClass(context, VideoPlayActivity.Portrait.class);
+                    break;
+                default:
+                    intent.setClass(context, VideoPlayActivity.class);
+                    break;
+            }
+
+            intent.putExtra(INTENT_KEY_PARAMETERS, this);
             if (!(context instanceof Activity)) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
             context.startActivity(intent);
         }
-
 
         @Override
         public int describeContents() {
@@ -209,13 +265,14 @@ public final class VideoPlayActivity extends AppActivity
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(mVideoSource);
-            dest.writeString(mVideoTitle);
-            dest.writeInt(mPlayProgress);
-            dest.writeByte(mGestureEnabled ? (byte) 1 : (byte) 0);
-            dest.writeByte(mLoopPlay ? (byte) 1 : (byte) 0);
-            dest.writeByte(mAutoPlay ? (byte) 1 : (byte) 0);
-            dest.writeByte(mAutoOver ? (byte) 1 : (byte) 0);
+            dest.writeString(videoSource);
+            dest.writeString(videoTitle);
+            dest.writeInt(activityOrientation);
+            dest.writeInt(playProgress);
+            dest.writeByte(gestureEnabled ? (byte) 1 : (byte) 0);
+            dest.writeByte(loopPlay ? (byte) 1 : (byte) 0);
+            dest.writeByte(autoPlay ? (byte) 1 : (byte) 0);
+            dest.writeByte(autoOver ? (byte) 1 : (byte) 0);
         }
 
         public static final Parcelable.Creator<Builder> CREATOR = new Parcelable.Creator<Builder>() {

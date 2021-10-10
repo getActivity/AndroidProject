@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
@@ -37,6 +38,7 @@ public final class SelectDialog {
             implements View.OnLayoutChangeListener, Runnable {
 
         @SuppressWarnings("rawtypes")
+        @Nullable
         private OnListener mListener;
 
         private final RecyclerView mRecyclerView;
@@ -119,17 +121,19 @@ public final class SelectDialog {
                 HashMap<Integer, Object> data = mAdapter.getSelectSet();
                 if (data.size() >= mAdapter.getMinSelect()) {
                     autoDismiss();
-                    if (mListener != null) {
-                        mListener.onSelected(getDialog(), data);
+                    if (mListener == null) {
+                        return;
                     }
+                    mListener.onSelected(getDialog(), data);
                 } else {
                     ToastUtils.show(String.format(getString(R.string.select_min_hint), mAdapter.getMinSelect()));
                 }
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
 
@@ -259,8 +263,8 @@ public final class SelectDialog {
 
             ViewHolder() {
                 super(R.layout.select_item);
-                mTextView = (TextView) findViewById(R.id.tv_select_text);
-                mCheckBox = (CheckBox) findViewById(R.id.tv_select_checkbox);
+                mTextView = findViewById(R.id.tv_select_text);
+                mCheckBox = findViewById(R.id.tv_select_checkbox);
             }
 
             @Override

@@ -7,7 +7,9 @@ import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.LogoutApi;
 import com.hjq.demo.http.glide.GlideApp;
+import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.manager.CacheDataManager;
 import com.hjq.demo.manager.ThreadPoolManager;
@@ -15,6 +17,8 @@ import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.ui.dialog.MenuDialog;
 import com.hjq.demo.ui.dialog.SafeDialog;
 import com.hjq.demo.ui.dialog.UpdateDialog;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.layout.SettingBar;
 import com.hjq.widget.view.SwitchButton;
 
@@ -112,7 +116,7 @@ public final class SettingActivity extends AppActivity
 
         } else if (viewId == R.id.sb_setting_agreement) {
 
-            BrowserActivity.start(this, "https://github.com/getActivity/AndroidProject");
+            BrowserActivity.start(this, "https://github.com/getActivity/Donate");
 
         } else if (viewId == R.id.sb_setting_about) {
 
@@ -147,7 +151,7 @@ public final class SettingActivity extends AppActivity
             }
 
             // 退出登录
-            /*EasyHttp.post(this)
+            EasyHttp.post(this)
                     .api(new LogoutApi())
                     .request(new HttpCallback<HttpData<Void>>(this) {
 
@@ -157,7 +161,7 @@ public final class SettingActivity extends AppActivity
                             // 进行内存优化，销毁除登录页之外的所有界面
                             ActivityManager.getInstance().finishAllActivities(LoginActivity.class);
                         }
-                    });*/
+                    });
 
         }
     }

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="320dp"
+    android:layout_width="@dimen/dp_280"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal|bottom"
     android:orientation="vertical"
@@ -27,7 +27,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="@dimen/dp_10"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/dialog_ui_round_size"
         app:cardElevation="0px">
@@ -39,12 +39,12 @@
             android:background="@drawable/transparent_selector"
             android:focusable="true"
             android:gravity="center"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="13dp"
+            android:paddingHorizontal="@dimen/dp_15"
+            android:paddingVertical="@dimen/dp_13"
             android:singleLine="true"
             android:text="@string/common_cancel"
             android:textColor="@color/common_cancel_text_color"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp_14" />
 
     </androidx.cardview.widget.CardView>
 

@@ -12,13 +12,14 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.hjq.demo.R;
 
 /**
  *    author : 王浩 & Android 轮子哥
@@ -41,16 +42,17 @@ public final class ArrowDrawable extends Drawable {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (mPath != null) {
-            if (mBuilder.mShadowSize > 0) {
-                mPaint.setMaskFilter(new BlurMaskFilter(mBuilder.mShadowSize, BlurMaskFilter.Blur.OUTER));
-                mPaint.setColor(mBuilder.mShadowColor);
-                canvas.drawPath(mPath, mPaint);
-            }
-            mPaint.setMaskFilter(null);
-            mPaint.setColor(mBuilder.mBackgroundColor);
+        if (mPath == null) {
+            return;
+        }
+        if (mBuilder.mShadowSize > 0) {
+            mPaint.setMaskFilter(new BlurMaskFilter(mBuilder.mShadowSize, BlurMaskFilter.Blur.OUTER));
+            mPaint.setColor(mBuilder.mShadowColor);
             canvas.drawPath(mPath, mPaint);
         }
+        mPaint.setMaskFilter(null);
+        mPaint.setColor(mBuilder.mBackgroundColor);
+        canvas.drawPath(mPath, mPaint);
     }
 
     @Override
@@ -205,8 +207,8 @@ public final class ArrowDrawable extends Drawable {
             mContext = context;
             mBackgroundColor = 0xFF000000;
             mShadowColor = 0x33000000;
-            mArrowHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, mContext.getResources().getDisplayMetrics());
-            mRadius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, mContext.getResources().getDisplayMetrics());
+            mArrowHeight = (int) context.getResources().getDimension(R.dimen.dp_6);
+            mRadius = (int) context.getResources().getDimension(R.dimen.dp_4);
             mShadowSize = 0;
             mArrowOffsetX = 0;
             mArrowOffsetY = 0;

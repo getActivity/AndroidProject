@@ -3,6 +3,8 @@ package com.hjq.demo.manager;
 import android.content.Context;
 import android.os.Environment;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import java.io.File;
 import java.math.BigDecimal;
 
@@ -39,17 +41,19 @@ public final class CacheDataManager {
      * 删除文件夹
      */
     private static boolean deleteDir(File dir) {
-        if (dir != null) {
-            if (dir.isDirectory()) {
-                String[] children = dir.list();
-                if (children != null) {
-                    for (String child : children) {
-                        deleteDir(new File(dir, child));
-                    }
-                }
-            } else {
-                return dir.delete();
-            }
+        if (dir == null) {
+            return false;
+        }
+        if (!dir.isDirectory()) {
+            return dir.delete();
+        }
+
+        String[] children = dir.list();
+        if (children == null) {
+            return false;
+        }
+        for (String child : children) {
+            deleteDir(new File(dir, child));
         }
         return false;
     }
@@ -61,18 +65,19 @@ public final class CacheDataManager {
         long size = 0;
         try {
             File[] list = file.listFiles();
-            if (list != null) {
-                for (File temp : list) {
-                    // 如果下面还有文件
-                    if (temp.isDirectory()) {
-                        size = size + getFolderSize(temp);
-                    } else {
-                        size = size + temp.length();
-                    }
+            if (list == null) {
+                return 0;
+            }
+            for (File temp : list) {
+                // 如果下面还有文件
+                if (temp.isDirectory()) {
+                    size = size + getFolderSize(temp);
+                } else {
+                    size = size + temp.length();
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            CrashReport.postCatchedException(e);
         }
         return size;
     }
@@ -89,26 +94,19 @@ public final class CacheDataManager {
 
         double megaByte = kiloByte / 1024;
         if (megaByte < 1) {
-            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
-            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
-                    .toPlainString() + "K";
+            return new BigDecimal(kiloByte).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "K";
         }
 
         double gigaByte = megaByte / 1024;
         if (gigaByte < 1) {
-            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
-            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
-                    .toPlainString() + "M";
+            return new BigDecimal(megaByte).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "M";
         }
 
         double teraBytes = gigaByte / 1024;
         if (teraBytes < 1) {
-            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
-            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
-                    .toPlainString() + "GB";
+            return new BigDecimal(gigaByte).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
         }
-        BigDecimal result4 = new BigDecimal(teraBytes);
-        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
-                + "TB";
+
+        return new BigDecimal(teraBytes).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 }

@@ -6,29 +6,28 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.other.GridSpaceDecoration;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.ui.adapter.ImageSelectAdapter;
 import com.hjq.demo.ui.dialog.AlbumDialog;
 import com.hjq.demo.widget.StatusLayout;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.hjq.widget.view.FloatActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,26 +48,35 @@ public final class ImageSelectActivity extends AppActivity
         BaseAdapter.OnItemLongClickListener,
         BaseAdapter.OnChildClickListener {
 
+    private static final String INTENT_KEY_IN_MAX_SELECT = "maxSelect";
+
+    private static final String INTENT_KEY_OUT_IMAGE_LIST = "imageList";
+
     public static void start(BaseActivity activity, OnPhotoSelectListener listener) {
         start(activity, 1, listener);
     }
 
-    @DebugLog
-    @Permissions({Permission.MANAGE_EXTERNAL_STORAGE})
+    @Log
+    @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE})
     public static void start(BaseActivity activity, int maxSelect, OnPhotoSelectListener listener) {
         if (maxSelect < 1) {
             // 最少要选择一个图片
             throw new IllegalArgumentException("are you ok?");
         }
         Intent intent = new Intent(activity, ImageSelectActivity.class);
-        intent.putExtra(IntentKey.AMOUNT, maxSelect);
+        intent.putExtra(INTENT_KEY_IN_MAX_SELECT, maxSelect);
         activity.startActivityForResult(intent, (resultCode, data) -> {
 
-            if (listener == null || data == null) {
+            if (listener == null) {
                 return;
             }
 
-            ArrayList<String> list = data.getStringArrayListExtra(IntentKey.IMAGE);
+            if (data == null) {
+                listener.onCancel();
+                return;
+            }
+
+            ArrayList<String> list = data.getStringArrayListExtra(INTENT_KEY_OUT_IMAGE_LIST);
             if (list == null || list.isEmpty()) {
                 listener.onCancel();
                 return;
@@ -91,7 +99,7 @@ public final class ImageSelectActivity extends AppActivity
 
     private StatusLayout mStatusLayout;
     private RecyclerView mRecyclerView;
-    private FloatingActionButton mFloatingView;
+    private FloatActionButton mFloatingView;
 
     private ImageSelectAdapter mAdapter;
 
@@ -128,13 +136,29 @@ public final class ImageSelectActivity extends AppActivity
         // 禁用动画效果
         mRecyclerView.setItemAnimator(null);
         // 添加分割线
-        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics())));
+        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) getResources().getDimension(R.dimen.dp_3)));
+        // 设置滚动监听
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        mFloatingView.hide();
+                        break;
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        mFloatingView.show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
         // 获取最大的选择数
-        mMaxSelect = getInt(IntentKey.AMOUNT, mMaxSelect);
+        mMaxSelect = getInt(INTENT_KEY_IN_MAX_SELECT, mMaxSelect);
 
         // 显示加载进度条
         showLoading();
@@ -160,10 +184,11 @@ public final class ImageSelectActivity extends AppActivity
         Set<String> keys = mAllAlbum.keySet();
         for (String key : keys) {
             List<String> list = mAllAlbum.get(key);
-            if (list != null && !list.isEmpty()) {
-                count += list.size();
-                data.add(new AlbumDialog.AlbumInfo(list.get(0), key, String.format(getString(R.string.image_select_total), list.size()), mAdapter.getData() == list));
+            if (list == null || list.isEmpty()) {
+                continue;
             }
+            count += list.size();
+            data.add(new AlbumDialog.AlbumInfo(list.get(0), key, String.format(getString(R.string.image_select_total), list.size()), mAdapter.getData() == list));
         }
         data.add(0, new AlbumDialog.AlbumInfo(mAllImage.get(0), getString(R.string.image_select_all), String.format(getString(R.string.image_select_total), count), mAdapter.getData() == mAllImage));
 
@@ -180,7 +205,7 @@ public final class ImageSelectActivity extends AppActivity
                             mAdapter.setData(mAllAlbum.get(bean.getName()));
                         }
                         // 执行列表动画
-                        mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.from_right_layout));
+                        mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_from_right));
                         mRecyclerView.scheduleLayoutAnimation();
                     });
         }
@@ -204,18 +229,20 @@ public final class ImageSelectActivity extends AppActivity
             mAllImage.remove(path);
 
             File parentFile = file.getParentFile();
-            if (parentFile != null) {
-                List<String> data = mAllAlbum.get(parentFile.getName());
-                if (data != null) {
-                    data.remove(path);
-                }
-                mAdapter.notifyDataSetChanged();
+            if (parentFile == null) {
+                continue;
+            }
 
-                if (mSelectImage.isEmpty()) {
-                    mFloatingView.setImageResource(R.drawable.camera_ic);
-                } else {
-                    mFloatingView.setImageResource(R.drawable.succeed_ic);
-                }
+            List<String> data = mAllAlbum.get(parentFile.getName());
+            if (data != null) {
+                data.remove(path);
+            }
+            mAdapter.notifyDataSetChanged();
+
+            if (mSelectImage.isEmpty()) {
+                mFloatingView.setImageResource(R.drawable.camera_ic);
+            } else {
+                mFloatingView.setImageResource(R.drawable.succeed_ic);
             }
         }
     }
@@ -226,24 +253,31 @@ public final class ImageSelectActivity extends AppActivity
         if (view.getId() == R.id.fab_image_select_floating) {
             if (mSelectImage.isEmpty()) {
                 // 点击拍照
-                CameraActivity.start(this, file -> {
+                CameraActivity.start(this, new CameraActivity.OnCameraListener() {
+                    @Override
+                    public void onSelected(File file) {
+                        // 当前选中图片的数量必须小于最大选中数
+                        if (mSelectImage.size() < mMaxSelect) {
+                            mSelectImage.add(file.getPath());
+                        }
 
-                    // 当前选中图片的数量必须小于最大选中数
-                    if (mSelectImage.size() < mMaxSelect) {
-                        mSelectImage.add(file.getPath());
+                        // 这里需要延迟刷新，否则可能会找不到拍照的图片
+                        postDelayed(() -> {
+                            // 重新加载图片列表
+                            ThreadPoolManager.getInstance().execute(ImageSelectActivity.this);
+                        }, 1000);
                     }
 
-                    // 这里需要延迟刷新，否则可能会找不到拍照的图片
-                    postDelayed(() -> {
-                        // 重新加载图片列表
-                        ThreadPoolManager.getInstance().execute(ImageSelectActivity.this);
-                    }, 1000);
+                    @Override
+                    public void onError(String details) {
+                        toast(details);
+                    }
                 });
                 return;
             }
 
             // 完成选择
-            setResult(RESULT_OK, new Intent().putStringArrayListExtra(IntentKey.IMAGE, mSelectImage));
+            setResult(RESULT_OK, new Intent().putStringArrayListExtra(INTENT_KEY_OUT_IMAGE_LIST, mSelectImage));
             finish();
         }
     }
@@ -296,11 +330,7 @@ public final class ImageSelectActivity extends AppActivity
                 mSelectImage.remove(path);
 
                 if (mSelectImage.isEmpty()) {
-                    mFloatingView.hide();
-                    postDelayed(() -> {
-                        mFloatingView.setImageResource(R.drawable.camera_ic);
-                        mFloatingView.show();
-                    }, 200);
+                    mFloatingView.setImageResource(R.drawable.camera_ic);
                 }
 
                 mAdapter.notifyItemChanged(position);
@@ -323,11 +353,7 @@ public final class ImageSelectActivity extends AppActivity
                 mSelectImage.add(path);
 
                 if (mSelectImage.size() == 1) {
-                    mFloatingView.hide();
-                    postDelayed(() -> {
-                        mFloatingView.setImageResource(R.drawable.succeed_ic);
-                        mFloatingView.show();
-                    }, 200);
+                    mFloatingView.setImageResource(R.drawable.succeed_ic);
                 }
             } else {
                 toast(String.format(getString(R.string.image_select_max_hint), mMaxSelect));
@@ -352,7 +378,7 @@ public final class ImageSelectActivity extends AppActivity
                 MediaStore.MediaColumns.HEIGHT, MediaStore.MediaColumns.SIZE};
 
         Cursor cursor = null;
-        if (XXPermissions.isGrantedPermission(this, Permission.MANAGE_EXTERNAL_STORAGE)) {
+        if (XXPermissions.isGranted(this, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)) {
             cursor = contentResolver.query(contentUri, projections, selection, new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)}, sortOrder);
         }
         if (cursor != null && cursor.moveToFirst()) {
@@ -380,17 +406,19 @@ public final class ImageSelectActivity extends AppActivity
                 }
 
                 File parentFile = file.getParentFile();
-                if (parentFile != null) {
-                    // 获取目录名作为专辑名称
-                    String albumName = parentFile.getName();
-                    List<String> data = mAllAlbum.get(albumName);
-                    if (data == null) {
-                        data = new ArrayList<>();
-                        mAllAlbum.put(albumName, data);
-                    }
-                    data.add(path);
-                    mAllImage.add(path);
+                if (parentFile == null) {
+                    continue;
                 }
+
+                // 获取目录名作为专辑名称
+                String albumName = parentFile.getName();
+                List<String> data = mAllAlbum.get(albumName);
+                if (data == null) {
+                    data = new ArrayList<>();
+                    mAllAlbum.put(albumName, data);
+                }
+                data.add(path);
+                mAllImage.add(path);
 
             } while (cursor.moveToNext());
 
@@ -410,7 +438,7 @@ public final class ImageSelectActivity extends AppActivity
             }
 
             // 执行列表动画
-            mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.fall_down_layout));
+            mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_fall_down));
             mRecyclerView.scheduleLayoutAnimation();
 
             if (mAllImage.isEmpty()) {

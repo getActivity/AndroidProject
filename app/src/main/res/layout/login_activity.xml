@@ -6,26 +6,28 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="center_horizontal"
-    android:layoutAnimation="@anim/from_bottom_layout"
+    android:layoutAnimation="@anim/layout_from_bottom"
     android:orientation="vertical"
     tools:context=".ui.activity.LoginActivity"
     tools:layoutAnimation="@null">
 
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:backButton="false"
+        android:layout_height="@dimen/dp_50"
         app:barStyle="transparent"
-        app:rightColor="@color/common_accent_color"
+        app:leftIcon="@null"
+        app:rightBackground="@null"
         app:rightTitle="@string/login_register"
+        app:rightTitleColor="@color/common_accent_color"
+        app:rightTitleSize="@dimen/sp_14"
         app:title="" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_login_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginVertical="30dp"
-        android:src="@drawable/logo_big_ic" />
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_120"
+        android:layout_marginVertical="@dimen/dp_10"
+        app:srcCompat="@drawable/logo_big_ic" />
 
     <LinearLayout
         android:id="@+id/ll_login_body"
@@ -38,8 +40,8 @@
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_10"
             android:hint="@string/common_phone_input_hint"
             android:inputType="textVisiblePassword"
             android:singleLine="true"
@@ -47,15 +49,15 @@
 
         <View
             style="@style/HorizontalLineStyle"
-            android:layout_marginHorizontal="40dp" />
+            android:layout_marginHorizontal="@dimen/dp_40" />
 
         <com.hjq.widget.view.PasswordEditText
             android:id="@+id/et_login_password"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_15"
             android:hint="@string/common_password_input_error"
             android:imeOptions="actionDone"
             android:maxLength="20"
@@ -63,16 +65,16 @@
 
         <View
             style="@style/HorizontalLineStyle"
-            android:layout_marginHorizontal="40dp" />
+            android:layout_marginHorizontal="@dimen/dp_40" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_login_forget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="60dp"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_60"
             android:text="@string/login_forget"
             android:textColor="@color/common_accent_color" />
 
@@ -81,8 +83,8 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_30"
             android:text="@string/login_text" />
 
     </LinearLayout>
@@ -90,7 +92,7 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="0px"
-        android:layout_weight="5" />
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/ll_login_other"
@@ -102,19 +104,19 @@
 
         <View
             style="@style/HorizontalLineStyle"
-            android:layout_width="60dp"
+            android:layout_width="@dimen/dp_60"
             android:layout_weight="1" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
+            android:layout_marginHorizontal="@dimen/dp_15"
             android:text="@string/login_other"
             android:textColor="@color/black50" />
 
         <View
             style="@style/HorizontalLineStyle"
-            android:layout_width="60dp"
+            android:layout_width="@dimen/dp_60"
             android:layout_weight="1" />
     </LinearLayout>
 
@@ -125,20 +127,20 @@
 
         <com.hjq.widget.view.ScaleImageView
             android:id="@+id/iv_login_qq"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="25dp"
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_35"
+            android:layout_marginHorizontal="@dimen/dp_30"
+            android:layout_marginVertical="@dimen/dp_20"
             android:layout_weight="1"
             app:scaleRatio="1.2"
             app:srcCompat="@drawable/login_qq_ic" />
 
         <com.hjq.widget.view.ScaleImageView
             android:id="@+id/iv_login_wechat"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="25dp"
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_35"
+            android:layout_marginHorizontal="@dimen/dp_30"
+            android:layout_marginVertical="@dimen/dp_20"
             android:layout_weight="1"
             app:scaleRatio="1.2"
             app:srcCompat="@drawable/login_wechat_ic" />

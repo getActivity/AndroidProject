@@ -77,7 +77,9 @@ public final class OkHttpFetcher implements DataFetcher<InputStream>, Callback {
             if (mInputStream != null) {
                 mInputStream.close();
             }
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (mResponseBody != null) {
             mResponseBody.close();
@@ -87,9 +89,10 @@ public final class OkHttpFetcher implements DataFetcher<InputStream>, Callback {
 
     @Override
     public void cancel() {
-        if (mCall != null) {
-            mCall.cancel();
+        if (mCall == null) {
+            return;
         }
+        mCall.cancel();
     }
 
     @NonNull

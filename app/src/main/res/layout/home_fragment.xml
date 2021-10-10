@@ -16,10 +16,10 @@
         <com.hjq.demo.widget.XCollapsingToolbarLayout
             android:id="@+id/ctl_home_bar"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
+            android:layout_height="@dimen/dp_256"
             app:contentScrim="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:scrimVisibleHeightTrigger="100dp">
+            app:scrimVisibleHeightTrigger="@dimen/dp_100">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
@@ -38,8 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_home_address"
@@ -48,25 +47,26 @@
                         android:gravity="center_vertical"
                         android:text="广州"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="@dimen/sp_15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_home_hint"
                         android:layout_width="0px"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp_20"
                         android:layout_weight="1"
                         android:background="@drawable/home_search_bar_transparent_bg"
                         android:gravity="center"
+                        android:paddingVertical="@dimen/dp_5"
                         android:text="完善细节，追求完美"
                         android:textColor="@color/white60"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/sp_13" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_home_search"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_marginEnd="@dimen/dp_10"
                         app:srcCompat="@drawable/search_ic"
                         app:tint="@color/white" />
 
@@ -76,16 +76,15 @@
 
         </com.hjq.demo.widget.XCollapsingToolbarLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_home_tab"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/common_accent_color"
-            app:tabIndicatorFullWidth="false"
-            app:tabMode="fixed"
-            app:tabRippleColor="@color/transparent"
-            app:tabSelectedTextColor="@color/common_accent_color"
-            app:tabTextColor="@color/black25" />
+            android:orientation="vertical"
+            tools:itemCount="2"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/tab_item_design"
+            tools:spanCount="2" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

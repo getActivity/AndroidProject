@@ -5,9 +5,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.http.api.GetCodeApi;
+import com.hjq.demo.http.api.VerifyCodeApi;
+import com.hjq.demo.http.model.HttpData;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.toast.ToastUtils;
 import com.hjq.widget.view.CountdownView;
 
@@ -26,6 +33,7 @@ public final class SafeDialog {
         private final EditText mCodeView;
         private final CountdownView mCountdownView;
 
+        @Nullable
         private OnListener mListener;
 
         /** 当前手机号 */
@@ -68,7 +76,7 @@ public final class SafeDialog {
                 }
 
                 // 获取验证码
-                /*EasyHttp.post(getDialog())
+                EasyHttp.post(getDialog())
                         .api(new GetCodeApi()
                                 .setPhone(mPhoneNumber))
                         .request(new OnHttpListener<HttpData<Void>>() {
@@ -84,7 +92,7 @@ public final class SafeDialog {
                             public void onFail(Exception e) {
                                 ToastUtils.show(e.getMessage());
                             }
-                        });*/
+                        });
             } else if (viewId == R.id.tv_ui_confirm) {
                 if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
                     ToastUtils.show(R.string.common_code_error_hint);
@@ -93,14 +101,15 @@ public final class SafeDialog {
 
                 if (true) {
                     autoDismiss();
-                    if (mListener != null) {
-                        mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
+                    if (mListener == null) {
+                        return;
                     }
+                    mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
                     return;
                 }
 
                 // 验证码校验
-                /*EasyHttp.post(getDialog())
+                EasyHttp.post(getDialog())
                         .api(new VerifyCodeApi()
                                 .setPhone(mPhoneNumber)
                                 .setCode(mCodeView.getText().toString()))
@@ -109,21 +118,23 @@ public final class SafeDialog {
                             @Override
                             public void onSucceed(HttpData<Void> data) {
                                 autoDismiss();
-                                if (mListener != null) {
-                                    mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
+                                if (mListener == null) {
+                                    return;
                                 }
+                                mListener.onConfirm(getDialog(), mPhoneNumber, mCodeView.getText().toString());
                             }
 
                             @Override
                             public void onFail(Exception e) {
                                 ToastUtils.show(e.getMessage());
                             }
-                        });*/
+                        });
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
     }

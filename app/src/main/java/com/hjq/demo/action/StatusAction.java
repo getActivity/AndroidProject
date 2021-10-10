@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.view.View;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.RawRes;
@@ -39,7 +38,7 @@ public interface StatusAction {
         layout.show();
         layout.setAnimResource(id);
         layout.setHint("");
-        layout.setOnClickListener(null);
+        layout.setOnRetryListener(null);
     }
 
     /**
@@ -63,7 +62,7 @@ public interface StatusAction {
     /**
      * 显示错误提示
      */
-    default void showError(View.OnClickListener listener) {
+    default void showError(StatusLayout.OnRetryListener listener) {
         StatusLayout layout = getStatusLayout();
         Context context = layout.getContext();
         ConnectivityManager manager = ContextCompat.getSystemService(context, ConnectivityManager.class);
@@ -81,17 +80,17 @@ public interface StatusAction {
     /**
      * 显示自定义提示
      */
-    default void showLayout(@DrawableRes int drawableId, @StringRes int stringId, View.OnClickListener listener) {
+    default void showLayout(@DrawableRes int drawableId, @StringRes int stringId, StatusLayout.OnRetryListener listener) {
         StatusLayout layout = getStatusLayout();
         Context context = layout.getContext();
         showLayout(ContextCompat.getDrawable(context, drawableId), context.getString(stringId), listener);
     }
 
-    default void showLayout(Drawable drawable, CharSequence hint, View.OnClickListener listener) {
+    default void showLayout(Drawable drawable, CharSequence hint, StatusLayout.OnRetryListener listener) {
         StatusLayout layout = getStatusLayout();
         layout.show();
         layout.setIcon(drawable);
         layout.setHint(hint);
-        layout.setOnClickListener(listener);
+        layout.setOnRetryListener(listener);
     }
 }

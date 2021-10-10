@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingVertical="@dimen/dp_5"
+    tools:context=".ui.adapter.NavigationAdapter">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_home_navigation_icon"
+        android:layout_width="@dimen/dp_22"
+        android:layout_height="@dimen/dp_22"
+        tools:srcCompat="@drawable/home_home_selector" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tv_home_navigation_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_2"
+        android:textSize="@dimen/sp_12"
+        app:shape_textColor="#A4A4A4"
+        app:shape_textSelectedColor="@color/black"
+        tools:text="@string/home_nav_index" />
+
+</LinearLayout>

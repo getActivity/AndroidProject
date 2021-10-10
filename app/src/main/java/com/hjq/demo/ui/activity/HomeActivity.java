@@ -3,24 +3,25 @@ package com.hjq.demo.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.FragmentPagerAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.app.AppFragment;
 import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.other.DoubleClickHelper;
-import com.hjq.demo.other.IntentKey;
+import com.hjq.demo.ui.adapter.NavigationAdapter;
 import com.hjq.demo.ui.fragment.FindFragment;
 import com.hjq.demo.ui.fragment.HomeFragment;
-import com.hjq.demo.ui.fragment.MeFragment;
 import com.hjq.demo.ui.fragment.MessageFragment;
+import com.hjq.demo.ui.fragment.MineFragment;
 
 /**
  *    author : Android 轮子哥
@@ -29,11 +30,15 @@ import com.hjq.demo.ui.fragment.MessageFragment;
  *    desc   : 首页界面
  */
 public final class HomeActivity extends AppActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener {
+        implements NavigationAdapter.OnNavigationListener {
+
+    private static final String INTENT_KEY_IN_FRAGMENT_INDEX = "fragmentIndex";
+    private static final String INTENT_KEY_IN_FRAGMENT_CLASS = "fragmentClass";
 
     private ViewPager mViewPager;
-    private BottomNavigationView mBottomNavigationView;
+    private RecyclerView mNavigationView;
 
+    private NavigationAdapter mNavigationAdapter;
     private FragmentPagerAdapter<AppFragment<?>> mPagerAdapter;
 
     public static void start(Context context) {
@@ -42,7 +47,7 @@ public final class HomeActivity extends AppActivity
 
     public static void start(Context context, Class<? extends AppFragment<?>> fragmentClass) {
         Intent intent = new Intent(context, HomeActivity.class);
-        intent.putExtra(IntentKey.INDEX, fragmentClass);
+        intent.putExtra(INTENT_KEY_IN_FRAGMENT_CLASS, fragmentClass);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -57,18 +62,19 @@ public final class HomeActivity extends AppActivity
     @Override
     protected void initView() {
         mViewPager = findViewById(R.id.vp_home_pager);
-        mBottomNavigationView = findViewById(R.id.bv_home_navigation);
+        mNavigationView = findViewById(R.id.rv_home_navigation);
 
-        // 不使用图标默认变色
-        mBottomNavigationView.setItemIconTintList(null);
-        // 设置导航栏条目点击事件
-        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-
-        // 屏蔽底部导航栏长按文本提示
-        Menu menu = mBottomNavigationView.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            mBottomNavigationView.findViewById(menu.getItem(i).getItemId()).setOnLongClickListener(v -> true);
-        }
+        mNavigationAdapter = new NavigationAdapter(this);
+        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_index),
+                ContextCompat.getDrawable(this, R.drawable.home_home_selector)));
+        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_found),
+                ContextCompat.getDrawable(this, R.drawable.home_found_selector)));
+        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_message),
+                ContextCompat.getDrawable(this, R.drawable.home_message_selector)));
+        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_me),
+                ContextCompat.getDrawable(this, R.drawable.home_me_selector)));
+        mNavigationAdapter.setOnNavigationListener(this);
+        mNavigationView.setAdapter(mNavigationAdapter);
     }
 
     @Override
@@ -77,7 +83,7 @@ public final class HomeActivity extends AppActivity
         mPagerAdapter.addFragment(HomeFragment.newInstance());
         mPagerAdapter.addFragment(FindFragment.newInstance());
         mPagerAdapter.addFragment(MessageFragment.newInstance());
-        mPagerAdapter.addFragment(MeFragment.newInstance());
+        mPagerAdapter.addFragment(MineFragment.newInstance());
         mViewPager.setAdapter(mPagerAdapter);
 
         onNewIntent(getIntent());
@@ -86,24 +92,35 @@ public final class HomeActivity extends AppActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        int fragmentIndex = mPagerAdapter.getFragmentIndex(getSerializable(IntentKey.INDEX));
+        switchFragment(mPagerAdapter.getFragmentIndex(getSerializable(INTENT_KEY_IN_FRAGMENT_CLASS)));
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // 保存当前 Fragment 索引位置
+        outState.putInt(INTENT_KEY_IN_FRAGMENT_INDEX, mViewPager.getCurrentItem());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // 恢复当前 Fragment 索引位置
+        switchFragment(savedInstanceState.getInt(INTENT_KEY_IN_FRAGMENT_INDEX));
+    }
+
+    private void switchFragment(int fragmentIndex) {
         if (fragmentIndex == -1) {
             return;
         }
 
-        mViewPager.setCurrentItem(fragmentIndex);
         switch (fragmentIndex) {
             case 0:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home);
-                break;
             case 1:
-                mBottomNavigationView.setSelectedItemId(R.id.home_found);
-                break;
             case 2:
-                mBottomNavigationView.setSelectedItemId(R.id.home_message);
-                break;
             case 3:
-                mBottomNavigationView.setSelectedItemId(R.id.home_me);
+                mViewPager.setCurrentItem(fragmentIndex);
+                mNavigationAdapter.setSelectedPosition(fragmentIndex);
                 break;
             default:
                 break;
@@ -111,26 +128,29 @@ public final class HomeActivity extends AppActivity
     }
 
     /**
-     * {@link BottomNavigationView.OnNavigationItemSelectedListener}
+     * {@link NavigationAdapter.OnNavigationListener}
      */
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_home) {
-            mViewPager.setCurrentItem(0);
-            return true;
-        } else if (itemId == R.id.home_found) {
-            mViewPager.setCurrentItem(1);
-            return true;
-        } else if (itemId == R.id.home_message) {
-            mViewPager.setCurrentItem(2);
-            return true;
-        } else if (itemId == R.id.home_me) {
-            mViewPager.setCurrentItem(3);
-            return true;
+    public boolean onNavigationItemSelected(int position) {
+        switch (position) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                mViewPager.setCurrentItem(position);
+                return true;
+            default:
+                return false;
         }
-        return false;
+    }
+
+    @NonNull
+    @Override
+    protected ImmersionBar createStatusBarConfig() {
+        return super.createStatusBarConfig()
+                // 指定导航栏背景颜色
+                .navigationBarColor(R.color.white);
     }
 
     @Override
@@ -154,6 +174,7 @@ public final class HomeActivity extends AppActivity
     protected void onDestroy() {
         super.onDestroy();
         mViewPager.setAdapter(null);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(null);
+        mNavigationView.setAdapter(null);
+        mNavigationAdapter.setOnNavigationListener(null);
     }
 }

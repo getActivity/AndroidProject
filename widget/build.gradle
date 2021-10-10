@@ -1,7 +1,0 @@
-apply plugin : 'com.android.library'
-apply from : '../config.gradle'
-
-dependencies {
-    // 基础库（不包任何第三方框架）
-    implementation project(':base')
-}
