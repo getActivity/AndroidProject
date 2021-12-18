@@ -90,7 +90,7 @@ public final class PayPasswordDialog {
         }
 
         public Builder setMoney(@StringRes int id) {
-            return setSubTitle(getString(id));
+            return setMoney(getString(id));
         }
 
         public Builder setMoney(CharSequence money) {

@@ -58,6 +58,7 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
      * 结束倒计时
      */
     public void stop() {
+        mCurrentSecond = 0;
         setText(mRecordText);
         setEnabled(true);
     }
