@@ -70,7 +70,7 @@ public interface StatusAction {
             NetworkInfo info = manager.getActiveNetworkInfo();
             // 判断网络是否连接
             if (info == null || !info.isConnected()) {
-                showLayout(R.drawable.status_nerwork_ic, R.string.status_layout_error_network, listener);
+                showLayout(R.drawable.status_network_ic, R.string.status_layout_error_network, listener);
                 return;
             }
         }
