@@ -14,12 +14,12 @@
         app:title="@string/about_title" />
 
     <com.hjq.widget.view.ScaleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/logo_big_ic"
-        app:scaleRatio="1.5" />
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginBottom="@dimen/dp_40"
+        app:scaleRatio="1.5"
+        app:srcCompat="@drawable/logo_big_ic" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,27 +36,27 @@
             android:layout_height="wrap_content"
             android:text="@string/about_author"
             android:textColor="#222222"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sp_18" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/dp_40"
             android:autoLink="all"
             android:gravity="center_horizontal"
-            android:lineSpacingExtra="20dp"
+            android:lineSpacingExtra="@dimen/dp_20"
             android:text="但愿人长久，搬砖不再有\n https://github.com/getActivity/AndroidProject"
             android:textColor="#222222"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp_14" />
 
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
+        android:layout_marginVertical="@dimen/dp_20"
         android:text="@string/about_copyright"
         android:textColor="#BDBDBD"
-        android:textSize="14sp" />
+        android:textSize="@dimen/sp_14" />
 
 </LinearLayout>

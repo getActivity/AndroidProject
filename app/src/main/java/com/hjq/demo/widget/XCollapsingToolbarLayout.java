@@ -3,6 +3,8 @@ package com.hjq.demo.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
@@ -14,6 +16,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
     /** 渐变监听 */
+    @Nullable
     private OnScrimsListener mListener;
     /** 当前渐变状态 */
     private boolean mScrimsShown;
@@ -34,13 +37,15 @@ public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
     public void setScrimsShown(boolean shown, boolean animate) {
         super.setScrimsShown(shown, true);
         // 判断渐变状态是否改变了
-        if (mScrimsShown != shown) {
-            // 如果是就记录并且回调监听器
-            mScrimsShown = shown;
-            if (mListener != null) {
-                mListener.onScrimsStateChange(this, mScrimsShown);
-            }
+        if (mScrimsShown == shown) {
+            return;
         }
+        // 如果是就记录并且回调监听器
+        mScrimsShown = shown;
+        if (mListener == null) {
+            return;
+        }
+        mListener.onScrimsStateChange(this, mScrimsShown);
     }
 
     /**
@@ -53,7 +58,7 @@ public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
     /**
      * 设置CollapsingToolbarLayout渐变监听
      */
-    public void setOnScrimsListener(OnScrimsListener listener) {
+    public void setOnScrimsListener(@Nullable OnScrimsListener listener) {
         mListener = listener;
     }
 

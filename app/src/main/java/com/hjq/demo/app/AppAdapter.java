@@ -18,7 +18,7 @@ import java.util.List;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/12/19
- *    desc   : 业务 RecyclerView 适配器基类
+ *    desc   : RecyclerView 适配器业务基类
  */
 public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolder> {
 
@@ -96,9 +96,29 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
     }
 
     /**
+     * 是否包含了某个位置上的条目数据
+     */
+    public boolean containsItem(@IntRange(from = 0) int position) {
+        return containsItem(getItem(position));
+    }
+
+    /**
+     * 是否包含某个条目数据
+     */
+    public boolean containsItem(T item) {
+        if (mDataSet == null || item == null) {
+            return false;
+        }
+        return mDataSet.contains(item);
+    }
+
+    /**
      * 获取某个位置上的数据
      */
     public T getItem(@IntRange(from = 0) int position) {
+        if (mDataSet == null) {
+            return null;
+        }
         return mDataSet.get(position);
     }
 
@@ -120,7 +140,6 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
         if (mDataSet == null) {
             mDataSet = new ArrayList<>();
         }
-
         addItem(mDataSet.size(), item);
     }
 

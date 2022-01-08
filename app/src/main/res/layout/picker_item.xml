@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:paddingVertical="10dp"
+    android:paddingVertical="@dimen/dp_10"
     android:singleLine="true"
     android:textColor="@color/black"
-    android:textSize="18sp"
+    android:textSize="@dimen/sp_18"
     android:textStyle="bold"
     tools:text="2018年" />

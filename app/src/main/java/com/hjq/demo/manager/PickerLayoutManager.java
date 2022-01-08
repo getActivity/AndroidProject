@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -24,6 +25,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
     private final boolean mAlpha;
 
     private RecyclerView mRecyclerView;
+    @Nullable
     private OnPickerListener mListener;
 
     private PickerLayoutManager(Context context, int orientation, boolean reverseLayout, int maxItem, float scale, boolean alpha) {
@@ -89,11 +91,13 @@ public final class PickerLayoutManager extends LinearLayoutManager {
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
         // 当 RecyclerView 停止滚动时
-        if (state == RecyclerView.SCROLL_STATE_IDLE) {
-            if (mListener != null) {
-                mListener.onPicked(mRecyclerView, getPickedPosition());
-            }
+        if (state != RecyclerView.SCROLL_STATE_IDLE) {
+            return;
         }
+        if (mListener == null) {
+            return;
+        }
+        mListener.onPicked(mRecyclerView, getPickedPosition());
     }
 
     @Override
@@ -129,14 +133,15 @@ public final class PickerLayoutManager extends LinearLayoutManager {
         float mid = getWidth() / 2.0f;
         for (int i = 0; i < getChildCount(); i++) {
             View childView =  getChildAt(i);
-            if (childView != null) {
-                float childMid = (getDecoratedLeft(childView) + getDecoratedRight(childView)) / 2.0f;
-                float scale = 1.0f + (-1 * (1 - mScale)) * (Math.min(mid, Math.abs(mid - childMid))) / mid;
-                childView.setScaleX(scale);
-                childView.setScaleY(scale);
-                if (mAlpha) {
-                    childView.setAlpha(scale);
-                }
+            if (childView == null) {
+                continue;
+            }
+            float childMid = (getDecoratedLeft(childView) + getDecoratedRight(childView)) / 2.0f;
+            float scale = 1.0f + (-1 * (1 - mScale)) * (Math.min(mid, Math.abs(mid - childMid))) / mid;
+            childView.setScaleX(scale);
+            childView.setScaleY(scale);
+            if (mAlpha) {
+                childView.setAlpha(scale);
             }
         }
     }
@@ -148,14 +153,15 @@ public final class PickerLayoutManager extends LinearLayoutManager {
         float mid = getHeight() / 2.0f;
         for (int i = 0; i < getChildCount(); i++) {
             View childView =  getChildAt(i);
-            if (childView != null) {
-                float childMid = (getDecoratedTop(childView) + getDecoratedBottom(childView)) / 2.0f;
-                float scale = 1.0f + (-1 *  (1 - mScale)) * (Math.min(mid, Math.abs(mid - childMid))) / mid;
-                childView.setScaleX(scale);
-                childView.setScaleY(scale);
-                if (mAlpha) {
-                    childView.setAlpha(scale);
-                }
+            if (childView == null) {
+                continue;
+            }
+            float childMid = (getDecoratedTop(childView) + getDecoratedBottom(childView)) / 2.0f;
+            float scale = 1.0f + (-1 *  (1 - mScale)) * (Math.min(mid, Math.abs(mid - childMid))) / mid;
+            childView.setScaleX(scale);
+            childView.setScaleY(scale);
+            if (mAlpha) {
+                childView.setAlpha(scale);
             }
         }
     }
@@ -165,16 +171,16 @@ public final class PickerLayoutManager extends LinearLayoutManager {
      */
     public int getPickedPosition() {
         View itemView = mLinearSnapHelper.findSnapView(this);
-        if(itemView != null) {
-            return getPosition(itemView);
+        if(itemView == null) {
+            return 0;
         }
-        return 0;
+        return getPosition(itemView);
     }
 
     /**
      * 设置监听器
      */
-    public void setOnPickerListener(OnPickerListener listener) {
+    public void setOnPickerListener(@Nullable OnPickerListener listener) {
         mListener = listener;
     }
 
@@ -254,9 +260,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
          */
         public PickerLayoutManager build() {
             PickerLayoutManager layoutManager = new PickerLayoutManager(mContext, mOrientation, mReverseLayout, mMaxItem, mScale, mAlpha);
-            if (mListener != null) {
-                layoutManager.setOnPickerListener(mListener);
-            }
+            layoutManager.setOnPickerListener(mListener);
             return layoutManager;
         }
 

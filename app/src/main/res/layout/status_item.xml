@@ -7,7 +7,7 @@
     android:layout_marginBottom="1px"
     android:background="@drawable/white_selector"
     android:gravity="center_horizontal"
-    android:paddingVertical="15dp"
-    android:textSize="18sp"
+    android:paddingVertical="@dimen/dp_15"
+    android:textSize="@dimen/sp_18"
     tools:context=".ui.adapter.StatusAdapter"
     tools:text="我是条目" />

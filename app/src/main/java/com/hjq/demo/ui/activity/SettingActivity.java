@@ -7,12 +7,12 @@ import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.LogoutApi;
 import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.LogoutApi;
 import com.hjq.demo.manager.ActivityManager;
-import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.manager.CacheDataManager;
+import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.ui.dialog.MenuDialog;
 import com.hjq.demo.ui.dialog.SafeDialog;
@@ -116,7 +116,7 @@ public final class SettingActivity extends AppActivity
 
         } else if (viewId == R.id.sb_setting_agreement) {
 
-            BrowserActivity.start(this, "https://github.com/getActivity/AndroidProject");
+            BrowserActivity.start(this, "https://github.com/getActivity/Donate");
 
         } else if (viewId == R.id.sb_setting_about) {
 

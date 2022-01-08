@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,7 @@ public final class MenuDialog {
             View.OnLayoutChangeListener, Runnable {
 
         @SuppressWarnings("rawtypes")
+        @Nullable
         private OnListener mListener;
         private boolean mAutoDismiss = true;
 
@@ -122,9 +124,10 @@ public final class MenuDialog {
             }
 
             if (view == mCancelView) {
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
 
@@ -138,9 +141,10 @@ public final class MenuDialog {
                 dismiss();
             }
 
-            if (mListener != null) {
-                mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
+            if (mListener == null) {
+                return;
             }
+            mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
         }
 
         /**
@@ -162,11 +166,12 @@ public final class MenuDialog {
                     params.height = maxHeight;
                     mRecyclerView.setLayoutParams(params);
                 }
-            } else {
-                if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
-                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    mRecyclerView.setLayoutParams(params);
-                }
+                return;
+            }
+
+            if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                mRecyclerView.setLayoutParams(params);
             }
         }
 
@@ -199,7 +204,7 @@ public final class MenuDialog {
 
             ViewHolder() {
                 super(R.layout.menu_item);
-                mTextView = (TextView) findViewById(R.id.tv_menu_text);
+                mTextView = findViewById(R.id.tv_menu_text);
                 mLineView = findViewById(R.id.v_menu_line);
             }
 
@@ -209,12 +214,12 @@ public final class MenuDialog {
 
                 if (position == 0) {
                     // 当前是否只有一个条目
-                    if (getItemCount() == 1) {
+                    if (getCount() == 1) {
                         mLineView.setVisibility(View.GONE);
                     } else {
                         mLineView.setVisibility(View.VISIBLE);
                     }
-                } else if (position == getItemCount() - 1) {
+                } else if (position == getCount() - 1) {
                     mLineView.setVisibility(View.GONE);
                 } else {
                     mLineView.setVisibility(View.VISIBLE);

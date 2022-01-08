@@ -41,7 +41,7 @@ public final class StatusActivity extends AppActivity
                             postDelayed(this::showComplete, 2500);
                             break;
                         case 1:
-                            showError(v -> {
+                            showError(listener -> {
                                 showLoading();
                                 postDelayed(this::showEmpty, 2500);
                             });

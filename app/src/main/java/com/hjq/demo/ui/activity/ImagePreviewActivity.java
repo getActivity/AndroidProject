@@ -16,10 +16,8 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.RecyclerPagerAdapter;
 import com.hjq.demo.R;
-import com.hjq.demo.aop.CheckNet;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.ui.adapter.ImagePreviewAdapter;
 
 import java.util.ArrayList;
@@ -38,6 +36,9 @@ public final class ImagePreviewActivity extends AppActivity
         implements ViewPager.OnPageChangeListener,
         BaseAdapter.OnItemClickListener {
 
+    private static final String INTENT_KEY_IN_IMAGE_LIST = "imageList";
+    private static final String INTENT_KEY_IN_IMAGE_INDEX = "imageIndex";
+
     public static void start(Context context, String url) {
         ArrayList<String> images = new ArrayList<>(1);
         images.add(url);
@@ -48,27 +49,26 @@ public final class ImagePreviewActivity extends AppActivity
         start(context, urls, 0);
     }
 
-    @CheckNet
-    @DebugLog
+    @Log
     public static void start(Context context, List<String> urls, int index) {
         if (urls == null || urls.isEmpty()) {
             return;
         }
         Intent intent = new Intent(context, ImagePreviewActivity.class);
-        if (urls.size() > 2500) {
+        if (urls.size() > 2000) {
             // 请注意：如果传输的数据量过大，会抛出此异常，并且这种异常是不能被捕获的
             // 所以当图片数量过多的时候，我们应当只显示一张，这种一般是手机图片过多导致的
-            // 经过测试，传入 3121 张图片集合的时候会抛出此异常，所以保险值应当是 2500
+            // 经过测试，传入 3121 张图片集合的时候会抛出此异常，所以保险值应当是 2000
             // android.os.TransactionTooLargeException: data parcel size 521984 bytes
             urls = Collections.singletonList(urls.get(index));
         }
 
         if (urls instanceof ArrayList) {
-            intent.putExtra(IntentKey.IMAGE, (ArrayList<String>) urls);
+            intent.putExtra(INTENT_KEY_IN_IMAGE_LIST, (ArrayList<String>) urls);
         } else {
-            intent.putExtra(IntentKey.IMAGE, new ArrayList<>(urls));
+            intent.putExtra(INTENT_KEY_IN_IMAGE_LIST, new ArrayList<>(urls));
         }
-        intent.putExtra(IntentKey.INDEX, index);
+        intent.putExtra(INTENT_KEY_IN_IMAGE_INDEX, index);
         if (!(context instanceof Activity)) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -97,7 +97,7 @@ public final class ImagePreviewActivity extends AppActivity
 
     @Override
     protected void initData() {
-        ArrayList<String> images = getStringArrayList(IntentKey.IMAGE);
+        ArrayList<String> images = getStringArrayList(INTENT_KEY_IN_IMAGE_LIST);
         if (images == null || images.isEmpty()) {
             finish();
             return;
@@ -117,7 +117,7 @@ public final class ImagePreviewActivity extends AppActivity
                 mViewPager.addOnPageChangeListener(this);
             }
 
-            int index = getInt(IntentKey.INDEX);
+            int index = getInt(INTENT_KEY_IN_IMAGE_INDEX);
             if (index < images.size()) {
                 mViewPager.setCurrentItem(index);
                 onPageSelected(index);
@@ -148,7 +148,7 @@ public final class ImagePreviewActivity extends AppActivity
     @SuppressLint("SetTextI18n")
     @Override
     public void onPageSelected(int position) {
-        mTextIndicatorView.setText((position + 1) + "/" + mAdapter.getItemCount());
+        mTextIndicatorView.setText((position + 1) + "/" + mAdapter.getCount());
     }
 
     @Override
@@ -168,9 +168,10 @@ public final class ImagePreviewActivity extends AppActivity
      */
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        // 单击图片退出当前的 Activity
-        if (!isFinishing()) {
-            finish();
+        if (isFinishing() || isDestroyed()) {
+            return;
         }
+        // 单击图片退出当前的 Activity
+        finish();
     }
 }

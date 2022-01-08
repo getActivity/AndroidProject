@@ -73,7 +73,7 @@ public final class StatusFragment extends TitleBarFragment<AppActivity>
      */
     private List<String> analogData() {
         List<String> data = new ArrayList<>();
-        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 20; i++) {
+        for (int i = mAdapter.getCount(); i < mAdapter.getCount() + 20; i++) {
             data.add("我是第" + i + "条目");
         }
         return data;
@@ -110,7 +110,7 @@ public final class StatusFragment extends TitleBarFragment<AppActivity>
             mAdapter.addData(analogData());
             mRefreshLayout.finishLoadMore();
 
-            mAdapter.setLastPage(mAdapter.getItemCount() >= 100);
+            mAdapter.setLastPage(mAdapter.getCount() >= 100);
             mRefreshLayout.setNoMoreData(mAdapter.isLastPage());
         }, 1000);
     }

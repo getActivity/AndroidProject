@@ -4,7 +4,7 @@
     <!-- 进度条的整体背景颜色 -->
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="5dp" />
+            <corners android:radius="@dimen/dp_5" />
             <solid android:color="@color/white25" />
         </shape>
     </item>
@@ -13,7 +13,7 @@
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
-                <corners android:radius="5dp" />
+                <corners android:radius="@dimen/dp_5" />
                 <solid android:color="@color/white35" />
             </shape>
         </clip>
@@ -23,7 +23,7 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <corners android:radius="5dp" />
+                <corners android:radius="@dimen/dp_5" />
                 <solid android:color="@color/white" />
             </shape>
         </clip>

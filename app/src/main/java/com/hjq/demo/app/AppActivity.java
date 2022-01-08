@@ -25,7 +25,7 @@ import okhttp3.Call;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 业务 Activity 基类
+ *    desc   : Activity 业务基类
  */
 public abstract class AppActivity extends BaseActivity
         implements ToastAction, TitleBarAction, OnHttpListener<Object> {
@@ -38,7 +38,7 @@ public abstract class AppActivity extends BaseActivity
     /** 加载对话框 */
     private BaseDialog mDialog;
     /** 对话框数量 */
-    private int mDialogTotal;
+    private int mDialogCount;
 
     /**
      * 当前加载对话框是否在显示中
@@ -51,9 +51,13 @@ public abstract class AppActivity extends BaseActivity
      * 显示加载对话框
      */
     public void showDialog() {
-        mDialogTotal++;
+        if (isFinishing() || isDestroyed()) {
+            return;
+        }
+
+        mDialogCount++;
         postDelayed(() -> {
-            if (mDialogTotal <= 0 || isFinishing() || isDestroyed()) {
+            if (mDialogCount <= 0 || isFinishing() || isDestroyed()) {
                 return;
             }
 
@@ -72,13 +76,19 @@ public abstract class AppActivity extends BaseActivity
      * 隐藏加载对话框
      */
     public void hideDialog() {
-        if (mDialogTotal > 0) {
-            mDialogTotal--;
+        if (isFinishing() || isDestroyed()) {
+            return;
         }
 
-        if (mDialogTotal == 0 && mDialog != null && mDialog.isShowing() && !isFinishing()) {
-            mDialog.dismiss();
+        if (mDialogCount > 0) {
+            mDialogCount--;
         }
+
+        if (mDialogCount != 0 || mDialog == null || !mDialog.isShowing()) {
+            return;
+        }
+
+        mDialog.dismiss();
     }
 
     @Override
@@ -134,7 +144,7 @@ public abstract class AppActivity extends BaseActivity
                 // 默认状态栏字体颜色为黑色
                 .statusBarDarkFont(isStatusBarDarkFont())
                 // 指定导航栏背景颜色
-                .navigationBarColor(android.R.color.white)
+                .navigationBarColor(R.color.white)
                 // 状态栏字体和导航栏内容自动变色，必须指定状态栏颜色和导航栏颜色才可以自动变色
                 .autoDarkModeEnable(true, 0.2f);
     }

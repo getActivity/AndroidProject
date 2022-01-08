@@ -5,10 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import com.hjq.demo.R;
 
 /**
  *    author : Android 轮子哥
@@ -23,9 +24,9 @@ public final class PasswordView extends View {
     private final Paint mPointPaint;
 
     /** 单个密码框的宽度 */
-    private int mItemWidth = 44;
+    private final int mItemWidth;
     /** 单个密码框的高度 */
-    private int mItemHeight = 41;
+    private final int mItemHeight;
 
     /** 中心黑点的半径大小 */
     private static final int POINT_RADIUS = 15;
@@ -57,8 +58,8 @@ public final class PasswordView extends View {
     public PasswordView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        mItemWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mItemWidth, getResources().getDisplayMetrics());
-        mItemHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mItemHeight, getResources().getDisplayMetrics());
+        mItemWidth = (int) getResources().getDimension(R.dimen.dp_44);
+        mItemHeight = (int) getResources().getDimension(R.dimen.dp_41);
 
         mPaint = new Paint();
         // 设置抗锯齿

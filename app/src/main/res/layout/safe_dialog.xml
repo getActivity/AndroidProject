@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="8dp"
+    android:paddingHorizontal="@dimen/dp_10"
+    android:paddingVertical="@dimen/dp_8"
     tools:background="@color/white"
     tools:context=".ui.dialog.SafeDialog">
 
@@ -15,22 +15,22 @@
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawablePadding="15dp"
+        android:drawablePadding="@dimen/dp_15"
         android:hint="@string/common_phone_input_hint"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
+        android:paddingHorizontal="@dimen/dp_20"
+        android:paddingVertical="@dimen/dp_10"
         android:singleLine="true"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         tools:text="12345678910" />
 
     <View
         style="@style/HorizontalLineStyle"
-        android:layout_marginHorizontal="10dp" />
+        android:layout_marginHorizontal="@dimen/dp_10" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dp_10"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -44,25 +44,27 @@
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="15dp"
+                android:drawablePadding="@dimen/dp_15"
+                android:ellipsize="end"
                 android:hint="@string/common_code_input_hint"
                 android:inputType="number"
                 android:maxLength="@integer/sms_code_length"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="10dp"
+                android:paddingHorizontal="@dimen/dp_20"
+                android:paddingVertical="@dimen/dp_10"
                 android:singleLine="true"
-                android:textSize="13sp" />
+                android:textSize="@dimen/sp_13" />
 
             <View
                 style="@style/HorizontalLineStyle"
                 android:layout_gravity="bottom"
-                android:layout_marginHorizontal="10dp" />
+                android:layout_marginHorizontal="@dimen/dp_10" />
 
         </FrameLayout>
 
         <com.hjq.widget.view.CountdownView
             android:id="@+id/cv_safe_countdown"
-            style="@style/CountdownViewStyle" />
+            style="@style/CountdownViewStyle"
+            android:layout_marginHorizontal="@dimen/dp_5" />
 
     </LinearLayout>
 

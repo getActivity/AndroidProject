@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  *    author : Android 轮子哥
@@ -24,8 +25,9 @@ public final class KeyboardWatcher implements
 
     private Activity mActivity;
     private View mContentView;
+    @Nullable
     private SoftKeyboardStateListener mListeners;
-    private boolean isSoftKeyboardOpened;
+    private boolean mSoftKeyboardOpened;
     private int mStatusBarHeight;
 
     public static KeyboardWatcher with(Activity activity) {
@@ -62,30 +64,29 @@ public final class KeyboardWatcher implements
         mContentView.getWindowVisibleDisplayFrame(r);
 
         final int heightDiff = mContentView.getRootView().getHeight() - (r.bottom - r.top);
-        if (!isSoftKeyboardOpened && heightDiff > mContentView.getRootView().getHeight() / 4) {
-            isSoftKeyboardOpened = true;
+        if (!mSoftKeyboardOpened && heightDiff > mContentView.getRootView().getHeight() / 4) {
+            mSoftKeyboardOpened = true;
+            if (mListeners == null) {
+                return;
+            }
             if ((mActivity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != WindowManager.LayoutParams.FLAG_FULLSCREEN) {
-                if (mListeners != null) {
-                    mListeners.onSoftKeyboardOpened(heightDiff - mStatusBarHeight);
-                }
+                mListeners.onSoftKeyboardOpened(heightDiff - mStatusBarHeight);
             } else {
-                if (mListeners != null) {
-                    mListeners.onSoftKeyboardOpened(heightDiff);
-                }
+                mListeners.onSoftKeyboardOpened(heightDiff);
             }
-
-        } else if (isSoftKeyboardOpened && heightDiff < mContentView.getRootView().getHeight() / 4) {
-            isSoftKeyboardOpened = false;
-            if (mListeners != null) {
-                mListeners.onSoftKeyboardClosed();
+        } else if (mSoftKeyboardOpened && heightDiff < mContentView.getRootView().getHeight() / 4) {
+            mSoftKeyboardOpened = false;
+            if (mListeners == null) {
+                return;
             }
+            mListeners.onSoftKeyboardClosed();
         }
     }
 
     /**
      * 设置软键盘弹出监听
      */
-    public void setListener(SoftKeyboardStateListener listener) {
+    public void setListener(@Nullable SoftKeyboardStateListener listener) {
         mListeners = listener;
     }
 

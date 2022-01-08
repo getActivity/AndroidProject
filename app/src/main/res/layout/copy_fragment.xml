@@ -10,7 +10,7 @@
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backButton="false"
+        app:leftIcon="@null"
         app:title="标题" />
 
 </LinearLayout>

@@ -1,0 +1,60 @@
+ext {
+    // 测试服
+    def SERVER_TYPE_TEST = "test"
+    // 预发布服
+    def SERVER_TYPE_PREVIEW = "pre"
+    // 正式服
+    def SERVER_TYPE_PRODUCT = "product"
+
+    def taskName = project.gradle.startParameter.taskNames[0]
+    if (taskName == null) {
+        taskName = ""
+    }
+    // 打印当前执行的任务名称
+    println "GradleLog TaskNameOutput " + taskName
+
+    def serverType = SERVER_TYPE_PRODUCT
+
+    if (taskName.endsWith("Debug")) {
+        serverType = SERVER_TYPE_TEST
+    } else if (taskName.endsWith("Preview")) {
+        serverType = SERVER_TYPE_PREVIEW
+    }
+
+    // 从 Gradle 命令中读取参数配置，例如：./gradlew assembleRelease -P ServerType="test"
+    if (project.hasProperty("ServerType")) {
+        serverType = project.properties["ServerType"]
+    }
+
+    // 打印当前服务器配置
+    println "GradleLog ServerTypeOutput " + serverType
+
+    // 友盟 AppKey
+    UMENG_APP_KEY = "5cb16d93570df399fd0014e2"
+    // QQ AppId
+    QQ_APP_ID = "101828096"
+    // QQ Secret
+    QQ_APP_SECRET = "9dfd3300c3aa3c4596a07796c64914b2"
+    // 微信 AppId
+    WX_APP_ID = "wxd35706cc9f46114c"
+    // 微信 Secret
+    WX_APP_SECRET = "0c8c7cf831dd135a32b3e395ea459b5a"
+
+    switch(serverType) {
+        case SERVER_TYPE_TEST:
+        case SERVER_TYPE_PREVIEW:
+            LOG_ENABLE = true
+            BUGLY_ID = "请自行替换 Bugly 上面的 AppID"
+            if (serverType == SERVER_TYPE_PREVIEW) {
+                HOST_URL = "https://www.pre.baidu.com/"
+            } else {
+                HOST_URL = "https://www.test.baidu.com/"
+            }
+            break
+        case SERVER_TYPE_PRODUCT:
+            LOG_ENABLE = false
+            BUGLY_ID = "请自行替换 Bugly 上面的 AppID"
+            HOST_URL = "https://www.baidu.com/"
+            break
+    }
+}

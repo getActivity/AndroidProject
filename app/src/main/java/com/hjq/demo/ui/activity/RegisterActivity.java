@@ -13,15 +13,13 @@ import androidx.annotation.NonNull;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.demo.R;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
+import com.hjq.demo.http.api.GetCodeApi;
+import com.hjq.demo.http.api.RegisterApi;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.http.request.GetCodeApi;
-import com.hjq.demo.http.request.RegisterApi;
-import com.hjq.demo.http.response.RegisterBean;
 import com.hjq.demo.manager.InputTextManager;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.hjq.widget.view.CountdownView;
@@ -38,11 +36,14 @@ import okhttp3.Call;
 public final class RegisterActivity extends AppActivity
         implements TextView.OnEditorActionListener {
 
-    @DebugLog
+    private static final String INTENT_KEY_PHONE = "phone";
+    private static final String INTENT_KEY_PASSWORD = "password";
+
+    @Log
     public static void start(BaseActivity activity, String phone, String password, OnRegisterListener listener) {
         Intent intent = new Intent(activity, RegisterActivity.class);
-        intent.putExtra(IntentKey.PHONE, phone);
-        intent.putExtra(IntentKey.PASSWORD, password);
+        intent.putExtra(INTENT_KEY_PHONE, phone);
+        intent.putExtra(INTENT_KEY_PASSWORD, password);
         activity.startActivityForResult(intent, (resultCode, data) -> {
 
             if (listener == null || data == null) {
@@ -50,7 +51,7 @@ public final class RegisterActivity extends AppActivity
             }
 
             if (resultCode == RESULT_OK) {
-                listener.onSucceed(data.getStringExtra(IntentKey.PHONE), data.getStringExtra(IntentKey.PASSWORD));
+                listener.onSucceed(data.getStringExtra(INTENT_KEY_PHONE), data.getStringExtra(INTENT_KEY_PASSWORD));
             } else {
                 listener.onCancel();
             }
@@ -100,9 +101,9 @@ public final class RegisterActivity extends AppActivity
     @Override
     protected void initData() {
         // 自动填充手机号和密码
-        mPhoneView.setText(getString(IntentKey.PHONE));
-        mFirstPassword.setText(getString(IntentKey.PASSWORD));
-        mSecondPassword.setText(getString(IntentKey.PASSWORD));
+        mPhoneView.setText(getString(INTENT_KEY_PHONE));
+        mFirstPassword.setText(getString(INTENT_KEY_PASSWORD));
+        mSecondPassword.setText(getString(INTENT_KEY_PASSWORD));
     }
 
     @SingleClick
@@ -171,8 +172,8 @@ public final class RegisterActivity extends AppActivity
                     mCommitView.showSucceed();
                     postDelayed(() -> {
                         setResult(RESULT_OK, new Intent()
-                                .putExtra(IntentKey.PHONE, mPhoneView.getText().toString())
-                                .putExtra(IntentKey.PASSWORD, mFirstPassword.getText().toString()));
+                                .putExtra(INTENT_KEY_PHONE, mPhoneView.getText().toString())
+                                .putExtra(INTENT_KEY_PASSWORD, mFirstPassword.getText().toString()));
                         finish();
                     }, 1000);
                 }, 2000);
@@ -185,7 +186,7 @@ public final class RegisterActivity extends AppActivity
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString())
                             .setPassword(mFirstPassword.getText().toString()))
-                    .request(new HttpCallback<HttpData<RegisterBean>>(this) {
+                    .request(new HttpCallback<HttpData<RegisterApi.Bean>>(this) {
 
                         @Override
                         public void onStart(Call call) {
@@ -196,13 +197,13 @@ public final class RegisterActivity extends AppActivity
                         public void onEnd(Call call) {}
 
                         @Override
-                        public void onSucceed(HttpData<RegisterBean> data) {
+                        public void onSucceed(HttpData<RegisterApi.Bean> data) {
                             postDelayed(() -> {
                                 mCommitView.showSucceed();
                                 postDelayed(() -> {
                                     setResult(RESULT_OK, new Intent()
-                                            .putExtra(IntentKey.PHONE, mPhoneView.getText().toString())
-                                            .putExtra(IntentKey.PASSWORD, mFirstPassword.getText().toString()));
+                                            .putExtra(INTENT_KEY_PHONE, mPhoneView.getText().toString())
+                                            .putExtra(INTENT_KEY_PASSWORD, mFirstPassword.getText().toString()));
                                     finish();
                                 }, 1000);
                             }, 1000);
@@ -223,6 +224,8 @@ public final class RegisterActivity extends AppActivity
     @Override
     protected ImmersionBar createStatusBarConfig() {
         return super.createStatusBarConfig()
+                // 指定导航栏背景颜色
+                .navigationBarColor(R.color.white)
                 // 不要把整个布局顶上去
                 .keyboardEnable(true);
     }

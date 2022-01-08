@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="30dp"
+            android:layout_marginHorizontal="@dimen/dp_30"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -28,7 +28,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出消息对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -36,7 +36,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出输入对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -44,7 +44,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出底部选择框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -52,7 +52,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出居中选择框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -60,7 +60,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出单项选择框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -68,7 +68,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出多项选择框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -76,7 +76,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出完成对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -84,7 +84,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出错误对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -92,7 +92,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出警告对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -100,7 +100,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出加载对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -108,7 +108,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出支付对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -116,7 +116,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出地区对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -124,7 +124,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出日期对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -132,7 +132,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出时间对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -140,7 +140,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出更新对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -148,7 +148,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出分享对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -156,7 +156,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出验证码对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -164,7 +164,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹出自定义对话框" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -172,7 +172,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="30dp"
+                android:layout_marginVertical="@dimen/dp_30"
                 android:text="连续弹出对话框" />
 
         </LinearLayout>

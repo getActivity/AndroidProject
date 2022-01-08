@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JsPromptResult;
@@ -34,13 +35,16 @@ import com.hjq.base.action.ActivityAction;
 import com.hjq.demo.R;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.other.PermissionCallback;
-import com.hjq.demo.ui.dialog.HintDialog;
+import com.hjq.demo.ui.activity.ImageSelectActivity;
+import com.hjq.demo.ui.activity.VideoSelectActivity;
 import com.hjq.demo.ui.dialog.InputDialog;
 import com.hjq.demo.ui.dialog.MessageDialog;
+import com.hjq.demo.ui.dialog.TipsDialog;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.widget.layout.NestedScrollWebView;
 
+import java.io.File;
 import java.util.List;
 
 import timber.log.Timber;
@@ -128,10 +132,10 @@ public final class BrowserView extends NestedScrollWebView
     public String getUrl() {
         String originalUrl = super.getOriginalUrl();
         // 避免开始时同时加载两个地址而导致的崩溃
-        if (originalUrl != null) {
-            return originalUrl;
+        if (originalUrl == null) {
+            return super.getUrl();
         }
-        return super.getUrl();
+        return originalUrl;
     }
 
     /**
@@ -150,11 +154,9 @@ public final class BrowserView extends NestedScrollWebView
         switch (event) {
             case ON_RESUME:
                 onResume();
-                resumeTimers();
                 break;
-            case ON_PAUSE:
+            case ON_STOP:
                 onPause();
-                pauseTimers();
                 break;
             case ON_DESTROY:
                 onDestroy();
@@ -219,6 +221,7 @@ public final class BrowserView extends NestedScrollWebView
                 return;
             }
 
+            // 如何处理应用中的 WebView SSL 错误处理程序提醒：https://support.google.com/faqs/answer/7071387?hl=zh-Hans
             new MessageDialog.Builder(context)
                     .setMessage(R.string.common_web_ssl_error_title)
                     .setConfirm(R.string.common_web_ssl_error_allow)
@@ -277,7 +280,7 @@ public final class BrowserView extends NestedScrollWebView
             Timber.i("WebView shouldOverrideUrlLoading：%s", url);
             String scheme = Uri.parse(url).getScheme();
             if (scheme == null) {
-                return true;
+                return false;
             }
             switch (scheme) {
                 // 如果这是跳链接操作
@@ -292,7 +295,6 @@ public final class BrowserView extends NestedScrollWebView
                 default:
                     break;
             }
-            // 已经处理该链接请求
             return true;
         }
 
@@ -341,8 +343,8 @@ public final class BrowserView extends NestedScrollWebView
                 return false;
             }
 
-            new HintDialog.Builder(activity)
-                    .setIcon(HintDialog.ICON_WARNING)
+            new TipsDialog.Builder(activity)
+                    .setIcon(TipsDialog.ICON_WARNING)
                     .setMessage(message)
                     .setCancelable(false)
                     .addOnDismissListener(dialog -> result.confirm())
@@ -458,7 +460,6 @@ public final class BrowserView extends NestedScrollWebView
          * @param callback              文件选择回调
          * @param params                文件选择参数
          */
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, FileChooserParams params) {
             Activity activity = mWebView.getActivity();
@@ -468,12 +469,12 @@ public final class BrowserView extends NestedScrollWebView
             }
 
             XXPermissions.with(activity)
-                    .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                    .permission(Permission.Group.STORAGE)
                     .request(new PermissionCallback() {
                         @Override
                         public void onGranted(List<String> permissions, boolean all) {
                             if (all) {
-                                openSystemFileChooser((BaseActivity) activity, callback, params);
+                                openSystemFileChooser((BaseActivity) activity, params, callback);
                             }
                         }
 
@@ -489,15 +490,59 @@ public final class BrowserView extends NestedScrollWebView
         /**
          * 打开系统文件选择器
          */
-        private void openSystemFileChooser(BaseActivity activity, ValueCallback<Uri[]> callback, FileChooserParams params) {
+        private static void openSystemFileChooser(BaseActivity activity, FileChooserParams params, ValueCallback<Uri[]> callback) {
             Intent intent = params.createIntent();
             String[] mimeTypes = params.getAcceptTypes();
-            if (mimeTypes != null && mimeTypes.length > 0 && mimeTypes[0] != null && !"".equals(mimeTypes[0])) {
+            boolean multipleSelect = params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE;
+            if (mimeTypes != null && mimeTypes.length > 0 && !TextUtils.isEmpty(mimeTypes[0])) {
                 // 要过滤的文件类型
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+                if (mimeTypes.length == 1) {
+                    switch (mimeTypes[0]) {
+                        case "image/*":
+                            ImageSelectActivity.start(activity, multipleSelect ? Integer.MAX_VALUE : 1, new ImageSelectActivity.OnPhotoSelectListener() {
+
+                                @Override
+                                public void onSelected(List<String> data) {
+                                    Uri[] uri = new Uri[data.size()];
+                                    for (int i = 0; i < data.size(); i++) {
+                                        uri[i] = Uri.fromFile(new File(data.get(i)));
+                                    }
+                                    callback.onReceiveValue(uri);
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    callback.onReceiveValue(null);
+                                }
+                            });
+                            return;
+                        case "video/*":
+                            VideoSelectActivity.start(activity, multipleSelect ? Integer.MAX_VALUE : 1, new VideoSelectActivity.OnVideoSelectListener() {
+
+                                @Override
+                                public void onSelected(List<VideoSelectActivity.VideoBean> data) {
+                                    Uri[] uri = new Uri[data.size()];
+                                    for (int i = 0; i < data.size(); i++) {
+                                        uri[i] = Uri.fromFile(new File(data.get(i).getVideoPath()));
+                                    }
+                                    callback.onReceiveValue(uri);
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    callback.onReceiveValue(null);
+                                }
+                            });
+                            return;
+                        default:
+                            break;
+                    }
+                }
             }
+
             // 是否是多选模式
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multipleSelect);
             activity.startActivityForResult(Intent.createChooser(intent, params.getTitle()), (resultCode, data) -> {
                 Uri[] uris = null;
                 if (resultCode == Activity.RESULT_OK && data != null) {

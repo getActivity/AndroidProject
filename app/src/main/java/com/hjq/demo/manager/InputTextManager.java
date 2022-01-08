@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/10/18
- *    desc   : 文本输入管理类，通过管理多个 TextView 输入是否为空来启用或者禁用按钮的点击事件
+ *    desc   : 文本输入管理类，通过管理多个 EditText 输入是否为空来启用或者禁用按钮的点击事件
  *    blog   : https://www.jianshu.com/p/fd3795e8a6b3
  */
 public final class InputTextManager implements TextWatcher {
@@ -32,6 +33,7 @@ public final class InputTextManager implements TextWatcher {
     private List<TextView> mViewSet;
 
     /** 输入监听器 */
+    @Nullable
     private OnInputTextListener mListener;
 
     /**
@@ -108,14 +110,16 @@ public final class InputTextManager implements TextWatcher {
      * 移除 TextView 监听，避免内存泄露
      */
     public void removeViews(TextView... views) {
-        if (mViewSet != null && mViewSet.size() > 0) {
-            for (TextView view : views) {
-                view.removeTextChangedListener(this);
-                mViewSet.remove(view);
-            }
-            // 触发一次监听
-            notifyChanged();
+        if (mViewSet == null || mViewSet.isEmpty()) {
+            return;
         }
+
+        for (TextView view : views) {
+            view.removeTextChangedListener(this);
+            mViewSet.remove(view);
+        }
+        // 触发一次监听
+        notifyChanged();
     }
 
     /**
@@ -136,7 +140,7 @@ public final class InputTextManager implements TextWatcher {
     /**
      * 设置输入监听
      */
-    public void setListener(OnInputTextListener listener) {
+    public void setListener(@Nullable OnInputTextListener listener) {
         mListener = listener;
     }
 
@@ -171,11 +175,12 @@ public final class InputTextManager implements TextWatcher {
             }
         }
 
-        if (mListener != null) {
-            setEnabled(mListener.onInputChange(this));
-        } else {
+        if (mListener == null) {
             setEnabled(true);
+            return;
         }
+
+        setEnabled(mListener.onInputChange(this));
     }
 
     /**
@@ -215,10 +220,10 @@ public final class InputTextManager implements TextWatcher {
         private boolean isAlpha;
         /**  TextView集合 */
         private final List<TextView> mViewSet = new ArrayList<>();
-        /** 文本 */
+        /** 输入变化监听 */
         private OnInputTextListener mListener;
 
-        private Builder(Activity activity) {
+        private Builder(@NonNull Activity activity) {
             mActivity = activity;
         }
 
@@ -246,12 +251,7 @@ public final class InputTextManager implements TextWatcher {
             InputTextManager helper = new InputTextManager(mView, isAlpha);
             helper.addViews(mViewSet);
             helper.setListener(mListener);
-            TextInputLifecycle lifecycle = new TextInputLifecycle(mActivity, helper);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                mActivity.registerActivityLifecycleCallbacks(lifecycle);
-            } else {
-                mActivity.getApplication().registerActivityLifecycleCallbacks(lifecycle);
-            }
+            TextInputLifecycle.register(mActivity, helper);
             return helper;
         }
     }
@@ -264,6 +264,15 @@ public final class InputTextManager implements TextWatcher {
         private TextInputLifecycle(Activity activity, InputTextManager helper) {
             mActivity = activity;
             mTextHelper = helper;
+        }
+
+        private static void register(Activity activity, InputTextManager helper) {
+            TextInputLifecycle lifecycle = new TextInputLifecycle(activity, helper);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                activity.registerActivityLifecycleCallbacks(lifecycle);
+            } else {
+                activity.getApplication().registerActivityLifecycleCallbacks(lifecycle);
+            }
         }
 
         @Override
@@ -286,16 +295,17 @@ public final class InputTextManager implements TextWatcher {
 
         @Override
         public void onActivityDestroyed(@NonNull Activity activity) {
-            if (mActivity != null && mActivity == activity) {
-                mTextHelper.removeAllViews();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    mActivity.unregisterActivityLifecycleCallbacks(this);
-                } else {
-                    mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
-                }
-                mTextHelper = null;
-                mActivity = null;
+            if (mActivity != activity) {
+                return;
             }
+            mTextHelper.removeAllViews();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                mActivity.unregisterActivityLifecycleCallbacks(this);
+            } else {
+                mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
+            }
+            mTextHelper = null;
+            mActivity = null;
         }
     }
 

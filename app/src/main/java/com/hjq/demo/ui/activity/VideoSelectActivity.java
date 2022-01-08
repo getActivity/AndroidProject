@@ -2,6 +2,7 @@ package com.hjq.demo.ui.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -9,7 +10,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
@@ -17,23 +17,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
-import com.hjq.demo.aop.DebugLog;
+import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.other.GridSpaceDecoration;
-import com.hjq.demo.other.IntentKey;
 import com.hjq.demo.ui.adapter.VideoSelectAdapter;
 import com.hjq.demo.ui.dialog.AlbumDialog;
 import com.hjq.demo.widget.StatusLayout;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.hjq.widget.view.FloatActionButton;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,26 +54,35 @@ public final class VideoSelectActivity extends AppActivity
         BaseAdapter.OnItemLongClickListener,
         BaseAdapter.OnChildClickListener {
 
+    private static final String INTENT_KEY_IN_MAX_SELECT = "maxSelect";
+
+    private static final String INTENT_KEY_OUT_VIDEO_LIST = "videoList";
+
     public static void start(BaseActivity activity, OnVideoSelectListener listener) {
         start(activity, 1, listener);
     }
 
-    @DebugLog
-    @Permissions({Permission.MANAGE_EXTERNAL_STORAGE})
+    @Log
+    @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE})
     public static void start(BaseActivity activity, int maxSelect, OnVideoSelectListener listener) {
         if (maxSelect < 1) {
             // 最少要选择一个视频
             throw new IllegalArgumentException("are you ok?");
         }
         Intent intent = new Intent(activity, VideoSelectActivity.class);
-        intent.putExtra(IntentKey.AMOUNT, maxSelect);
+        intent.putExtra(INTENT_KEY_IN_MAX_SELECT, maxSelect);
         activity.startActivityForResult(intent, (resultCode, data) -> {
 
-            if (listener == null || data == null) {
+            if (listener == null) {
                 return;
             }
 
-            ArrayList<VideoBean> list = data.getParcelableArrayListExtra(IntentKey.VIDEO);
+            if (data == null) {
+                listener.onCancel();
+                return;
+            }
+
+            ArrayList<VideoBean> list = data.getParcelableArrayListExtra(INTENT_KEY_OUT_VIDEO_LIST);
             if (list == null || list.isEmpty()) {
                 listener.onCancel();
                 return;
@@ -96,7 +105,7 @@ public final class VideoSelectActivity extends AppActivity
 
     private StatusLayout mStatusLayout;
     private RecyclerView mRecyclerView;
-    private FloatingActionButton mFloatingView;
+    private FloatActionButton mFloatingView;
 
     private VideoSelectAdapter mAdapter;
 
@@ -133,19 +142,34 @@ public final class VideoSelectActivity extends AppActivity
         // 禁用动画效果
         mRecyclerView.setItemAnimator(null);
         // 添加分割线
-        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics())));
+        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) getResources().getDimension(R.dimen.dp_5)));
+        // 设置滚动监听
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        mFloatingView.hide();
+                        break;
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        mFloatingView.show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
-    @SuppressWarnings("all")
     @Override
     protected void initData() {
         // 获取最大的选择数
-        mMaxSelect = getInt(IntentKey.AMOUNT, mMaxSelect);
+        mMaxSelect = getInt(INTENT_KEY_IN_MAX_SELECT, mMaxSelect);
 
         // 显示加载进度条
         showLoading();
         // 加载视频列表
-        ThreadPoolManager.getInstance().execute(VideoSelectActivity.this);
+        ThreadPoolManager.getInstance().execute(this);
     }
 
     @Override
@@ -166,10 +190,11 @@ public final class VideoSelectActivity extends AppActivity
         Set<String> keys = mAllAlbum.keySet();
         for (String key : keys) {
             List<VideoBean> list = mAllAlbum.get(key);
-            if (list != null && !list.isEmpty()) {
-                count += list.size();
-                data.add(new AlbumDialog.AlbumInfo(list.get(0).getVideoPath(), key, String.format(getString(R.string.video_select_total), list.size()), mAdapter.getData() == list));
+            if (list == null || list.isEmpty()) {
+                continue;
             }
+            count += list.size();
+            data.add(new AlbumDialog.AlbumInfo(list.get(0).getVideoPath(), key, String.format(getString(R.string.video_select_total), list.size()), mAdapter.getData() == list));
         }
         data.add(0, new AlbumDialog.AlbumInfo(mAllVideo.get(0).getVideoPath(), getString(R.string.video_select_all), String.format(getString(R.string.video_select_total), count), mAdapter.getData() == mAllVideo));
 
@@ -186,7 +211,7 @@ public final class VideoSelectActivity extends AppActivity
                             mAdapter.setData(mAllAlbum.get(bean.getName()));
                         }
                         // 执行列表动画
-                        mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.from_right_layout));
+                        mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_from_right));
                         mRecyclerView.scheduleLayoutAnimation();
                     });
         }
@@ -211,18 +236,20 @@ public final class VideoSelectActivity extends AppActivity
             mAllVideo.remove(bean);
 
             File parentFile = file.getParentFile();
-            if (parentFile != null) {
-                List<VideoBean> data = mAllAlbum.get(parentFile.getName());
-                if (data != null) {
-                    data.remove(bean);
-                }
-                mAdapter.notifyDataSetChanged();
+            if (parentFile == null) {
+                continue;
+            }
 
-                if (mSelectVideo.isEmpty()) {
-                    mFloatingView.setImageResource(R.drawable.videocam_ic);
-                } else {
-                    mFloatingView.setImageResource(R.drawable.succeed_ic);
-                }
+            List<VideoBean> data = mAllAlbum.get(parentFile.getName());
+            if (data != null) {
+                data.remove(bean);
+            }
+            mAdapter.notifyDataSetChanged();
+
+            if (mSelectVideo.isEmpty()) {
+                mFloatingView.setImageResource(R.drawable.videocam_ic);
+            } else {
+                mFloatingView.setImageResource(R.drawable.succeed_ic);
             }
         }
     }
@@ -233,24 +260,31 @@ public final class VideoSelectActivity extends AppActivity
         if (view.getId() == R.id.fab_video_select_floating) {
             if (mSelectVideo.isEmpty()) {
                 // 点击拍照
-                CameraActivity.start(this, true, file -> {
+                CameraActivity.start(this, true, new CameraActivity.OnCameraListener() {
+                    @Override
+                    public void onSelected(File file) {
+                        // 当前选中视频的数量必须小于最大选中数
+                        if (mSelectVideo.size() < mMaxSelect) {
+                            mSelectVideo.add(VideoBean.newInstance(file.getPath()));
+                        }
 
-                    // 当前选中视频的数量必须小于最大选中数
-                    if (mSelectVideo.size() < mMaxSelect) {
-                        mSelectVideo.add(VideoBean.newInstance(file.getPath()));
+                        // 这里需要延迟刷新，否则可能会找不到拍照的视频
+                        postDelayed(() -> {
+                            // 重新加载视频列表
+                            ThreadPoolManager.getInstance().execute(VideoSelectActivity.this);
+                        }, 1000);
                     }
 
-                    // 这里需要延迟刷新，否则可能会找不到拍照的视频
-                    postDelayed(() -> {
-                        // 重新加载视频列表
-                        ThreadPoolManager.getInstance().execute(VideoSelectActivity.this);
-                    }, 1000);
+                    @Override
+                    public void onError(String details) {
+                        toast(details);
+                    }
                 });
                 return;
             }
 
             // 完成选择
-            setResult(RESULT_OK, new Intent().putParcelableArrayListExtra(IntentKey.VIDEO, mSelectVideo));
+            setResult(RESULT_OK, new Intent().putParcelableArrayListExtra(INTENT_KEY_OUT_VIDEO_LIST, mSelectVideo));
             finish();
         }
     }
@@ -263,8 +297,11 @@ public final class VideoSelectActivity extends AppActivity
      */
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        VideoBean bean = mAdapter.getItem(position);
         new VideoPlayActivity.Builder()
-                .setVideoSource(new File(mAdapter.getItem(position).getVideoPath()))
+                .setVideoSource(new File(bean.getVideoPath()))
+                .setActivityOrientation(bean.getVideoWidth() > bean.getVideoHeight() ?
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                 .start(getActivity());
     }
 
@@ -305,11 +342,7 @@ public final class VideoSelectActivity extends AppActivity
                 mSelectVideo.remove(bean);
 
                 if (mSelectVideo.isEmpty()) {
-                    mFloatingView.hide();
-                    postDelayed(() -> {
-                        mFloatingView.setImageResource(R.drawable.videocam_ic);
-                        mFloatingView.show();
-                    }, 200);
+                    mFloatingView.setImageResource(R.drawable.videocam_ic);
                 }
 
                 mAdapter.notifyItemChanged(position);
@@ -332,11 +365,7 @@ public final class VideoSelectActivity extends AppActivity
                 mSelectVideo.add(bean);
 
                 if (mSelectVideo.size() == 1) {
-                    mFloatingView.hide();
-                    postDelayed(() -> {
-                        mFloatingView.setImageResource(R.drawable.succeed_ic);
-                        mFloatingView.show();
-                    }, 200);
+                    mFloatingView.setImageResource(R.drawable.succeed_ic);
                 }
             } else {
                 toast(String.format(getString(R.string.video_select_max_hint), mMaxSelect));
@@ -361,7 +390,7 @@ public final class VideoSelectActivity extends AppActivity
                 MediaStore.MediaColumns.HEIGHT, MediaStore.MediaColumns.SIZE, MediaStore.Video.Media.DURATION};
 
         Cursor cursor = null;
-        if (XXPermissions.isGrantedPermission(this, Permission.MANAGE_EXTERNAL_STORAGE)) {
+        if (XXPermissions.isGranted(this, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)) {
             cursor = contentResolver.query(contentUri, projections, selection, new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)}, sortOrder);
         }
         if (cursor != null && cursor.moveToFirst()) {
@@ -370,6 +399,8 @@ public final class VideoSelectActivity extends AppActivity
             int mimeTypeIndex = cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE);
             int sizeIndex = cursor.getColumnIndex(MediaStore.MediaColumns.SIZE);
             int durationIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DURATION);
+            int widthIndex = cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH);
+            int heightIndex = cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT);
 
             do {
                 long duration = cursor.getLong(durationIndex);
@@ -396,19 +427,24 @@ public final class VideoSelectActivity extends AppActivity
                 }
 
                 File parentFile = file.getParentFile();
-                if (parentFile != null) {
-                    // 获取目录名作为专辑名称
-                    String albumName = parentFile.getName();
-                    List<VideoBean> data = mAllAlbum.get(albumName);
-                    if (data == null) {
-                        data = new ArrayList<>();
-                        mAllAlbum.put(albumName, data);
-                    }
-
-                    VideoBean bean = new VideoBean(path, duration, size);
-                    data.add(bean);
-                    mAllVideo.add(bean);
+                if (parentFile == null) {
+                    continue;
                 }
+
+                // 获取目录名作为专辑名称
+                String albumName = parentFile.getName();
+                List<VideoBean> data = mAllAlbum.get(albumName);
+                if (data == null) {
+                    data = new ArrayList<>();
+                    mAllAlbum.put(albumName, data);
+                }
+
+                int width = cursor.getInt(widthIndex);
+                int height = cursor.getInt(heightIndex);
+
+                VideoBean bean = new VideoBean(path, width, height, duration, size);
+                data.add(bean);
+                mAllVideo.add(bean);
 
             } while (cursor.moveToNext());
 
@@ -428,7 +464,7 @@ public final class VideoSelectActivity extends AppActivity
             }
 
             // 执行列表动画
-            mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.fall_down_layout));
+            mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_fall_down));
             mRecyclerView.scheduleLayoutAnimation();
 
             if (mAllVideo.isEmpty()) {
@@ -450,49 +486,79 @@ public final class VideoSelectActivity extends AppActivity
      */
     public static class VideoBean implements Parcelable {
 
-        private final String videoPath;
-        private final long duration;
-        private final long size;
+        private final String mVideoPath;
+        private final int mVideoWidth;
+        private final int mVideoHeight;
+        private final long mVideoDuration;
+        private final long mVideoSize;
 
         public static VideoBean newInstance(String videoPath) {
-            int duration = 0;
+            int videoWidth = 0;
+            int videoHeight = 0;
+            long videoDuration = 0;
             try {
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(videoPath);
+
+                String widthMetadata = retriever.extractMetadata
+                        (MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+                if (widthMetadata != null && !"".equals(widthMetadata)) {
+                    videoWidth = Integer.parseInt(widthMetadata);
+                }
+
+                String heightMetadata = retriever.extractMetadata
+                        (MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+                if (heightMetadata != null && !"".equals(heightMetadata)) {
+                    videoHeight = Integer.parseInt(heightMetadata);
+                }
+
+                String durationMetadata = retriever.extractMetadata
+                        (MediaMetadataRetriever.METADATA_KEY_DURATION);
+                if (durationMetadata != null && !"".equals(durationMetadata)) {
+                    videoDuration = Long.parseLong(durationMetadata);
+                }
+            } catch (RuntimeException e) {
                 // 荣耀 LLD AL20 Android 8.0 出现：java.lang.IllegalArgumentException
                 // 荣耀 HLK AL00 Android 10.0 出现：java.lang.RuntimeException：setDataSource failed: status = 0x80000000
-                retriever.setDataSource(videoPath);
-                duration = Integer.parseInt(retriever.extractMetadata
-                        (MediaMetadataRetriever.METADATA_KEY_DURATION));
-            } catch (RuntimeException e) {
-                e.printStackTrace();
+                CrashReport.postCatchedException(e);
             }
 
-            long size = new File(videoPath).length();
-            return new VideoBean(videoPath, duration, size);
+            long videoSize = new File(videoPath).length();
+            return new VideoBean(videoPath, videoWidth, videoHeight, videoDuration, videoSize);
         }
 
-        public VideoBean(String videoPath, long videoDuration, long videoSize) {
-            this.videoPath = videoPath;
-            this.duration = videoDuration;
-            this.size = videoSize;
+        public VideoBean(String path, int width, int height, long duration, long size) {
+            mVideoPath = path;
+            mVideoWidth = width;
+            mVideoHeight = height;
+            mVideoDuration = duration;
+            mVideoSize = size;
+        }
+
+        public int getVideoWidth() {
+            return mVideoWidth;
+        }
+
+        public int getVideoHeight() {
+            return mVideoHeight;
         }
 
         public String getVideoPath() {
-            return videoPath;
+            return mVideoPath;
         }
 
         public long getVideoDuration() {
-            return duration;
+            return mVideoDuration;
         }
 
         public long getVideoSize() {
-            return size;
+            return mVideoSize;
         }
 
         @Override
         public boolean equals(@Nullable Object obj) {
             if (obj instanceof VideoBean) {
-                return videoPath.equals(((VideoBean) obj).videoPath);
+                return mVideoPath.equals(((VideoBean) obj).mVideoPath);
             }
             return false;
         }
@@ -500,7 +566,7 @@ public final class VideoSelectActivity extends AppActivity
         @NonNull
         @Override
         public String toString() {
-            return videoPath;
+            return mVideoPath;
         }
 
         @Override
@@ -510,15 +576,19 @@ public final class VideoSelectActivity extends AppActivity
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(this.videoPath);
-            dest.writeLong(this.duration);
-            dest.writeLong(this.size);
+            dest.writeString(mVideoPath);
+            dest.writeInt(mVideoWidth);
+            dest.writeInt(mVideoHeight);
+            dest.writeLong(mVideoDuration);
+            dest.writeLong(mVideoSize);
         }
 
         protected VideoBean(Parcel in) {
-            this.videoPath = in.readString();
-            this.duration = in.readLong();
-            this.size = in.readLong();
+            mVideoPath = in.readString();
+            mVideoWidth = in.readInt();
+            mVideoHeight = in.readInt();
+            mVideoDuration = in.readLong();
+            mVideoSize = in.readLong();
         }
 
         public static final Parcelable.Creator<VideoBean> CREATOR = new Parcelable.Creator<VideoBean>() {

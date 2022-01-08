@@ -1,11 +1,9 @@
-/.gradle
-/.idea
-/build
-*/build
-/captures
-/.cxx
-*/.cxx
-/.externalNativeBuild
+.gradle
+.idea
+.cxx
+.externalNativeBuild
+build
+captures
 
 ._*
 *.iml

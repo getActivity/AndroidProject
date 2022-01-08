@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingHorizontal="10dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="5dp"
+    android:paddingHorizontal="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_5"
     tools:context=".ui.dialog.TimeDialog">
 
     <androidx.recyclerview.widget.RecyclerView

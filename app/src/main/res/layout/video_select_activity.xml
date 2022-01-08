@@ -32,17 +32,16 @@
 
         </com.hjq.demo.widget.StatusLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.hjq.widget.view.FloatActionButton
             android:id="@+id/fab_video_select_floating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="20dp"
-            app:borderWidth="0px"
-            app:elevation="1dp"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/videocam_ic" />
+            android:layout_marginEnd="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:background="@drawable/roll_accent_bg"
+            android:padding="@dimen/dp_20"
+            app:srcCompat="@drawable/camera_ic" />
     </FrameLayout>
 
 </LinearLayout>

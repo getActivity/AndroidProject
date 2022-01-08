@@ -10,15 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppAdapter;
+import com.hjq.demo.ui.adapter.TabAdapter;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +32,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
 
@@ -45,18 +46,21 @@ public final class AddressDialog {
 
     public static final class Builder
             extends BaseDialog.Builder<Builder>
-            implements TabLayout.OnTabSelectedListener,
+            implements TabAdapter.OnTabListener,
             Runnable, RecyclerViewAdapter.OnSelectListener,
             BaseDialog.OnShowListener, BaseDialog.OnDismissListener {
 
         private final TextView mTitleView;
         private final ImageView mCloseView;
-        private final TabLayout mTabLayout;
+        private final RecyclerView mTabView;
 
         private final ViewPager2 mViewPager;
+
+        private final TabAdapter mTabAdapter;
         private final RecyclerViewAdapter mAdapter;
         private final ViewPager2.OnPageChangeCallback mCallback;
 
+        @Nullable
         private OnListener mListener;
 
         private String mProvince = null;
@@ -78,11 +82,13 @@ public final class AddressDialog {
 
             mTitleView = findViewById(R.id.tv_address_title);
             mCloseView = findViewById(R.id.iv_address_closer);
-            mTabLayout = findViewById(R.id.tb_address_tab);
+            mTabView = findViewById(R.id.rv_address_tab);
             setOnClickListener(mCloseView);
 
-            mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
-            mTabLayout.addOnTabSelectedListener(this);
+            mTabAdapter = new TabAdapter(context, TabAdapter.TAB_MODE_SLIDING, false);
+            mTabAdapter.addItem(getString(R.string.address_hint));
+            mTabAdapter.setOnTabListener(this);
+            mTabView.setAdapter(mTabAdapter);
 
             mCallback = new ViewPager2.OnPageChangeCallback() {
 
@@ -92,18 +98,14 @@ public final class AddressDialog {
                 public void onPageScrollStateChanged(int state) {
                     mPreviousScrollState = mScrollState;
                     mScrollState = state;
-                    if (state == ViewPager2.SCROLL_STATE_IDLE && mTabLayout.getSelectedTabPosition() != mViewPager.getCurrentItem()) {
+                    if (state == ViewPager2.SCROLL_STATE_IDLE && mTabAdapter.getSelectedPosition() != mViewPager.getCurrentItem()) {
                         final boolean updateIndicator = mScrollState == SCROLL_STATE_IDLE || (mScrollState == SCROLL_STATE_SETTLING && mPreviousScrollState == SCROLL_STATE_IDLE);
-                        mTabLayout.selectTab(mTabLayout.getTabAt(mViewPager.getCurrentItem()), updateIndicator);
+                        onTabSelected(mTabView, mViewPager.getCurrentItem());
                     }
                 }
 
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    final boolean updateText = mScrollState != SCROLL_STATE_SETTLING || mPreviousScrollState == SCROLL_STATE_DRAGGING;
-                    final boolean updateIndicator = !(mScrollState == SCROLL_STATE_SETTLING && mPreviousScrollState == SCROLL_STATE_IDLE);
-                    mTabLayout.setScrollPosition(position, positionOffset, updateText, updateIndicator);
-                }
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             };
 
             // 显示省份列表
@@ -124,16 +126,21 @@ public final class AddressDialog {
          * 设置默认省份
          */
         public Builder setProvince(String province) {
-            if (!TextUtils.isEmpty(province)) {
-                List<AddressBean> data = mAdapter.getItem(0);
-                if (data != null && !data.isEmpty()) {
-                    for (int i = 0; i < data.size(); i++) {
-                        if (province.equals(data.get(i).getName())) {
-                            selectedAddress(0, i, false);
-                            break;
-                        }
-                    }
+            if (TextUtils.isEmpty(province)) {
+                return this;
+            }
+
+            List<AddressBean> data = mAdapter.getItem(0);
+            if (data == null || data.isEmpty()) {
+                return this;
+            }
+
+            for (int i = 0; i < data.size(); i++) {
+                if (!province.equals(data.get(i).getName())) {
+                    continue;
                 }
+                selectedAddress(0, i, false);
+                break;
             }
             return this;
         }
@@ -146,19 +153,24 @@ public final class AddressDialog {
                 // 已经忽略了县级区域的选择，不能选定指定的城市
                 throw new IllegalStateException("The selection of county-level regions has been ignored. The designated city cannot be selected");
             }
-            if (!TextUtils.isEmpty(city)) {
-                List<AddressBean> data = mAdapter.getItem(1);
-                if (data != null && !data.isEmpty()) {
-                    for (int i = 0; i < data.size(); i++) {
-                        if (city.equals(data.get(i).getName())) {
-                            // 避开直辖市，因为选择省的时候已经自动跳过市区了
-                            if (mAdapter.getItem(1).size() > 1) {
-                                selectedAddress(1, i, false);
-                            }
-                            break;
-                        }
-                    }
+            if (TextUtils.isEmpty(city)) {
+                return this;
+            }
+
+            List<AddressBean> data = mAdapter.getItem(1);
+            if (data == null || data.isEmpty()) {
+                return this;
+            }
+
+            for (int i = 0; i < data.size(); i++) {
+                if (!city.equals(data.get(i).getName())) {
+                    continue;
                 }
+                // 避开直辖市，因为选择省的时候已经自动跳过市区了
+                if (mAdapter.getItem(1).size() > 1) {
+                    selectedAddress(1, i, false);
+                }
+                break;
             }
             return this;
         }
@@ -167,7 +179,7 @@ public final class AddressDialog {
          * 不选择县级区域
          */
         public Builder setIgnoreArea() {
-            if (mAdapter.getItemCount() == 3) {
+            if (mAdapter.getCount() == 3) {
                 // 已经指定了城市，则不能忽略县级区域
                 throw new IllegalStateException("Cities have been designated and county-level areas can no longer be ignored");
             }
@@ -201,9 +213,10 @@ public final class AddressDialog {
                 case 0:
                     // 记录当前选择的省份
                     mProvince = mAdapter.getItem(type).get(position).getName();
-                    mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mProvince);
+                    mTabAdapter.setItem(type, mProvince);
 
-                    mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
+                    mTabAdapter.addItem(getString(R.string.address_hint));
+                    mTabAdapter.setSelectedPosition(type + 1);
                     mAdapter.addItem(AddressManager.getCityList(mAdapter.getItem(type).get(position).getNext()));
                     mViewPager.setCurrentItem(type + 1, smoothScroll);
 
@@ -215,7 +228,7 @@ public final class AddressDialog {
                 case 1:
                     // 记录当前选择的城市
                     mCity = mAdapter.getItem(type).get(position).getName();
-                    mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mCity);
+                    mTabAdapter.setItem(type, mCity);
 
                     if (mIgnoreArea) {
 
@@ -227,7 +240,8 @@ public final class AddressDialog {
                         postDelayed(this::dismiss, 300);
 
                     } else {
-                        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.address_hint)), true);
+                        mTabAdapter.addItem(getString(R.string.address_hint));
+                        mTabAdapter.setSelectedPosition(type + 1);
                         mAdapter.addItem(AddressManager.getAreaList(mAdapter.getItem(type).get(position).getNext()));
                         mViewPager.setCurrentItem(type + 1, smoothScroll);
                     }
@@ -236,7 +250,7 @@ public final class AddressDialog {
                 case 2:
                     // 记录当前选择的区域
                     mArea = mAdapter.getItem(type).get(position).getName();
-                    mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).setText(mArea);
+                    mTabAdapter.setItem(type, mArea);
 
                     if (mListener != null) {
                         mListener.onSelected(getDialog(), mProvince, mCity, mArea);
@@ -262,40 +276,42 @@ public final class AddressDialog {
         public void onClick(View view) {
             if (view == mCloseView) {
                 dismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
 
         /**
-         * {@link TabLayout.OnTabSelectedListener}
+         * {@link TabAdapter.OnTabListener}
          */
 
         @Override
-        public void onTabSelected(TabLayout.Tab tab) {
+        public boolean onTabSelected(RecyclerView recyclerView, int position) {
             synchronized (this) {
-                if (mViewPager.getCurrentItem() != tab.getPosition()) {
-                    mViewPager.setCurrentItem(tab.getPosition());
+                if (mViewPager.getCurrentItem() != position) {
+                    mViewPager.setCurrentItem(position);
                 }
 
-                tab.setText(getString(R.string.address_hint));
-                switch (tab.getPosition()) {
+                mTabAdapter.setItem(position, getString(R.string.address_hint));
+                switch (position) {
                     case 0:
                         mProvince = mCity = mArea = null;
-                        if (mTabLayout.getTabAt(2) != null) {
-                            mTabLayout.removeTabAt(2);
+                        if (mTabAdapter.getCount() > 2) {
+                            mTabAdapter.removeItem(2);
                             mAdapter.removeItem(2);
                         }
-                        if (mTabLayout.getTabAt(1) != null) {
-                            mTabLayout.removeTabAt(1);
+
+                        if (mTabAdapter.getCount() > 1) {
+                            mTabAdapter.removeItem(1);
                             mAdapter.removeItem(1);
                         }
                         break;
                     case 1:
                         mCity = mArea = null;
-                        if (mTabLayout.getTabAt(2) != null) {
-                            mTabLayout.removeTabAt(2);
+                        if (mTabAdapter.getCount() > 2) {
+                            mTabAdapter.removeItem(2);
                             mAdapter.removeItem(2);
                         }
                         break;
@@ -306,13 +322,8 @@ public final class AddressDialog {
                         break;
                 }
             }
+            return true;
         }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {}
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {}
 
         /**
          * {@link BaseDialog.OnShowListener}
@@ -337,6 +348,7 @@ public final class AddressDialog {
 
     private final static class RecyclerViewAdapter extends AppAdapter<List<AddressBean>> {
 
+        @Nullable
         private OnSelectListener mListener;
 
         private RecyclerViewAdapter(Context context) {
@@ -370,13 +382,14 @@ public final class AddressDialog {
 
             @Override
             public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-                if (mListener != null) {
-                    mListener.onSelected(getViewHolderPosition(), position);
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onSelected(getViewHolderPosition(), position);
             }
         }
 
-        private void setOnSelectListener(OnSelectListener listener) {
+        private void setOnSelectListener(@Nullable OnSelectListener listener) {
             mListener = listener;
         }
 
@@ -399,12 +412,12 @@ public final class AddressDialog {
             textView.setGravity(Gravity.CENTER_VERTICAL);
             textView.setBackgroundResource(R.drawable.transparent_selector);
             textView.setTextColor(0xFF222222);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.sp_14));
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setPadding((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()));
+            textView.setPadding((int) getResources().getDimension(R.dimen.dp_20),
+                    (int) getResources().getDimension(R.dimen.dp_10),
+                    (int) getResources().getDimension(R.dimen.dp_20),
+                    (int) getResources().getDimension(R.dimen.dp_10));
             return new ViewHolder(textView);
         }
 
@@ -458,20 +471,21 @@ public final class AddressDialog {
                 // 省市区Json数据文件来源：https://github.com/getActivity/ProvinceJson
                 JSONArray jsonArray = getProvinceJson(context);
 
-                if (jsonArray != null) {
-
-                    int length = jsonArray.length();
-                    ArrayList<AddressBean> list = new ArrayList<>(length);
-                    for (int i = 0; i < length; i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        list.add(new AddressBean(jsonObject.getString("name"), jsonObject));
-                    }
-
-                    return list;
+                if (jsonArray == null) {
+                    return null;
                 }
 
+                int length = jsonArray.length();
+                ArrayList<AddressBean> list = new ArrayList<>(length);
+                for (int i = 0; i < length; i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    list.add(new AddressBean(jsonObject.getString("name"), jsonObject));
+                }
+
+                return list;
+
             } catch (JSONException e) {
-                e.printStackTrace();
+                CrashReport.postCatchedException(e);
             }
             return null;
         }
@@ -494,7 +508,7 @@ public final class AddressDialog {
 
                 return list;
             } catch (JSONException e) {
-                e.printStackTrace();
+                CrashReport.postCatchedException(e);
                 return null;
             }
         }
@@ -517,7 +531,7 @@ public final class AddressDialog {
                 }
                 return list;
             } catch (JSONException e) {
-                e.printStackTrace();
+                CrashReport.postCatchedException(e);
                 return null;
             }
         }
@@ -538,7 +552,7 @@ public final class AddressDialog {
                 inputStream.close();
                 return new JSONArray(outStream.toString());
             } catch (IOException | JSONException e) {
-                e.printStackTrace();
+                CrashReport.postCatchedException(e);
             }
             return null;
         }

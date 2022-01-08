@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dl_crash_drawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.CrashActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
-        tools:context=".ui.activity.CrashActivity">
+        android:paddingHorizontal="@dimen/dp_20"
+        android:paddingVertical="@dimen/dp_10">
 
         <LinearLayout
             android:id="@+id/ll_crash_bar"
@@ -26,34 +26,34 @@
                 android:id="@+id/iv_crash_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="@dimen/dp_10"
                 app:srcCompat="@drawable/info_ic" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_crash_title"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="@dimen/dp_30"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:lineSpacingExtra="5dp"
-                android:text="应用程序发生崩溃"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:lineSpacingExtra="@dimen/dp_5"
+                android:textSize="@dimen/sp_18"
+                android:textStyle="bold"
+                tools:text="应用程序发生崩溃" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_crash_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="@dimen/dp_10"
                 app:srcCompat="@drawable/share_ic" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_crash_restart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="@dimen/dp_10"
                 app:srcCompat="@drawable/reboot_ic" />
 
         </LinearLayout>
@@ -61,17 +61,17 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_15">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_crash_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:lineSpacingExtra="5dp"
+                android:lineSpacingExtra="@dimen/dp_5"
                 android:textColor="#FF4444"
-                android:textSize="16sp"
+                android:textSize="@dimen/sp_15"
                 tools:text="我是错误信息" />
 
         </androidx.core.widget.NestedScrollView>
@@ -79,14 +79,14 @@
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="240dp"
+        android:layout_width="@dimen/dp_240"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/white">
 
         <LinearLayout
             android:id="@+id/ll_crash_info"
-            android:layout_width="240dp"
+            android:layout_width="@dimen/dp_240"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
@@ -95,20 +95,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/dp_10"
                 android:text="详细信息"
                 android:textColor="@color/black80"
-                android:textSize="16sp"
+                android:textSize="@dimen/sp_16"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_crash_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="15dp"
-                android:lineSpacingExtra="5dp"
+                android:layout_marginVertical="@dimen/dp_15"
+                android:lineSpacingExtra="@dimen/dp_5"
                 android:textColor="@color/black60"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp_14" />
 
         </LinearLayout>
 

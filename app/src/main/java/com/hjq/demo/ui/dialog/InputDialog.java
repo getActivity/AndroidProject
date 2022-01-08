@@ -1,17 +1,19 @@
 package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
+import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
+import com.hjq.widget.view.RegexEditText;
 
 /**
  *    author : Android 轮子哥
@@ -26,8 +28,9 @@ public final class InputDialog {
             implements BaseDialog.OnShowListener,
             TextView.OnEditorActionListener {
 
+        @Nullable
         private OnListener mListener;
-        private final EditText mInputView;
+        private final RegexEditText mInputView;
 
         public Builder(Context context) {
             super(context);
@@ -52,11 +55,21 @@ public final class InputDialog {
         }
         public Builder setContent(CharSequence text) {
             mInputView.setText(text);
-            int index = mInputView.getText().toString().length();
-            if (index > 0) {
-                mInputView.requestFocus();
-                mInputView.setSelection(index);
+            Editable editable = mInputView.getText();
+            if (editable == null) {
+                return this;
             }
+            int index = editable.length();
+            if (index <= 0) {
+                return this;
+            }
+            mInputView.requestFocus();
+            mInputView.setSelection(index);
+            return this;
+        }
+
+        public Builder setInputRegex(String regex) {
+            mInputView.setInputRegex(regex);
             return this;
         }
 
@@ -79,14 +92,17 @@ public final class InputDialog {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onConfirm(getDialog(), mInputView.getText().toString());
+                if (mListener == null) {
+                    return;
                 }
+                Editable editable = mInputView.getText();
+                mListener.onConfirm(getDialog(), editable != null ? editable.toString() : "");
             } else if (viewId == R.id.tv_ui_cancel) {
                 autoDismiss();
-                if (mListener != null) {
-                    mListener.onCancel(getDialog());
+                if (mListener == null) {
+                    return;
                 }
+                mListener.onCancel(getDialog());
             }
         }
 

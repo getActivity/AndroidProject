@@ -1,8 +1,8 @@
 package com.hjq.demo.widget;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -34,7 +34,9 @@ import androidx.lifecycle.LifecycleOwner;
 import com.airbnb.lottie.LottieAnimationView;
 import com.hjq.base.action.ActivityAction;
 import com.hjq.demo.R;
+import com.hjq.demo.ui.dialog.MessageDialog;
 import com.hjq.widget.layout.SimpleLayout;
+import com.hjq.widget.view.PlayButton;
 
 import java.io.File;
 import java.util.Formatter;
@@ -52,7 +54,8 @@ public final class PlayerView extends SimpleLayout
         View.OnClickListener, ActivityAction,
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnInfoListener,
-        MediaPlayer.OnCompletionListener {
+        MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnErrorListener {
 
     /** 刷新间隔 */
     private static final int REFRESH_TIME = 1000;
@@ -60,6 +63,8 @@ public final class PlayerView extends SimpleLayout
     private static final int CONTROLLER_TIME = 3000;
     /** 提示对话框隐藏间隔 */
     private static final int DIALOG_TIME = 500;
+    /** 动画执行时间 */
+    private static final int ANIM_TIME = 500;
 
     private final ViewGroup mTopLayout;
     private final TextView mTitleView;
@@ -71,17 +76,22 @@ public final class PlayerView extends SimpleLayout
     private final SeekBar mProgressView;
 
     private final VideoView mVideoView;
-    private final ImageView mControlView;
+    private final PlayButton mControlView;
     private final ImageView mLockView;
 
     private ViewGroup mMessageLayout;
     private final LottieAnimationView mLottieView;
     private final TextView mMessageView;
 
+    /** 视频宽度 */
+    private int mVideoWidth;
+    /** 视频高度 */
+    private int mVideoHeight;
+
     /** 锁定面板 */
     private boolean mLockMode;
     /** 显示面板 */
-    private boolean mControllerShow = true;
+    private boolean mControllerShow = false;
 
     /** 触摸按下的 X 坐标 */
     private float mViewDownX;
@@ -92,10 +102,11 @@ public final class PlayerView extends SimpleLayout
     /** 当前播放进度 */
     private int mCurrentProgress;
     /** 返回监听器 */
-    private onPlayListener mListener;
+    @Nullable
+    private OnPlayListener mListener;
 
     /** 音量管理器 */
-    private AudioManager mAudioManager;
+    private final AudioManager mAudioManager;
     /** 最大音量值 */
     private int mMaxVoice;
     /** 当前音量值 */
@@ -152,9 +163,9 @@ public final class PlayerView extends SimpleLayout
         mVideoView.setOnPreparedListener(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setOnInfoListener(this);
+        mVideoView.setOnErrorListener(this);
 
         mAudioManager = ContextCompat.getSystemService(getContext(), AudioManager.class);
-        postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
     }
 
     /**
@@ -217,7 +228,7 @@ public final class PlayerView extends SimpleLayout
      */
     public void start() {
         mVideoView.start();
-        mControlView.setImageResource(R.drawable.video_play_pause_ic);
+        mControlView.play();
         // 延迟隐藏控制面板
         removeCallbacks(mHideControllerRunnable);
         postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
@@ -228,7 +239,7 @@ public final class PlayerView extends SimpleLayout
      */
     public void pause() {
         mVideoView.pause();
-        mControlView.setImageResource(R.drawable.video_play_start_ic);
+        mControlView.pause();
         // 延迟隐藏控制面板
         removeCallbacks(mHideControllerRunnable);
         postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
@@ -309,7 +320,7 @@ public final class PlayerView extends SimpleLayout
     /**
      * 设置返回监听
      */
-    public void setOnPlayListener(onPlayListener listener) {
+    public void setOnPlayListener(@Nullable OnPlayListener listener) {
         mListener = listener;
         mLeftView.setVisibility(mListener != null ? VISIBLE : INVISIBLE);
     }
@@ -323,16 +334,44 @@ public final class PlayerView extends SimpleLayout
         }
 
         mControllerShow = true;
-        ObjectAnimator.ofFloat(mTopLayout, "translationY", - mTopLayout.getHeight(), 0).start();
-        ObjectAnimator.ofFloat(mBottomLayout, "translationY", mBottomLayout.getHeight(), 0).start();
 
-        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.setDuration(500);
-        animator.addUpdateListener(animation -> {
+        ValueAnimator topAnimator = ValueAnimator.ofInt(-mTopLayout.getHeight(), 0);
+        topAnimator.setDuration(ANIM_TIME);
+        topAnimator.addUpdateListener(animation -> {
+            int translationY = (int) animation.getAnimatedValue();
+            mTopLayout.setTranslationY(translationY);
+            if (translationY != -mTopLayout.getHeight()) {
+                return;
+            }
+
+            if (mTopLayout.getVisibility() == INVISIBLE) {
+                mTopLayout.setVisibility(VISIBLE);
+            }
+        });
+        topAnimator.start();
+
+        ValueAnimator bottomAnimator = ValueAnimator.ofInt(mBottomLayout.getHeight(), 0);
+        bottomAnimator.setDuration(ANIM_TIME);
+        bottomAnimator.addUpdateListener(animation -> {
+            int translationY = (int) animation.getAnimatedValue();
+            mBottomLayout.setTranslationY(translationY);
+            if (translationY != mBottomLayout.getHeight()) {
+                return;
+            }
+
+            if (mBottomLayout.getVisibility() == INVISIBLE) {
+                mBottomLayout.setVisibility(VISIBLE);
+            }
+        });
+        bottomAnimator.start();
+
+        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0f, 1f);
+        alphaAnimator.setDuration(ANIM_TIME);
+        alphaAnimator.addUpdateListener(animation -> {
             float alpha = (float) animation.getAnimatedValue();
             mLockView.setAlpha(alpha);
             mControlView.setAlpha(alpha);
-            if ((int) alpha != 1) {
+            if (alpha != 0) {
                 return;
             }
 
@@ -343,7 +382,7 @@ public final class PlayerView extends SimpleLayout
                 mControlView.setVisibility(VISIBLE);
             }
         });
-        animator.start();
+        alphaAnimator.start();
     }
 
     /**
@@ -355,16 +394,44 @@ public final class PlayerView extends SimpleLayout
         }
 
         mControllerShow = false;
-        ObjectAnimator.ofFloat(mTopLayout, "translationY", 0, - mTopLayout.getHeight()).start();
-        ObjectAnimator.ofFloat(mBottomLayout, "translationY", 0, mBottomLayout.getHeight()).start();
 
-        ValueAnimator animator = ValueAnimator.ofFloat(1f, 0f);
-        animator.setDuration(500);
-        animator.addUpdateListener(animation -> {
+        ValueAnimator topAnimator = ValueAnimator.ofInt(0, -mTopLayout.getHeight());
+        topAnimator.setDuration(ANIM_TIME);
+        topAnimator.addUpdateListener(animation -> {
+            int translationY = (int) animation.getAnimatedValue();
+            mTopLayout.setTranslationY(translationY);
+            if (translationY != -mTopLayout.getHeight()) {
+                return;
+            }
+
+            if (mTopLayout.getVisibility() == VISIBLE) {
+                mTopLayout.setVisibility(INVISIBLE);
+            }
+        });
+        topAnimator.start();
+
+        ValueAnimator bottomAnimator = ValueAnimator.ofInt(0, mBottomLayout.getHeight());
+        bottomAnimator.setDuration(ANIM_TIME);
+        bottomAnimator.addUpdateListener(animation -> {
+            int translationY = (int) animation.getAnimatedValue();
+            mBottomLayout.setTranslationY(translationY);
+            if (translationY != mBottomLayout.getHeight()) {
+                return;
+            }
+
+            if (mBottomLayout.getVisibility() == VISIBLE) {
+                mBottomLayout.setVisibility(INVISIBLE);
+            }
+        });
+        bottomAnimator.start();
+
+        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(1f, 0f);
+        alphaAnimator.setDuration(ANIM_TIME);
+        alphaAnimator.addUpdateListener(animation -> {
             float alpha = (float) animation.getAnimatedValue();
             mLockView.setAlpha(alpha);
             mControlView.setAlpha(alpha);
-            if (alpha != 0f) {
+            if (alpha != 0) {
                 return;
             }
 
@@ -375,7 +442,7 @@ public final class PlayerView extends SimpleLayout
                 mControlView.setVisibility(INVISIBLE);
             }
         });
-        animator.start();
+        alphaAnimator.start();
     }
 
     public void onResume() {
@@ -397,54 +464,6 @@ public final class PlayerView extends SimpleLayout
         removeAllViews();
     }
 
-    /**
-     * {@link MediaPlayer.OnPreparedListener}
-     */
-    @Override
-    public void onPrepared(MediaPlayer player) {
-        mPlayTime.setText(conversionTime(0));
-        mTotalTime.setText(conversionTime(player.getDuration()));
-        mProgressView.setMax(mVideoView.getDuration());
-
-        // 获取视频的宽高
-        int videoWidth = player.getVideoWidth();
-        int videoHeight = player.getVideoHeight();
-
-        // VideoView 的宽高
-        int viewWidth = getWidth();
-        int viewHeight = getHeight();
-
-        // 基于比例调整大小
-        if (videoWidth * viewHeight < viewWidth * videoHeight) {
-            // 视频宽度过大，进行纠正
-            viewWidth = viewHeight * videoWidth / videoHeight;
-        } else if (videoWidth * viewHeight > viewWidth * videoHeight) {
-            // 视频高度过大，进行纠正
-            viewHeight = viewWidth * videoHeight / videoWidth;
-        }
-
-        // 重新设置 VideoView 的宽高
-        ViewGroup.LayoutParams params = mVideoView.getLayoutParams();
-        params.width = viewWidth;
-        params.height = viewHeight;
-        mVideoView.setLayoutParams(params);
-        if (mListener != null) {
-            mListener.onPlayStart(this);
-        }
-        postDelayed(mRefreshRunnable, REFRESH_TIME / 2);
-    }
-
-    /**
-     * {@link MediaPlayer.OnCompletionListener}
-     */
-    @Override
-    public void onCompletion(MediaPlayer player) {
-        pause();
-        if (mListener != null) {
-            mListener.onPlayEnd(this);
-        }
-    }
-
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         // 这里解释一下 onWindowVisibilityChanged 方法调用的时机
@@ -452,10 +471,11 @@ public final class PlayerView extends SimpleLayout
         // 从后台返回到前台：先调用 onWindowVisibilityChanged(View.INVISIBLE) 后调用 onWindowVisibilityChanged(View.VISIBLE)
         super.onWindowVisibilityChanged(visibility);
         // 这里修复了 Activity 从后台返回到前台时 VideoView 从头开始播放的问题
-        if (visibility == VISIBLE) {
-            mVideoView.seekTo(mCurrentProgress);
-            mProgressView.setProgress(mCurrentProgress);
+        if (visibility != VISIBLE) {
+            return;
         }
+        mVideoView.seekTo(mCurrentProgress);
+        mProgressView.setProgress(mCurrentProgress);
     }
 
     /**
@@ -495,6 +515,59 @@ public final class PlayerView extends SimpleLayout
     }
 
     /**
+     * {@link MediaPlayer.OnPreparedListener}
+     */
+    @Override
+    public void onPrepared(MediaPlayer player) {
+        mPlayTime.setText(conversionTime(0));
+        mTotalTime.setText(conversionTime(player.getDuration()));
+        mProgressView.setMax(mVideoView.getDuration());
+
+        // 获取视频的宽高
+        mVideoWidth = player.getVideoWidth();
+        mVideoHeight = player.getVideoHeight();
+
+        // VideoView 的宽高
+        int viewWidth = getWidth();
+        int viewHeight = getHeight();
+
+        // 基于比例调整大小
+        if (mVideoWidth * viewHeight < viewWidth * mVideoHeight) {
+            // 视频宽度过大，进行纠正
+            viewWidth = viewHeight * mVideoWidth / mVideoHeight;
+        } else if (mVideoWidth * viewHeight > viewWidth * mVideoHeight) {
+            // 视频高度过大，进行纠正
+            viewHeight = viewWidth * mVideoHeight / mVideoWidth;
+        }
+
+        // 重新设置 VideoView 的宽高
+        ViewGroup.LayoutParams params = mVideoView.getLayoutParams();
+        params.width = viewWidth;
+        params.height = viewHeight;
+        mVideoView.setLayoutParams(params);
+
+        post(mShowControllerRunnable);
+        postDelayed(mRefreshRunnable, REFRESH_TIME / 2);
+
+        if (mListener == null) {
+            return;
+        }
+        mListener.onPlayStart(this);
+    }
+
+    /**
+     * {@link MediaPlayer.OnCompletionListener}
+     */
+    @Override
+    public void onCompletion(MediaPlayer player) {
+        pause();
+        if (mListener == null) {
+            return;
+        }
+        mListener.onPlayEnd(this);
+    }
+
+    /**
      * {@link MediaPlayer.OnInfoListener}
      */
     @Override
@@ -520,33 +593,69 @@ public final class PlayerView extends SimpleLayout
     }
 
     /**
+     * {@link MediaPlayer.OnErrorListener}
+     */
+
+    @Override
+    public boolean onError(MediaPlayer player, int what, int extra) {
+        Activity activity = getActivity();
+        if (activity == null) {
+            return false;
+        }
+
+        String message;
+        if (what == MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK) {
+            message = activity.getString(R.string.common_video_error_not_support);
+        } else {
+            message = activity.getString(R.string.common_video_error_unknown);
+        }
+        message += "\n" + String.format(activity.getString(R.string.common_video_error_supplement), what, extra);
+
+        new MessageDialog.Builder(getActivity())
+                .setMessage(message)
+                .setConfirm(R.string.common_confirm)
+                .setCancel(null)
+                .setCancelable(false)
+                .setListener(dialog -> onCompletion(player))
+                .show();
+        return true;
+    }
+
+    /**
      * {@link View.OnClickListener}
      */
 
     @Override
     public void onClick(View view) {
         if (view == this) {
+
             // 先移除之前发送的
             removeCallbacks(mShowControllerRunnable);
             removeCallbacks(mHideControllerRunnable);
+
             if (mControllerShow) {
                 // 隐藏控制面板
                 post(mHideControllerRunnable);
-            } else {
-                // 显示控制面板
-                post(mShowControllerRunnable);
-                postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
+                return;
             }
 
-            return;
-        }
+            // 显示控制面板
+            post(mShowControllerRunnable);
+            postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
 
-        if (view == mLeftView && mListener != null) {
+        } else if (view == mLeftView) {
+
+            if (mListener == null) {
+                return;
+            }
             mListener.onClickBack(this);
-            return;
-        }
 
-        if (view == mControlView && mControlView.getVisibility() == VISIBLE) {
+        } else if (view == mControlView) {
+
+            if (mControlView.getVisibility() != VISIBLE) {
+                return;
+            }
+
             if (isPlaying()) {
                 pause();
             } else {
@@ -560,22 +669,31 @@ public final class PlayerView extends SimpleLayout
                 post(mShowControllerRunnable);
             }
             postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
-            if (mListener != null) {
-                mListener.onClickPlay(this);
+            if (mListener == null) {
+                return;
             }
-            return;
-        }
+            mListener.onClickPlay(this);
 
-        if (view == mLockView) {
+        } else if (view == mLockView) {
+
             if (mLockMode) {
                 unlock();
             } else {
                 lock();
             }
-            if (mListener != null) {
-                mListener.onClickLock(this);
+            if (mListener == null) {
+                return;
             }
+            mListener.onClickLock(this);
         }
+    }
+
+    public int getVideoWidth() {
+        return mVideoWidth;
+    }
+
+    public int getVideoHeight() {
+        return mVideoHeight;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -596,7 +714,10 @@ public final class PlayerView extends SimpleLayout
                 // 如果当前亮度是默认的，那么就获取系统当前的屏幕亮度
                 if (mCurrentBrightness == WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE) {
                     try {
-                        mCurrentBrightness = Settings.System.getInt(getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS) / 255f;
+                        // 这里需要注意，Settings.System.SCREEN_BRIGHTNESS 获取到的值在小米手机上面会超过 255
+                        mCurrentBrightness = Math.min(Settings.System.getInt(
+                                getContext().getContentResolver(),
+                                Settings.System.SCREEN_BRIGHTNESS), 255) / 255f;
                     } catch (Settings.SettingNotFoundException ignored) {
                         mCurrentBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
                     }
@@ -629,11 +750,12 @@ public final class PlayerView extends SimpleLayout
                     int progress = getProgress() + second * 1000;
                     if (progress >= 0 && progress <= getDuration()) {
                         mAdjustSecond = second;
-                        mLottieView.setImageResource(mAdjustSecond < 0 ? R.drawable.video_schedule_rewind_ic : R.drawable.video_schedule_forward_ic);
+                        mLottieView.setImageResource(mAdjustSecond < 0 ?
+                                R.drawable.video_schedule_rewind_ic :
+                                R.drawable.video_schedule_forward_ic);
                         mMessageView.setText(String.format("%s s", Math.abs(mAdjustSecond)));
                         post(mShowMessageRunnable);
                     }
-
                     break;
                 }
 
@@ -749,10 +871,12 @@ public final class PlayerView extends SimpleLayout
                     mBottomLayout.setVisibility(GONE);
                 }
             }
-            if (mListener != null) {
-                mListener.onPlayProgress(PlayerView.this);
-            }
             postDelayed(this, REFRESH_TIME);
+
+            if (mListener == null) {
+                return;
+            }
+            mListener.onPlayProgress(PlayerView.this);
         }
     };
 
@@ -812,7 +936,7 @@ public final class PlayerView extends SimpleLayout
     /**
      * 点击返回监听器
      */
-    public interface onPlayListener {
+    public interface OnPlayListener {
 
         /**
          * 点击了返回按钮（可在此处处理返回事件）

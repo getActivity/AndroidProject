@@ -12,32 +12,32 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:gravity="center_horizontal"
-        android:layoutAnimation="@anim/fall_down_layout"
+        android:layoutAnimation="@anim/layout_fall_down"
         android:orientation="vertical"
-        android:paddingHorizontal="40dp"
+        android:paddingHorizontal="@dimen/dp_40"
         tools:layoutAnimation="@null">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/dp_40"
             android:text="@string/register_title"
             android:textColor="@color/black60"
-            android:textSize="23sp" />
+            android:textSize="@dimen/sp_23" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:text="@string/register_hint"
             android:textColor="@color/black20"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp_14" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/dp_40"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -66,16 +66,17 @@
                 style="@style/CountdownViewStyle" />
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <com.hjq.widget.view.RegexEditText
             android:id="@+id/et_register_code"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:hint="@string/common_code_input_hint"
-            android:inputType="number"
+            android:inputType="textVisiblePassword"
             android:maxLength="@integer/sms_code_length"
-            android:singleLine="true" />
+            android:singleLine="true"
+            app:regexType="number" />
 
         <View style="@style/HorizontalLineStyle" />
 
@@ -84,7 +85,7 @@
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:hint="@string/register_password_hint1"
             android:maxLength="20"
             android:singleLine="true" />
@@ -96,7 +97,7 @@
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:hint="@string/register_password_hint2"
             android:imeOptions="actionDone"
             android:maxLength="20"
@@ -109,7 +110,7 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="30dp"
+            android:layout_marginVertical="@dimen/dp_30"
             android:text="@string/register_title" />
 
     </LinearLayout>

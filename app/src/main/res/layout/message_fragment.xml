@@ -10,7 +10,7 @@
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backButton="false"
+        app:leftIcon="@null"
         app:title="@string/home_nav_message" />
 
     <androidx.core.widget.NestedScrollView
@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="30dp"
+            android:layout_marginHorizontal="@dimen/dp_30"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -36,7 +36,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="加载普通图片" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -44,7 +44,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="加载圆形图片" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -52,7 +52,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="加载圆角图片" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -60,7 +60,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="弹一个吐司" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -68,7 +68,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="申请摄像头权限" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -76,7 +76,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="跳转到应用详情页" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -84,7 +84,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="状态栏黑色字体" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -92,7 +92,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:text="状态栏白色字体" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -100,7 +100,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="30dp"
+                android:layout_marginVertical="@dimen/dp_30"
                 android:text="切换到首页 Tab" />
 
         </LinearLayout>
