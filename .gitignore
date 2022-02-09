@@ -9,3 +9,4 @@ captures
 *.iml
 .DS_Store
 local.properties
+*.txt
