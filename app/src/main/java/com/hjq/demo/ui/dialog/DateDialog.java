@@ -132,10 +132,6 @@ public final class DateDialog {
             mDayView.setVisibility(View.GONE);
             return this;
         }
-        public Builder setIgnoreMonth() {
-            mMonthView.setVisibility(View.GONE);
-            return this;
-        }
 
         public Builder setDate(long date) {
             if (date > 0) {

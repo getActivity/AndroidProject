@@ -38,16 +38,14 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * author : Android 轮子哥
- * github : https://github.com/getActivity/AndroidProject
- * time   : 2018/12/02
- * desc   : 对话框使用案例
+ *    author : Android 轮子哥
+ *    github : https://github.com/getActivity/AndroidProject
+ *    time   : 2018/12/02
+ *    desc   : 对话框使用案例
  */
 public final class DialogActivity extends AppActivity {
 
-    /**
-     * 等待对话框
-     */
+    /** 等待对话框 */
     private BaseDialog mWaitDialog;
 
     @Override
@@ -139,7 +137,7 @@ public final class DialogActivity extends AppActivity {
         } else if (viewId == R.id.btn_dialog_bottom_menu) {
 
             List<String> data = new ArrayList<>();
-            for (int i = 0; i < 40; i++) {
+            for (int i = 0; i < 10; i++) {
                 data.add("我是数据" + (i + 1));
             }
             // 底部选择框
@@ -166,7 +164,7 @@ public final class DialogActivity extends AppActivity {
         } else if (viewId == R.id.btn_dialog_center_menu) {
 
             List<String> data = new ArrayList<>();
-            for (int i = 0; i < 40; i++) {
+            for (int i = 0; i < 10; i++) {
                 data.add("我是数据" + (i + 1));
             }
             // 居中选择框

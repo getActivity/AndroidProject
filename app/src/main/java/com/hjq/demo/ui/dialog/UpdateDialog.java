@@ -2,6 +2,7 @@ package com.hjq.demo.ui.dialog;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,9 @@ import com.hjq.demo.aop.CheckNet;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.other.AppConfig;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.OnDownloadListener;
+import com.hjq.http.model.HttpMethod;
 import com.hjq.permissions.Permission;
 
 import java.io.File;
@@ -185,7 +189,7 @@ public final class UpdateDialog {
             // 创建要下载的文件对象
             mApkFile = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                     getString(R.string.app_name) + "_v" + mNameView.getText().toString() + ".apk");
-            /*EasyHttp.download(getDialog())
+            EasyHttp.download(getDialog())
                     .method(HttpMethod.GET)
                     .file(mApkFile)
                     .url(mDownloadUrl)
@@ -268,7 +272,7 @@ public final class UpdateDialog {
                             }
                         }
 
-                    }).start();*/
+                    }).start();
         }
 
         /**
