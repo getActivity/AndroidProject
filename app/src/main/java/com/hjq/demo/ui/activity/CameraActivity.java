@@ -15,19 +15,21 @@ import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.other.AppConfig;
+import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2019/12/18
- *    desc   : 拍摄图片、视频
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2019/12/18
+ * desc   : 拍摄图片、视频
  */
 public final class CameraActivity extends AppActivity {
 
@@ -81,7 +83,8 @@ public final class CameraActivity extends AppActivity {
     }
 
     @Override
-    protected void initView() {}
+    protected void initView() {
+    }
 
     @Override
     protected void initData() {
@@ -95,10 +98,19 @@ public final class CameraActivity extends AppActivity {
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         }
 
-        if (intent.resolveActivity(getPackageManager()) == null ||
-                !XXPermissions.isGranted(this, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA)) {
+        if (intent.resolveActivity(getPackageManager()) == null) {
             setResult(RESULT_ERROR, new Intent().putExtra(INTENT_KEY_OUT_ERROR, getString(R.string.camera_launch_fail)));
             finish();
+            return;
+        }
+        if (!XXPermissions.isGranted(this, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA)) {
+            setResult(RESULT_ERROR, new Intent().putExtra(INTENT_KEY_OUT_ERROR, "已申请权限，请重新进入"));
+            XXPermissions.with(getContext()).permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA).request(new OnPermissionCallback() {
+                @Override
+                public void onGranted(List<String> permissions, boolean all) {
+                    finish();
+                }
+            });
             return;
         }
 
@@ -154,20 +166,21 @@ public final class CameraActivity extends AppActivity {
         /**
          * 选择回调
          *
-         * @param file          文件
+         * @param file 文件
          */
         void onSelected(File file);
 
         /**
          * 错误回调
          *
-         * @param details       错误详情
+         * @param details 错误详情
          */
         void onError(String details);
 
         /**
          * 取消回调
          */
-        default void onCancel() {}
+        default void onCancel() {
+        }
     }
 }
