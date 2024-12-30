@@ -19,7 +19,8 @@ import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppAdapter;
-import com.hjq.toast.ToastUtils;
+
+import com.hjq.toast.Toaster;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengShare;
@@ -173,7 +174,7 @@ public final class ShareDialog {
                 if (mShareAction.getShareContent().getShareType() == ShareContent.WEB_STYLE) {
                     // 复制到剪贴板
                     getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("url", mShareAction.getShareContent().mMedia.toUrl()));
-                    ToastUtils.show(R.string.share_platform_copy_hint);
+                    Toaster.show(R.string.share_platform_copy_hint);
                 }
             }
             dismiss();

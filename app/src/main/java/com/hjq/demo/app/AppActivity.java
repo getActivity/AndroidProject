@@ -17,6 +17,7 @@ import com.hjq.demo.action.TitleBarAction;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.ui.dialog.WaitDialog;
+import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.OnHttpListener;
 
 import okhttp3.Call;
@@ -178,7 +179,7 @@ public abstract class AppActivity extends BaseActivity
     }
 
     @Override
-    public void onLeftClick(View view) {
+    public void onLeftClick(TitleBar titleBar) {
         onBackPressed();
     }
 
@@ -194,33 +195,29 @@ public abstract class AppActivity extends BaseActivity
         overridePendingTransition(R.anim.left_in_activity, R.anim.left_out_activity);
     }
 
-    /**
-     * {@link OnHttpListener}
-     */
+	@Override
+	public void onHttpStart(@NonNull IRequestApi api) {
+		showDialog();
+	}
 
-    @Override
-    public void onStart(Call call) {
-        showDialog();
-    }
+	@Override
+	public void onHttpSuccess(@NonNull Object result) {
+		if (result instanceof HttpData) {
+			toast(((HttpData<?>) result).getMessage());
+		}
+	}
 
-    @Override
-    public void onSucceed(Object result) {
-        if (result instanceof HttpData) {
-            toast(((HttpData<?>) result).getMessage());
-        }
-    }
+	@Override
+	public void onHttpFail(@NonNull Throwable throwable) {
+		toast(throwable.getMessage());
+	}
 
-    @Override
-    public void onFail(Exception e) {
-        toast(e.getMessage());
-    }
+	@Override
+	public void onHttpEnd(@NonNull IRequestApi api) {
+		hideDialog();
+	}
 
-    @Override
-    public void onEnd(Call call) {
-        hideDialog();
-    }
-
-    @Override
+	@Override
     protected void onDestroy() {
         super.onDestroy();
         if (isShowDialog()) {

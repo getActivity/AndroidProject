@@ -16,7 +16,7 @@ import com.hjq.demo.http.api.UserInfoApi;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.widget.view.SlantedTextView;
 
 /**
@@ -66,12 +66,16 @@ public final class SplashActivity extends AppActivity {
         // 刷新用户信息
         EasyHttp.post(this)
                 .api(new UserInfoApi())
-                .request(new HttpCallback<HttpData<UserInfoApi.Bean>>(this) {
+                .request(new OnHttpListener<HttpData<UserInfoApi.Bean>>() {
+	                @Override
+	                public void onHttpSuccess(@NonNull HttpData<UserInfoApi.Bean> result) {
 
-                    @Override
-                    public void onSucceed(HttpData<UserInfoApi.Bean> data) {
+	                }
 
-                    }
+	                @Override
+	                public void onHttpFail(@NonNull Throwable throwable) {
+
+	                }
                 });
     }
 
@@ -113,4 +117,14 @@ public final class SplashActivity extends AppActivity {
         // 所以如果需要在此处释放对象资源需要先对这个对象进行判空，否则可能会导致空指针异常
         super.onDestroy();
     }
+
+	@Override
+	public void onHttpSuccess(@NonNull Object result) {
+
+	}
+
+	@Override
+	public void onHttpFail(@NonNull Throwable throwable) {
+
+	}
 }

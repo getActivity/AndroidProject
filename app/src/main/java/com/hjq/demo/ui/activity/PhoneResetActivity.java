@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
@@ -21,8 +23,9 @@ import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.ui.dialog.TipsDialog;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
-import com.hjq.toast.ToastUtils;
+
+import com.hjq.http.listener.OnHttpListener;
+import com.hjq.toast.Toaster;
 import com.hjq.widget.view.CountdownView;
 
 /**
@@ -103,13 +106,18 @@ public final class PhoneResetActivity extends AppActivity
             EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new OnHttpListener<HttpData<Void>>() {
 
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            toast(R.string.common_code_send_hint);
-                            mCountdownView.start();
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<Void> result) {
+		                    toast(R.string.common_code_send_hint);
+		                    mCountdownView.start();
+	                    }
+
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+
+	                    }
                     });
         } else if (view == mCommitView) {
 
@@ -120,7 +128,7 @@ public final class PhoneResetActivity extends AppActivity
             }
 
             if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
-                ToastUtils.show(R.string.common_code_error_hint);
+                Toaster.show(R.string.common_code_error_hint);
                 return;
             }
 
@@ -143,17 +151,22 @@ public final class PhoneResetActivity extends AppActivity
                             .setPreCode(mVerifyCode)
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString()))
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new OnHttpListener<HttpData<Void>>() {
 
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            new TipsDialog.Builder(getActivity())
-                                    .setIcon(TipsDialog.ICON_FINISH)
-                                    .setMessage(R.string.phone_reset_commit_succeed)
-                                    .setDuration(2000)
-                                    .addOnDismissListener(dialog -> finish())
-                                    .show();
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<Void> result) {
+		                    new TipsDialog.Builder(getActivity())
+				                    .setIcon(TipsDialog.ICON_FINISH)
+				                    .setMessage(R.string.phone_reset_commit_succeed)
+				                    .setDuration(2000)
+				                    .addOnDismissListener(dialog -> finish())
+				                    .show();
+	                    }
+
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+
+	                    }
                     });
         }
     }

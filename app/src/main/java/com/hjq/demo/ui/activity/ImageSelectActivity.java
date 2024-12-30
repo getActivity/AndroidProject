@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
@@ -173,7 +174,7 @@ public final class ImageSelectActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onRightClick(View view) {
+    public void onRightClick(TitleBar titleBar) {
         if (mAllImage.isEmpty()) {
             return;
         }

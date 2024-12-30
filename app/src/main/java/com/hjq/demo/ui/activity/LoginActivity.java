@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
@@ -32,7 +33,8 @@ import com.hjq.demo.ui.fragment.MineFragment;
 import com.hjq.demo.wxapi.WXEntryActivity;
 import com.hjq.http.EasyConfig;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.config.IRequestApi;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
@@ -139,7 +141,7 @@ public final class LoginActivity extends AppActivity
     }
 
     @Override
-    public void onRightClick(View view) {
+    public void onRightClick(TitleBar titleBar) {
         // 跳转到注册界面
         RegisterActivity.start(this, mPhoneView.getText().toString(),
                 mPasswordView.getText().toString(), (phone, password) -> {
@@ -187,38 +189,39 @@ public final class LoginActivity extends AppActivity
                     .api(new LoginApi()
                             .setPhone(mPhoneView.getText().toString())
                             .setPassword(mPasswordView.getText().toString()))
-                    .request(new HttpCallback<HttpData<LoginApi.Bean>>(this) {
+                    .request(new OnHttpListener<HttpData<LoginApi.Bean>>() {
 
-                        @Override
-                        public void onStart(Call call) {
-                            mCommitView.showProgress();
-                        }
+	                    @Override
+	                    public void onHttpStart(@NonNull IRequestApi api) {
+		                    mCommitView.showProgress();
+	                    }
 
-                        @Override
-                        public void onEnd(Call call) {}
+	                    @Override
+	                    public void onHttpEnd(@NonNull IRequestApi api) {
+		                    OnHttpListener.super.onHttpEnd(api);
+	                    }
 
-                        @Override
-                        public void onSucceed(HttpData<LoginApi.Bean> data) {
-                            // 更新 Token
-                            EasyConfig.getInstance()
-                                    .addParam("token", data.getData().getToken());
-                            postDelayed(() -> {
-                                mCommitView.showSucceed();
-                                postDelayed(() -> {
-                                    // 跳转到首页
-                                    HomeActivity.start(getContext(), MineFragment.class);
-                                    finish();
-                                }, 1000);
-                            }, 1000);
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<LoginApi.Bean> result) {
+		                    // 更新 Token
+		                    EasyConfig.getInstance()
+				                    .addParam("token", result.getData().getToken());
+		                    postDelayed(() -> {
+			                    mCommitView.showSucceed();
+			                    postDelayed(() -> {
+				                    // 跳转到首页
+				                    HomeActivity.start(getContext(), MineFragment.class);
+				                    finish();
+			                    }, 1000);
+		                    }, 1000);
+	                    }
 
-                        @Override
-                        public void onFail(Exception e) {
-                            super.onFail(e);
-                            postDelayed(() -> {
-                                mCommitView.showError(3000);
-                            }, 1000);
-                        }
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+		                    postDelayed(() -> {
+			                    mCommitView.showError(3000);
+		                    }, 1000);
+	                    }
                     });
             return;
         }

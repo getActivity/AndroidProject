@@ -230,13 +230,12 @@
                 android:text="支持在布局直接定义 Shape 的 TextView"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_13"
-                app:shape="rectangle"
-                app:shape_angle="0"
-                app:shape_centerX="0.5"
-                app:shape_centerY="0.5"
-                app:shape_endColor="@color/common_accent_color"
+                app:shape_type="rectangle"
+                app:shape_solidGradientCenterX="0.5"
+                app:shape_solidGradientCenterY="0.5"
+                app:shape_textEndColor="@color/common_accent_color"
                 app:shape_radius="@dimen/dp_20"
-                app:shape_startColor="@color/common_button_pressed_color" />
+                app:shape_textStartColor="@color/common_button_pressed_color" />
 
             <com.hjq.shape.view.ShapeTextView
                 android:layout_width="match_parent"
@@ -250,7 +249,7 @@
                 android:text="我是带阴影背景的控件"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:shape="rectangle"
+                app:shape_type="rectangle"
                 app:shape_radius="@dimen/dp_10"
                 app:shape_shadowColor="@color/black10"
                 app:shape_shadowSize="10dp"

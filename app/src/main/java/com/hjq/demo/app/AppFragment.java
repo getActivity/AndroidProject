@@ -1,8 +1,11 @@
 package com.hjq.demo.app;
 
+import androidx.annotation.NonNull;
+
 import com.hjq.base.BaseFragment;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
+import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.OnHttpListener;
 
 import okhttp3.Call;
@@ -49,30 +52,26 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
         activity.hideDialog();
     }
 
-    /**
-     * {@link OnHttpListener}
-     */
+	@Override
+	public void onHttpStart(@NonNull IRequestApi api) {
+		showDialog();
+	}
 
-    @Override
-    public void onStart(Call call) {
-        showDialog();
-    }
+	@Override
+	public void onHttpSuccess(@NonNull Object result) {
+		if (!(result instanceof HttpData)) {
+			return;
+		}
+		toast(((HttpData<?>) result).getMessage());
+	}
 
-    @Override
-    public void onSucceed(Object result) {
-        if (!(result instanceof HttpData)) {
-            return;
-        }
-        toast(((HttpData<?>) result).getMessage());
-    }
+	@Override
+	public void onHttpFail(@NonNull Throwable throwable) {
+		toast(throwable.getMessage());
+	}
 
-    @Override
-    public void onFail(Exception e) {
-        toast(e.getMessage());
-    }
-
-    @Override
-    public void onEnd(Call call) {
-        hideDialog();
-    }
+	@Override
+	public void onHttpEnd(@NonNull IRequestApi api) {
+		hideDialog();
+	}
 }

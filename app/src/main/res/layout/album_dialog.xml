@@ -8,7 +8,7 @@
     android:layout_gravity="bottom"
     android:layoutAnimation="@anim/layout_from_bottom"
     android:orientation="horizontal"
-    app:shape="rectangle"
+    app:shape_type="rectangle"
     app:shape_radius="@dimen/dp_20"
     app:shape_solidColor="@color/white"
     tools:context=".ui.dialog.AlbumDialog"

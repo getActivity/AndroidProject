@@ -21,7 +21,8 @@ import com.hjq.demo.http.api.RegisterApi;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.config.IRequestApi;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.widget.view.CountdownView;
 import com.hjq.widget.view.SubmitButton;
 
@@ -126,19 +127,18 @@ public final class RegisterActivity extends AppActivity
             EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new OnHttpListener<HttpData<Void>>() {
 
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            toast(R.string.common_code_send_hint);
-                            mCountdownView.start();
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<Void> result) {
+		                    toast(R.string.common_code_send_hint);
+		                    mCountdownView.start();
+	                    }
 
-                        @Override
-                        public void onFail(Exception e) {
-                            super.onFail(e);
-                            mCountdownView.start();
-                        }
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+		                    mCountdownView.start();
+	                    }
                     });
         } else if (view == mCommitView) {
             if (mPhoneView.getText().toString().length() != 11) {
@@ -186,36 +186,37 @@ public final class RegisterActivity extends AppActivity
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString())
                             .setPassword(mFirstPassword.getText().toString()))
-                    .request(new HttpCallback<HttpData<RegisterApi.Bean>>(this) {
+                    .request(new OnHttpListener<HttpData<RegisterApi.Bean>>() {
 
-                        @Override
-                        public void onStart(Call call) {
-                            mCommitView.showProgress();
-                        }
+	                    @Override
+	                    public void onHttpStart(@NonNull IRequestApi api) {
+		                    mCommitView.showProgress();
+	                    }
 
-                        @Override
-                        public void onEnd(Call call) {}
+	                    @Override
+	                    public void onHttpEnd(@NonNull IRequestApi api) {
+		                    OnHttpListener.super.onHttpEnd(api);
+	                    }
 
-                        @Override
-                        public void onSucceed(HttpData<RegisterApi.Bean> data) {
-                            postDelayed(() -> {
-                                mCommitView.showSucceed();
-                                postDelayed(() -> {
-                                    setResult(RESULT_OK, new Intent()
-                                            .putExtra(INTENT_KEY_PHONE, mPhoneView.getText().toString())
-                                            .putExtra(INTENT_KEY_PASSWORD, mFirstPassword.getText().toString()));
-                                    finish();
-                                }, 1000);
-                            }, 1000);
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<RegisterApi.Bean> result) {
+		                    postDelayed(() -> {
+			                    mCommitView.showSucceed();
+			                    postDelayed(() -> {
+				                    setResult(RESULT_OK, new Intent()
+						                    .putExtra(INTENT_KEY_PHONE, mPhoneView.getText().toString())
+						                    .putExtra(INTENT_KEY_PASSWORD, mFirstPassword.getText().toString()));
+				                    finish();
+			                    }, 1000);
+		                    }, 1000);
+	                    }
 
-                        @Override
-                        public void onFail(Exception e) {
-                            super.onFail(e);
-                            postDelayed(() -> {
-                                mCommitView.showError(3000);
-                            }, 1000);
-                        }
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+		                    postDelayed(() -> {
+			                    mCommitView.showError(3000);
+		                    }, 1000);
+	                    }
                     });
         }
     }
@@ -243,7 +244,7 @@ public final class RegisterActivity extends AppActivity
         return false;
     }
 
-    /**
+	/**
      * 注册监听
      */
     public interface OnRegisterListener {

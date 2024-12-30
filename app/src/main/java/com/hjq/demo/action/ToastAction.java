@@ -2,7 +2,8 @@ package com.hjq.demo.action;
 
 import androidx.annotation.StringRes;
 
-import com.hjq.toast.ToastUtils;
+import com.hjq.toast.Toaster;
+
 
 /**
  *    author : Android 轮子哥
@@ -13,14 +14,14 @@ import com.hjq.toast.ToastUtils;
 public interface ToastAction {
 
     default void toast(CharSequence text) {
-        ToastUtils.show(text);
+        Toaster.show(text);
     }
 
     default void toast(@StringRes int id) {
-        ToastUtils.show(id);
+	    Toaster.show(id);
     }
 
     default void toast(Object object) {
-        ToastUtils.show(object);
+	    Toaster.show(object);
     }
 }

@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
@@ -20,7 +22,7 @@ import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.demo.ui.dialog.TipsDialog;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.listener.OnHttpListener;
 
 /**
  *    author : Android 轮子哥
@@ -113,17 +115,22 @@ public final class PasswordResetActivity extends AppActivity
                             .setPhone(mPhoneNumber)
                             .setCode(mVerifyCode)
                             .setPassword(mFirstPassword.getText().toString()))
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new OnHttpListener<HttpData<Void>>() {
 
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            new TipsDialog.Builder(getActivity())
-                                    .setIcon(TipsDialog.ICON_FINISH)
-                                    .setMessage(R.string.password_reset_success)
-                                    .setDuration(2000)
-                                    .addOnDismissListener(dialog -> finish())
-                                    .show();
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<Void> result) {
+		                    new TipsDialog.Builder(getActivity())
+				                    .setIcon(TipsDialog.ICON_FINISH)
+				                    .setMessage(R.string.password_reset_success)
+				                    .setDuration(2000)
+				                    .addOnDismissListener(dialog -> finish())
+				                    .show();
+	                    }
+
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+
+	                    }
                     });
         }
     }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
@@ -196,81 +197,80 @@ public final class UpdateDialog {
                     .md5(mFileMd5)
                     .listener(new OnDownloadListener() {
 
-                        @Override
-                        public void onStart(File file) {
-                            // 标记为下载中
-                            mDownloading = true;
-                            // 标记成未下载完成
-                            mDownloadComplete = false;
-                            // 后台更新
-                            mCloseView.setVisibility(View.GONE);
-                            // 显示进度条
-                            mProgressView.setVisibility(View.VISIBLE);
-                            mUpdateView.setText(R.string.update_status_start);
-                        }
+	                    @Override
+	                    public void onDownloadProgressChange(@NonNull File file, int progress) {
+		                    mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
+		                    mProgressView.setProgress(progress);
+		                    // 更新下载通知
+		                    notificationManager.notify(notificationId, notificationBuilder
+				                    // 设置通知的文本
+				                    .setContentText(String.format(getString(R.string.update_status_running), progress))
+				                    // 设置下载的进度
+				                    .setProgress(100, progress, false)
+				                    // 设置点击通知后是否自动消失
+				                    .setAutoCancel(false)
+				                    // 是否正在交互中
+				                    .setOngoing(true)
+				                    // 重新创建新的通知对象
+				                    .build());
+	                    }
 
-                        @Override
-                        public void onProgress(File file, int progress) {
-                            mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
-                            mProgressView.setProgress(progress);
-                            // 更新下载通知
-                            notificationManager.notify(notificationId, notificationBuilder
-                                    // 设置通知的文本
-                                    .setContentText(String.format(getString(R.string.update_status_running), progress))
-                                    // 设置下载的进度
-                                    .setProgress(100, progress, false)
-                                    // 设置点击通知后是否自动消失
-                                    .setAutoCancel(false)
-                                    // 是否正在交互中
-                                    .setOngoing(true)
-                                    // 重新创建新的通知对象
-                                    .build());
-                        }
+	                    @Override
+	                    public void onDownloadSuccess(@NonNull File file) {
+							// 显示下载成功通知
+		                    notificationManager.notify(notificationId, notificationBuilder
+				                    // 设置通知的文本
+				                    .setContentText(String.format(getString(R.string.update_status_successful), 100))
+				                    // 设置下载的进度
+				                    .setProgress(100, 100, false)
+				                    // 设置通知点击之后的意图
+				                    .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), Intent.FILL_IN_ACTION))
+				                    // 设置点击通知后是否自动消失
+				                    .setAutoCancel(true)
+				                    // 是否正在交互中
+				                    .setOngoing(false)
+				                    .build());
+		                    mUpdateView.setText(R.string.update_status_successful);
+		                    // 标记成下载完成
+		                    mDownloadComplete = true;
+		                    // 安装 Apk
+		                    installApk();
+	                    }
 
-                        @Override
-                        public void onComplete(File file) {
-                            // 显示下载成功通知
-                            notificationManager.notify(notificationId, notificationBuilder
-                                    // 设置通知的文本
-                                    .setContentText(String.format(getString(R.string.update_status_successful), 100))
-                                    // 设置下载的进度
-                                    .setProgress(100, 100, false)
-                                    // 设置通知点击之后的意图
-                                    .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), Intent.FILL_IN_ACTION))
-                                    // 设置点击通知后是否自动消失
-                                    .setAutoCancel(true)
-                                    // 是否正在交互中
-                                    .setOngoing(false)
-                                    .build());
-                            mUpdateView.setText(R.string.update_status_successful);
-                            // 标记成下载完成
-                            mDownloadComplete = true;
-                            // 安装 Apk
-                            installApk();
-                        }
+	                    @Override
+	                    public void onDownloadFail(@NonNull File file, @NonNull Throwable throwable) {
+							// 清除通知
+		                    notificationManager.cancel(notificationId);
+		                    mUpdateView.setText(R.string.update_status_failed);
+		                    // 删除下载的文件
+		                    file.delete();
+	                    }
 
-                        @SuppressWarnings("ResultOfMethodCallIgnored")
-                        @Override
-                        public void onError(File file, Exception e) {
-                            // 清除通知
-                            notificationManager.cancel(notificationId);
-                            mUpdateView.setText(R.string.update_status_failed);
-                            // 删除下载的文件
-                            file.delete();
-                        }
+	                    @Override
+	                    public void onDownloadStart(@NonNull File file) {
+		                    // 标记为下载中
+		                    mDownloading = true;
+		                    // 标记成未下载完成
+		                    mDownloadComplete = false;
+		                    // 后台更新
+		                    mCloseView.setVisibility(View.GONE);
+		                    // 显示进度条
+		                    mProgressView.setVisibility(View.VISIBLE);
+		                    mUpdateView.setText(R.string.update_status_start);
+	                    }
 
-                        @Override
-                        public void onEnd(File file) {
-                            // 更新进度条
-                            mProgressView.setProgress(0);
-                            mProgressView.setVisibility(View.GONE);
-                            // 标记当前不是下载中
-                            mDownloading = false;
-                            // 如果当前不是强制更新，对话框就恢复成可取消状态
-                            if (!mForceUpdate) {
-                                setCancelable(true);
-                            }
-                        }
+	                    @Override
+	                    public void onDownloadEnd(@NonNull File file) {
+		                    // 更新进度条
+		                    mProgressView.setProgress(0);
+		                    mProgressView.setVisibility(View.GONE);
+		                    // 标记当前不是下载中
+		                    mDownloading = false;
+		                    // 如果当前不是强制更新，对话框就恢复成可取消状态
+		                    if (!mForceUpdate) {
+			                    setCancelable(true);
+		                    }
+	                    }
 
                     }).start();
         }

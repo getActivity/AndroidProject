@@ -26,7 +26,7 @@
         android:layout_height="@dimen/dp_5"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/dp_5"
-        app:shape="oval"
+        app:shape_type="oval"
         app:shape_solidColor="@color/common_accent_color" />
 
 </FrameLayout>

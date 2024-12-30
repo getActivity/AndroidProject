@@ -3,6 +3,8 @@ package com.hjq.demo.ui.activity;
 import android.view.Gravity;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
@@ -18,7 +20,7 @@ import com.hjq.demo.ui.dialog.MenuDialog;
 import com.hjq.demo.ui.dialog.SafeDialog;
 import com.hjq.demo.ui.dialog.UpdateDialog;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.widget.layout.SettingBar;
 import com.hjq.widget.view.SwitchButton;
 
@@ -153,16 +155,7 @@ public final class SettingActivity extends AppActivity
             // 退出登录
             EasyHttp.post(this)
                     .api(new LogoutApi())
-                    .request(new HttpCallback<HttpData<Void>>(this) {
-
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            startActivity(LoginActivity.class);
-                            // 进行内存优化，销毁除登录页之外的所有界面
-                            ActivityManager.getInstance().finishAllActivities(LoginActivity.class);
-                        }
-                    });
-
+                    .request(this);
         }
     }
 
@@ -174,4 +167,16 @@ public final class SettingActivity extends AppActivity
     public void onCheckedChanged(SwitchButton button, boolean checked) {
         toast(checked);
     }
+
+	@Override
+	public void onHttpSuccess(@NonNull Object result) {
+		startActivity(LoginActivity.class);
+		// 进行内存优化，销毁除登录页之外的所有界面
+		ActivityManager.getInstance().finishAllActivities(LoginActivity.class);
+	}
+
+	@Override
+	public void onHttpFail(@NonNull Throwable throwable) {
+
+	}
 }

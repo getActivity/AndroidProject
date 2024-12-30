@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
@@ -16,7 +18,7 @@ import com.hjq.demo.http.api.VerifyCodeApi;
 import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.manager.InputTextManager;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.widget.view.CountdownView;
 
 /**
@@ -84,13 +86,18 @@ public final class PasswordForgetActivity extends AppActivity
             EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new OnHttpListener<HttpData<Void>>() {
 
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            toast(R.string.common_code_send_hint);
-                            mCountdownView.start();
-                        }
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<Void> result) {
+		                    toast(R.string.common_code_send_hint);
+		                    mCountdownView.start();
+	                    }
+
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+
+	                    }
                     });
         } else if (view == mCommitView) {
 
@@ -117,13 +124,19 @@ public final class PasswordForgetActivity extends AppActivity
                     .api(new VerifyCodeApi()
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString()))
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new OnHttpListener<HttpData<Void>>() {
 
-                        @Override
-                        public void onSucceed(HttpData<Void> data) {
-                            PasswordResetActivity.start(getActivity(), mPhoneView.getText().toString(), mCodeView.getText().toString());
-                            finish();
-                        }
+
+	                    @Override
+	                    public void onHttpSuccess(@NonNull HttpData<Void> result) {
+		                    PasswordResetActivity.start(getActivity(), mPhoneView.getText().toString(), mCodeView.getText().toString());
+		                    finish();
+	                    }
+
+	                    @Override
+	                    public void onHttpFail(@NonNull Throwable throwable) {
+
+	                    }
                     });
         }
     }

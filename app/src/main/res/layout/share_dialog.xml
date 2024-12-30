@@ -7,10 +7,10 @@
     android:layout_gravity="bottom"
     android:background="@color/white"
     android:orientation="vertical"
-    app:shape="rectangle"
+    app:shape_type="rectangle"
     app:shape_solidColor="@color/white"
-    app:shape_topLeftRadius="@dimen/dp_20"
-    app:shape_topRightRadius="@dimen/dp_20"
+    app:shape_radiusInTopLeft="@dimen/dp_20"
+    app:shape_radiusInTopRight="@dimen/dp_20"
     tools:context=".ui.dialog.ShareDialog">
 
     <androidx.appcompat.widget.AppCompatTextView

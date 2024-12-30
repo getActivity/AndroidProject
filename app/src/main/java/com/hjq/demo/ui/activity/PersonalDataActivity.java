@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -18,7 +20,7 @@ import com.hjq.demo.http.model.HttpData;
 import com.hjq.demo.ui.dialog.AddressDialog;
 import com.hjq.demo.ui.dialog.InputDialog;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.listener.OnHttpListener;
 import com.hjq.http.model.FileContentResolver;
 import com.hjq.widget.layout.SettingBar;
 
@@ -187,19 +189,24 @@ public final class PersonalDataActivity extends AppActivity {
         EasyHttp.post(this)
                 .api(new UpdateImageApi()
                         .setImage(file))
-                .request(new HttpCallback<HttpData<String>>(this) {
+                .request(new OnHttpListener<HttpData<String>>() {
 
-                    @Override
-                    public void onSucceed(HttpData<String> data) {
-                        mAvatarUrl = Uri.parse(data.getData());
-                        GlideApp.with(getActivity())
-                                .load(mAvatarUrl)
-                                .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
-                                .into(mAvatarView);
-                        if (deleteFile) {
-                            file.delete();
-                        }
-                    }
+	                @Override
+	                public void onHttpSuccess(@NonNull HttpData<String> result) {
+		                mAvatarUrl = Uri.parse(result.getData());
+		                GlideApp.with(getActivity())
+				                .load(mAvatarUrl)
+				                .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
+				                .into(mAvatarView);
+		                if (deleteFile) {
+			                file.delete();
+		                }
+	                }
+
+	                @Override
+	                public void onHttpFail(@NonNull Throwable throwable) {
+
+	                }
                 });
     }
 }

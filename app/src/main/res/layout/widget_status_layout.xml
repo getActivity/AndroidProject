@@ -42,7 +42,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/sp_13"
         android:visibility="invisible"
-        app:shape="rectangle"
+        app:shape_type="rectangle"
         app:shape_radius="@dimen/dp_5"
         app:shape_solidColor="@color/common_accent_color"
         app:shape_solidPressedColor="@color/common_button_pressed_color"

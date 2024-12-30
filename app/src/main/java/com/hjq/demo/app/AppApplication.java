@@ -33,14 +33,18 @@ import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.model.HttpHeaders;
 import com.hjq.http.model.HttpParams;
+import com.hjq.http.request.HttpRequest;
 import com.hjq.permissions.XXPermissions;
-import com.hjq.toast.ToastUtils;
+
+import com.hjq.toast.Toaster;
 import com.hjq.umeng.UmengClient;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mmkv.MMKV;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -104,11 +108,9 @@ public final class AppApplication extends Application {
         });
 
         // 初始化吐司
-        ToastUtils.init(application, new ToastStyle());
-        // 设置调试模式
-        ToastUtils.setDebugMode(AppConfig.isDebug());
-        // 设置 Toast 拦截器
-        ToastUtils.setInterceptor(new ToastLogInterceptor());
+	    Toaster.init(application);
+	    // 设置 Toast 拦截器（全局生效）
+		Toaster.setInterceptor(new ToastLogInterceptor());
 
         // 本地异常捕捉
         CrashHandler.register(application);
@@ -138,14 +140,26 @@ public final class AppApplication extends Application {
                 .setHandler(new RequestHandler(application))
                 // 设置请求重试次数
                 .setRetryCount(1)
-                .setInterceptor((api, params, headers) -> {
-                    // 添加全局请求头
-                    headers.put("token", "66666666666");
-                    headers.put("deviceOaid", UmengClient.getDeviceOaid());
-                    headers.put("versionName", AppConfig.getVersionName());
-                    headers.put("versionCode", String.valueOf(AppConfig.getVersionCode()));
-                    // 添加全局请求参数
-                    // params.put("6666666", "6666666");
+                .setInterceptor(new IRequestInterceptor() {
+	                @Override
+	                public void interceptArguments(@NonNull HttpRequest<?> httpRequest, @NonNull HttpParams params, @NonNull HttpHeaders headers) {
+						// 请求参数拦截
+		                IRequestInterceptor.super.interceptArguments(httpRequest, params, headers);
+	                }
+
+	                @NonNull
+	                @Override
+	                public Request interceptRequest(@NonNull HttpRequest<?> httpRequest, @NonNull Request request) {
+						// 请求拦截
+		                return IRequestInterceptor.super.interceptRequest(httpRequest, request);
+	                }
+
+	                @NonNull
+	                @Override
+	                public Response interceptResponse(HttpRequest<?> httpRequest, Response response) {
+						// 响应拦截
+		                return IRequestInterceptor.super.interceptResponse(httpRequest, response);
+	                }
                 })
                 .into();
 
@@ -177,7 +191,7 @@ public final class AppApplication extends Application {
                         return;
                     }
 
-                    ToastUtils.show(R.string.common_network_error);
+                    Toaster.show(R.string.common_network_error);
                 }
             });
         }

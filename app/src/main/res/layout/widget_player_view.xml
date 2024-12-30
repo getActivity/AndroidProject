@@ -27,11 +27,7 @@
             android:layout_gravity="top"
             android:orientation="horizontal"
             android:visibility="invisible"
-            app:shape="rectangle"
-            app:shape_angle="270"
-            app:shape_centerColor="@color/black20"
-            app:shape_endColor="@color/transparent"
-            app:shape_startColor="#AA000000"
+            app:shape_type="rectangle"
             tools:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -76,7 +72,7 @@
             android:layout_marginStart="@dimen/dp_5"
             android:padding="@dimen/dp_10"
             android:visibility="invisible"
-            app:shape="oval"
+            app:shape_type="oval"
             app:shape_solidColor="@color/black30"
             app:shape_solidPressedColor="@color/black60"
             app:srcCompat="@drawable/video_lock_open_ic"
@@ -91,11 +87,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/dp_15"
             android:visibility="invisible"
-            app:shape="rectangle"
-            app:shape_angle="90"
-            app:shape_centerColor="@color/black20"
-            app:shape_endColor="@color/transparent"
-            app:shape_startColor="#AA000000"
+            app:shape_type="rectangle"
             tools:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatTextView

@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
+import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
 import com.hjq.demo.aop.CheckNet;
@@ -87,7 +88,7 @@ public final class BrowserActivity extends AppActivity
     }
 
     @Override
-    public void onLeftClick(View view) {
+    public void onLeftClick(TitleBar titleBar) {
         finish();
     }
 

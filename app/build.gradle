@@ -61,7 +61,7 @@ android {
             ])
             // 调试模式下只保留一种架构的 so 库，提升打包速度
             ndk {
-                abiFilters 'armeabi-v7a'
+                abiFilters 'armeabi-v7a','x86_64'
             }
         }
 
@@ -95,7 +95,7 @@ android {
                 // armeabi：万金油架构平台（占用率：0%）
                 // armeabi-v7a：曾经主流的架构平台（占用率：10%）
                 // arm64-v8a：目前主流架构平台（占用率：95%）
-                abiFilters 'armeabi-v7a', 'arm64-v8a'
+                abiFilters 'armeabi-v7a', 'arm64-v8a','x86_64'
             }
         }
     }
@@ -139,16 +139,16 @@ dependencies {
     implementation project(':library:umeng')
 
     // 权限请求框架：https://github.com/getActivity/XXPermissions
-    implementation 'com.github.getActivity:XXPermissions:12.3'
+    implementation 'com.github.getActivity:XXPermissions:20.0'
 
     // 标题栏框架：https://github.com/getActivity/TitleBar
-    implementation 'com.github.getActivity:TitleBar:9.2'
+    implementation 'com.github.getActivity:TitleBar:10.5'
 
-    // 吐司框架：https://github.com/getActivity/ToastUtils
-    implementation 'com.github.getActivity:ToastUtils:9.5'
+    // 吐司框架：https://github.com/getActivity/Toaster
+    implementation 'com.github.getActivity:Toaster:12.6'
 
     // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation 'com.github.getActivity:EasyHttp:10.2'
+    implementation 'com.github.getActivity:EasyHttp:13.0'
     // OkHttp 框架：https://github.com/square/okhttp
     // noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:3.12.13'
@@ -159,7 +159,7 @@ dependencies {
     implementation 'com.github.getActivity:GsonFactory:5.2'
 
     // Shape 框架：https://github.com/getActivity/ShapeView
-    implementation 'com.github.getActivity:ShapeView:6.0'
+    implementation 'com.github.getActivity:ShapeView:9.3'
 
     // AOP 插件库：https://mvnrepository.com/artifact/org.aspectj/aspectjrt
     implementation 'org.aspectj:aspectjrt:1.9.6'
@@ -170,7 +170,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // 沉浸式框架：https://github.com/gyf-dev/ImmersionBar
-    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 
     // 手势 ImageView：https://github.com/Baseflow/PhotoView
     implementation 'com.github.Baseflow:PhotoView:2.3.0'
@@ -194,7 +194,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     // 腾讯 MMKV：https://github.com/Tencent/MMKV
-    implementation 'com.tencent:mmkv-static:1.2.10'
+    implementation 'com.tencent:mmkv:2.0.2'
 
     // 内存泄漏监测框架：https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'

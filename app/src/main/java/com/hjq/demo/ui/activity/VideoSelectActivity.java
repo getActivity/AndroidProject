@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
@@ -179,7 +180,7 @@ public final class VideoSelectActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onRightClick(View view) {
+    public void onRightClick(TitleBar titleBar) {
         if (mAllVideo.isEmpty()) {
             return;
         }
