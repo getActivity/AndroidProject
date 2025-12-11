@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'io.github.wurensen.android-aspectjx'
-    id 'com.starter.easylauncher'
+//    id 'com.starter.easylauncher'
 }
 
 apply from : '../common.gradle'
@@ -144,25 +144,25 @@ android {
 }
 
 // 应用启动图标配置
-easylauncher {
-    buildTypes {
-        preview {
-            filters = [
-                customRibbon(label: "preview", position: "topRight",
-                        ribbonColor: "#b65656", labelColor: "#FFFFFF")
-            ]
-        }
-        debug {
-            filters = [
-                customRibbon(label: "debug", position: "topRight",
-                        ribbonColor: "#b65656", labelColor: "#FFFFFF")
-            ]
-        }
-        release {
-            enable false
-        }
-    }
-}
+//easylauncher {
+//    buildTypes {
+//        preview {
+//            filters = [
+//                customRibbon(label: "preview", position: "topRight",
+//                        ribbonColor: "#b65656", labelColor: "#FFFFFF")
+//            ]
+//        }
+//        debug {
+//            filters = [
+//                customRibbon(label: "debug", position: "topRight",
+//                        ribbonColor: "#b65656", labelColor: "#FFFFFF")
+//            ]
+//        }
+//        release {
+//            enable false
+//        }
+//    }
+//}
 
 // 添加构建依赖项：https://developer.android.google.cn/studio/build/dependencies
 // api 与 implementation 的区别：https://www.jianshu.com/p/8962d6ba936e

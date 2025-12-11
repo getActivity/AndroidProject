@@ -1,11 +1,11 @@
 // AndroidProject 版本：v15.0
 plugins {
-    id 'com.android.application' version '7.1.3' apply false
+    id 'com.android.application' version '7.4.2' apply false
     id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
     // AOP 插件：https://github.com/wurensen/gradle_plugin_android_aspectjx
     id 'io.github.wurensen.android-aspectjx' version '3.3.2' apply false
     // 多 buildType 图标插件：https://github.com/usefulness/easylauncher-gradle-plugin
-    id 'com.starter.easylauncher' version '6.1.0' apply false
+//    id 'com.starter.easylauncher' version '6.1.0' apply false
 }
 
 // 导入配置文件
