@@ -1,5 +1,10 @@
-apply plugin : 'com.android.application'
-apply plugin : 'android-aspectjx'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'io.github.wurensen.android-aspectjx'
+    id 'com.starter.easylauncher'
+}
+
 apply from : '../common.gradle'
 
 // Android 代码规范文档：https://github.com/getActivity/AndroidCodeStandard
@@ -28,13 +33,23 @@ android {
         buildConfigField('String', 'HOST_URL', '"' + HOST_URL + '"')
     }
 
+    sourceSets {
+        main {
+            // res 资源目录配置
+            res.srcDirs(
+                    'src/main/res',
+                    'src/main/res-common'
+            )
+        }
+    }
+
     // Apk 签名的那些事：https://www.jianshu.com/p/a1f8e5896aa2
     signingConfigs {
         config {
-            storeFile file(StoreFile)
-            storePassword StorePassword
-            keyAlias KeyAlias
-            keyPassword KeyPassword
+            storeFile file(STORE_FILE)
+            storePassword STORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
         }
     }
 
@@ -57,11 +72,11 @@ android {
             signingConfig signingConfigs.config
             // 添加清单占位符
             addManifestPlaceholders([
-                    'app_name'    :    '安卓技术中台 Debug 版'
+                    'app_name'    :    '@string/app_name_debug'
             ])
             // 调试模式下只保留一种架构的 so 库，提升打包速度
             ndk {
-                abiFilters 'armeabi-v7a'
+                abiFilters 'arm64-v8a'
             }
         }
 
@@ -70,7 +85,7 @@ android {
             applicationIdSuffix ''
             // 添加清单占位符
             addManifestPlaceholders([
-                    'app_name'    :    '安卓技术中台 Preview 版'
+                    'app_name'    :    '@string/app_name_preview'
             ])
         }
 
@@ -93,7 +108,7 @@ android {
             // 仅保留两种架构的 so 库，根据 Bugly 统计得出
             ndk {
                 // armeabi：万金油架构平台（占用率：0%）
-                // armeabi-v7a：曾经主流的架构平台（占用率：10%）
+                // armeabi-v7a：曾经主流的架构平台（占用率：5%）
                 // arm64-v8a：目前主流架构平台（占用率：95%）
                 abiFilters 'armeabi-v7a', 'arm64-v8a'
             }
@@ -116,14 +131,35 @@ android {
         include android.defaultConfig.applicationId
     }
 
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         // apk 输出文件名配置
-        variant.outputs.all { output ->
+        variant.outputs.configureEach { output ->
             outputFileName = rootProject.getName() + '_v' + variant.versionName + '_' + variant.buildType.name
             if (variant.buildType.name == buildTypes.release.getName()) {
                 outputFileName += '_' + new Date().format('MMdd')
             }
             outputFileName += '.apk'
+        }
+    }
+}
+
+// 应用启动图标配置
+easylauncher {
+    buildTypes {
+        preview {
+            filters = [
+                customRibbon(label: "preview", position: "topRight",
+                        ribbonColor: "#b65656", labelColor: "#FFFFFF")
+            ]
+        }
+        debug {
+            filters = [
+                customRibbon(label: "debug", position: "topRight",
+                        ribbonColor: "#b65656", labelColor: "#FFFFFF")
+            ]
+        }
+        release {
+            enable false
         }
     }
 }
@@ -138,54 +174,64 @@ dependencies {
     // 友盟封装
     implementation project(':library:umeng')
 
+    // 设备兼容框架：https://github.com/getActivity/DeviceCompat
+    implementation 'com.github.getActivity:DeviceCompat:2.5'
     // 权限请求框架：https://github.com/getActivity/XXPermissions
-    implementation 'com.github.getActivity:XXPermissions:12.3'
+    implementation 'com.github.getActivity:XXPermissions:28.0'
 
     // 标题栏框架：https://github.com/getActivity/TitleBar
-    implementation 'com.github.getActivity:TitleBar:9.2'
+    implementation 'com.github.getActivity:TitleBar:10.8'
 
-    // 吐司框架：https://github.com/getActivity/ToastUtils
-    implementation 'com.github.getActivity:ToastUtils:9.5'
+    // 吐司框架：https://github.com/getActivity/Toaster
+    implementation 'com.github.getActivity:Toaster:13.8'
 
     // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation 'com.github.getActivity:EasyHttp:10.2'
+    implementation 'com.github.getActivity:EasyHttp:13.0'
     // OkHttp 框架：https://github.com/square/okhttp
     // noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:3.12.13'
 
-    // Json 解析框架：https://github.com/google/gson
-    implementation 'com.google.code.gson:gson:2.8.8'
     // Gson 解析容错：https://github.com/getActivity/GsonFactory
-    implementation 'com.github.getActivity:GsonFactory:5.2'
+    implementation ('com.github.getActivity:GsonFactory:10.3') {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
+    }
+    // Json 解析框架：https://github.com/google/gson
+    implementation ('com.google.code.gson:gson:2.13.1') {
+        exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    }
+    // Kotlin 反射库：用于反射 Kotlin data class 类对象
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.9.23'
 
-    // Shape 框架：https://github.com/getActivity/ShapeView
-    implementation 'com.github.getActivity:ShapeView:6.0'
+    // ShapeView：https://github.com/getActivity/ShapeView
+    implementation 'com.github.getActivity:ShapeView:9.8'
+    // ShapeDrawable：https://github.com/getActivity/ShapeDrawable
+    implementation 'com.github.getActivity:ShapeDrawable:3.3'
 
-    // AOP 插件库：https://mvnrepository.com/artifact/org.aspectj/aspectjrt
-    implementation 'org.aspectj:aspectjrt:1.9.6'
+    // 嵌套滚动布局：https://github.com/getActivity/NestedScrollLayout
+    implementation 'com.github.getActivity:NestedScrollLayout:2.0'
 
     // 图片加载框架：https://github.com/bumptech/glide
     // 官方使用文档：https://github.com/Muyangmin/glide-docs-cn
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     // 沉浸式框架：https://github.com/gyf-dev/ImmersionBar
-    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 
     // 手势 ImageView：https://github.com/Baseflow/PhotoView
     implementation 'com.github.Baseflow:PhotoView:2.3.0'
 
     // Bugly 异常捕捉：https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20190418140644
-    implementation 'com.tencent.bugly:crashreport:3.4.4'
+    implementation 'com.tencent.bugly:crashreport:4.1.9.3'
     implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
 
     // 动画解析库：https://github.com/airbnb/lottie-android
     // 动画资源：https://lottiefiles.com、https://icons8.com/animated-icons
-    implementation 'com.airbnb.android:lottie:4.1.0'
+    implementation 'com.airbnb.android:lottie:5.2.0'
 
     // 上拉刷新下拉加载框架：https://github.com/scwang90/SmartRefreshLayout
-    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'
-    implementation 'com.scwang.smart:refresh-header-material:2.0.3'
+    implementation 'io.github.scwang90:refresh-layout-kernel:3.0.0-alpha'
+    implementation 'io.github.scwang90:refresh-header-material:3.0.0-alpha'
 
     // 日志打印框架：https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -194,14 +240,20 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     // 腾讯 MMKV：https://github.com/Tencent/MMKV
-    implementation 'com.tencent:mmkv-static:1.2.10'
+    implementation ('com.tencent:mmkv-static:1.3.12') {
+        // 避免版本不一致导致的依赖冲突，从而导致编译报错
+        exclude group: 'androidx.annotation', module: 'annotation'
+    }
 
     // 内存泄漏监测框架：https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
-    previewImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+    previewImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+
+    // 软键盘遮挡解决方案：https://github.com/liangjingkanji/soft-input-event
+    implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
 
     // 多语种：https://github.com/getActivity/MultiLanguages
-    // 悬浮窗：https://github.com/getActivity/XToast
+    // 悬浮窗：https://github.com/getActivity/EasyWindow
     // 日志输出：https://github.com/getActivity/Logcat
     // 工具类：https://github.com/Blankj/AndroidUtilCode
     // 轮播图：https://github.com/bingoogolapple/BGABanner-Android
@@ -212,5 +264,5 @@ dependencies {
     // 多渠道打包：https://github.com/Meituan-Dianping/walle
     // 设备唯一标识：http://msa-alliance.cn/col.jsp?id=120
     // 嵌套滚动容器：https://github.com/donkingliang/ConsecutiveScroller
-    // 隐私调用监控：https://github.com/huage2580/PermissionMonitor
+    // 隐私调用监控：https://github.com/allenymt/PrivacySentry
 }

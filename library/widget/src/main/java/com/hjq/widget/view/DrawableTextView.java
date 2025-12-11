@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-
 import com.hjq.widget.R;
 
 /**
@@ -18,6 +16,11 @@ import com.hjq.widget.R;
  *    desc   : 支持限定 Drawable 大小的 TextView
  */
 public final class DrawableTextView extends AppCompatTextView {
+
+    private static final int DRAWABLE_INDEX_LEFT = 0;
+    private static final int DRAWABLE_INDEX_TOP = 1;
+    private static final int DRAWABLE_INDEX_RIGHT = 2;
+    private static final int DRAWABLE_INDEX_BOTTOM = 3;
 
     private int mDrawableWidth;
     private int mDrawableHeight;
@@ -47,9 +50,6 @@ public final class DrawableTextView extends AppCompatTextView {
     public void setDrawableSize(int width, int height) {
         mDrawableWidth = width;
         mDrawableHeight = height;
-        if (!isAttachedToWindow()) {
-            return;
-        }
         refreshDrawablesSize();
     }
 
@@ -58,9 +58,6 @@ public final class DrawableTextView extends AppCompatTextView {
      */
     public void setDrawableWidth(int width) {
         mDrawableWidth = width;
-        if (!isAttachedToWindow()) {
-            return;
-        }
         refreshDrawablesSize();
     }
 
@@ -69,27 +66,18 @@ public final class DrawableTextView extends AppCompatTextView {
      */
     public void setDrawableHeight(int height) {
         mDrawableHeight = height;
-        if (!isAttachedToWindow()) {
-            return;
-        }
         refreshDrawablesSize();
     }
 
     @Override
     public void setCompoundDrawables(@Nullable Drawable left, @Nullable Drawable top, @Nullable Drawable right, @Nullable Drawable bottom) {
         super.setCompoundDrawables(left, top, right, bottom);
-        if (!isAttachedToWindow()) {
-            return;
-        }
         refreshDrawablesSize();
     }
 
     @Override
     public void setCompoundDrawablesRelative(@Nullable Drawable start, @Nullable Drawable top, @Nullable Drawable end, @Nullable Drawable bottom) {
         super.setCompoundDrawablesRelative(start, top, end, bottom);
-        if (!isAttachedToWindow()) {
-            return;
-        }
         refreshDrawablesSize();
     }
 
@@ -101,18 +89,42 @@ public final class DrawableTextView extends AppCompatTextView {
             return;
         }
         Drawable[] compoundDrawables = getCompoundDrawables();
-        if (compoundDrawables[0] != null || compoundDrawables[1] != null) {
-            super.setCompoundDrawables(limitDrawableSize(compoundDrawables[0]),
-                    limitDrawableSize(compoundDrawables[1]),
-                    limitDrawableSize(compoundDrawables[2]),
-                    limitDrawableSize(compoundDrawables[3]));
-            return;
+        Drawable[] compoundDrawablesRelative = getCompoundDrawablesRelative();
+
+        // 获取布局方向
+        int layoutDirection = getLayoutDirection();
+
+        Drawable leftDrawable = compoundDrawablesRelative[layoutDirection == LAYOUT_DIRECTION_LTR ?
+                DRAWABLE_INDEX_LEFT : DRAWABLE_INDEX_RIGHT];
+        if (leftDrawable == null) {
+            leftDrawable = compoundDrawables[DRAWABLE_INDEX_LEFT];
         }
-        compoundDrawables = getCompoundDrawablesRelative();
-        super.setCompoundDrawablesRelative(limitDrawableSize(compoundDrawables[0]),
-                limitDrawableSize(compoundDrawables[1]),
-                limitDrawableSize(compoundDrawables[2]),
-                limitDrawableSize(compoundDrawables[3]));
+
+        Drawable topDrawable = compoundDrawablesRelative[DRAWABLE_INDEX_TOP];
+        if (topDrawable == null) {
+            topDrawable = compoundDrawables[DRAWABLE_INDEX_TOP];
+        }
+
+        Drawable rightDrawable = compoundDrawablesRelative[layoutDirection == LAYOUT_DIRECTION_LTR ?
+                DRAWABLE_INDEX_RIGHT : DRAWABLE_INDEX_LEFT];
+        if (rightDrawable == null) {
+            rightDrawable = compoundDrawables[DRAWABLE_INDEX_RIGHT];
+        }
+
+        Drawable bottomDrawable = compoundDrawablesRelative[DRAWABLE_INDEX_BOTTOM];
+        if (bottomDrawable == null) {
+            bottomDrawable = compoundDrawables[DRAWABLE_INDEX_BOTTOM];
+        }
+
+        Drawable[] newDrawable = new Drawable[4];
+        newDrawable[DRAWABLE_INDEX_LEFT] = limitDrawableSize(leftDrawable);
+        newDrawable[DRAWABLE_INDEX_TOP] = limitDrawableSize(topDrawable);
+        newDrawable[DRAWABLE_INDEX_RIGHT] = limitDrawableSize(rightDrawable);
+        newDrawable[DRAWABLE_INDEX_BOTTOM] = limitDrawableSize(bottomDrawable);
+
+        super.setCompoundDrawables(
+                newDrawable[DRAWABLE_INDEX_LEFT], newDrawable[DRAWABLE_INDEX_TOP],
+                newDrawable[DRAWABLE_INDEX_RIGHT], newDrawable[DRAWABLE_INDEX_BOTTOM]);
     }
 
     /**

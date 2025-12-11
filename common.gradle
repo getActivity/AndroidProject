@@ -2,12 +2,12 @@
 android {
 
     // 编译源码版本
-    compileSdkVersion 30
+    compileSdk 36
     defaultConfig {
         // 最低安装版本
-        minSdkVersion 21
-        // 目标适配版本
-        targetSdkVersion 30
+        minSdk 21
+        // Android 版本适配指南：https://github.com/getActivity/AndroidVersionAdapter
+        targetSdk 32
         versionName '1.0'
         versionCode 10
     }
@@ -42,6 +42,24 @@ android {
         // 禁用图片描述警告
         disable 'ContentDescription'
     }
+
+    // 读取 local.properties 文件配置
+    def properties = new Properties()
+    def localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.withInputStream { inputStream ->
+            properties.load(inputStream)
+        }
+    }
+
+    String buildDirPath = properties.getProperty("build.dir")
+    if (buildDirPath != null && buildDirPath != "") {
+        // 将构建文件统一输出到指定的目录下
+        setBuildDir(new File(buildDirPath, rootProject.name + "/build/${path.replaceAll(':', '/')}"))
+    } else {
+        // 将构建文件统一输出到项目根目录下的 build 文件夹
+        setBuildDir(new File(rootDir, "build/${path.replaceAll(':', '/')}"))
+    }
 }
 
 afterEvaluate {
@@ -59,7 +77,8 @@ dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
     // AndroidX 库：https://github.com/androidx/androidx
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    // 更新日志：https://developer.android.google.cn/jetpack/androidx/releases/appcompat?hl=zh-cn
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     // Material 库：https://github.com/material-components/material-components-android
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.6.1'
 }

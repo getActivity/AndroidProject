@@ -3,12 +3,9 @@ package com.hjq.demo.other;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.view.Gravity;
 import android.widget.TextView;
-
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
-
 import com.hjq.bar.style.LightBarStyle;
 import com.hjq.demo.R;
 import com.hjq.widget.view.PressAlphaTextView;
@@ -57,8 +54,18 @@ public final class TitleBarStyle extends LightBarStyle {
     }
 
     @Override
-    public int getChildHorizontalPadding(Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_12);
+    public int getTitleHorizontalPadding(Context context) {
+        return 0;
+    }
+
+    @Override
+    public int getLeftHorizontalPadding(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.dp_10);
+    }
+
+    @Override
+    public int getRightHorizontalPadding(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.dp_10);
     }
 
     @Override

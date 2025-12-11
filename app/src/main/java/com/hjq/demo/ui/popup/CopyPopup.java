@@ -1,7 +1,6 @@
 package com.hjq.demo.ui.popup;
 
 import android.content.Context;
-
 import com.hjq.base.BasePopupWindow;
 import com.hjq.demo.R;
 

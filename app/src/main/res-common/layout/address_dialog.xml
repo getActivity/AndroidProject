@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    app:shape_radiusInTopLeft="@dimen/dp_20"
+    app:shape_radiusInTopRight="@dimen/dp_20"
+    app:shape_solidColor="@color/white"
+    app:shape_type="rectangle"
+    tools:context=".ui.dialog.common.AddressDialog">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_address_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="@dimen/dp_40"
+            android:gravity="center"
+            android:text="@string/address_title"
+            android:textColor="#333333"
+            android:textSize="@dimen/sp_15" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_address_close"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="end|center_vertical"
+            android:padding="@dimen/dp_5"
+            app:srcCompat="@drawable/close_icon" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_size"
+        android:background="#ececec" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_address_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/dp_10" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_address_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</com.hjq.shape.layout.ShapeLinearLayout>

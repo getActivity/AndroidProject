@@ -69,7 +69,7 @@
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_update_content"
+                android:id="@+id/tv_update_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp_20"
@@ -86,11 +86,12 @@
                 android:id="@+id/pb_update_progress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_3"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_3"
                 android:indeterminate="false"
+                android:progressDrawable="@drawable/update_progress_bg"
                 android:visibility="gone"
                 tools:progress="50"
                 tools:visibility="visible" />

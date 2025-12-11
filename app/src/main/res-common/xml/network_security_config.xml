@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 网络安全配置：https://developer.android.google.cn/training/articles/security-config?hl=zh-cn -->
+<network-security-config>
+
+    <!-- 允许明文通信，解决 Android P 禁用 http 请求的问题 -->
+    <base-config cleartextTrafficPermitted="true" />
+
+    <!-- debug 模式下生效的配置，release 包不会生效 -->
+    <debug-overrides>
+        <trust-anchors>
+            <!-- 信任用户级别的证书，这样抓包软件的 SSL 证书在 Android 7.0 及以上系统才能正常生效 -->
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+
+</network-security-config>

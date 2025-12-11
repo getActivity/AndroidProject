@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    app:shape_radiusInTopLeft="@dimen/dp_20"
+    app:shape_radiusInTopRight="@dimen/dp_20"
+    app:shape_solidColor="@color/white"
+    app:shape_type="rectangle"
+    tools:context=".ui.dialog.common.ShareDialog">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dp_25"
+        android:paddingTop="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_5"
+        android:text="@string/share_title"
+        android:textColor="#666666"
+        android:textSize="@dimen/sp_16" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_share_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/layout_from_bottom"
+        tools:itemCount="5"
+        tools:layoutAnimation="@null"
+        tools:layoutManager="GridLayoutManager"
+        tools:listitem="@layout/share_item"
+        tools:spanCount="5" />
+
+</com.hjq.shape.layout.ShapeLinearLayout>

@@ -7,9 +7,6 @@
 -dontskipnonpubliclibraryclasses
 -verbose
 
-# 不要删除无用代码
--dontshrink
-
 # 不混淆泛型
 -keepattributes Signature
 

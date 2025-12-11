@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_message_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dp_15"
+    android:layout_marginVertical="@dimen/dp_10"
+    android:gravity="center_horizontal"
+    android:lineSpacingExtra="@dimen/dp_4"
+    android:maxHeight="@dimen/dp_240"
+    android:scrollbars="vertical"
+    android:textColor="#333333"
+    android:textSize="@dimen/sp_14"
+    tools:context=".ui.dialog.common.MessageDialog"
+    tools:text="内容" />

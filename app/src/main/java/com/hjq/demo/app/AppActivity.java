@@ -1,25 +1,21 @@
 package com.hjq.demo.app;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
-import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.action.TitleBarAction;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.ui.dialog.WaitDialog;
+import com.hjq.demo.ui.dialog.common.WaitDialog;
+import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.OnHttpListener;
-
-import okhttp3.Call;
+import com.hjq.umeng.UmengClient;
 
 /**
  *    author : Android 轮子哥
@@ -36,7 +32,7 @@ public abstract class AppActivity extends BaseActivity
     private ImmersionBar mImmersionBar;
 
     /** 加载对话框 */
-    private BaseDialog mDialog;
+    private WaitDialog.Builder mDialog;
     /** 对话框数量 */
     private int mDialogCount;
 
@@ -50,7 +46,11 @@ public abstract class AppActivity extends BaseActivity
     /**
      * 显示加载对话框
      */
-    public void showDialog() {
+    public void showLoadingDialog() {
+        showLoadingDialog(getString(R.string.common_loading));
+    }
+
+    public void showLoadingDialog(String message) {
         if (isFinishing() || isDestroyed()) {
             return;
         }
@@ -63,9 +63,9 @@ public abstract class AppActivity extends BaseActivity
 
             if (mDialog == null) {
                 mDialog = new WaitDialog.Builder(this)
-                        .setCancelable(false)
-                        .create();
+                        .setCancelable(false);
             }
+            mDialog.setMessage(message);
             if (!mDialog.isShowing()) {
                 mDialog.show();
             }
@@ -75,7 +75,7 @@ public abstract class AppActivity extends BaseActivity
     /**
      * 隐藏加载对话框
      */
-    public void hideDialog() {
+    public void hideLoadingDialog() {
         if (isFinishing() || isDestroyed()) {
             return;
         }
@@ -95,18 +95,19 @@ public abstract class AppActivity extends BaseActivity
     protected void initLayout() {
         super.initLayout();
 
-        if (getTitleBar() != null) {
-            getTitleBar().setOnTitleBarListener(this);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar != null) {
+            titleBar.setOnTitleBarListener(this);
         }
 
         // 初始化沉浸式状态栏
         if (isStatusBarEnabled()) {
             getStatusBarConfig().init();
+        }
 
-            // 设置标题栏沉浸
-            if (getTitleBar() != null) {
-                ImmersionBar.setTitleBar(this, getTitleBar());
-            }
+        View immersionView = getImmersionView();
+        if (immersionView != null) {
+            ImmersionBar.setTitleBar(this, immersionView);
         }
     }
 
@@ -177,21 +178,13 @@ public abstract class AppActivity extends BaseActivity
         return mTitleBar;
     }
 
+    public View getImmersionView() {
+        return getTitleBar();
+    }
+
     @Override
-    public void onLeftClick(View view) {
+    public void onLeftClick(TitleBar titleBar) {
         onBackPressed();
-    }
-
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
-        super.startActivityForResult(intent, requestCode, options);
-        overridePendingTransition(R.anim.right_in_activity, R.anim.right_out_activity);
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.left_in_activity, R.anim.left_out_activity);
     }
 
     /**
@@ -199,33 +192,40 @@ public abstract class AppActivity extends BaseActivity
      */
 
     @Override
-    public void onStart(Call call) {
-        showDialog();
+    public void onHttpStart(@NonNull IRequestApi api) {
+        showLoadingDialog();
     }
 
     @Override
-    public void onSucceed(Object result) {
+    public void onHttpSuccess(@NonNull Object result) {
         if (result instanceof HttpData) {
             toast(((HttpData<?>) result).getMessage());
         }
     }
 
     @Override
-    public void onFail(Exception e) {
-        toast(e.getMessage());
+    public void onHttpFail(@NonNull Throwable throwable) {
+        toast(throwable.getMessage());
     }
 
     @Override
-    public void onEnd(Call call) {
-        hideDialog();
+    public void onHttpEnd(@NonNull IRequestApi api) {
+        hideLoadingDialog();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (isShowDialog()) {
-            hideDialog();
+            hideLoadingDialog();
         }
         mDialog = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 友盟回调
+        UmengClient.onActivityResult(this, requestCode, resultCode, data);
     }
 }

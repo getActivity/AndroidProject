@@ -2,7 +2,6 @@ package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
 import android.view.Gravity;
-
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 

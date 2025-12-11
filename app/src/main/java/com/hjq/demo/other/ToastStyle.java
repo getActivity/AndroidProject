@@ -3,8 +3,6 @@ package com.hjq.demo.other;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.TypedValue;
-
 import com.hjq.demo.R;
 import com.hjq.toast.style.BlackToastStyle;
 
@@ -22,7 +20,7 @@ public final class ToastStyle extends BlackToastStyle {
         // 设置颜色
         drawable.setColor(0X88000000);
         // 设置圆角
-        drawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) context.getResources().getDimension(R.dimen.button_circle_size), context.getResources().getDisplayMetrics()));
+        drawable.setCornerRadius((int) context.getResources().getDimension(R.dimen.button_circle_size));
         return drawable;
     }
 

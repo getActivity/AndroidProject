@@ -5,10 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
@@ -71,7 +69,7 @@ public final class UmengClient {
             if (listener == null) {
                 return;
             }
-            listener.onError(platform, new PackageManager.NameNotFoundException("Is not installed"));
+            listener.onShareFail(platform, new PackageManager.NameNotFoundException(activity.getString(R.string.umeng_not_installed_hint)));
             return;
         }
         action.setPlatform(platform.getThirdParty())
@@ -92,7 +90,7 @@ public final class UmengClient {
             if (listener == null) {
                 return;
             }
-            listener.onError(platform, new PackageManager.NameNotFoundException("Is not installed"));
+            listener.onLoginFail(platform, new PackageManager.NameNotFoundException(activity.getString(R.string.umeng_not_installed_hint)));
             return;
         }
 

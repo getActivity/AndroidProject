@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.PhoneResetActivity">
+    tools:context=".ui.activity.account.PhoneResetActivity">
 
     <com.hjq.bar.TitleBar
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:drawableStart="@drawable/phone_ic"
         android:drawablePadding="@dimen/dp_15"
         android:hint="@string/common_phone_input_hint"
-        android:inputType="number"
+        android:inputType="phone"
         android:paddingHorizontal="@dimen/dp_20"
         android:paddingVertical="@dimen/dp_18"
         android:singleLine="true"
@@ -46,7 +46,7 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <com.hjq.widget.view.RegexEditText
             android:id="@+id/et_phone_reset_code"
             style="@style/EditTextStyle"
             android:layout_width="0px"
@@ -57,15 +57,17 @@
             android:drawablePadding="@dimen/dp_15"
             android:hint="@string/common_code_input_hint"
             android:imeOptions="actionDone"
-            android:inputType="number"
-            android:maxLength="@integer/sms_code_length"
+            android:inputType="phone"
+            android:maxLength="@integer/sms_code_max_length"
             android:paddingHorizontal="@dimen/dp_20"
             android:paddingVertical="@dimen/dp_18"
-            android:singleLine="true" />
+            android:singleLine="true"
+            app:regexType="number" />
 
         <com.hjq.widget.view.CountdownView
             android:id="@+id/cv_phone_reset_countdown"
-            style="@style/CountdownViewStyle" />
+            style="@style/CountdownViewStyle"
+            android:layout_marginHorizontal="@dimen/dp_15" />
 
     </LinearLayout>
 

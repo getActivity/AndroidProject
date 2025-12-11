@@ -3,7 +3,6 @@ package com.hjq.widget.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -38,10 +37,17 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
     }
 
     /**
+     * 是否正在倒计时
+     */
+    public boolean isRunning() {
+        return mCurrentSecond > 0;
+    }
+
+    /**
      * 设置倒计时总秒数
      */
     public void setTotalTime(int totalTime) {
-        this.mTotalSecond = totalTime;
+        mTotalSecond = totalTime;
     }
 
     /**
@@ -58,6 +64,7 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
      * 结束倒计时
      */
     public void stop() {
+        mCurrentSecond = 0;
         setText(mRecordText);
         setEnabled(true);
     }

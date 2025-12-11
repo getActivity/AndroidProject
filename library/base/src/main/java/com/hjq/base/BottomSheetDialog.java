@@ -12,14 +12,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.AccessibilityDelegateCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 /**
@@ -31,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public final class BottomSheetDialog extends BaseDialog
         implements OnTouchListener, View.OnClickListener {
 
+    @NonNull
     private final BottomSheetBehavior<FrameLayout> mBottomSheetBehavior;
     private boolean mCancelable = true;
     private boolean mCanceledOnTouchOutside = true;
@@ -48,6 +47,7 @@ public final class BottomSheetDialog extends BaseDialog
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,7 @@ public final class BottomSheetDialog extends BaseDialog
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // 隐藏底部导航栏
-        View decorView = getWindow().getDecorView();
+        View decorView = window.getDecorView();
         int uiOptions = decorView.getSystemUiVisibility() |
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -93,10 +93,6 @@ public final class BottomSheetDialog extends BaseDialog
             return;
         }
         mCancelable = cancelable;
-
-        if (mBottomSheetBehavior == null) {
-            return;
-        }
         mBottomSheetBehavior.setHideable(cancelable);
     }
 
@@ -104,7 +100,7 @@ public final class BottomSheetDialog extends BaseDialog
     protected void onStart() {
         super.onStart();
 
-        if (mBottomSheetBehavior == null || mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+        if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
             return;
         }
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -112,7 +108,7 @@ public final class BottomSheetDialog extends BaseDialog
 
     @Override
     public void cancel() {
-        if (mBottomSheetBehavior == null || mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             super.cancel();
             return;
         }

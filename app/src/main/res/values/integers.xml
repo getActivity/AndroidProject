@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Activity 转场动画时间 -->
-    <integer name="activity_anim_duration">200</integer>
 
-    <!-- 短信验证码的长度 -->
-    <integer name="sms_code_length">4</integer>
+    <!-- 短信验证码的最大长度 -->
+    <integer name="sms_code_max_length">4</integer>
+
+    <!-- 登录密码的最大长度 -->
+    <integer name="login_password_max_length">16</integer>
+
 </resources>

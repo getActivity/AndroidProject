@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用的 -->
+    <string name="common_loading">加载中&#8230;</string>
+
+    <string name="common_unknown_error">未知错误</string>
+
+    <string name="common_confirm">确定</string>
+    <string name="common_cancel">取消</string>
+
+    <string name="common_year">年</string>
+    <string name="common_month">月</string>
+    <string name="common_day">日</string>
+
+    <string name="common_hour">时</string>
+    <string name="common_minute">分</string>
+    <string name="common_second">秒</string>
+
+    <string name="common_crash_hint">应用出了点小意外，正在重新启动</string>
+
+    <string name="common_network_error">当前网络不可用，请检查网络设置</string>
+
+    <string name="common_video_error_not_support">该视频不适合在此设备上播放</string>
+    <string name="common_video_error_unknown">无法播放此视频</string>
+    <string name="common_video_error_supplement">错误类型：%d，错误代码：%d</string>
+
+    <string name="common_phone_input_hint">请输入手机号码</string>
+    <string name="common_phone_input_error">手机号输入不正确</string>
+
+    <string name="common_password_input_error">请输入密码</string>
+    <string name="common_password_input_unlike">两次密码输入不一致，请重新输入</string>
+
+    <string name="common_code_input_hint">请输入验证码</string>
+    <string name="common_code_send">发送验证码</string>
+    <string name="common_code_send_hint">验证码已发送，请注意查收</string>
+    <string name="common_code_error_hint">验证码错误，请检查输入</string>
+
+    <string name="common_step_next">下一步</string>
+    <string name="common_step_complete">完成</string>
+    <string name="common_step_commit">提交</string>
+
+    <string name="common_network_hint">当前没有网络连接，请检查网络设置</string>
+    <string name="common_no_more_data">没有更多数据了</string>
+
+    <string name="common_web_ssl_error_type_not_valid">当前网站证书尚未生效</string>
+    <string name="common_web_ssl_error_type_expired">当前网站证书已过期</string>
+    <string name="common_web_ssl_error_type_hostname_mismatch">当前网站证书主机名不匹配</string>
+    <string name="common_web_ssl_error_type_untrusted">当前网站证书颁发机构不受信任</string>
+    <string name="common_web_ssl_error_type_date_invalid">当前网站证书日期无效</string>
+    <string name="common_web_ssl_error_type_invalid">当前网站证书无效</string>
+    <string name="common_web_ssl_error_type_other">当前网站证书已过期或不可信</string>
+    <string name="common_web_ssl_error_inquire">是否继续浏览</string>
+    <string name="common_web_ssl_error_allow">继续浏览</string>
+    <string name="common_web_ssl_error_reject">返回上一页</string>
+
+    <string name="common_web_location_permission_title">当前网站需要获取您的地理位置</string>
+    <string name="common_web_location_permission_allow">授予</string>
+    <string name="common_web_location_permission_reject">拒绝</string>
+
+    <string name="common_web_call_phone_title">当前号码 %s</string>
+    <string name="common_web_call_phone_allow">拨打</string>
+    <string name="common_web_call_phone_reject">取消</string>
+
+    <!-- 状态布局 -->
+    <string name="status_layout_no_data">空空如也</string>
+    <string name="status_layout_error_request">请求出错，请重试</string>
+    <string name="status_layout_error_network">网络错误，请重试</string>
+    <string name="status_layout_retry">重试</string>
+
+    <!-- 地区对话框 -->
+    <string name="address_title">请选择地区</string>
+    <string name="address_hint">请选择</string>
+
+    <!-- 日期对话框 -->
+    <string name="date_title">请选择日期</string>
+
+    <!-- 时间对话框 -->
+    <string name="time_title">请选择时间</string>
+
+    <!-- 分享对话框 -->
+    <string name="share_title">分享到&#8230;</string>
+
+    <string name="share_platform_wechat">微信</string>
+    <string name="share_platform_moment">朋友圈</string>
+    <string name="share_platform_qq">QQ</string>
+    <string name="share_platform_qzone">QQ空间</string>
+    <string name="share_platform_link">复制链接</string>
+
+    <string name="share_platform_copy_hint">已复制到剪贴板</string>
+
+    <!-- 支付密码对话框 -->
+    <string name="pay_title">请输入支付密码</string>
+
+    <!-- 选择对话框 -->
+    <string name="select_min_hint">至少要选择 %d 项</string>
+    <string name="select_max_hint">最多只能选择 %d 项</string>
+
+    <!-- 浏览器 -->
+    <string name="web_title">网页加载中&#8230;</string>
+
+    <!-- 图片选择 -->
+    <string name="image_select_title">图片选择</string>
+    <string name="image_select_all">所有图片</string>
+
+    <string name="image_select_total">共 %d 张</string>
+
+    <string name="image_select_max_hint">本次最多只能选择 %d 张图片</string>
+
+    <string name="image_select_error">无法选中，该图片已经被删除</string>
+
+    <!-- 裁剪图片 -->
+    <string name="image_crop_error_not_support">裁剪失败，当前手机不支持裁剪图片</string>
+
+    <!-- 视频选择 -->
+    <string name="video_select_title">视频选择</string>
+    <string name="video_select_all">所有视频</string>
+
+    <string name="video_select_total">共 %d 个</string>
+
+    <string name="video_select_max_hint">本次最多只能选择 %d 个视频</string>
+
+    <string name="video_select_error">无法选中，该视频已经被删除</string>
+
+    <!-- 拍照和拍摄 -->
+    <string name="camera_launch_fail">无法启动相机</string>
+    <string name="camera_image_error">目标地址错误</string>
+
+</resources>

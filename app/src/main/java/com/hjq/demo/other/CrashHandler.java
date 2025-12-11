@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.annotation.NonNull;
-
-import com.hjq.demo.ui.activity.CrashActivity;
-import com.hjq.demo.ui.activity.RestartActivity;
+import com.hjq.demo.ui.activity.common.CrashActivity;
+import com.hjq.demo.ui.activity.common.RestartActivity;
 
 /**
  *    author : Android 轮子哥
@@ -19,7 +17,7 @@ import com.hjq.demo.ui.activity.RestartActivity;
 public final class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /** Crash 文件名 */
-    private static final String CRASH_FILE_NAME = "crash_file";
+    private static final String CRASH_FILE_NAME = "crash_config";
     /** Crash 时间记录 */
     private static final String KEY_CRASH_TIME = "key_crash_time";
 
@@ -36,7 +34,7 @@ public final class CrashHandler implements Thread.UncaughtExceptionHandler {
     private CrashHandler(Application application) {
         mApplication = application;
         mNextHandler = Thread.getDefaultUncaughtExceptionHandler();
-        if (getClass().getName().equals(mNextHandler.getClass().getName())) {
+        if (mNextHandler != null && getClass().getName().equals(mNextHandler.getClass().getName())) {
             // 请不要重复注册 Crash 监听
             throw new IllegalStateException("are you ok?");
         }
@@ -51,13 +49,13 @@ public final class CrashHandler implements Thread.UncaughtExceptionHandler {
         // 记录当前崩溃的时间，以便下次崩溃时进行比对
         sharedPreferences.edit().putLong(KEY_CRASH_TIME, currentCrashTime).commit();
 
-        // 致命异常标记：如果上次崩溃的时间距离当前崩溃小于 5 分钟，那么判定为致命异常
-        boolean deadlyCrash = currentCrashTime - lastCrashTime < 1000 * 60 * 5;
-
         if (AppConfig.isDebug()) {
-            CrashActivity.start(mApplication, throwable);
+            if (currentCrashTime - lastCrashTime > 1000 * 5) {
+                CrashActivity.start(mApplication, throwable);
+            }
         } else {
-            if (!deadlyCrash) {
+            // 致命异常标记：如果上次崩溃的时间距离当前崩溃小于 5 分钟，那么判定为致命异常
+            if (currentCrashTime - lastCrashTime > 1000 * 60 * 5) {
                 // 如果不是致命的异常就自动重启应用
                 RestartActivity.start(mApplication);
             }

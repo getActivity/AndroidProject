@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#363636"
+    tools:context=".ui.activity.common.ImagePreviewActivity">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_image_preview_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/ci_image_preview_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:visibility="invisible"
+        app:ci_drawable="@drawable/image_preview_indicator"
+        app:ci_height="@dimen/dp_5"
+        app:ci_margin="@dimen/dp_5"
+        app:ci_width="@dimen/dp_5"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_image_preview_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:textColor="@color/panda"
+        android:textSize="@dimen/sp_16"
+        android:visibility="invisible"
+        tools:text="1/10"
+        tools:visibility="visible" />
+
+</FrameLayout>

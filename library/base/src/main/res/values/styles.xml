@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- 对话框默认主题 -->
-    <style name="BaseDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert"><!-- @android:style/Theme.Dialog -->
+    <style name="BaseDialogTheme" parent="Theme.AppCompat.DayNight.Dialog"><!-- @android:style/Theme.Dialog -->
         <!-- 无边框 -->
         <item name="android:windowFrame">@null</item>
         <!-- 浮在 Activity 之上 -->

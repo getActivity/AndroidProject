@@ -3,10 +3,8 @@ package com.hjq.demo.action;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
@@ -18,139 +16,142 @@ import com.hjq.bar.TitleBar;
  */
 public interface TitleBarAction extends OnTitleBarListener {
 
+    /**
+     * 获取标题栏对象
+     */
     @Nullable
     TitleBar getTitleBar();
-
-    /**
-     * 左项被点击
-     *
-     * @param view     被点击的左项View
-     */
-    @Override
-    default void onLeftClick(View view) {}
-
-    /**
-     * 标题被点击
-     *
-     * @param view     被点击的标题View
-     */
-    @Override
-    default void onTitleClick(View view) {}
-
-    /**
-     * 右项被点击
-     *
-     * @param view     被点击的右项View
-     */
-    @Override
-    default void onRightClick(View view) {}
 
     /**
      * 设置标题栏的标题
      */
     default void setTitle(@StringRes int id) {
-        if (getTitleBar() != null) {
-            setTitle(getTitleBar().getResources().getString(id));
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setTitle(id);
     }
 
     /**
      * 设置标题栏的标题
      */
     default void setTitle(CharSequence title) {
-        if (getTitleBar() != null) {
-            getTitleBar().setTitle(title);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setTitle(title);
     }
 
     /**
      * 设置标题栏的左标题
      */
     default void setLeftTitle(int id) {
-        if (getTitleBar() != null) {
-            getTitleBar().setLeftTitle(id);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setLeftTitle(id);
     }
 
     default void setLeftTitle(CharSequence text) {
-        if (getTitleBar() != null) {
-            getTitleBar().setLeftTitle(text);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setLeftTitle(text);
     }
 
     default CharSequence getLeftTitle() {
-        if (getTitleBar() != null) {
-            return getTitleBar().getLeftTitle();
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return "";
         }
-        return "";
+        return titleBar.getLeftTitle();
     }
 
     /**
      * 设置标题栏的右标题
      */
     default void setRightTitle(int id) {
-        if (getTitleBar() != null) {
-            getTitleBar().setRightTitle(id);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setRightTitle(id);
     }
 
     default void setRightTitle(CharSequence text) {
-        if (getTitleBar() != null) {
-            getTitleBar().setRightTitle(text);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setRightTitle(text);
     }
 
     default CharSequence getRightTitle() {
-        if (getTitleBar() != null) {
-            return getTitleBar().getRightTitle();
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return "";
         }
-        return "";
+        return titleBar.getRightTitle();
     }
 
     /**
      * 设置标题栏的左图标
      */
     default void setLeftIcon(int id) {
-        if (getTitleBar() != null) {
-            getTitleBar().setLeftIcon(id);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setLeftIcon(id);
     }
 
     default void setLeftIcon(Drawable drawable) {
-        if (getTitleBar() != null) {
-            getTitleBar().setLeftIcon(drawable);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setLeftIcon(drawable);
     }
 
     @Nullable
     default Drawable getLeftIcon() {
-        if (getTitleBar() != null) {
-            return getTitleBar().getLeftIcon();
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return null;
         }
-        return null;
+        return titleBar.getLeftIcon();
     }
 
     /**
      * 设置标题栏的右图标
      */
     default void setRightIcon(int id) {
-        if (getTitleBar() != null) {
-            getTitleBar().setRightIcon(id);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setRightIcon(id);
     }
 
     default void setRightIcon(Drawable drawable) {
-        if (getTitleBar() != null) {
-            getTitleBar().setRightIcon(drawable);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return;
         }
+        titleBar.setRightIcon(drawable);
     }
 
     @Nullable
     default Drawable getRightIcon() {
-        if (getTitleBar() != null) {
-            return getTitleBar().getRightIcon();
+        TitleBar titleBar = getTitleBar();
+        if (titleBar == null) {
+            return null;
         }
-        return null;
+        return titleBar.getRightIcon();
     }
 
     /**

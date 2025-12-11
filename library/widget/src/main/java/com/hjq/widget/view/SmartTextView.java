@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -52,8 +51,10 @@ public final class SmartTextView extends AppCompatTextView {
      */
     private void refreshVisibilityStatus() {
         // 判断当前有没有设置文本达到自动隐藏和显示的效果
-        if (isEmptyContent() && getVisibility() != GONE) {
-            setVisibility(GONE);
+        if (isEmptyContent()) {
+            if (getVisibility() != GONE) {
+                setVisibility(GONE);
+            }
             return;
         }
 

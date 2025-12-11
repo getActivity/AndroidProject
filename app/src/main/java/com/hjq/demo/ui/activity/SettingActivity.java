@@ -2,7 +2,7 @@ package com.hjq.demo.ui.activity;
 
 import android.view.Gravity;
 import android.view.View;
-
+import androidx.annotation.NonNull;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
@@ -14,11 +14,15 @@ import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.manager.CacheDataManager;
 import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.other.AppConfig;
-import com.hjq.demo.ui.dialog.MenuDialog;
+import com.hjq.demo.ui.activity.account.LoginActivity;
+import com.hjq.demo.ui.activity.account.PasswordResetActivity;
+import com.hjq.demo.ui.activity.account.PhoneResetActivity;
+import com.hjq.demo.ui.activity.common.BrowserActivity;
 import com.hjq.demo.ui.dialog.SafeDialog;
 import com.hjq.demo.ui.dialog.UpdateDialog;
+import com.hjq.demo.ui.dialog.common.MenuDialog;
 import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.listener.HttpCallbackProxy;
 import com.hjq.widget.layout.SettingBar;
 import com.hjq.widget.view.SwitchButton;
 
@@ -81,7 +85,7 @@ public final class SettingActivity extends AppActivity
                     .setList(R.string.setting_language_simple, R.string.setting_language_complex)
                     .setListener((MenuDialog.OnListener<String>) (dialog, position, string) -> {
                         mLanguageView.setRightText(string);
-                        BrowserActivity.start(getActivity(), "https://github.com/getActivity/MultiLanguages");
+                        BrowserActivity.start(SettingActivity.this, "https://github.com/getActivity/MultiLanguages");
                     })
                     .setGravity(Gravity.BOTTOM)
                     .setAnimStyle(BaseDialog.ANIM_BOTTOM)
@@ -95,8 +99,8 @@ public final class SettingActivity extends AppActivity
                         .setVersionName("2.0")
                         .setForceUpdate(false)
                         .setUpdateLog("修复Bug\n优化用户体验")
-                        .setDownloadUrl("https://down.qq.com/qqweb/QQ_1/android_apk/Android_8.5.0.5025_537066738.apk")
-                        .setFileMd5("560017dc94e8f9b65f4ca997c7feb326")
+                        .setDownloadUrl("https://dldir1.qq.com/weixin/android/weixin8015android2020_arm64.apk")
+                        .setFileMd5("b05b25d4738ea31091dd9f80f4416469")
                         .show();
             } else {
                 toast(R.string.update_no_update);
@@ -105,13 +109,13 @@ public final class SettingActivity extends AppActivity
         } else if (viewId == R.id.sb_setting_phone) {
 
             new SafeDialog.Builder(this)
-                    .setListener((dialog, phone, code) -> PhoneResetActivity.start(getActivity(), code))
+                    .setListener((dialog, phone, code) -> PhoneResetActivity.start(this, code))
                     .show();
 
         } else if (viewId == R.id.sb_setting_password) {
 
             new SafeDialog.Builder(this)
-                    .setListener((dialog, phone, code) -> PasswordResetActivity.start(getActivity(), phone, code))
+                    .setListener((dialog, phone, code) -> PasswordResetActivity.start(this, phone, code))
                     .show();
 
         } else if (viewId == R.id.sb_setting_agreement) {
@@ -130,14 +134,14 @@ public final class SettingActivity extends AppActivity
         } else if (viewId == R.id.sb_setting_cache) {
 
             // 清除内存缓存（必须在主线程）
-            GlideApp.get(getActivity()).clearMemory();
+            GlideApp.get(this).clearMemory();
             ThreadPoolManager.getInstance().execute(() -> {
                 CacheDataManager.clearAllCache(this);
                 // 清除本地缓存（必须在子线程）
-                GlideApp.get(getActivity()).clearDiskCache();
+                GlideApp.get(SettingActivity.this).clearDiskCache();
                 post(() -> {
                     // 重新获取应用缓存大小
-                    mCleanCacheView.setRightText(CacheDataManager.getTotalCacheSize(getActivity()));
+                    mCleanCacheView.setRightText(CacheDataManager.getTotalCacheSize(SettingActivity.this));
                 });
             });
 
@@ -153,10 +157,10 @@ public final class SettingActivity extends AppActivity
             // 退出登录
             EasyHttp.post(this)
                     .api(new LogoutApi())
-                    .request(new HttpCallback<HttpData<Void>>(this) {
+                    .request(new HttpCallbackProxy<HttpData<Void>>(this) {
 
                         @Override
-                        public void onSucceed(HttpData<Void> data) {
+                        public void onHttpSuccess(@NonNull HttpData<Void> data) {
                             startActivity(LoginActivity.class);
                             // 进行内存优化，销毁除登录页之外的所有界面
                             ActivityManager.getInstance().finishAllActivities(LoginActivity.class);

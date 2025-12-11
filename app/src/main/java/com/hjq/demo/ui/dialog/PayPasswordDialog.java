@@ -5,20 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.widget.PasswordView;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -90,7 +87,7 @@ public final class PayPasswordDialog {
         }
 
         public Builder setMoney(@StringRes int id) {
-            return setSubTitle(getString(id));
+            return setMoney(getString(id));
         }
 
         public Builder setMoney(CharSequence money) {
@@ -195,18 +192,18 @@ public final class PayPasswordDialog {
 
         @NonNull
         @Override
-        public AppAdapter<?>.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             switch (viewType) {
                 case TYPE_DELETE:
-                    return new AppAdapter<?>.SimpleHolder(R.layout.pay_password_delete_item);
+                    return new SimpleViewHolder(R.layout.pay_password_delete_item);
                 case TYPE_EMPTY:
-                    return new AppAdapter<?>.SimpleHolder(R.layout.pay_password_empty_item);
+                    return new SimpleViewHolder(R.layout.pay_password_empty_item);
                 default:
                     return new KeyboardAdapter.ViewHolder();
             }
         }
 
-        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
+        private final class ViewHolder extends AppViewHolder {
 
             private final TextView mTextView;
 

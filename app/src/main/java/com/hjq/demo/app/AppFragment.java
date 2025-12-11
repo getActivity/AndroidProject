@@ -1,11 +1,11 @@
 package com.hjq.demo.app;
 
+import androidx.annotation.NonNull;
 import com.hjq.base.BaseFragment;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
+import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.OnHttpListener;
-
-import okhttp3.Call;
 
 /**
  *    author : Android 轮子哥
@@ -30,23 +30,23 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
     /**
      * 显示加载对话框
      */
-    public void showDialog() {
+    public void showLoadingDialog() {
         A activity = getAttachActivity();
         if (activity == null) {
             return;
         }
-        activity.showDialog();
+        activity.showLoadingDialog();
     }
 
     /**
      * 隐藏加载对话框
      */
-    public void hideDialog() {
+    public void hideLoadingDialog() {
         A activity = getAttachActivity();
         if (activity == null) {
             return;
         }
-        activity.hideDialog();
+        activity.hideLoadingDialog();
     }
 
     /**
@@ -54,12 +54,12 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
      */
 
     @Override
-    public void onStart(Call call) {
-        showDialog();
+    public void onHttpStart(@NonNull IRequestApi api) {
+        showLoadingDialog();
     }
 
     @Override
-    public void onSucceed(Object result) {
+    public void onHttpSuccess(@NonNull Object result) {
         if (!(result instanceof HttpData)) {
             return;
         }
@@ -67,12 +67,12 @@ public abstract class AppFragment<A extends AppActivity> extends BaseFragment<A>
     }
 
     @Override
-    public void onFail(Exception e) {
-        toast(e.getMessage());
+    public void onHttpFail(@NonNull Throwable throwable) {
+        toast(throwable.getMessage());
     }
 
     @Override
-    public void onEnd(Call call) {
-        hideDialog();
+    public void onHttpEnd(@NonNull IRequestApi api) {
+        hideLoadingDialog();
     }
 }

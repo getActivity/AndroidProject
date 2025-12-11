@@ -39,21 +39,6 @@ public interface KeyboardAction {
         if (manager == null) {
             return;
         }
-        manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    /**
-     * 切换软键盘
-     */
-    default void toggleSoftInput(View view) {
-        if (view == null) {
-            return;
-        }
-        InputMethodManager manager = (InputMethodManager) view.getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (manager == null) {
-            return;
-        }
-        manager.toggleSoftInput(0, 0);
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.widget.layout.SimpleLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sl_select_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_15" >
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_select_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.dialog.common.SelectDialog"
+        tools:itemCount="5"
+        tools:listitem="@layout/select_item" />
+
+</com.hjq.widget.layout.SimpleLayout>

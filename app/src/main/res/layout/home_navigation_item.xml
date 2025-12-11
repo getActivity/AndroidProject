@@ -6,14 +6,14 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingVertical="@dimen/dp_5"
-    tools:context=".ui.adapter.NavigationAdapter">
+    android:paddingVertical="@dimen/dp_7"
+    tools:context=".ui.adapter.common.NavigationAdapter">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_home_navigation_icon"
         android:layout_width="@dimen/dp_22"
         android:layout_height="@dimen/dp_22"
-        tools:srcCompat="@drawable/home_home_selector" />
+        tools:srcCompat="@drawable/home_main_selector" />
 
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/tv_home_navigation_title"
@@ -23,6 +23,6 @@
         android:textSize="@dimen/sp_12"
         app:shape_textColor="#A4A4A4"
         app:shape_textSelectedColor="@color/black"
-        tools:text="@string/home_nav_index" />
+        tools:text="@string/home_nav_main" />
 
 </LinearLayout>

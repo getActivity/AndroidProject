@@ -2,7 +2,6 @@ package com.hjq.demo.manager;
 
 import android.content.Context;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public final class PickerLayoutManager extends LinearLayoutManager {
 
     private final LinearSnapHelper mLinearSnapHelper;
-    private final int mOrientation;
     private final int mMaxItem;
     private final float mScale;
     private final boolean mAlpha;
@@ -32,7 +30,6 @@ public final class PickerLayoutManager extends LinearLayoutManager {
         super(context, orientation, reverseLayout);
         mLinearSnapHelper = new LinearSnapHelper();
         mMaxItem = maxItem;
-        mOrientation = orientation;
         mAlpha = alpha;
         mScale = scale;
     }
@@ -72,12 +69,12 @@ public final class PickerLayoutManager extends LinearLayoutManager {
             View itemView = recycler.getViewForPosition(0);
             measureChildWithMargins(itemView, widthSpec, heightSpec);
 
-            if (mOrientation == HORIZONTAL) {
+            if (getOrientation() == HORIZONTAL) {
                 int measuredWidth = itemView.getMeasuredWidth();
                 int paddingHorizontal = (mMaxItem - 1) / 2 * measuredWidth;
                 mRecyclerView.setPadding(paddingHorizontal,0, paddingHorizontal,0);
                 width = measuredWidth * mMaxItem;
-            } else if (mOrientation == VERTICAL) {
+            } else if (getOrientation() == VERTICAL) {
                 int measuredHeight = itemView.getMeasuredHeight();
                 int paddingVertical = (mMaxItem - 1) / 2 * measuredHeight;
                 mRecyclerView.setPadding(0, paddingVertical,0, paddingVertical);
@@ -107,9 +104,9 @@ public final class PickerLayoutManager extends LinearLayoutManager {
             return;
         }
 
-        if (mOrientation == HORIZONTAL) {
+        if (getOrientation() == HORIZONTAL) {
             scaleHorizontalChildView();
-        } else if (mOrientation == VERTICAL) {
+        } else if (getOrientation() == VERTICAL) {
             scaleVerticalChildView();
         }
     }
@@ -171,7 +168,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
      */
     public int getPickedPosition() {
         View itemView = mLinearSnapHelper.findSnapView(this);
-        if(itemView == null) {
+        if (itemView == null) {
             return 0;
         }
         return getPosition(itemView);

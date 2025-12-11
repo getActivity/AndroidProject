@@ -14,11 +14,10 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+import androidx.core.content.ContextCompat;
 import com.hjq.demo.R;
 
 /**
@@ -31,20 +30,15 @@ import com.hjq.demo.R;
 public final class ArrowDrawable extends Drawable {
 
     private final Builder mBuilder;
-    private final Paint mPaint;
+    private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Path mPath;
 
     private ArrowDrawable(Builder builder) {
         mBuilder = builder;
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setAntiAlias(true);
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (mPath == null) {
-            return;
-        }
         if (mBuilder.mShadowSize > 0) {
             mPaint.setMaskFilter(new BlurMaskFilter(mBuilder.mShadowSize, BlurMaskFilter.Blur.OUTER));
             mPaint.setColor(mBuilder.mShadowColor);
@@ -205,8 +199,8 @@ public final class ArrowDrawable extends Drawable {
 
         public Builder(Context context) {
             mContext = context;
-            mBackgroundColor = 0xFF000000;
-            mShadowColor = 0x33000000;
+            mBackgroundColor = ContextCompat.getColor(context, R.color.black);
+            mShadowColor = ContextCompat.getColor(context, R.color.black20);
             mArrowHeight = (int) context.getResources().getDimension(R.dimen.dp_6);
             mRadius = (int) context.getResources().getDimension(R.dimen.dp_4);
             mShadowSize = 0;

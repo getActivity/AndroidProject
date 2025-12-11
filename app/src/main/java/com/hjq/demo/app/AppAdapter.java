@@ -1,15 +1,15 @@
 package com.hjq.demo.app;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
-
 import androidx.annotation.IntRange;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.base.BaseAdapter;
-
+import com.hjq.widget.layout.WrapRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +20,18 @@ import java.util.List;
  *    time   : 2018/12/19
  *    desc   : RecyclerView 适配器业务基类
  */
-public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolder> {
+public abstract class AppAdapter<T> extends BaseAdapter<AppAdapter<T>.AppViewHolder> {
 
     /** 列表数据 */
-    private List<T> mDataSet;
+    @NonNull
+    private List<T> mDataSet = new ArrayList<>();
+
     /** 当前列表的页码，默认为第一页，用于分页加载功能 */
     private int mPageNumber = 1;
+
     /** 是否是最后一页，默认为false，用于分页加载功能 */
     private boolean mLastPage;
+
     /** 标记对象 */
     private Object mTag;
 
@@ -44,24 +48,26 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
      * 获取数据总数
      */
     public int getCount() {
-        if (mDataSet == null) {
-            return 0;
-        }
         return mDataSet.size();
     }
 
     /**
      * 设置新的数据
      */
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(@Nullable List<T> data) {
-        mDataSet = data;
+        if (data == null) {
+            mDataSet.clear();
+        } else {
+            mDataSet = data;
+        }
         notifyDataSetChanged();
     }
 
     /**
      * 获取当前数据
      */
-    @Nullable
+    @NonNull
     public List<T> getData() {
         return mDataSet;
     }
@@ -70,12 +76,7 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
      * 追加一些数据
      */
     public void addData(List<T> data) {
-        if (data == null || data.size() == 0) {
-            return;
-        }
-
-        if (mDataSet == null || mDataSet.size() == 0) {
-            setData(data);
+        if (data == null || data.isEmpty()) {
             return;
         }
 
@@ -86,11 +87,8 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
     /**
      * 清空当前数据
      */
+    @SuppressLint("NotifyDataSetChanged")
     public void clearData() {
-        if (mDataSet == null || mDataSet.size() == 0) {
-            return;
-        }
-
         mDataSet.clear();
         notifyDataSetChanged();
     }
@@ -106,7 +104,7 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
      * 是否包含某个条目数据
      */
     public boolean containsItem(T item) {
-        if (mDataSet == null || item == null) {
+        if (item == null) {
             return false;
         }
         return mDataSet.contains(item);
@@ -116,9 +114,6 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
      * 获取某个位置上的数据
      */
     public T getItem(@IntRange(from = 0) int position) {
-        if (mDataSet == null) {
-            return null;
-        }
         return mDataSet.get(position);
     }
 
@@ -126,9 +121,6 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
      * 更新某个位置上的数据
      */
     public void setItem(@IntRange(from = 0) int position, @NonNull T item) {
-        if (mDataSet == null) {
-            mDataSet = new ArrayList<>();
-        }
         mDataSet.set(position, item);
         notifyItemChanged(position);
     }
@@ -137,17 +129,10 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
      * 添加单条数据
      */
     public void addItem(@NonNull T item) {
-        if (mDataSet == null) {
-            mDataSet = new ArrayList<>();
-        }
         addItem(mDataSet.size(), item);
     }
 
     public void addItem(@IntRange(from = 0) int position, @NonNull T item) {
-        if (mDataSet == null) {
-            mDataSet = new ArrayList<>();
-        }
-
         if (position < mDataSet.size()) {
             mDataSet.add(position, item);
         } else {
@@ -196,8 +181,8 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
     /**
      * 设置是否为最后一页
      */
-    public void setLastPage(boolean last) {
-        mLastPage = last;
+    public void setLastPage(boolean lastPage) {
+        mLastPage = lastPage;
     }
 
     /**
@@ -215,13 +200,35 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
         mTag = tag;
     }
 
-    public final class SimpleHolder extends ViewHolder {
+    public abstract class AppViewHolder extends BaseAdapter<?>.BaseViewHolder {
 
-        public SimpleHolder(@LayoutRes int id) {
+        public AppViewHolder(@LayoutRes int id) {
             super(id);
         }
 
-        public SimpleHolder(View itemView) {
+        public AppViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        protected int getViewHolderPosition() {
+            int position = super.getViewHolderPosition();
+            RecyclerView recyclerView = getRecyclerView();
+            if (recyclerView instanceof WrapRecyclerView) {
+                // 这里要减去头部的数量
+                position -= ((WrapRecyclerView) recyclerView).getHeaderViewsCount();
+            }
+            return position;
+        }
+    }
+
+    public final class SimpleViewHolder extends AppViewHolder {
+
+        public SimpleViewHolder(@LayoutRes int id) {
+            super(id);
+        }
+
+        public SimpleViewHolder(View itemView) {
             super(itemView);
         }
 

@@ -1,5 +1,6 @@
 package com.hjq.demo.http.api;
 
+import androidx.annotation.NonNull;
 import com.hjq.http.config.IRequestApi;
 
 /**
@@ -10,6 +11,7 @@ import com.hjq.http.config.IRequestApi;
  */
 public final class PhoneApi implements IRequestApi {
 
+    @NonNull
     @Override
     public String getApi() {
         return "user/phone";

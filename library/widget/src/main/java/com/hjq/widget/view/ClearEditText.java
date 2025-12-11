@@ -3,15 +3,14 @@ package com.hjq.widget.view;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-
 import com.hjq.widget.R;
 
 /**
@@ -81,11 +80,7 @@ public final class ClearEditText extends RegexEditText
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
-        if (hasFocus && getText() != null) {
-            setDrawableVisible(getText().length() > 0);
-        } else {
-            setDrawableVisible(false);
-        }
+        setDrawableVisible(hasFocus && !TextUtils.isEmpty(getText()));
         if (mFocusChangeListener != null) {
             mFocusChangeListener.onFocusChange(view, hasFocus);
         }

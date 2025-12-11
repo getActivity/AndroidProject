@@ -4,18 +4,18 @@ import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.http.api.GetCodeApi;
 import com.hjq.demo.http.api.VerifyCodeApi;
 import com.hjq.demo.http.model.HttpData;
+import com.hjq.demo.ui.dialog.common.StyleDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnHttpListener;
-import com.hjq.toast.ToastUtils;
+import com.hjq.toast.Toaster;
 import com.hjq.widget.view.CountdownView;
 
 /**
@@ -27,7 +27,7 @@ import com.hjq.widget.view.CountdownView;
 public final class SafeDialog {
 
     public static final class Builder
-            extends CommonDialog.Builder<Builder> {
+            extends StyleDialog.Builder<Builder> {
 
         private final TextView mPhoneView;
         private final EditText mCodeView;
@@ -69,7 +69,7 @@ public final class SafeDialog {
             int viewId = view.getId();
             if (viewId == R.id.cv_safe_countdown) {
                 if (true) {
-                    ToastUtils.show(R.string.common_code_send_hint);
+                    Toaster.show(R.string.common_code_send_hint);
                     mCountdownView.start();
                     setCancelable(false);
                     return;
@@ -82,25 +82,25 @@ public final class SafeDialog {
                         .request(new OnHttpListener<HttpData<Void>>() {
 
                             @Override
-                            public void onSucceed(HttpData<Void> data) {
-                                ToastUtils.show(R.string.common_code_send_hint);
+                            public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                                Toaster.show(R.string.common_code_send_hint);
                                 mCountdownView.start();
                                 setCancelable(false);
                             }
 
                             @Override
-                            public void onFail(Exception e) {
-                                ToastUtils.show(e.getMessage());
+                            public void onHttpFail(@NonNull Throwable throwable) {
+                                Toaster.show(throwable.getMessage());
                             }
                         });
             } else if (viewId == R.id.tv_ui_confirm) {
-                if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_length)) {
-                    ToastUtils.show(R.string.common_code_error_hint);
+                if (mCodeView.getText().toString().length() != getResources().getInteger(R.integer.sms_code_max_length)) {
+                    Toaster.show(R.string.common_code_error_hint);
                     return;
                 }
 
                 if (true) {
-                    autoDismiss();
+                    performClickDismiss();
                     if (mListener == null) {
                         return;
                     }
@@ -116,8 +116,8 @@ public final class SafeDialog {
                         .request(new OnHttpListener<HttpData<Void>>() {
 
                             @Override
-                            public void onSucceed(HttpData<Void> data) {
-                                autoDismiss();
+                            public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                                performClickDismiss();
                                 if (mListener == null) {
                                     return;
                                 }
@@ -125,12 +125,12 @@ public final class SafeDialog {
                             }
 
                             @Override
-                            public void onFail(Exception e) {
-                                ToastUtils.show(e.getMessage());
+                            public void onHttpFail(@NonNull Throwable throwable) {
+                                Toaster.show(throwable.getMessage());
                             }
                         });
             } else if (viewId == R.id.tv_ui_cancel) {
-                autoDismiss();
+                performClickDismiss();
                 if (mListener == null) {
                     return;
                 }

@@ -1,18 +1,17 @@
 package com.hjq.widget.layout;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import java.util.List;
  *    desc   : 支持添加头部和底部的 RecyclerView
  */
 @SuppressWarnings("rawtypes")
+@SuppressLint("NotifyDataSetChanged")
 public final class WrapRecyclerView extends RecyclerView {
 
     /** 原有的适配器 */
@@ -248,12 +248,12 @@ public final class WrapRecyclerView extends RecyclerView {
                 case FOOTER_VIEW_TYPE:
                     return newWrapViewHolder(mFooterViews.get(getPosition() - getHeaderViewsCount() - (mRealAdapter != null ? mRealAdapter.getItemCount() : 0)));
                 default:
+                    if (mRealAdapter == null) {
+                        return null;
+                    }
                     int itemViewType = mRealAdapter.getItemViewType(getPosition() - getHeaderViewsCount());
                     if (itemViewType == HEADER_VIEW_TYPE || itemViewType == FOOTER_VIEW_TYPE) {
                         throw new IllegalStateException("Please do not use this type as itemType");
-                    }
-                    if (mRealAdapter == null) {
-                        return null;
                     }
                     return mRealAdapter.onCreateViewHolder(parent, itemViewType);
             }
@@ -329,7 +329,7 @@ public final class WrapRecyclerView extends RecyclerView {
         @SuppressWarnings("unchecked")
         @Override
         public boolean onFailedToRecycleView(@NonNull ViewHolder holder) {
-            if (mRealAdapter == null) {
+            if (mRealAdapter == null || holder instanceof WrapViewHolder) {
                 return super.onFailedToRecycleView(holder);
             }
             return mRealAdapter.onFailedToRecycleView(holder);
@@ -338,7 +338,7 @@ public final class WrapRecyclerView extends RecyclerView {
         @SuppressWarnings("unchecked")
         @Override
         public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-            if (mRealAdapter == null) {
+            if (mRealAdapter == null || holder instanceof WrapViewHolder) {
                 return;
             }
             mRealAdapter.onViewAttachedToWindow(holder);
@@ -347,7 +347,7 @@ public final class WrapRecyclerView extends RecyclerView {
         @SuppressWarnings("unchecked")
         @Override
         public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-            if (mRealAdapter == null) {
+            if (mRealAdapter == null || holder instanceof WrapViewHolder) {
                 return;
             }
             mRealAdapter.onViewDetachedFromWindow(holder);

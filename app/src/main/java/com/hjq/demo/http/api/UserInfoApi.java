@@ -15,7 +15,7 @@ public final class UserInfoApi implements IRequestApi {
         return "user/info";
     }
 
-    public final class Bean {
+    public final static class Bean {
 
     }
 }

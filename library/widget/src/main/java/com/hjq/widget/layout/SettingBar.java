@@ -2,11 +2,14 @@ package com.hjq.widget.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -15,14 +18,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
-
 import com.hjq.widget.R;
 
 /**
@@ -67,15 +68,16 @@ public final class SettingBar extends FrameLayout {
         mRightView = new TextView(getContext());
         mLineView  = new View(getContext());
 
-        mMainLayout.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
+        mMainLayout.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 
-        LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT);
         leftParams.gravity = Gravity.CENTER_VERTICAL;
+        leftParams.weight = 1;
         mLeftView.setLayoutParams(leftParams);
 
-        LinearLayout.LayoutParams rightParams = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams rightParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         rightParams.gravity = Gravity.CENTER_VERTICAL;
-        rightParams.weight = 1;
         mRightView.setLayoutParams(rightParams);
 
         mLineView.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1, Gravity.BOTTOM));
@@ -132,7 +134,7 @@ public final class SettingBar extends FrameLayout {
 
         // 图标着色器
         if (array.hasValue(R.styleable.SettingBar_bar_leftDrawableTint)) {
-            setLeftDraawbleTint(array.getColor(R.styleable.SettingBar_bar_leftDrawableTint, NO_COLOR));
+            setLeftDrawableTint(array.getColor(R.styleable.SettingBar_bar_leftDrawableTint, NO_COLOR));
         }
 
         if (array.hasValue(R.styleable.SettingBar_bar_rightDrawableTint)) {
@@ -168,7 +170,7 @@ public final class SettingBar extends FrameLayout {
         if (array.hasValue(R.styleable.SettingBar_bar_lineDrawable)) {
             setLineDrawable(array.getDrawable(R.styleable.SettingBar_bar_lineDrawable));
         } else {
-            setLineDrawable(new ColorDrawable(0xFFECECEC));
+            setLineDrawable(new ColorDrawable(Color.parseColor("#ECECEC")));
         }
 
         if (array.hasValue(R.styleable.SettingBar_bar_lineVisible)) {
@@ -203,6 +205,16 @@ public final class SettingBar extends FrameLayout {
 
         addView(mMainLayout, 0);
         addView(mLineView, 1);
+
+        mMainLayout.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                v.removeOnLayoutChangeListener(this);
+                // 限制右边 View 的宽度，避免文本过长挤掉左边 View
+                mRightView.setMaxWidth((right - left) / 3 * 2);
+            }
+        });
     }
 
     /**
@@ -273,7 +285,7 @@ public final class SettingBar extends FrameLayout {
     public SettingBar setLeftDrawable(Drawable drawable) {
         mLeftView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         setLeftDrawableSize(mLeftDrawableSize);
-        setLeftDraawbleTint(mLeftDrawableTint);
+        setLeftDrawableTint(mLeftDrawableTint);
         return this;
     }
 
@@ -353,12 +365,16 @@ public final class SettingBar extends FrameLayout {
     /**
      * 设置左边的图标着色器
      */
-    public SettingBar setLeftDraawbleTint(int color) {
+    public SettingBar setLeftDrawableTint(int color) {
         mLeftDrawableTint = color;
         Drawable drawable = getLeftDrawable();
         if (drawable != null && color != NO_COLOR) {
             drawable.mutate();
-            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                drawable.setColorFilter(new BlendModeColorFilter(color, BlendMode.SRC_IN));
+            } else {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
         }
         return this;
     }
@@ -371,7 +387,11 @@ public final class SettingBar extends FrameLayout {
         Drawable drawable = getRightDrawable();
         if (drawable != null && color != NO_COLOR) {
             drawable.mutate();
-            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                drawable.setColorFilter(new BlendModeColorFilter(color, BlendMode.SRC_IN));
+            } else {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            }
         }
         return this;
     }

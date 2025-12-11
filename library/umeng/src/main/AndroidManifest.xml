@@ -44,6 +44,7 @@
         <!-- QQ 回调 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:noHistory="true"
             tools:node="replace">
@@ -62,6 +63,17 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:node="replace" />
+
+        <!-- 微信回调（使用狸猫换太子） -->
+        <activity android:name="com.hjq.umeng.WXEntryActivity" />
+        <activity-alias
+            android:name="${applicationId}.wxapi.WXEntryActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:targetActivity="com.hjq.umeng.WXEntryActivity"
+            android:taskAffinity="${applicationId}"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
     </application>
 

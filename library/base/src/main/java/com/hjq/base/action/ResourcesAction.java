@@ -3,7 +3,6 @@ package com.hjq.base.action;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;

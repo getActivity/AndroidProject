@@ -1,0 +1,65 @@
+name: 提出疑问
+description: 提出你的困惑，我会给你解答
+title: "[疑惑]："
+labels: ["question"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## [【警告：请务必按照 issue 模板填写，不要抱有侥幸心理，一旦发现 issue 没有按照模板认真填写，一律直接关闭】](https://github.com/getActivity/IssueTemplateGuide)
+  - type: textarea
+    id: input_id_1
+    attributes:
+      label: 问题描述【必填】
+      description: 请描述一下你的问题（注意：如果确定是框架 bug 请不要在这里提，否则一概不受理）
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_2
+    attributes:
+      label: 框架文档是否提及了该问题【必答】
+      description: 文档会提供最常见的问题解答，可以先看看是否有自己想要的
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_3
+    attributes:
+      label: 是否已经查阅框架文档但还未能解决的【必答】
+      description: 如果查阅了文档但还是没有解决的话，可以选择是
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_4
+    attributes:
+      label: issue 列表中是否有人曾提过类似的问题【必答】
+      description: 可以在 issue 列表在搜索问题关键字，参考一下别人的解决方案
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_5
+    attributes:
+      label: 是否已经搜索过了 issue 列表但还未能解决的【必答】
+      description: 如果搜索过了 issue 列表但是问题没有解决的话，可以选择是
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true

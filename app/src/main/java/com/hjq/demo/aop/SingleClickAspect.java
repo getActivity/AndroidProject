@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
-
 import timber.log.Timber;
 
 /**
@@ -14,6 +13,7 @@ import timber.log.Timber;
  *    time   : 2019/12/06
  *    desc   : 防重复点击切面
  */
+@SuppressWarnings("unused")
 @Aspect
 public class SingleClickAspect {
 

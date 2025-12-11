@@ -4,12 +4,10 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
-
 import com.hjq.demo.R;
 import com.hjq.demo.widget.StatusLayout;
 
@@ -35,6 +33,9 @@ public interface StatusAction {
 
     default void showLoading(@RawRes int id) {
         StatusLayout layout = getStatusLayout();
+        if (layout == null) {
+            return;
+        }
         layout.show();
         layout.setAnimResource(id);
         layout.setHint("");
@@ -64,13 +65,16 @@ public interface StatusAction {
      */
     default void showError(StatusLayout.OnRetryListener listener) {
         StatusLayout layout = getStatusLayout();
+        if (layout == null) {
+            return;
+        }
         Context context = layout.getContext();
         ConnectivityManager manager = ContextCompat.getSystemService(context, ConnectivityManager.class);
         if (manager != null) {
             NetworkInfo info = manager.getActiveNetworkInfo();
             // 判断网络是否连接
             if (info == null || !info.isConnected()) {
-                showLayout(R.drawable.status_nerwork_ic, R.string.status_layout_error_network, listener);
+                showLayout(R.drawable.status_network_ic, R.string.status_layout_error_network, listener);
                 return;
             }
         }
@@ -82,12 +86,18 @@ public interface StatusAction {
      */
     default void showLayout(@DrawableRes int drawableId, @StringRes int stringId, StatusLayout.OnRetryListener listener) {
         StatusLayout layout = getStatusLayout();
+        if (layout == null) {
+            return;
+        }
         Context context = layout.getContext();
         showLayout(ContextCompat.getDrawable(context, drawableId), context.getString(stringId), listener);
     }
 
     default void showLayout(Drawable drawable, CharSequence hint, StatusLayout.OnRetryListener listener) {
         StatusLayout layout = getStatusLayout();
+        if (layout == null) {
+            return;
+        }
         layout.show();
         layout.setIcon(drawable);
         layout.setHint(hint);

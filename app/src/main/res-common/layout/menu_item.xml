@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    tools:context=".ui.dialog.common.MenuDialog">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_menu_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent_selector"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/dp_15"
+        android:paddingVertical="@dimen/dp_13"
+        android:singleLine="true"
+        android:textColor="@color/common_confirm_text_color"
+        android:textSize="@dimen/sp_14"
+        tools:text="条目" />
+
+    <View
+        android:id="@+id/v_menu_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_size"
+        android:layout_gravity="bottom"
+        android:background="@color/common_line_color" />
+
+</FrameLayout>

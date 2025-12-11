@@ -17,6 +17,7 @@ import androidx.lifecycle.Lifecycle;
 import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
+import com.hjq.base.action.FixOrientationAction;
 import com.hjq.base.action.HandlerAction;
 import com.hjq.base.action.KeyboardAction;
 
@@ -30,8 +31,8 @@ import java.util.Random;
  *    desc   : Activity 技术基类
  */
 public abstract class BaseActivity extends AppCompatActivity
-        implements ActivityAction, ClickAction,
-        HandlerAction, BundleAction, KeyboardAction {
+        implements ActivityAction, ClickAction, HandlerAction,
+        BundleAction, KeyboardAction, FixOrientationAction {
 
     /** 错误结果码 */
     public static final int RESULT_ERROR = -2;
@@ -41,6 +42,9 @@ public abstract class BaseActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!isAllowOrientation(this)) {
+            fixScreenOrientation(this);
+        }
         super.onCreate(savedInstanceState);
         initActivity();
     }
@@ -89,8 +93,8 @@ public abstract class BaseActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         removeCallbacks();
+        super.onDestroy();
     }
 
     @Override
@@ -125,6 +129,14 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void setRequestedOrientation(int requestedOrientation) {
+        if (!isAllowOrientation(this)) {
+            return;
+        }
+        super.setRequestedOrientation(requestedOrientation);
     }
 
     @Override

@@ -4,24 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.gyf.immersionbar.ImmersionBar;
-import com.hjq.base.FragmentPagerAdapter;
+import com.hjq.base.BasePagerAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.app.AppFragment;
 import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.other.DoubleClickHelper;
-import com.hjq.demo.ui.adapter.NavigationAdapter;
-import com.hjq.demo.ui.fragment.FindFragment;
-import com.hjq.demo.ui.fragment.HomeFragment;
-import com.hjq.demo.ui.fragment.MessageFragment;
-import com.hjq.demo.ui.fragment.MineFragment;
+import com.hjq.demo.ui.adapter.common.NavigationAdapter;
+import com.hjq.demo.ui.adapter.common.NavigationAdapter.NavigationItem;
+import com.hjq.demo.ui.fragment.home.HomeFindFragment;
+import com.hjq.demo.ui.fragment.home.HomeMainFragment;
+import com.hjq.demo.ui.fragment.home.HomeMessageFragment;
+import com.hjq.demo.ui.fragment.home.HomeMineFragment;
 
 /**
  *    author : Android 轮子哥
@@ -39,10 +38,10 @@ public final class HomeActivity extends AppActivity
     private RecyclerView mNavigationView;
 
     private NavigationAdapter mNavigationAdapter;
-    private FragmentPagerAdapter<AppFragment<?>> mPagerAdapter;
+    private BasePagerAdapter<AppFragment<?>> mPagerAdapter;
 
     public static void start(Context context) {
-        start(context, HomeFragment.class);
+        start(context, HomeMainFragment.class);
     }
 
     public static void start(Context context, Class<? extends AppFragment<?>> fragmentClass) {
@@ -65,25 +64,25 @@ public final class HomeActivity extends AppActivity
         mNavigationView = findViewById(R.id.rv_home_navigation);
 
         mNavigationAdapter = new NavigationAdapter(this);
-        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_index),
-                ContextCompat.getDrawable(this, R.drawable.home_home_selector)));
-        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_found),
+        mNavigationAdapter.addItem(new NavigationItem(getString(R.string.home_nav_main),
+                ContextCompat.getDrawable(this, R.drawable.home_main_selector)));
+        mNavigationAdapter.addItem(new NavigationItem(getString(R.string.home_nav_found),
                 ContextCompat.getDrawable(this, R.drawable.home_found_selector)));
-        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_message),
+        mNavigationAdapter.addItem(new NavigationItem(getString(R.string.home_nav_message),
                 ContextCompat.getDrawable(this, R.drawable.home_message_selector)));
-        mNavigationAdapter.addItem(new NavigationAdapter.MenuItem(getString(R.string.home_nav_me),
-                ContextCompat.getDrawable(this, R.drawable.home_me_selector)));
+        mNavigationAdapter.addItem(new NavigationItem(getString(R.string.home_nav_mime),
+                ContextCompat.getDrawable(this, R.drawable.home_mime_selector)));
         mNavigationAdapter.setOnNavigationListener(this);
         mNavigationView.setAdapter(mNavigationAdapter);
     }
 
     @Override
     protected void initData() {
-        mPagerAdapter = new FragmentPagerAdapter<>(this);
-        mPagerAdapter.addFragment(HomeFragment.newInstance());
-        mPagerAdapter.addFragment(FindFragment.newInstance());
-        mPagerAdapter.addFragment(MessageFragment.newInstance());
-        mPagerAdapter.addFragment(MineFragment.newInstance());
+        mPagerAdapter = new BasePagerAdapter<>(this);
+        mPagerAdapter.addFragment(HomeMainFragment.newInstance());
+        mPagerAdapter.addFragment(HomeFindFragment.newInstance());
+        mPagerAdapter.addFragment(HomeMessageFragment.newInstance());
+        mPagerAdapter.addFragment(HomeMineFragment.newInstance());
         mViewPager.setAdapter(mPagerAdapter);
 
         onNewIntent(getIntent());
@@ -160,14 +159,12 @@ public final class HomeActivity extends AppActivity
             return;
         }
 
-        // 移动到上一个任务栈，避免侧滑引起的不良反应
+        // 移动到上一个任务栈
         moveTaskToBack(false);
         postDelayed(() -> {
             // 进行内存优化，销毁掉所有的界面
             ActivityManager.getInstance().finishAllActivities();
-            // 销毁进程（注意：调用此 API 可能导致当前 Activity onDestroy 方法无法正常回调）
-            // System.exit(0);
-        }, 300);
+        }, 200);
     }
 
     @Override

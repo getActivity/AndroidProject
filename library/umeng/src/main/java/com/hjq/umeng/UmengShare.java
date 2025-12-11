@@ -1,7 +1,6 @@
 package com.hjq.umeng;
 
 import androidx.annotation.Nullable;
-
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -52,7 +51,7 @@ public final class UmengShare {
             if (mListener == null) {
                 return;
             }
-            mListener.onStart(mPlatform);
+            mListener.onShareStart(mPlatform);
         }
 
         /**
@@ -65,7 +64,7 @@ public final class UmengShare {
             if (mListener == null) {
                 return;
             }
-            mListener.onSucceed(mPlatform);
+            mListener.onShareSuccess(mPlatform);
             mListener = null;
         }
 
@@ -81,7 +80,7 @@ public final class UmengShare {
             if (mListener == null) {
                 return;
             }
-            mListener.onError(mPlatform, t);
+            mListener.onShareFail(mPlatform, t);
             mListener = null;
         }
 
@@ -95,7 +94,7 @@ public final class UmengShare {
             if (mListener == null) {
                 return;
             }
-            mListener.onCancel(mPlatform);
+            mListener.onShareCancel(mPlatform);
             mListener = null;
         }
     }
@@ -107,14 +106,14 @@ public final class UmengShare {
          *
          * @param platform      平台对象
          */
-        default void onStart(Platform platform) {}
+        default void onShareStart(Platform platform) {}
 
         /**
          * 分享成功的回调
          *
          * @param platform      平台对象
          */
-        void onSucceed(Platform platform);
+        void onShareSuccess(Platform platform);
 
         /**
          * 分享失败的回调
@@ -122,13 +121,13 @@ public final class UmengShare {
          * @param platform      平台对象
          * @param t             错误原因
          */
-        default void onError(Platform platform, Throwable t) {}
+        default void onShareFail(Platform platform, Throwable t) {}
 
         /**
          * 分享取消的回调
          *
          * @param platform      平台对象
          */
-        default void onCancel(Platform platform) {}
+        default void onShareCancel(Platform platform) {}
     }
 }

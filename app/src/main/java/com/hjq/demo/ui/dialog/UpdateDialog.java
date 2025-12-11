@@ -13,21 +13,21 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
-
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.CheckNet;
-import com.hjq.demo.aop.Permissions;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.other.AppConfig;
+import com.hjq.demo.permission.PermissionDescription;
+import com.hjq.demo.permission.PermissionInterceptor;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnDownloadListener;
 import com.hjq.http.model.HttpMethod;
-import com.hjq.permissions.Permission;
-
+import com.hjq.permissions.XXPermissions;
+import com.hjq.permissions.permission.PermissionLists;
 import java.io.File;
 
 /**
@@ -42,7 +42,7 @@ public final class UpdateDialog {
             extends BaseDialog.Builder<Builder> {
 
         private final TextView mNameView;
-        private final TextView mContentView;
+        private final TextView mDetailsView;
         private final ProgressBar mProgressView;
 
         private final TextView mUpdateView;
@@ -70,14 +70,14 @@ public final class UpdateDialog {
             setCancelable(false);
 
             mNameView = findViewById(R.id.tv_update_name);
-            mContentView = findViewById(R.id.tv_update_content);
+            mDetailsView = findViewById(R.id.tv_update_details);
             mProgressView = findViewById(R.id.pb_update_progress);
             mUpdateView = findViewById(R.id.tv_update_update);
             mCloseView = findViewById(R.id.tv_update_close);
             setOnClickListener(mUpdateView, mCloseView);
 
             // 让 TextView 支持滚动
-            mContentView.setMovementMethod(new ScrollingMovementMethod());
+            mDetailsView.setMovementMethod(new ScrollingMovementMethod());
         }
 
         /**
@@ -92,8 +92,8 @@ public final class UpdateDialog {
          * 设置更新日志
          */
         public Builder setUpdateLog(CharSequence text) {
-            mContentView.setText(text);
-            mContentView.setVisibility(text == null ? View.GONE : View.VISIBLE);
+            mDetailsView.setText(text);
+            mDetailsView.setVisibility(text == null ? View.GONE : View.VISIBLE);
             return this;
         }
 
@@ -128,28 +128,43 @@ public final class UpdateDialog {
         public void onClick(View view) {
             if (view == mCloseView) {
                 dismiss();
-            } else if (view == mUpdateView) {
+                return;
+            }
+
+            if (view == mUpdateView) {
                 // 判断下载状态
                 if (mDownloadComplete) {
                     if (mApkFile.isFile()) {
                         // 下载完毕，安装 Apk
-                        installApk();
+                        startInstall();
                     } else {
                         // 下载失败，重新下载
-                        downloadApk();
+                        startDownload();
                     }
                 } else if (!mDownloading) {
                     // 没有下载，开启下载
-                    downloadApk();
+                    startDownload();
                 }
             }
         }
 
-        /**
-         * 下载 Apk
-         */
         @CheckNet
-        @Permissions({Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.REQUEST_INSTALL_PACKAGES})
+        private void startDownload() {
+            XXPermissions.with(getActivity())
+                    .permission(PermissionLists.getReadExternalStoragePermission())
+                    .permission(PermissionLists.getWriteExternalStoragePermission())
+                    .permission(PermissionLists.getRequestInstallPackagesPermission())
+                    .interceptor(new PermissionInterceptor())
+                    .description(new PermissionDescription())
+                    .request((grantedList, deniedList) -> {
+                        boolean allGranted = deniedList.isEmpty();
+                        if (!allGranted) {
+                            return;
+                        }
+                        downloadApk();
+                    });
+        }
+
         private void downloadApk() {
             // 设置对话框不能被取消
             setCancelable(false);
@@ -188,16 +203,18 @@ public final class UpdateDialog {
 
             // 创建要下载的文件对象
             mApkFile = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    getString(R.string.app_name) + "_v" + mNameView.getText().toString() + ".apk");
+                    getString(R.string.app_name) + "_v" + mNameView.getText().toString() + "1.apk");
             EasyHttp.download(getDialog())
                     .method(HttpMethod.GET)
                     .file(mApkFile)
                     .url(mDownloadUrl)
                     .md5(mFileMd5)
+                    // 设置断点续传（默认不开启）
+                    .resumableTransfer(true)
                     .listener(new OnDownloadListener() {
 
                         @Override
-                        public void onStart(File file) {
+                        public void onDownloadStart(@NonNull File file) {
                             // 标记为下载中
                             mDownloading = true;
                             // 标记成未下载完成
@@ -210,7 +227,7 @@ public final class UpdateDialog {
                         }
 
                         @Override
-                        public void onProgress(File file, int progress) {
+                        public void onDownloadProgressChange(@NonNull File file, int progress) {
                             mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
                             mProgressView.setProgress(progress);
                             // 更新下载通知
@@ -228,7 +245,16 @@ public final class UpdateDialog {
                         }
 
                         @Override
-                        public void onComplete(File file) {
+                        public void onDownloadSuccess(@NonNull File file) {
+                            int pendingIntentFlag;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                // Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE or FLAG_MUTABLE be specified when creating a PendingIntent.
+                                // Strongly consider using FLAG_IMMUTABLE, only use FLAG_MUTABLE if some functionality depends on the PendingIntent being mutable, e.g.
+                                // if it needs to be used with inline replies or bubbles.
+                                pendingIntentFlag = PendingIntent.FLAG_MUTABLE;
+                            } else {
+                                pendingIntentFlag = PendingIntent.FLAG_UPDATE_CURRENT;
+                            }
                             // 显示下载成功通知
                             notificationManager.notify(notificationId, notificationBuilder
                                     // 设置通知的文本
@@ -236,7 +262,7 @@ public final class UpdateDialog {
                                     // 设置下载的进度
                                     .setProgress(100, 100, false)
                                     // 设置通知点击之后的意图
-                                    .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), Intent.FILL_IN_ACTION))
+                                    .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), pendingIntentFlag))
                                     // 设置点击通知后是否自动消失
                                     .setAutoCancel(true)
                                     // 是否正在交互中
@@ -246,12 +272,12 @@ public final class UpdateDialog {
                             // 标记成下载完成
                             mDownloadComplete = true;
                             // 安装 Apk
-                            installApk();
+                            startInstall();
                         }
 
                         @SuppressWarnings("ResultOfMethodCallIgnored")
                         @Override
-                        public void onError(File file, Exception e) {
+                        public void onDownloadFail(@NonNull File file, @NonNull Throwable throwable) {
                             // 清除通知
                             notificationManager.cancel(notificationId);
                             mUpdateView.setText(R.string.update_status_failed);
@@ -260,44 +286,50 @@ public final class UpdateDialog {
                         }
 
                         @Override
-                        public void onEnd(File file) {
+                        public void onDownloadEnd(@NonNull File file) {
                             // 更新进度条
                             mProgressView.setProgress(0);
                             mProgressView.setVisibility(View.GONE);
                             // 标记当前不是下载中
                             mDownloading = false;
                             // 如果当前不是强制更新，对话框就恢复成可取消状态
-                            if (!mForceUpdate) {
-                                setCancelable(true);
+                            if (mForceUpdate) {
+                                return;
                             }
+                            setCancelable(true);
                         }
-
                     }).start();
         }
 
-        /**
-         * 安装 Apk
-         */
-        @Permissions({Permission.REQUEST_INSTALL_PACKAGES})
-        private void installApk() {
-            getContext().startActivity(getInstallIntent());
+        private void startInstall() {
+            XXPermissions.with(getContext())
+                    .permission(PermissionLists.getRequestInstallPackagesPermission())
+                    .interceptor(new PermissionInterceptor())
+                    .description(new PermissionDescription())
+                    .request((grantedList, deniedList) -> {
+                        boolean allGranted = deniedList.isEmpty();
+                        if (!allGranted) {
+                            return;
+                        }
+                        getContext().startActivity(getInstallIntent());
+                    });
         }
 
         /**
          * 获取安装意图
          */
         private Intent getInstallIntent() {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri uri;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 uri = FileProvider.getUriForFile(getContext(), AppConfig.getPackageName() + ".provider", mApkFile);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } else {
                 uri = Uri.fromFile(mApkFile);
             }
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // 对目标应用临时授权该 Uri 读写权限
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             return intent;
         }
     }

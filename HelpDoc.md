@@ -26,9 +26,9 @@
 
 * [为什么不拆成多个框架来做这件事](#为什么不拆成多个框架来做这件事)
 
-* [为什么最低兼容到 Android 5](#为什么最低兼容到-android-5)
+* [为什么最低兼容到 Android 5.0](#为什么最低兼容到-android-50)
 
-* [为什么不加入扫描二维码功能](#为什么不加入扫描二维码功能)
+* [为什么不加入 XXX 功能](#为什么不加入-xxx-功能)
 
 * [为什么不加入 EventBus](#为什么不加入-eventbus)
 
@@ -50,15 +50,17 @@
 
 * [为什么不用谷歌 ActivityResultContracts](#为什么不用谷歌-activityresultcontracts)
 
+* [为什么新版移除了权限申请的 AOP 注解](#为什么新版移除了权限申请的-aop-注解)
+
 * [轮子哥你怎么看待层出不穷的新技术](#轮子哥你怎么看待层出不穷的新技术)
 
 #### 为什么没有用 MVP
 
-![](picture/help/mvp1.jpg)
+![](picture/help/mvp_issue_1.jpg)
 
-![](picture/help/mvp2.jpg)
+![](picture/help/mvp_issue_2.jpg)
 
-![](picture/help/mvp3.jpg)
+![](picture/help/mvvm_issue.jpg)
 
 * AndroidProject 舍弃 MVP 的最大一个原因，需要写各种类，各种回调，如果这个页面比较简单的话，使用 MVP 会让原本简单的代码变复杂，导致后续开发和维护成本是非常高，前期付出的代价和后期的维护不成正比关系，当然这种说法只适用于各种中小型项目，大型的项目我还没有经历过，不过我觉得，无论是 MVC、MVP、MVVM，它们出现的目的是为了解决代码多并且乱的问题，作用就是给代码做分类，但是可以跟大家分享我的心得，我并不看好 MVP，因为它让我开发和维护都很痛苦，所以我就直接将它从 AndroidProject 移除，目的也很简单，不推荐大家使用，因为 MVP 不适合大多数项目的开发和维护。我更推荐大家直接将代码写在 Activity，但是有一个前提条件需要大家遵守，大家要做好代码封装和重复代码的抽取，尽量让 Activity 成为只有业务代码的类，这样一个项目里面的大多数 Activity 代码量都能很好控制在 1000 行代码以内。但是这种看似简单的操作，但是实际要做到是一件不容易的事情，这里面不仅要解决代码带来的问题，还要解决带来的各种人性矛盾，困难重重，这种想法经过很长一段时间的思考，虽然写法在开发和维护中效率是非常高的，但是不被大多数人认可，大家更愿意相信 MVC、MVP、MVVM，而很少有人理解这三种模式的本质是什么，就是为了给代码做分类，但这三种模式都不够灵活，很生硬，像是一套套规则，而这样的代码分类，只会让大多数人的开发越来越头疼。
 
@@ -100,7 +102,7 @@ binding.tv_data_name.setText("字符串");
 
 * DataBinding 最大的优势在于，因为它可以在 xml 直接给 View 赋值，但它的优点正是它最致命的缺点，当业务逻辑简单时，会显得格外美好，但是一旦判断条件复杂起来，由于 xml 属性不能换行的特性，会导致无法在 xml 直接赋值又或者很长的一段代码堆在布局中，间接导致 CodeReview 时异常艰难，更别说在原有的基础上继续更新迭代，这对每一个开发者来讲无疑是一个巨大的灾难。
 
-* 还有一个是 DataBinding 的学习成本比较高，其次成本也挺高，使用前需要做很多封装，另外每次使用时都需要添加 `layout` 和 `data` 节点，然后在 Java 代码中初始化 DataBinding 对象，无法在基类中封装处理，每次都要写 `binding.xxx` 才能操作控件，和 ViewBinding 的问题差不多。
+* 还有一个是 DataBinding 的学习成本比较高，其次使用成本也挺高，使用前需要做很多封装，另外每次使用时都需要添加 `layout` 和 `data` 节点，然后在 Java 代码中初始化 DataBinding 对象，无法在基类中封装处理，每次都要写 `binding.xxx` 才能操作控件，和 ViewBinding 的问题差不多。
 
 ```java
 ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_xxxx);
@@ -118,7 +120,7 @@ ActivityXxxxBinding binding = DataBindingUtil.setContentView(this, R.layout.acti
 
 * AndroidProject 其实有加入过这个功能，但是在 [v9.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/9.0) 就移除了，原因是第三方侧滑框架 [BGASwipeBackLayout](https://github.com/bingoogolapple/BGASwipeBackLayout-Android) 在 Android 9.0 上面会[闪屏](https://github.com/bingoogolapple/BGASwipeBackLayout-Android/issues/173)，并且还是 **100% 必现**，**用户体验极差**，我也跟作者反馈过这个问题，但结果不了了之，所以不得不移除。但是到了 [v10.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/10.0)，我又加上界面侧滑功能了，不过这次我换成了 [SmartSwipe](https://github.com/luckybilly/SmartSwipe) 来做，但是我又再一次失望了，这个框架在 Android 11 上面，如果 Activity 上有 WindowManager 正在显示，然后使用界面侧滑，那么会出现闪屏的情况，具体效果如下图：
 
-![](picture/help/Swipe.jpg)
+![](picture/help/swipe_issue.jpg)
 
 * 就这个情况我也联系过作者，并详细阐述了产生的原因和具体的复现步骤，但是我等了三天连个回复都没有，实属有些让我心寒，在等待的期间我看到 Github 的 issue 已经基本没有回复了，并且最后一次提交是在 13 个月前了，种种迹象都已经表明，所以经过慎重考虑，最终决定在 [v12.1 版本](https://github.com/getActivity/AndroidProject/releases/tag/12.1) 移除界面侧滑功能。
 
@@ -148,7 +150,7 @@ xxxhdpi：1dp=4px
 
 * 另外谈谈我的经历，我自己之前的公司主要是做平板上面的应用，所以也用过 [AutoSize 框架](https://github.com/JessYanCoding/AndroidAutoSize)，一年多的使用体验下来，发现这个框架 Bug 还算是比较多的，例如框架会偶尔出现机型适配失效，重写了 **getResources** 方法情况之后出现的情况少了一些，但是仍然还有一些奇奇怪怪的问题，这里就不一一举例了，最后总结下来就是框架还不够成熟，但是框架的思想还是很不错的。我后面换了一家公司，也是做平板应用，项目用的是用[通配符的适配方案](https://github.com/wildma/ScreenAdaptation)，跟 AutoSize 相对比，没有了那些奇奇怪怪的问题，但是代码的侵入性比较高。这两种方案各有优缺点，大家看着选择。
 
-![](picture/help/vote2.jpg)
+![](picture/help/vote_2.jpg)
 
 * 在这块我也发起过群投票，相比谷歌的适配方案，大多数人更认同那种百分比适配方案，秉承着少数服从多数的理念，我在 AndroidProject [v13.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/13.0) 加入了通配符的适配方案。虽然有一部分人不认同，但是我想跟这些人说的是：我的每一个决定都是十分谨慎的，因为这其中涉及到许多人的利益，AndroidProject 虽然是我创造的，但是它早就不是我一个人的了，而是大家的，每个重要的决定我都会考虑再三才会去做，在做决定的时候我会把大众的利益放在第一位，把自己的利益放在最后一位，所以大家唯一能做的是，相信我的选择。或许你可能觉得这样不太对，也随时欢迎你提出不同的意见给到我，我不认为自己做的决定一定都是对的，但是我会一直朝着对的方向前进。
 
@@ -212,7 +214,7 @@ xxxhdpi：1dp=4px
 
 #### 为什么不拆成多个框架来做这件事
 
-* AndroidProject 其实一直有这样做，把很多组件都拆成了独立的框架，例如：权限请求框架 [XXPermissions](https://github.com/getActivity/XXPermissions)，网络请求框架 [EasyHttp](https://github.com/getActivity/EasyHttp)、吐司框架 [ToastUtils](https://github.com/getActivity/ToastUtils) 等等，我都是将它抽离在 AndroidProject 之外，作为一个单独的开源项目进行开发和维护，至于说为什么还有一些代码没有抽取出来，主要原因有几点：
+* AndroidProject 其实一直有这样做，把很多组件都拆成了独立的框架，例如：权限请求框架 [XXPermissions](https://github.com/getActivity/XXPermissions)，网络请求框架 [EasyHttp](https://github.com/getActivity/EasyHttp)、吐司框架 [Toaster](https://github.com/getActivity/Toaster) 等等，我都是将它抽离在 AndroidProject 之外，作为一个单独的开源项目进行开发和维护，至于说为什么还有一些代码没有抽取出来，主要原因有几点：
 
     1. 和业务的耦合性高，例如 Dialog 组件引用了很多项目的基类，例如 **BaseDialog**、**BaseAdapter** 等
 
@@ -220,11 +222,11 @@ xxxhdpi：1dp=4px
 
 * 基于以上几点，我并不认为所有的东西都适合抽取成框架给大家用，有些东西还是跟随 **AndroidProject** 一起更新比较好。当然像权限请求这种东西，我个人觉得抽成框架是比较合适的，因为它和业务的关联性不大，更重要的是，如果某一天你觉得 **XXPermissions** 做得不够好，你随时可以在 **AndroidProject** 替换掉它，并且整个过程不需要太大的改动。
 
-#### 为什么最低兼容到 Android 5
+#### 为什么最低兼容到 Android 5.0
 
 * AndroidProject 从 [v11.0 版本](https://github.com/getActivity/AndroidProject/releases/tag/11.0)，已经将 minSdkVersion 从 19 升级到 21，原因也很简单，我不推荐大家兼容 Android 4.4 版本，因为这个版本兼容性的问题太多，对 **dex 分包**、**矢量图**的支持不是特别好，这个我们开发者处理不了，除此之外还有很多 API 要做高低版本兼容，这个我们开发者能做，但是我觉得没什么必要性，因为这个版本的机型会越来越少，会逐步退出历史舞台，而 AndroidProject 一旦投入到项目中使用，minSdkVersion 基本不会有变动，所以我的想法是，不如在一开始就不兼容这个版本，免得后面给大家带来一些不必要的麻烦，Android 4.4 有些问题是**真硬伤**，这是一个非常**令人头疼**的问题。
 
-#### 为什么不加入扫描二维码功能
+#### 为什么不加入 XXX 功能
 
 * AndroidProject 的定位是做一个技术架构，不是什么都做的 Demo 工程，如果只是解决大家的需求问题，那样在我看来意义其实并不大，当然实现需求固然很重要，但并不是所有的技术点在不同项目都会用到，AndroidProject 只是在做架构的同时顺道把模板做了，如果说架构是理论，那么模板就是实践，代码写得再好，如果不实践，那么也只是纸上谈兵，又或者中看不中用。
 
@@ -262,7 +264,7 @@ xxxhdpi：1dp=4px
 
 * 常用的图片加载框架无非就两种，最常用的是 Glide，其次是 Fresco。我曾做过一个技术调研：
 
-![](picture/help/vote1.jpg)
+![](picture/help/vote_1.jpg)
 
 * 无疑 Glide 已成大家最喜爱的图片加载框架，当然也有人使用 Fresco，但是占比极少。
 
@@ -292,7 +294,7 @@ xxxhdpi：1dp=4px
 
 #### 假设 AndroidProject 更新了该怎么升级它
 
-* 原因和解释：首先纠正一点，AndroidProject 严格意义上来说，不是框架一种，而属于架构一种，架构升级本身就是一件大事，并且存在很多未知的风险点，我不推荐已使用 AndroidProject 开发的项目去做升级，因为开发和测试的成本极其高，间接能为业务带来价值其实很低，很多时候我知道大家很喜欢 AndroidProject 的代码，想用到公司项目中去，但是我仍然不推荐你那么做，假设这是你的个人项目可以那么做，但是公司项目最好不要，因为公司和你都是要靠这个项目赚钱，谁也不希望项目出现问题，如果是公司要开发人员重构公司项目，也可以考虑那么做，毕竟这个时候的风险公司已经承担了大部分了，接下来的话只需要服从公司安排即可。
+* 原因和解释：首先纠正一点，AndroidProject 严格意义上来说，不是框架一种，而属于架构一种，架构升级本身就是一件大事，并且存在很多未知的风险点，我不推荐已使用 AndroidProject 开发的项目去做升级，因为开发和测试的成本极其高，间接能为业务带来价值其实很低，很多时候我知道大家很喜欢 AndroidProject 的代码，想用最新的代码到公司项目中去，但是我仍然不推荐你那么做，假设这是你的个人项目可以那么做，但是公司项目最好不要，因为公司和你都是要靠这个项目赚钱，谁也不希望项目出现问题，如果是公司要开发人员重构公司项目，也可以考虑那么做，毕竟这个时候的风险公司已经承担了大部分了，接下来的话只需要服从公司安排即可。
 
 * 更新的方式：由于 AndroidProject 不是一个单独的框架那么简单，无法通过更新远程依赖的方式进行升级，所以只能通过替换代码的形式进行更新，需要注意的是，代码覆盖完需要经过严格的自测及测试，测试是做这件事情的关键流程，需要重视起来，对每一处功能进行详细测试，一定要详细，特别涉及到主流程的功能。
 
@@ -388,6 +390,84 @@ startActivityForResult(HomeActivity.class, new OnActivityCallback() {
     4. 之前使用 AndroidProject 的人群已经习惯和记忆了那种方式，所以 API 不能删也不能改
 
 * 所以并不是我不想用，而是谷歌封装得还不够好，至少在我看来还不够好，抛去 AndroidProject 封装的时间早不说，谷歌封装出来的效果也是强差人意，我感觉谷歌工程师的封装得越来越敷衍了，看起来像是在完成任务，而不是在做好一件事。
+
+#### 为什么新版移除了权限申请的 AOP 注解
+
+* 具体原因可以看这个 [`wurensen/gradle_plugin_android_aspectjx/issues/60`](https://github.com/wurensen/gradle_plugin_android_aspectjx/issues/60)，这里就不展开讲了，我的解决方案是移除权限申请的 AOP 注解，避免后面的人踩同样的坑，如果你已经知晓问题的原因，但是就是想用怎么办？我可以把删除的代码贴出来，到底要不要加进去大家自行斟酌。
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface Permissions {
+
+    /**
+     * 需要申请权限的集合
+     */
+    String[] value();
+}
+```
+
+```java
+@SuppressWarnings("unused")
+@Aspect
+public class PermissionsAspect {
+
+    /**
+     * 方法切入点
+     */
+    @Pointcut("execution(@com.hjq.demo.aop.Permissions * *(..))")
+    public void method() {}
+
+    /**
+     * 在连接点进行方法替换
+     */
+    @Around("method() && @annotation(permissions)")
+    public void aroundJoinPoint(ProceedingJoinPoint joinPoint, Permissions permissions) {
+        Activity activity = null;
+
+        // 方法参数值集合
+        Object[] parameterValues = joinPoint.getArgs();
+        for (Object arg : parameterValues) {
+            if (!(arg instanceof Activity)) {
+                continue;
+            }
+            activity = (Activity) arg;
+            break;
+        }
+
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            activity = ActivityManager.getInstance().getTopActivity();
+        }
+
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            Timber.e("The activity has been destroyed and permission requests cannot be made");
+            return;
+        }
+
+        requestPermissions(joinPoint, activity, permissions.value());
+    }
+
+    private void requestPermissions(ProceedingJoinPoint joinPoint, Activity activity, String[] requestPermissions) {
+        XXPermissions.with(activity)
+                .permission(requestPermissions)
+                .interceptor(new PermissionInterceptor())
+                .description(new PermissionDescription())
+                .request((grantedList, deniedList) -> {
+                    boolean allGranted = deniedList.isEmpty();
+                    if (!allGranted) {
+                        return;
+                    }
+                    try {
+                        // 获得权限，执行原方法
+                        joinPoint.proceed();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        CrashReport.postCatchedException(e);
+                    }
+                });
+    }
+}
+```
 
 #### 轮子哥你怎么看待层出不穷的新技术
 

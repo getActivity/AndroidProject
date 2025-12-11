@@ -6,18 +6,15 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BasePopupWindow;
 import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.other.ArrowDrawable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +53,7 @@ public final class ListPopup {
                     .setArrowOrientation(Gravity.TOP)
                     .setArrowGravity(Gravity.CENTER)
                     .setShadowSize((int) getResources().getDimension(R.dimen.dp_10))
-                    .setBackgroundColor(0xFFFFFFFF)
+                    .setBackgroundColor(getColor(R.color.white))
                     .apply(recyclerView);
         }
 
@@ -129,11 +126,11 @@ public final class ListPopup {
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new ViewHolder();
         }
 
-        private final class ViewHolder extends AppAdapter<?>.ViewHolder {
+        private final class ViewHolder extends AppViewHolder {
 
             private final TextView mTextView;
 
@@ -161,6 +158,6 @@ public final class ListPopup {
         /**
          * 选择条目时回调
          */
-        void onSelected(BasePopupWindow popupWindow, int position, T t);
+        void onSelected(BasePopupWindow popupWindow, int position, T data);
     }
 }

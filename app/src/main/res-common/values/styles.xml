@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 从左往右的动画效果 -->
+    <style name="LeftToRightAnimStyle" parent="android:Animation">
+        <item name="android:activityCloseEnterAnimation">@anim/left_in_activity</item>
+        <item name="android:activityCloseExitAnimation">@anim/left_out_activity</item>
+        <item name="android:activityOpenEnterAnimation">@anim/right_in_activity</item>
+        <item name="android:activityOpenExitAnimation">@anim/right_out_activity</item>
+    </style>
+
+    <!-- 默认按钮样式 -->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:paddingStart">@dimen/dp_20</item>
+        <item name="android:paddingEnd">@dimen/dp_20</item>
+        <item name="android:paddingTop">@dimen/dp_12</item>
+        <item name="android:paddingBottom">@dimen/dp_12</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:textColor">@color/white90</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/button_circle_selector</item>
+        <item name="android:foreground">@null</item>
+        <item name="android:minHeight">0px</item>
+    </style>
+
+    <!-- 直角按钮样式 -->
+    <style name="RectButtonStyle" parent="ButtonStyle">
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
+        <item name="android:paddingTop">@dimen/dp_12</item>
+        <item name="android:paddingBottom">@dimen/dp_12</item>
+        <item name="android:background">@drawable/button_rect_selector</item>
+    </style>
+
+    <!-- 默认文本框样式 -->
+    <style name="EditTextStyle">
+        <item name="android:background">@null</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:textColorHint">#A4A4A4</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:paddingBottom">@dimen/dp_10</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
+    </style>
+
+    <!-- 默认水平分割线样式 -->
+    <style name="HorizontalLineStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/line_size</item>
+        <item name="android:background">@color/common_line_color</item>
+    </style>
+
+    <!-- 默认垂直分割线样式 -->
+    <style name="VerticalLineStyle">
+        <item name="android:layout_width">@dimen/line_size</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/common_line_color</item>
+    </style>
+
+    <!-- 验证码按钮样式 -->
+    <style name="CountdownViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/countdown_selector</item>
+        <!-- 避免在没有设置点击事件的情况下，点击空白处会触发按压效果 -->
+        <item name="android:clickable">true</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:paddingBottom">@dimen/dp_10</item>
+        <item name="android:minWidth">@dimen/dp_90</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/common_code_send</item>
+        <item name="android:textColor">@drawable/countdown_color_selector</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
+
+</resources>

@@ -2,13 +2,12 @@ package com.hjq.demo.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
-
 import androidx.annotation.Nullable;
-
 import com.hjq.demo.R;
 
 /**
@@ -32,10 +31,10 @@ public final class PasswordView extends View {
     private static final int POINT_RADIUS = 15;
 
     /** 中心黑点的颜色 */
-    private static final int POINT_COLOR = 0xFF666666;
+    private static final int POINT_COLOR = Color.parseColor("#666666");
 
     /** 密码框边界线的颜色值 */
-    private static final int STROKE_COLOR = 0xFFECECEC;
+    private static final int STROKE_COLOR = Color.parseColor("#ECECEC");
 
     /** 密码总个数 */
     public static final int PASSWORD_COUNT = 6;

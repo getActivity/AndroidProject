@@ -2,9 +2,7 @@ package com.hjq.demo.ui.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
-
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppAdapter;
 
@@ -27,11 +25,11 @@ public final class CopyAdapter extends AppAdapter<String> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder();
     }
 
-    private final class ViewHolder extends AppAdapter<?>.ViewHolder {
+    private final class ViewHolder extends AppViewHolder {
 
         private ViewHolder() {
             super(R.layout.copy_item);

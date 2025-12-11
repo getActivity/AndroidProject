@@ -1,18 +1,19 @@
 package com.hjq.demo.other;
 
+import static android.view.View.MeasureSpec.getSize;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-
 import com.hjq.demo.R;
 import com.scwang.smart.refresh.header.material.CircleImageView;
 import com.scwang.smart.refresh.header.material.MaterialProgressDrawable;
@@ -22,8 +23,6 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.RefreshState;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 import com.scwang.smart.refresh.layout.simple.SimpleComponent;
-
-import static android.view.View.MeasureSpec.getSize;
 
 /**
  *    author : 树朾 & Android 轮子哥
@@ -38,21 +37,21 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
     /** 刷新球默认样式 */
     public static final int BALL_STYLE_DEFAULT = 1;
 
-    protected static final int CIRCLE_BG_LIGHT = 0xFFFAFAFA;
-    protected static final float MAX_PROGRESS_ANGLE = 0.8f;
+    private static final int CIRCLE_BG_LIGHT = Color.parseColor("#FAFAFA");
+    private static final float MAX_PROGRESS_ANGLE = 0.8f;
 
-    protected boolean mFinished;
-    protected int mCircleDiameter;
-    protected ImageView mCircleView;
-    protected MaterialProgressDrawable mProgressDrawable;
+    private boolean mFinished;
+    private int mCircleDiameter;
+    private final ImageView mCircleView;
+    private final MaterialProgressDrawable mProgressDrawable;
 
-    protected int mWaveHeight;
-    protected int mHeadHeight;
-    protected Path mBezierPath;
-    protected Paint mBezierPaint;
-    protected RefreshState mRefreshState;
-    protected boolean mShowBezierWave = false;
-    protected boolean mScrollableWhenRefreshing = true;
+    private int mWaveHeight;
+    private int mHeadHeight;
+    private final Path mBezierPath;
+    private final Paint mBezierPaint;
+    private RefreshState mRefreshState;
+    private boolean mShowBezierWave = false;
+    private boolean mScrollableWhenRefreshing = true;
 
     public MaterialHeader(Context context) {
         this(context, null);
@@ -65,7 +64,12 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
         setMinimumHeight((int) getResources().getDimension(R.dimen.dp_100));
 
         mProgressDrawable = new MaterialProgressDrawable(this);
-        mProgressDrawable.setColorSchemeColors(0xff0099cc, 0xffff4444, 0xff669900, 0xffaa66cc, 0xffff8800);
+        mProgressDrawable.setColorSchemeColors(
+                Color.parseColor("#0099CC"),
+                Color.parseColor("#FF4444"),
+                Color.parseColor("#669900"),
+                Color.parseColor("#AA66CC"),
+                Color.parseColor("#FF8800"));
         mCircleView = new CircleImageView(context, CIRCLE_BG_LIGHT);
         mCircleView.setImageDrawable(mProgressDrawable);
         mCircleView.setAlpha(0f);
@@ -81,10 +85,10 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MaterialHeader);
         mShowBezierWave = typedArray.getBoolean(R.styleable.MaterialHeader_srlShowBezierWave, mShowBezierWave);
         mScrollableWhenRefreshing = typedArray.getBoolean(R.styleable.MaterialHeader_srlScrollableWhenRefreshing, mScrollableWhenRefreshing);
-        mBezierPaint.setColor(typedArray.getColor(R.styleable.MaterialHeader_srlPrimaryColor, 0xff11bbff));
+        mBezierPaint.setColor(typedArray.getColor(R.styleable.MaterialHeader_srlPrimaryColor, Color.parseColor("#11BBFF")));
         if (typedArray.hasValue(R.styleable.MaterialHeader_srlShadowRadius)) {
             int radius = typedArray.getDimensionPixelOffset(R.styleable.MaterialHeader_srlShadowRadius, 0);
-            int color = typedArray.getColor(R.styleable.MaterialHeader_mhShadowColor, 0xff000000);
+            int color = typedArray.getColor(R.styleable.MaterialHeader_mhShadowColor, Color.parseColor("#000000"));
             mBezierPaint.setShadowLayer(radius, 0, 0, color);
             setLayerType(LAYER_TYPE_SOFTWARE, null);
         }
@@ -92,11 +96,11 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
         mShowBezierWave = typedArray.getBoolean(R.styleable.MaterialHeader_mhShowBezierWave, mShowBezierWave);
         mScrollableWhenRefreshing = typedArray.getBoolean(R.styleable.MaterialHeader_mhScrollableWhenRefreshing, mScrollableWhenRefreshing);
         if (typedArray.hasValue(R.styleable.MaterialHeader_mhPrimaryColor)) {
-            mBezierPaint.setColor(typedArray.getColor(R.styleable.MaterialHeader_mhPrimaryColor, 0xff11bbff));
+            mBezierPaint.setColor(typedArray.getColor(R.styleable.MaterialHeader_mhPrimaryColor, Color.parseColor("#11BBFF")));
         }
         if (typedArray.hasValue(R.styleable.MaterialHeader_mhShadowRadius)) {
             int radius = typedArray.getDimensionPixelOffset(R.styleable.MaterialHeader_mhShadowRadius, 0);
-            int color = typedArray.getColor(R.styleable.MaterialHeader_mhShadowColor, 0xff000000);
+            int color = typedArray.getColor(R.styleable.MaterialHeader_mhShadowColor, Color.parseColor("#000000"));
             mBezierPaint.setShadowLayer(radius, 0, 0, color);
             setLayerType(LAYER_TYPE_SOFTWARE, null);
         }

@@ -1,37 +1,32 @@
 package com.hjq.demo.ui.activity;
 
-import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-
-import androidx.annotation.Nullable;
-
+import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.manager.DialogManager;
-import com.hjq.demo.ui.dialog.AddressDialog;
-import com.hjq.demo.ui.dialog.DateDialog;
-import com.hjq.demo.ui.dialog.InputDialog;
-import com.hjq.demo.ui.dialog.MenuDialog;
-import com.hjq.demo.ui.dialog.MessageDialog;
 import com.hjq.demo.ui.dialog.PayPasswordDialog;
 import com.hjq.demo.ui.dialog.SafeDialog;
-import com.hjq.demo.ui.dialog.SelectDialog;
-import com.hjq.demo.ui.dialog.ShareDialog;
-import com.hjq.demo.ui.dialog.TimeDialog;
-import com.hjq.demo.ui.dialog.TipsDialog;
 import com.hjq.demo.ui.dialog.UpdateDialog;
-import com.hjq.demo.ui.dialog.WaitDialog;
+import com.hjq.demo.ui.dialog.common.AddressDialog;
+import com.hjq.demo.ui.dialog.common.DateDialog;
+import com.hjq.demo.ui.dialog.common.InputDialog;
+import com.hjq.demo.ui.dialog.common.MenuDialog;
+import com.hjq.demo.ui.dialog.common.MessageDialog;
+import com.hjq.demo.ui.dialog.common.SelectDialog;
+import com.hjq.demo.ui.dialog.common.ShareDialog;
+import com.hjq.demo.ui.dialog.common.TimeDialog;
+import com.hjq.demo.ui.dialog.common.TipsDialog;
+import com.hjq.demo.ui.dialog.common.WaitDialog;
 import com.hjq.demo.ui.popup.ListPopup;
 import com.hjq.umeng.Platform;
-import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengShare;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -79,7 +74,7 @@ public final class DialogActivity extends AppActivity {
         if (viewId == R.id.btn_dialog_message) {
 
             // 消息对话框
-            new MessageDialog.Builder(getActivity())
+            new MessageDialog.Builder(this)
                     // 标题可以不用填写
                     .setTitle("我是标题")
                     // 内容必须要填写
@@ -137,7 +132,7 @@ public final class DialogActivity extends AppActivity {
         } else if (viewId == R.id.btn_dialog_bottom_menu) {
 
             List<String> data = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 20; i++) {
                 data.add("我是数据" + (i + 1));
             }
             // 底部选择框
@@ -150,8 +145,8 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new MenuDialog.OnListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, int position, String string) {
-                            toast("位置：" + position + "，文本：" + string);
+                        public void onSelected(BaseDialog dialog, int position, String data) {
+                            toast("位置：" + position + "，文本：" + data);
                         }
 
                         @Override
@@ -164,7 +159,7 @@ public final class DialogActivity extends AppActivity {
         } else if (viewId == R.id.btn_dialog_center_menu) {
 
             List<String> data = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 20; i++) {
                 data.add("我是数据" + (i + 1));
             }
             // 居中选择框
@@ -178,8 +173,8 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new MenuDialog.OnListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, int position, String string) {
-                            toast("位置：" + position + "，文本：" + string);
+                        public void onSelected(BaseDialog dialog, int position, String data) {
+                            toast("位置：" + position + "，文本：" + data);
                         }
 
                         @Override
@@ -199,11 +194,11 @@ public final class DialogActivity extends AppActivity {
                     .setSingleSelect()
                     // 设置默认选中
                     .setSelect(0)
-                    .setListener(new SelectDialog.OnListener<String>() {
+                    .setSingleListener(new SelectDialog.OnSingleListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
-                            toast("确定了：" + data.toString());
+                        public void onSelected(BaseDialog dialog, int position, String data) {
+                            toast("位置：" + position + "，数据：" + data);
                         }
 
                         @Override
@@ -223,7 +218,7 @@ public final class DialogActivity extends AppActivity {
                     .setMaxSelect(3)
                     // 设置默认选中
                     .setSelect(2, 3, 4)
-                    .setListener(new SelectDialog.OnListener<String>() {
+                    .setMultiListener(new SelectDialog.OnMultiListener<String>() {
 
                         @Override
                         public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
@@ -421,17 +416,17 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new UmengShare.OnShareListener() {
 
                         @Override
-                        public void onSucceed(Platform platform) {
+                        public void onShareSuccess(Platform platform) {
                             toast("分享成功");
                         }
 
                         @Override
-                        public void onError(Platform platform, Throwable t) {
+                        public void onShareFail(Platform platform, Throwable t) {
                             toast(t.getMessage());
                         }
 
                         @Override
-                        public void onCancel(Platform platform) {
+                        public void onShareCancel(Platform platform) {
                             toast("分享取消");
                         }
                     })
@@ -448,9 +443,9 @@ public final class DialogActivity extends AppActivity {
                     // 更新日志
                     .setUpdateLog("到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥\n到底更新了啥")
                     // 下载 URL
-                    .setDownloadUrl("https://dldir1.qq.com/weixin/android/weixin807android1920_arm64.apk")
+                    .setDownloadUrl("https://dldir1.qq.com/weixin/android/weixin8015android2020_arm64.apk")
                     // 文件 MD5
-                    .setFileMd5("df2f045dfa854d8461d9cefe08b813c8")
+                    .setFileMd5("b05b25d4738ea31091dd9f80f4416469")
                     .show();
 
         } else if (viewId == R.id.btn_dialog_safe) {
@@ -491,40 +486,42 @@ public final class DialogActivity extends AppActivity {
 
         } else if (viewId == R.id.btn_dialog_multi) {
 
-            BaseDialog dialog1 = new MessageDialog.Builder(getActivity())
+            BaseDialog dialog1 = new MessageDialog.Builder(this)
                     .setTitle("温馨提示")
                     .setMessage("我是第一个弹出的对话框")
                     .setConfirm(getString(R.string.common_confirm))
                     .setCancel(getString(R.string.common_cancel))
                     .create();
 
-            BaseDialog dialog2 = new MessageDialog.Builder(getActivity())
+            BaseDialog dialog2 = new MessageDialog.Builder(this)
                     .setTitle("温馨提示")
                     .setMessage("我是第二个弹出的对话框")
                     .setConfirm(getString(R.string.common_confirm))
                     .setCancel(getString(R.string.common_cancel))
                     .create();
 
-            DialogManager.getInstance(this).addShow(dialog1);
-            DialogManager.getInstance(this).addShow(dialog2);
+            BaseDialog dialog3 = new MessageDialog.Builder(this)
+                    .setTitle("温馨提示")
+                    .setMessage("我是第三个弹出的对话框")
+                    .setConfirm(getString(R.string.common_confirm))
+                    .setCancel(getString(R.string.common_cancel))
+                    .create();
+
+            DialogManager.getInstance(this).addDialog(dialog1);
+            DialogManager.getInstance(this).addDialog(dialog2);
+            DialogManager.getInstance(this).addDialog(dialog3);
+            DialogManager.getInstance(this).startShow();
         }
     }
 
     @Override
-    public void onRightClick(View view) {
+    public void onRightClick(TitleBar titleBar) {
         // 菜单弹窗
         new ListPopup.Builder(this)
                 .setList("选择拍照", "选取相册")
                 .addOnShowListener(popupWindow -> toast("PopupWindow 显示了"))
                 .addOnDismissListener(popupWindow -> toast("PopupWindow 销毁了"))
                 .setListener((ListPopup.OnListener<String>) (popupWindow, position, s) -> toast("点击了：" + s))
-                .showAsDropDown(view);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // 友盟回调
-        UmengClient.onActivityResult(this, requestCode, resultCode, data);
+                .showAsDropDown(titleBar.getRightView());
     }
 }

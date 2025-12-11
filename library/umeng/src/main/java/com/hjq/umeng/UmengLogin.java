@@ -1,10 +1,8 @@
 package com.hjq.umeng;
 
 import androidx.annotation.Nullable;
-
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
 import java.util.Map;
 
 /**
@@ -98,7 +96,7 @@ public final class UmengLogin {
             if (mListener == null) {
                 return;
             }
-            mListener.onStart(mPlatform);
+            mListener.onLoginStart(mPlatform);
         }
 
         /**
@@ -113,7 +111,7 @@ public final class UmengLogin {
             if (mListener == null) {
                 return;
             }
-            mListener.onSucceed(mPlatform, new LoginData(data));
+            mListener.onLoginSuccess(mPlatform, new LoginData(data));
             mListener = null;
         }
 
@@ -130,7 +128,7 @@ public final class UmengLogin {
             if (mListener == null) {
                 return;
             }
-            mListener.onError(mPlatform, t);
+            mListener.onLoginFail(mPlatform, t);
             mListener = null;
         }
 
@@ -145,7 +143,7 @@ public final class UmengLogin {
             if (mListener == null) {
                 return;
             }
-            mListener.onCancel(mPlatform);
+            mListener.onLoginCancel(mPlatform);
             mListener = null;
         }
     }
@@ -157,7 +155,7 @@ public final class UmengLogin {
          *
          * @param platform      平台对象
          */
-        default void onStart(Platform platform) {}
+        default void onLoginStart(Platform platform) {}
 
         /**
          * 授权成功的回调
@@ -165,7 +163,7 @@ public final class UmengLogin {
          * @param platform      平台对象
          * @param data          用户资料返回
          */
-        void onSucceed(Platform platform, LoginData data);
+        void onLoginSuccess(Platform platform, LoginData data);
 
         /**
          * 授权失败的回调
@@ -173,13 +171,13 @@ public final class UmengLogin {
          * @param platform      平台对象
          * @param t             错误原因
          */
-        default void onError(Platform platform, Throwable t) {}
+        default void onLoginFail(Platform platform, Throwable t) {}
 
         /**
          * 授权取消的回调
          *
          * @param platform      平台对象
          */
-        default void onCancel(Platform platform) {}
+        default void onLoginCancel(Platform platform) {}
     }
 }

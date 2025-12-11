@@ -18,10 +18,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-
 import com.hjq.widget.R;
 
 /**
@@ -295,7 +293,10 @@ public final class SlantedTextView extends View {
     }
 
     public void setText(String text) {
-        if (!TextUtils.isEmpty(text) && !getText().equals(text)) {
+        if (text == null) {
+            text = "";
+        }
+        if (!TextUtils.equals(text, getText())) {
             mText = text;
             invalidate();
         }

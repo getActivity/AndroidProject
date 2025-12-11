@@ -2,10 +2,8 @@ package com.hjq.demo.ui.fragment;
 
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
@@ -15,7 +13,6 @@ import com.hjq.widget.layout.WrapRecyclerView;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +71,7 @@ public final class StatusFragment extends TitleBarFragment<AppActivity>
     private List<String> analogData() {
         List<String> data = new ArrayList<>();
         for (int i = mAdapter.getCount(); i < mAdapter.getCount() + 20; i++) {
-            data.add("我是第" + i + "条目");
+            data.add("我是第 " + i + " 条目");
         }
         return data;
     }

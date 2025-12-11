@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.activity.RegisterActivity">
+    tools:context=".ui.activity.account.RegisterActivity">
 
     <LinearLayout
+        android:id="@+id/fl_register_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
@@ -52,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/common_phone_input_hint"
-                    android:inputType="textVisiblePassword"
+                    android:inputType="phone"
                     android:singleLine="true"
                     app:regexType="mobile" />
 
@@ -63,7 +64,8 @@
 
             <com.hjq.widget.view.CountdownView
                 android:id="@+id/cv_register_countdown"
-                style="@style/CountdownViewStyle" />
+                style="@style/CountdownViewStyle"
+                android:layout_marginStart="@dimen/dp_10" />
         </LinearLayout>
 
         <com.hjq.widget.view.RegexEditText
@@ -73,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_20"
             android:hint="@string/common_code_input_hint"
-            android:inputType="textVisiblePassword"
-            android:maxLength="@integer/sms_code_length"
+            android:inputType="phone"
+            android:maxLength="@integer/sms_code_max_length"
             android:singleLine="true"
             app:regexType="number" />
 
@@ -87,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_20"
             android:hint="@string/register_password_hint1"
-            android:maxLength="20"
+            android:maxLength="@integer/login_password_max_length"
             android:singleLine="true" />
 
         <View style="@style/HorizontalLineStyle" />
@@ -100,7 +102,7 @@
             android:layout_marginTop="@dimen/dp_20"
             android:hint="@string/register_password_hint2"
             android:imeOptions="actionDone"
-            android:maxLength="20"
+            android:maxLength="@integer/login_password_max_length"
             android:singleLine="true" />
 
         <View style="@style/HorizontalLineStyle" />

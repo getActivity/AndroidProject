@@ -2,9 +2,6 @@ package com.hjq.demo.manager;
 
 import android.content.Context;
 import android.os.Environment;
-
-import com.tencent.bugly.crashreport.CrashReport;
-
 import java.io.File;
 import java.math.BigDecimal;
 
@@ -22,7 +19,10 @@ public final class CacheDataManager {
     public static String getTotalCacheSize(Context context) {
         long cacheSize = getFolderSize(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            cacheSize += getFolderSize(context.getExternalCacheDir());
+            File externalCacheDir = context.getExternalCacheDir();
+            if (externalCacheDir != null) {
+                cacheSize += getFolderSize(externalCacheDir);
+            }
         }
         return getFormatSize(cacheSize);
     }
@@ -77,7 +77,7 @@ public final class CacheDataManager {
                 }
             }
         } catch (Exception e) {
-            CrashReport.postCatchedException(e);
+            e.printStackTrace();
         }
         return size;
     }

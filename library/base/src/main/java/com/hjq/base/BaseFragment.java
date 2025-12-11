@@ -4,24 +4,22 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-
-import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
 import com.hjq.base.action.KeyboardAction;
-import com.hjq.base.action.ResourcesAction;
-
 import java.util.List;
 
 /**
@@ -31,7 +29,8 @@ import java.util.List;
  *    desc   : Fragment 技术基类
  */
 public abstract class BaseFragment<A extends BaseActivity> extends Fragment implements
-        ActivityAction, ResourcesAction, HandlerAction, ClickAction, BundleAction, KeyboardAction {
+    Application.ActivityLifecycleCallbacks,
+    HandlerAction, ClickAction, BundleAction, KeyboardAction {
 
     /** Activity 对象 */
     private A mActivity;
@@ -46,6 +45,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         super.onAttach(context);
         // 获得全局的 Activity
         mActivity = (A) requireActivity();
+        registerAttachActivityLifecycle();
     }
 
     @Override
@@ -63,31 +63,37 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     @Override
     public void onResume() {
         super.onResume();
-        if (!mLoading) {
-            mLoading = true;
-            initData();
-            onFragmentResume(true);
+        if (mLoading) {
             return;
         }
-
-        if (mActivity != null && mActivity.getLifecycle().getCurrentState() == Lifecycle.State.STARTED) {
-            onActivityResume();
-        } else {
-            onFragmentResume(false);
-        }
+        mLoading = true;
+        initData();
     }
 
     /**
-     * Fragment 可见回调
-     *
-     * @param first                 是否首次调用
+     * Activity 获取焦点回调
      */
-    protected void onFragmentResume(boolean first) {}
+    protected void onActivityStart(A attachActivity) {}
 
     /**
      * Activity 可见回调
      */
-    protected void onActivityResume() {}
+    protected void onActivityResume(A attachActivity) {}
+
+    /**
+     * Activity 不可见回调
+     */
+    protected void onActivityPause(A attachActivity) {}
+
+    /**
+     * Activity 失去焦点回调
+     */
+    protected void onActivityStop(A attachActivity) {}
+
+    /**
+     * Activity 销毁时回调
+     */
+    protected void onActivityDestroy(A attachActivity) {}
 
     @Override
     public void onDestroyView() {
@@ -97,14 +103,15 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
 
     @Override
     public void onDestroy() {
+        removeCallbacks();
         super.onDestroy();
         mLoading = false;
-        removeCallbacks();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        unregisterAttachActivityLifecycle();
         mActivity = null;
     }
 
@@ -164,19 +171,35 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     }
 
     /**
+     * 跳转 Activity 简化版
+     */
+    public void startActivity(Class<? extends Activity> clazz) {
+        startActivity(new Intent(getContext(), clazz));
+    }
+
+    /**
      * startActivityForResult 方法优化
      */
 
     public void startActivityForResult(Class<? extends Activity> clazz, BaseActivity.OnActivityCallback callback) {
-        getAttachActivity().startActivityForResult(clazz, callback);
+        if (mActivity == null) {
+            return;
+        }
+        mActivity.startActivityForResult(clazz, callback);
     }
 
     public void startActivityForResult(Intent intent, BaseActivity.OnActivityCallback callback) {
-        getAttachActivity().startActivityForResult(intent, null, callback);
+        if (mActivity == null) {
+            return;
+        }
+        mActivity.startActivityForResult(intent, null, callback);
     }
 
     public void startActivityForResult(Intent intent, Bundle options, BaseActivity.OnActivityCallback callback) {
-        getAttachActivity().startActivityForResult(intent, options, callback);
+        if (mActivity == null) {
+            return;
+        }
+        mActivity.startActivityForResult(intent, options, callback);
     }
 
     /**
@@ -230,5 +253,80 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         // 默认不拦截按键事件
         return false;
+    }
+
+    @Override
+    public final void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
+
+    @Override
+    public final void onActivityStarted(@NonNull Activity activity) {
+        if (activity != mActivity) {
+            return;
+        }
+        onActivityStart(mActivity);
+    }
+
+    @Override
+    public final void onActivityResumed(@NonNull Activity activity) {
+        if (activity != mActivity) {
+            return;
+        }
+        onActivityResume(mActivity);
+    }
+
+    @Override
+    public final void onActivityPaused(@NonNull Activity activity) {
+        if (activity != mActivity) {
+            return;
+        }
+        onActivityPause(mActivity);
+    }
+
+    @Override
+    public final void onActivityStopped(@NonNull Activity activity) {
+        if (activity != mActivity) {
+            return;
+        }
+        onActivityStop(mActivity);
+    }
+
+    @Override
+    public final void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+
+    @Override
+    public final void onActivityDestroyed(@NonNull Activity activity) {
+        if (activity != mActivity) {
+            return;
+        }
+        onActivityDestroy(mActivity);
+        unregisterAttachActivityLifecycle();
+    }
+
+    /**
+     * 注册绑定 Activity 生命周期回调
+     */
+    private void registerAttachActivityLifecycle() {
+        if (mActivity == null) {
+            return;
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+            mActivity.registerActivityLifecycleCallbacks(this);
+        } else {
+            mActivity.getApplication().registerActivityLifecycleCallbacks(this);
+        }
+    }
+
+    /**
+     * 反注册绑定 Activity 生命周期回调
+     */
+    private void unregisterAttachActivityLifecycle() {
+        if (mActivity == null) {
+            return;
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+            mActivity.unregisterActivityLifecycleCallbacks(this);
+        } else {
+            mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
+        }
     }
 }

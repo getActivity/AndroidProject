@@ -1,112 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- https://www.jianshu.com/p/4aecd5d54b4e -->
+<!DOCTYPE resources [
+    <!ENTITY app_name "安卓技术中台">
+    <!ENTITY user_agreement "《用户协议》">
+    <!ENTITY privacy_policy "《隐私政策》">
+    ]>
 <resources>
-    <string name="app_name">安卓技术中台</string>
+    <string name="app_name">&app_name;</string>
+    <string name="app_name_debug">&app_name; Debug 版</string>
+    <string name="app_name_preview">&app_name; Preview 版</string>
 
-    <!-- 通用的 -->
-    <string name="common_loading">加载中&#8230;</string>
-
-    <string name="common_unknown_error">未知错误</string>
-
-    <string name="common_confirm">确定</string>
-    <string name="common_cancel">取消</string>
-
-    <string name="common_year">年</string>
-    <string name="common_month">月</string>
-    <string name="common_day">日</string>
-
-    <string name="common_hour">时</string>
-    <string name="common_minute">分</string>
-    <string name="common_second">秒</string>
-
-    <string name="common_crash_hint">应用出了点小意外，正在重新启动</string>
-
-    <string name="common_network_error">当前网络不可用，请检查网络设置</string>
-
-    <string name="common_video_error_not_support">该视频不适合在此设备上播放</string>
-    <string name="common_video_error_unknown">无法播放此视频</string>
-    <string name="common_video_error_supplement">错误类型：%d，错误代码：%d</string>
-
-    <string name="common_phone_input_hint">请输入手机号码</string>
-    <string name="common_phone_input_error">手机号输入不正确</string>
-
-    <string name="common_password_input_error">请输入密码</string>
-    <string name="common_password_input_unlike">两次密码输入不一致，请重新输入</string>
-
-    <string name="common_code_input_hint">请输入验证码</string>
-    <string name="common_code_send">发送验证码</string>
-    <string name="common_code_send_hint">验证码已发送，请注意查收</string>
-    <string name="common_code_error_hint">验证码错误，请检查输入</string>
-
-    <string name="common_step_next">下一步</string>
-    <string name="common_step_complete">完成</string>
-    <string name="common_step_commit">提交</string>
-
-    <string name="common_permission_alert">授权提醒</string>
-    <string name="common_permission_fail_1">授权失败，请正确授予权限</string>
-    <string name="common_permission_fail_2">获取权限失败，请手动授予权限</string>
-    <string name="common_permission_fail_3">获取权限失败，请手动授予%s</string>
-    <string name="common_permission_fail_4">没有授予后台定位权限，请您选择"始终允许"</string>
-    <string name="common_permission_goto">前往授权</string>
-
-    <string name="common_permission_calendar">日历权限</string>
-    <string name="common_permission_camera">相机权限</string>
-    <string name="common_permission_contacts">通讯录权限</string>
-    <string name="common_permission_location">定位权限</string>
-    <string name="common_permission_location_background">后台定位权限</string>
-    <string name="common_permission_microphone">麦克风权限</string>
-    <string name="common_permission_phone">电话权限</string>
-    <string name="common_permission_call_log">通话记录权限</string>
-    <string name="common_permission_sensors">身体传感器权限</string>
-    <string name="common_permission_activity_recognition">健身运动权限</string>
-    <string name="common_permission_sms">短信权限</string>
-    <string name="common_permission_storage">存储权限</string>
-
-    <string name="common_permission_install">安装应用权限</string>
-    <string name="common_permission_notification">通知栏权限</string>
-    <string name="common_permission_window">悬浮窗权限</string>
-    <string name="common_permission_setting">系统设置权限</string>
-
-    <string name="common_network_hint">当前没有网络连接，请检查网络设置</string>
-    <string name="common_no_more_data">没有更多数据了</string>
-
-    <string name="common_web_ssl_error_title">当前网站安全证书已过期或不可信\n是否继续浏览</string>
-    <string name="common_web_ssl_error_allow">继续浏览</string>
-    <string name="common_web_ssl_error_reject">返回上一页</string>
-
-    <string name="common_web_location_permission_title">当前网站需要获取您的地理位置</string>
-    <string name="common_web_location_permission_allow">授予</string>
-    <string name="common_web_location_permission_reject">拒绝</string>
-
-    <string name="common_web_call_phone_title">当前号码 %s</string>
-    <string name="common_web_call_phone_allow">拨打</string>
-    <string name="common_web_call_phone_reject">取消</string>
-
-    <!-- 网络请求 -->
-    <string name="http_loading">加载中&#8230;</string>
-
-    <string name="http_unknown_error">请求出错，未知错误</string>
-    <string name="http_token_error">登录失效，请重新登录</string>
-    <string name="http_data_explain_error">数据解析异常，请稍后</string>
-    <string name="http_server_out_time">服务器请求超时，请稍后再试</string>
-    <string name="http_network_error">请求失败，请检查网络设置</string>
-    <string name="http_response_error">服务器响应异常，请稍后再试</string>
-    <string name="http_server_error">服务器连接异常，请稍后再试</string>
-    <string name="http_request_cancel">请求被中断，请重试</string>
-
-    <!-- 状态布局 -->
-    <string name="status_layout_no_data">空空如也</string>
-    <string name="status_layout_error_request">请求出错，请重试</string>
-    <string name="status_layout_error_network">网络错误，请重试</string>
-    <string name="status_layout_retry">重试</string>
-
-    <!-- 地区对话框 -->
-    <string name="address_title">请选择地区</string>
-    <string name="address_hint">请选择</string>
-
-    <!-- 日期对话框 -->
-    <string name="date_title">请选择日期</string>
-
-    <!-- 时间对话框 -->
-    <string name="time_title">请选择时间</string>
+    <!-- 用户协议与隐私保护弹窗 -->
+    <string name="privacy_agreement_title">用户协议与隐私保护</string>
+    <string name="privacy_agreement_user_agreement_text">&user_agreement;</string>
+    <string name="privacy_agreement_user_agreement_link">https://github.com/getActivity</string>
+    <string name="privacy_agreement_privacy_policy_text">&privacy_policy;</string>
+    <string name="privacy_agreement_privacy_policy_link">https://github.com/getActivity</string>
+    <string name="privacy_agreement_content">欢迎使用&app_name;，我们将努力为你提供更优秀的用户体验，在使用本应用的过程中，我们将可能联网，并且申请使用部分权限。\n\n在使用前，请认真阅读并同意我们的&user_agreement;和&privacy_policy;，了解你的用户权益及相关使用数据的处理办法。</string>
+    <string name="privacy_agreement_agree">同意</string>
+    <string name="privacy_agreement_disagree">不同意并退出</string>
 
     <!-- 升级对话框 -->
     <string name="update_title">发现新版本</string>
@@ -128,33 +40,15 @@
     <string name="update_notification_channel_id">update</string>
     <string name="update_notification_channel_name">升级通知</string>
 
-    <!-- 分享对话框 -->
-    <string name="share_title">分享到&#8230;</string>
-
-    <string name="share_platform_wechat">微信</string>
-    <string name="share_platform_moment">朋友圈</string>
-    <string name="share_platform_qq">QQ</string>
-    <string name="share_platform_qzone">QQ空间</string>
-    <string name="share_platform_link">复制链接</string>
-
-    <string name="share_platform_copy_hint">已复制到剪贴板</string>
-
-    <!-- 支付密码对话框 -->
-    <string name="pay_title">请输入支付密码</string>
-
-    <!-- 选择对话框 -->
-    <string name="select_min_hint">至少要选择 %d 项</string>
-    <string name="select_max_hint">最多只能选择 %d 项</string>
-
     <!-- 身份校验对话框 -->
     <string name="safe_title">身份校验</string>
 
     <!-- 首页 -->
     <string name="home_exit_hint">再按一次退出</string>
-    <string name="home_nav_index">首页</string>
+    <string name="home_nav_main">首页</string>
     <string name="home_nav_found">发现</string>
     <string name="home_nav_message">消息</string>
-    <string name="home_nav_me">我的</string>
+    <string name="home_nav_mime">我的</string>
 
     <!-- 登录 -->
     <string name="login_register">注册</string>
@@ -224,35 +118,5 @@
 
     <string name="personal_data_phone">手机号码</string>
     <string name="personal_data_phone_hint">立即绑定</string>
-
-    <!-- 浏览器 -->
-    <string name="web_title">网页加载中&#8230;</string>
-
-    <!-- 图片选择 -->
-    <string name="image_select_title">图片选择</string>
-    <string name="image_select_all">所有图片</string>
-
-    <string name="image_select_total">共 %d 张</string>
-
-    <string name="image_select_max_hint">本次最多只能选择 %d 张图片</string>
-
-    <string name="image_select_error">无法选中，该图片已经被删除</string>
-
-    <!-- 裁剪图片 -->
-    <string name="image_crop_error_not_support">裁剪失败，当前手机不支持裁剪图片</string>
-
-    <!-- 视频选择 -->
-    <string name="video_select_title">视频选择</string>
-    <string name="video_select_all">所有视频</string>
-
-    <string name="video_select_total">共 %d 个</string>
-
-    <string name="video_select_max_hint">本次最多只能选择 %d 个视频</string>
-
-    <string name="video_select_error">无法选中，该视频已经被删除</string>
-
-    <!-- 拍照和拍摄 -->
-    <string name="camera_launch_fail">无法启动相机</string>
-    <string name="camera_image_error">目标地址错误</string>
 
 </resources>

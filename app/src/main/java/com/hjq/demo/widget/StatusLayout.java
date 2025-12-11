@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import androidx.annotation.AttrRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.hjq.demo.R;
 
@@ -144,7 +142,7 @@ public final class StatusLayout extends FrameLayout {
         mMainLayout = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.widget_status_layout, this, false);
 
         mLottieView = mMainLayout.findViewById(R.id.iv_status_icon);
-        mTextView = mMainLayout.findViewById(R.id.iv_status_text);
+        mTextView = mMainLayout.findViewById(R.id.tv_status_text);
         mRetryView = mMainLayout.findViewById(R.id.iv_status_retry);
 
         if (mMainLayout.getBackground() == null) {

@@ -2,6 +2,7 @@
 <androidx.appcompat.widget.AppCompatImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/iv_guide_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/dp_50"

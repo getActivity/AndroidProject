@@ -13,9 +13,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
-
 import androidx.annotation.Nullable;
-
 import com.hjq.widget.R;
 
 /**
@@ -39,7 +37,7 @@ public final class PlayButton extends View {
 
     private final Paint mPaint;
 
-    private int mWidth, mHeight;
+    private int mViewWidth, mViewHeight;
 
     private int mCenterX, mCenterY;
 
@@ -90,15 +88,15 @@ public final class PlayButton extends View {
     @Override
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         super.onSizeChanged(width, height, oldWidth, oldHeight);
-        mWidth = width * 9 / 10;
-        mHeight = height * 9 / 10;
-        mCircleRadius = mWidth / (int) getResources().getDimension(R.dimen.dp_4);
+        mViewWidth = width * 9 / 10;
+        mViewHeight = height * 9 / 10;
+        mCircleRadius = mViewWidth / (int) getResources().getDimension(R.dimen.dp_4);
         mCenterX = width / 2;
         mCenterY = height / 2;
         mRectF = new RectF(mCenterX - mCircleRadius, mCenterY + 0.6f * mCircleRadius,
                 mCenterX + mCircleRadius, mCenterY + 2.6f * mCircleRadius);
-        mBgRectF = new RectF(mCenterX - mWidth / 2f ,mCenterY - mHeight / 2f ,
-                mCenterX + mWidth / 2f, mCenterY + mHeight / 2f);
+        mBgRectF = new RectF(mCenterX - mViewWidth / 2f ,mCenterY - mViewHeight / 2f ,
+                mCenterX + mViewWidth / 2f, mCenterY + mViewHeight / 2f);
         mPath.moveTo(mCenterX - mCircleRadius, mCenterY + 1.8f * mCircleRadius);
         mPath.lineTo(mCenterX - mCircleRadius, mCenterY - 1.8f * mCircleRadius);
         mPath.lineTo(mCenterX + mCircleRadius, mCenterY);
@@ -135,7 +133,7 @@ public final class PlayButton extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawCircle(mCenterX, mCenterY, mWidth / 2f, mPaint);
+        canvas.drawCircle(mCenterX, mCenterY, mViewWidth / 2f, mPaint);
         if (mFraction < 0) {
             // 弹性部分
             canvas.drawLine(mCenterX + mCircleRadius, mCenterY - 1.6f * mCircleRadius + 10 * mCircleRadius * mFraction,

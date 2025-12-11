@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_permission_description_title">权限说明</string>
+    <string name="common_permission_confirm">确定</string>
+
+    <string name="common_permission_alert">授权提醒</string>
+
+    <string name="common_permission_fail_assign_hint_1">申请权限失败，请手动授予%s</string>
+    <string name="common_permission_fail_assign_hint_2">申请权限失败，请正确授予%s</string>
+
+    <string name="common_permission_fail_hint_1">申请%s失败，请选择 \“%s\” 选项</string>
+    <string name="common_permission_fail_hint_2">申请%s失败，请选择 \“%s\” 并开启 \“%s\” 选项</string>
+    <string name="common_permission_fail_hint_3">申请%s失败，请开启 \“%s\” 选项</string>
+
+    <string name="common_permission_allow_all_option">全部允许</string>
+    <string name="common_permission_allow_all_the_time_option">始终允许</string>
+
+    <string name="common_permission_go_to_authorization">前往授权</string>
+
+    <string name="common_permission_comma">、</string>
+    <string name="common_permission_colon">：</string>
+    <string name="common_permission_and">、</string>
+
+    <string name="common_permission_unknown">权限</string>
+    <string name="common_permission_unknown_description">需要先申请该权限，才能继续使用该业务</string>
+
+    <string name="common_permission_calendar">日历权限</string>
+    <string name="common_permission_calendar_description">用于创建、查看和管理日程安排，例如同步会议提醒、自动导入活动时间，让您随时掌握行程动态。</string>
+
+    <string name="common_permission_camera">相机权限</string>
+    <string name="common_permission_camera_description">用于拍摄照片、录制视频或扫描二维码，例如上传头像、记录生活瞬间或快速识别信息。</string>
+
+    <string name="common_permission_contacts">通讯录权限</string>
+    <string name="common_permission_contacts_description">用于读取联系人信息，例如快速查找好友、同步联系人到应用或向通讯录好友分享内容。</string>
+
+    <string name="common_permission_location">定位权限</string>
+    <string name="common_permission_location_description">用于获取您的实时位置，例如显示附近的服务、导航路线规划或基于位置推荐内容。</string>
+
+    <string name="common_permission_location_fine">精确定位权限</string>
+    <string name="common_permission_location_fine_option">确切位置</string>
+
+    <string name="common_permission_location_background">后台定位权限</string>
+    <string name="common_permission_location_background_description">用于在后台持续获取位置信息，例如实时轨迹记录、后台导航或紧急情况下的位置共享。</string>
+
+    <string name="common_permission_nearby_devices">附近设备权限</string>
+    <string name="common_permission_nearby_devices_description">用于发现和连接蓝牙、Wi-Fi等附近设备，例如无线传输文件、连接智能设备或共享网络。</string>
+
+    <string name="common_permission_microphone">麦克风权限</string>
+    <string name="common_permission_microphone_description">用于录制声音，例如语音聊天、录制音频、语音输入或使用语音识别功能。</string>
+
+    <string name="common_permission_phone">电话权限</string>
+    <string name="common_permission_phone_description">用于读取通话状态和电话号码，例如来电自动识别、快速拨号或统计通话信息。</string>
+
+    <string name="common_permission_call_logs">通话记录权限</string>
+    <string name="common_permission_call_logs_description">用于读取通话历史，例如快速回拨号码、统计通话时长或标记骚扰电话。</string>
+
+    <string name="common_permission_body_sensors">身体传感器权限</string>
+    <string name="common_permission_body_sensors_description">用于获取心率、步数等生理数据，例如健康监测、运动记录或个性化健康建议。</string>
+
+    <string name="common_permission_body_sensors_background">后台身体传感器权限</string>
+    <string name="common_permission_body_sensors_background_description">用于在后台持续获取生理数据，例如睡眠监测、全天候健康追踪或紧急健康状况预警。</string>
+
+    <string name="common_permission_health_data">健康数据共享权限</string>
+    <string name="common_permission_health_data_description">@string/common_permission_body_sensors_description</string>
+
+    <string name="common_permission_health_data_background">后台健康数据共享权限</string>
+    <string name="common_permission_health_data_background_option">在后台访问健身与健康数据</string>
+    <string name="common_permission_health_data_background_description">@string/common_permission_body_sensors_background_description</string>
+
+    <string name="common_permission_health_data_past">过往的健身与健康数据权限</string>
+    <string name="common_permission_health_data_past_option">访问过往的健身与健康数据</string>
+    <string name="common_permission_health_data_past_description">访问过往的健身与健康数据以判断当前身体状态。</string>
+
+    <string name="common_permission_activity_recognition_api29">健身运动权限</string>
+    <string name="common_permission_activity_recognition_api30">身体活动权限</string>
+    <string name="common_permission_activity_recognition_description">用于识别步行、跑步等运动状态，例如运动模式自动切换、运动数据统计或健身计划制定。</string>
+
+    <string name="common_permission_access_media_location_information">访问媒体的位置信息权限</string>
+    <string name="common_permission_access_media_location_information_description">用于获取照片、视频等媒体文件的拍摄位置，例如按地点整理相册、显示照片拍摄地图或分享带位置的媒体内容。</string>
+
+    <string name="common_permission_sms">短信权限</string>
+    <string name="common_permission_sms_description">用于读取短信内容（如验证码）、发送短信或备份短信记录，例如自动填充验证码、批量发送信息或短信归档。</string>
+
+    <string name="common_permission_storage">存储权限</string>
+    <string name="common_permission_storage_description">用于读取和写入手机存储，例如保存图片、下载文件、缓存数据或备份应用设置。</string>
+
+    <string name="common_permission_post_notifications">发送通知权限</string>
+    <string name="common_permission_post_notifications_description">用于向您发送消息通知，例如新消息提醒、活动通知或重要事项推送。</string>
+
+    <string name="common_permission_image_and_video">照片和视频权限</string>
+    <string name="common_permission_image_and_video_description">用于访问相册中的照片和视频，例如上传图片、编辑视频或分享媒体文件到应用。</string>
+
+    <string name="common_permission_music_and_audio">音乐和音频权限</string>
+    <string name="common_permission_music_and_audio_description">用于访问手机中的音乐和音频文件，例如播放本地音乐、设置铃声或编辑音频内容。</string>
+
+    <string name="common_permission_get_installed_apps">读取应用列表权限</string>
+    <string name="common_permission_get_installed_apps_description">用于获取已安装的应用信息，以提供个性化推荐。例如，根据您安装的应用推荐相关工具，或根据您的应用使用习惯定制内容（您的应用列表数据将匿名使用，不会分享给第三方）。</string>
+
+    <string name="common_permission_all_file_access">所有文件访问权限</string>
+    <string name="common_permission_all_file_access_description">@string/common_permission_storage_description</string>
+
+    <string name="common_permission_install_unknown_apps">安装应用权限</string>
+    <string name="common_permission_install_unknown_apps_description">用于应用自更新功能，当官方版本发布时可直接在App内下载并安装最新版本，避免手动到浏览器下载的繁琐。</string>
+
+    <string name="common_permission_display_over_other_apps">悬浮窗权限</string>
+    <string name="common_permission_display_over_other_apps_description">用于在其他应用上方显示内容，当应用处于后台状态时，依然能够展示悬浮窗口。</string>
+
+    <string name="common_permission_modify_system_settings">修改系统设置权限</string>
+    <string name="common_permission_modify_system_settings_description">用于修改系统级设置，例如调整音量、切换网络模式或自定义显示设置。</string>
+
+    <string name="common_permission_allow_notifications">通知权限</string>
+    <string name="common_permission_allow_notifications_description">@string/common_permission_post_notifications_description</string>
+
+    <string name="common_permission_allow_notifications_access">通知栏监听权限</string>
+    <string name="common_permission_allow_notifications_access_description">用于读取通知栏内容，例如自动识别验证码、汇总通知信息或智能管理通知提醒。</string>
+
+    <string name="common_permission_apps_with_usage_access">查看使用情况权限</string>
+    <string name="common_permission_apps_with_usage_access_description">用于获取应用使用时间和频率，例如屏幕时间管理、应用使用统计或个性化推荐。</string>
+
+    <string name="common_permission_alarms_reminders">闹钟和提醒权限</string>
+    <string name="common_permission_alarms_reminders_description">用于创建和管理闹钟、提醒事项，例如日程闹钟、任务提醒或周期性活动通知。</string>
+
+    <string name="common_permission_do_not_disturb_access">勿扰权限</string>
+    <string name="common_permission_do_not_disturb_access_description">用于管理手机勿扰模式，例如自动切换勿扰时段、设置例外通知或临时屏蔽干扰信息。</string>
+
+    <string name="common_permission_ignore_battery_optimize">忽略电池优化权限</string>
+    <string name="common_permission_ignore_battery_optimize_description">用于保持应用后台运行，例如实时接收消息、持续定位或后台数据同步。</string>
+
+    <string name="common_permission_picture_in_picture">画中画权限</string>
+    <string name="common_permission_picture_in_picture_description">用于开启画中画模式，例如边看视频边操作其他应用、悬浮视频窗口或多任务处理。</string>
+
+    <string name="common_permission_full_screen_notifications">全屏通知权限</string>
+    <string name="common_permission_full_screen_notifications_description">允许在设备锁定时显示占据整个屏幕空间的通知，确保重要信息（如来电、紧急消息）不会被错过，即使设备处于锁屏状态也能立即看到提醒。</string>
+
+    <string name="common_permission_device_admin">设备管理器权限</string>
+    <string name="common_permission_device_admin_description">用于提供设备级管理功能，例如远程锁定设备、擦除数据或强制密码策略。</string>
+
+    <string name="common_permission_accessibility_service">无障碍服务权限</string>
+    <string name="common_permission_accessibility_service_description">用于帮助残障用户使用手机，例如语音播报、手势辅助或自动点击。（请在已下载的应用或者服务列表中找到并开启）</string>
+
+    <string name="common_permission_vpn">\tVPN\t权限</string>
+    <string name="common_permission_vpn_description">用于创建和管理 VPN 连接，例如访问内网资源、网络代理或加密网络传输。</string>
+
+    <string name="common_permission_manage_media">管理媒体权限</string>
+    <string name="common_permission_manage_media_description">允许应用在无需用户确认的情况下修改和删除此设备或任何连接的存储设备上的媒体文件。</string>
+
+</resources>

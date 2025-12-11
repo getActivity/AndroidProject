@@ -29,6 +29,8 @@
             <enum name="name" value="0x06" />
             <!-- 非空格字符 -->
             <enum name="nonnull" value="0x07" />
+            <!-- 密码（只能输入英文，数字，英文符号） -->
+            <enum name="password" value="0x08" />
         </attr>
     </declare-styleable>
 
@@ -102,12 +104,6 @@
         <attr name="scaleRatio" format="float" />
     </declare-styleable>
 
-    <!-- 按照比例显示的 FrameLayout -->
-    <declare-styleable name="RatioFrameLayout">
-        <!-- 宽高比例 -->
-        <attr name="sizeRatio" format="string" />
-    </declare-styleable>
-
     <!-- 支持限定 Drawable 大小的 TextView -->
     <declare-styleable name="DrawableTextView">
         <!-- Drawable 宽度 -->
@@ -150,6 +146,12 @@
         <attr name="pb_lineSize" format="integer" />
         <!-- 动画时间 -->
         <attr name="pb_animDuration" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="SimpleLayout">
+        <!-- 最大宽高 -->
+        <attr name="android:maxWidth" />
+        <attr name="android:maxHeight" />
     </declare-styleable>
 
 </resources>

@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
@@ -31,16 +30,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.PopupWindowCompat;
-
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
 import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.AnimAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.HandlerAction;
 import com.hjq.base.action.KeyboardAction;
 import com.hjq.base.action.ResourcesAction;
-
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,23 +51,35 @@ import java.util.List;
  *    desc   : PopupWindow 技术基类
  */
 public class BasePopupWindow extends PopupWindow
-        implements ActivityAction, HandlerAction, ClickAction,
+        implements LifecycleOwner, ActivityAction, HandlerAction, ClickAction,
         AnimAction, KeyboardAction, PopupWindow.OnDismissListener {
+
+    private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
     private final Context mContext;
     private PopupBackground mPopupBackground;
 
-    private List<BasePopupWindow.OnShowListener> mShowListeners;
-    private List<BasePopupWindow.OnDismissListener> mDismissListeners;
+    @NonNull
+    private final List<BasePopupWindow.OnShowListener> mShowListeners = new ArrayList<>();
+    @NonNull
+    private final List<BasePopupWindow.OnDismissListener> mDismissListeners = new ArrayList<>();
 
     public BasePopupWindow(@NonNull Context context) {
         super(context);
         mContext = context;
+        // 添加监听为自己，注意这里需要调用父类的方法
+        super.setOnDismissListener(new ListenersWrapper<>(this));
     }
 
     @Override
     public Context getContext() {
         return mContext;
+    }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return mLifecycle;
     }
 
     /**
@@ -92,8 +103,11 @@ public class BasePopupWindow extends PopupWindow
      * @param listener      监听器对象
      */
     public void addOnShowListener(@Nullable BasePopupWindow.OnShowListener listener) {
-        if (mShowListeners == null) {
-            mShowListeners = new ArrayList<>();
+        if (listener == null) {
+            return;
+        }
+        if (mShowListeners.contains(listener)) {
+            return;
         }
         mShowListeners.add(listener);
     }
@@ -104,9 +118,11 @@ public class BasePopupWindow extends PopupWindow
      * @param listener      监听器对象
      */
     public void addOnDismissListener(@Nullable BasePopupWindow.OnDismissListener listener) {
-        if (mDismissListeners == null) {
-            mDismissListeners = new ArrayList<>();
-            super.setOnDismissListener(this);
+        if (listener == null) {
+            return;
+        }
+        if (mDismissListeners.contains(listener)) {
+            return;
         }
         mDismissListeners.add(listener);
     }
@@ -117,7 +133,7 @@ public class BasePopupWindow extends PopupWindow
      * @param listener      监听器对象
      */
     public void removeOnShowListener(@Nullable BasePopupWindow.OnShowListener listener) {
-        if (mShowListeners == null) {
+        if (listener == null) {
             return;
         }
         mShowListeners.remove(listener);
@@ -129,25 +145,20 @@ public class BasePopupWindow extends PopupWindow
      * @param listener      监听器对象
      */
     public void removeOnDismissListener(@Nullable BasePopupWindow.OnDismissListener listener) {
-        if (mDismissListeners == null) {
+        if (listener == null) {
             return;
         }
         mDismissListeners.remove(listener);
     }
 
-    /**
-     * 设置显示监听器集合
-     */
-    private void setOnShowListeners(@Nullable List<BasePopupWindow.OnShowListener> listeners) {
-        mShowListeners = listeners;
-    }
-
-    /**
-     * 设置销毁监听器集合
-     */
-    private void setOnDismissListeners(@Nullable List<BasePopupWindow.OnDismissListener> listeners) {
-        super.setOnDismissListener(this);
-        mDismissListeners = listeners;
+    public void onShow() {
+        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START);
+        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+        List<BasePopupWindow.OnShowListener> listeners = new ArrayList<>(mShowListeners);
+        for (BasePopupWindow.OnShowListener listener : listeners) {
+            listener.onShow(this);
+        }
     }
 
     /**
@@ -155,11 +166,11 @@ public class BasePopupWindow extends PopupWindow
      */
     @Override
     public void onDismiss() {
-        if (mDismissListeners == null) {
-            return;
-        }
-
-        for (BasePopupWindow.OnDismissListener listener : mDismissListeners) {
+        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
+        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        List<BasePopupWindow.OnDismissListener> listeners = new ArrayList<>(mDismissListeners);
+        for (BasePopupWindow.OnDismissListener listener : listeners) {
             listener.onDismiss(this);
         }
     }
@@ -169,13 +180,8 @@ public class BasePopupWindow extends PopupWindow
         if (isShowing() || getContentView() == null) {
             return;
         }
-
-        if (mShowListeners != null) {
-            for (BasePopupWindow.OnShowListener listener : mShowListeners) {
-                listener.onShow(this);
-            }
-        }
         super.showAsDropDown(anchor, xOff, yOff, gravity);
+        onShow();
     }
 
     @Override
@@ -183,19 +189,14 @@ public class BasePopupWindow extends PopupWindow
         if (isShowing() || getContentView() == null) {
             return;
         }
-
-        if (mShowListeners != null) {
-            for (BasePopupWindow.OnShowListener listener : mShowListeners) {
-                listener.onShow(this);
-            }
-        }
         super.showAtLocation(parent, gravity, x, y);
+        onShow();
     }
 
     @Override
     public void dismiss() {
-        super.dismiss();
         removeCallbacks();
+        super.dismiss();
     }
 
     @Override
@@ -287,7 +288,7 @@ public class BasePopupWindow extends PopupWindow
         private View mContentView;
 
         /** 动画样式 */
-        private int mAnimations = BasePopupWindow.ANIM_DEFAULT;
+        private int mAnimStyle = BasePopupWindow.ANIM_DEFAULT;
 
         /** 宽度和高度 */
         private int mWidth = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -311,10 +312,13 @@ public class BasePopupWindow extends PopupWindow
         private float mBackgroundDimAmount;
 
         /** PopupWindow 创建监听 */
+        @Nullable
         private BasePopupWindow.OnCreateListener mCreateListener;
         /** PopupWindow 显示监听 */
+        @NonNull
         private final List<BasePopupWindow.OnShowListener> mShowListeners = new ArrayList<>();
         /** PopupWindow 销毁监听 */
+        @NonNull
         private final List<BasePopupWindow.OnDismissListener> mDismissListeners = new ArrayList<>();
 
         /** 点击事件集合 */
@@ -367,7 +371,7 @@ public class BasePopupWindow extends PopupWindow
                     }
                 } else if (layoutParams instanceof LinearLayout.LayoutParams) {
                     int gravity = ((LinearLayout.LayoutParams) layoutParams).gravity;
-                    if (gravity != FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY) {
+                    if (gravity != Gravity.NO_GRAVITY) {
                         setGravity(gravity);
                     }
                 }
@@ -384,7 +388,7 @@ public class BasePopupWindow extends PopupWindow
          * 设置动画，已经封装好几种样式，具体可见{@link AnimAction}类
          */
         public B setAnimStyle(@StyleRes int id) {
-            mAnimations = id;
+            mAnimStyle = id;
             if (isCreated()) {
                 mPopupWindow.setAnimationStyle(id);
             }
@@ -503,7 +507,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置创建监听
          */
-        public B setOnCreateListener(@NonNull BasePopupWindow.OnCreateListener listener) {
+        public B setOnCreateListener(@Nullable BasePopupWindow.OnCreateListener listener) {
             mCreateListener = listener;
             return (B) this;
         }
@@ -511,16 +515,62 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 添加显示监听
          */
-        public B addOnShowListener(@NonNull BasePopupWindow.OnShowListener listener) {
+        public B addOnShowListener(@Nullable BasePopupWindow.OnShowListener listener) {
+            if (listener == null) {
+                return (B) this;
+            }
+            if (mShowListeners.contains(listener)) {
+                return (B) this;
+            }
             mShowListeners.add(listener);
+            if (isCreated()) {
+                mPopupWindow.addOnShowListener(listener);
+            }
+            return (B) this;
+        }
+
+        /**
+         * 移除显示监听
+         */
+        public B removeOnShowListener(@Nullable BasePopupWindow.OnShowListener listener) {
+            if (listener == null) {
+                return (B) this;
+            }
+            mShowListeners.remove(listener);
+            if (isCreated()) {
+                mPopupWindow.removeOnShowListener(listener);
+            }
             return (B) this;
         }
 
         /**
          * 添加销毁监听
          */
-        public B addOnDismissListener(@NonNull BasePopupWindow.OnDismissListener listener) {
+        public B addOnDismissListener(@Nullable BasePopupWindow.OnDismissListener listener) {
+            if (listener == null) {
+                return (B) this;
+            }
+            if (mDismissListeners.contains(listener)) {
+                return (B) this;
+            }
             mDismissListeners.add(listener);
+            if (isCreated()) {
+                mPopupWindow.addOnDismissListener(listener);
+            }
+            return (B) this;
+        }
+
+        /**
+         * 移除销毁监听
+         */
+        public B removeOnDismissListener(@Nullable BasePopupWindow.OnDismissListener listener) {
+            if (listener == null) {
+                return (B) this;
+            }
+            mDismissListeners.remove(listener);
+            if (isCreated()) {
+                mPopupWindow.removeOnDismissListener(listener);
+            }
             return (B) this;
         }
 
@@ -566,7 +616,7 @@ public class BasePopupWindow extends PopupWindow
          * 设置背景
          */
         public B setBackground(@IdRes int viewId, @DrawableRes int drawableId) {
-            return setBackground(viewId, ContextCompat.getDrawable(mContext, drawableId));
+            return setBackground(viewId, getDrawable(drawableId));
         }
         public B setBackground(@IdRes int id, Drawable drawable) {
             findViewById(id).setBackground(drawable);
@@ -577,7 +627,7 @@ public class BasePopupWindow extends PopupWindow
          * 设置图片
          */
         public B setImageDrawable(@IdRes int viewId, @DrawableRes int drawableId) {
-            return setBackground(viewId, ContextCompat.getDrawable(mContext, drawableId));
+            return setBackground(viewId, getDrawable(drawableId));
         }
         public B setImageDrawable(@IdRes int id, Drawable drawable) {
             ((ImageView) findViewById(id)).setImageDrawable(drawable);
@@ -623,22 +673,22 @@ public class BasePopupWindow extends PopupWindow
             }
 
             // 如果当前没有设置动画效果，就设置一个默认的动画效果
-            if (mAnimations == BasePopupWindow.ANIM_DEFAULT) {
+            if (mAnimStyle == BasePopupWindow.ANIM_DEFAULT) {
                 switch (mGravity) {
                     case Gravity.TOP:
-                        mAnimations = BasePopupWindow.ANIM_TOP;
+                        mAnimStyle = BasePopupWindow.ANIM_TOP;
                         break;
                     case Gravity.BOTTOM:
-                        mAnimations = BasePopupWindow.ANIM_BOTTOM;
+                        mAnimStyle = BasePopupWindow.ANIM_BOTTOM;
                         break;
                     case Gravity.LEFT:
-                        mAnimations = BasePopupWindow.ANIM_LEFT;
+                        mAnimStyle = BasePopupWindow.ANIM_LEFT;
                         break;
                     case Gravity.RIGHT:
-                        mAnimations = BasePopupWindow.ANIM_RIGHT;
+                        mAnimStyle = BasePopupWindow.ANIM_RIGHT;
                         break;
                     default:
-                        mAnimations = BasePopupWindow.ANIM_DEFAULT;
+                        mAnimStyle = BasePopupWindow.ANIM_DEFAULT;
                         break;
                 }
             }
@@ -647,14 +697,19 @@ public class BasePopupWindow extends PopupWindow
             mPopupWindow.setContentView(mContentView);
             mPopupWindow.setWidth(mWidth);
             mPopupWindow.setHeight(mHeight);
-            mPopupWindow.setAnimationStyle(mAnimations);
+            mPopupWindow.setAnimationStyle(mAnimStyle);
             mPopupWindow.setFocusable(mFocusable);
             mPopupWindow.setTouchable(mTouchable);
             mPopupWindow.setOutsideTouchable(mOutsideTouchable);
             mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            mPopupWindow.setOnShowListeners(mShowListeners);
-            mPopupWindow.setOnDismissListeners(mDismissListeners);
+            for (OnShowListener listener : mShowListeners) {
+                mPopupWindow.addOnShowListener(listener);
+            }
+
+            for (OnDismissListener listener : mDismissListeners) {
+                mPopupWindow.addOnDismissListener(listener);
+            }
 
             mPopupWindow.setBackgroundDimAmount(mBackgroundDimAmount);
 
@@ -779,9 +834,17 @@ public class BasePopupWindow extends PopupWindow
         public final void post(Runnable runnable) {
             if (isShowing()) {
                 mPopupWindow.post(runnable);
-            } else {
-                addOnShowListener(new ShowPostWrapper(runnable));
+                return;
             }
+
+            addOnShowListener(new OnShowListener() {
+
+                @Override
+                public void onShow(BasePopupWindow popupWindow) {
+                    removeOnShowListener(this);
+                    popupWindow.post(runnable);
+                }
+            });
         }
 
         /**
@@ -790,20 +853,17 @@ public class BasePopupWindow extends PopupWindow
         public final void postDelayed(Runnable runnable, long delayMillis) {
             if (isShowing()) {
                 mPopupWindow.postDelayed(runnable, delayMillis);
-            } else {
-                addOnShowListener(new ShowPostDelayedWrapper(runnable, delayMillis));
+                return;
             }
-        }
 
-        /**
-         * 在指定的时间执行
-         */
-        public final void postAtTime(Runnable runnable, long uptimeMillis) {
-            if (isShowing()) {
-                mPopupWindow.postAtTime(runnable, uptimeMillis);
-            } else {
-                addOnShowListener(new ShowPostAtTimeWrapper(runnable, uptimeMillis));
-            }
+            addOnShowListener(new OnShowListener() {
+
+                @Override
+                public void onShow(BasePopupWindow popupWindow) {
+                    removeOnShowListener(this);
+                    popupWindow.postDelayed(runnable, delayMillis);
+                }
+            });
         }
     }
 
@@ -910,6 +970,25 @@ public class BasePopupWindow extends PopupWindow
     }
 
     /**
+     * PopupWindow 监听包装类（修复原生 PopupWindow 监听器对象导致的内存泄漏）
+     */
+    private static final class ListenersWrapper<T extends PopupWindow.OnDismissListener>
+            extends SoftReference<T> implements PopupWindow.OnDismissListener {
+
+        private ListenersWrapper(T referent) {
+            super(referent);
+        }
+
+        @Override
+        public void onDismiss() {
+            if (get() == null) {
+                return;
+            }
+            get().onDismiss();
+        }
+    }
+
+    /**
      * PopupWindow 背景遮盖层实现类
      */
     private static class PopupBackground implements
@@ -998,52 +1077,6 @@ public class BasePopupWindow extends PopupWindow
             }
             popupWindow.removeOnShowListener(this);
             popupWindow.post(mRunnable);
-        }
-    }
-
-    /**
-     * postDelayed 任务包装类
-     */
-    private static final class ShowPostDelayedWrapper implements OnShowListener {
-
-        private final Runnable mRunnable;
-        private final long mDelayMillis;
-
-        private ShowPostDelayedWrapper(Runnable runnable, long delayMillis) {
-            mRunnable = runnable;
-            mDelayMillis = delayMillis;
-        }
-
-        @Override
-        public void onShow(BasePopupWindow popupWindow) {
-            if (mRunnable == null) {
-                return;
-            }
-            popupWindow.removeOnShowListener(this);
-            popupWindow.postDelayed(mRunnable, mDelayMillis);
-        }
-    }
-
-    /**
-     * postAtTime 任务包装类
-     */
-    private static final class ShowPostAtTimeWrapper implements OnShowListener {
-
-        private final Runnable mRunnable;
-        private final long mUptimeMillis;
-
-        private ShowPostAtTimeWrapper(Runnable runnable, long uptimeMillis) {
-            mRunnable = runnable;
-            mUptimeMillis = uptimeMillis;
-        }
-
-        @Override
-        public void onShow(BasePopupWindow popupWindow) {
-            if (mRunnable == null) {
-                return;
-            }
-            popupWindow.removeOnShowListener(this);
-            popupWindow.postAtTime(mRunnable, mUptimeMillis);
         }
     }
 

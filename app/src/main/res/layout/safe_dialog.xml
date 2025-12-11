@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.hjq.widget.view.RegexEditText
                 android:id="@+id/et_safe_code"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
@@ -47,12 +48,13 @@
                 android:drawablePadding="@dimen/dp_15"
                 android:ellipsize="end"
                 android:hint="@string/common_code_input_hint"
-                android:inputType="number"
-                android:maxLength="@integer/sms_code_length"
+                android:inputType="phone"
+                android:maxLength="@integer/sms_code_max_length"
                 android:paddingHorizontal="@dimen/dp_20"
                 android:paddingVertical="@dimen/dp_10"
                 android:singleLine="true"
-                android:textSize="@dimen/sp_13" />
+                android:textSize="@dimen/sp_13"
+                app:regexType="number" />
 
             <View
                 style="@style/HorizontalLineStyle"

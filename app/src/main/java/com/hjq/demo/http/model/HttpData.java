@@ -1,5 +1,8 @@
 package com.hjq.demo.http.model;
 
+import androidx.annotation.Nullable;
+import java.util.Map;
+
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
@@ -8,12 +11,26 @@ package com.hjq.demo.http.model;
  */
 public class HttpData<T> {
 
+    /** 响应头 */
+    @Nullable
+    private Map<String, String> responseHeaders;
+
     /** 返回码 */
     private int code;
     /** 提示语 */
     private String msg;
     /** 数据 */
+    @Nullable
     private T data;
+
+    public void setResponseHeaders(@Nullable Map<String, String> responseHeaders) {
+        this.responseHeaders = responseHeaders;
+    }
+
+    @Nullable
+    public Map<String, String> getResponseHeaders() {
+        return responseHeaders;
+    }
 
     public int getCode() {
         return code;
@@ -23,6 +40,7 @@ public class HttpData<T> {
         return msg;
     }
 
+    @Nullable
     public T getData() {
         return data;
     }
@@ -30,14 +48,14 @@ public class HttpData<T> {
     /**
      * 是否请求成功
      */
-    public boolean isRequestSucceed() {
+    public boolean isRequestSuccess() {
         return code == 200;
     }
 
     /**
      * 是否 Token 失效
      */
-    public boolean isTokenFailure() {
+    public boolean isTokenInvalidation() {
         return code == 1001;
     }
 }

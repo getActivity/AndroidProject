@@ -3,10 +3,8 @@ package com.hjq.demo.app;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
@@ -18,8 +16,8 @@ import com.hjq.demo.action.TitleBarAction;
  *    time   : 2020/10/31
  *    desc   : 带标题栏的 Fragment 业务基类
  */
-public abstract class TitleBarFragment<A extends AppActivity> extends AppFragment<A>
-        implements TitleBarAction {
+public abstract class TitleBarFragment<A extends AppActivity>
+        extends AppFragment<A> implements TitleBarAction {
 
     /** 标题栏对象 */
     private TitleBar mTitleBar;
@@ -31,18 +29,19 @@ public abstract class TitleBarFragment<A extends AppActivity> extends AppFragmen
         super.onViewCreated(view, savedInstanceState);
 
         // 设置标题栏点击监听
-        if (getTitleBar() != null) {
-            getTitleBar().setOnTitleBarListener(this);
+        TitleBar titleBar = getTitleBar();
+        if (titleBar != null) {
+            titleBar.setOnTitleBarListener(this);
         }
 
         if (isStatusBarEnabled()) {
             // 初始化沉浸式状态栏
             getStatusBarConfig().init();
+        }
 
-            if (getTitleBar() != null) {
-                // 设置标题栏沉浸
-                ImmersionBar.setTitleBar(this, getTitleBar());
-            }
+        View immersionView = getImmersionView();
+        if (immersionView != null) {
+            ImmersionBar.setTitleBar(this, immersionView);
         }
     }
 
@@ -102,5 +101,9 @@ public abstract class TitleBarFragment<A extends AppActivity> extends AppFragmen
             mTitleBar = obtainTitleBar((ViewGroup) getView());
         }
         return mTitleBar;
+    }
+
+    public View getImmersionView() {
+        return getTitleBar();
     }
 }

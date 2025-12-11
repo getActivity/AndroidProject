@@ -16,9 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-
 import androidx.annotation.Nullable;
-
 import com.hjq.widget.R;
 
 /**
@@ -34,7 +32,7 @@ public final class SwitchButton extends View {
     private static final int STATE_SWITCH_ON = 3;
     private static final int STATE_SWITCH_ON2 = 4;
 
-    private final AccelerateInterpolator mInterpolator = new AccelerateInterpolator(2);
+    private final AccelerateInterpolator mInterpolator = new AccelerateInterpolator(2f);
     private final Paint mPaint = new Paint();
     private final Path mBackgroundPath = new Path();
     private final Path mBarPath = new Path();
@@ -44,9 +42,9 @@ public final class SwitchButton extends View {
     private RadialGradient mShadowGradient;
 
     /** 按钮宽高形状比率(0,1] 不推荐大幅度调整 */
-    protected final float mAspectRatio = 0.68f;
+    private final float mAspectRatio = 0.68f;
     /** (0,1] */
-    protected final float mAnimationSpeed = 0.1f;
+    private final float mAnimationSpeed = 0.1f;
 
     /** 上一个选中状态 */
     private int mLastCheckedState;
@@ -56,33 +54,33 @@ public final class SwitchButton extends View {
     private boolean mCanVisibleDrawing = false;
 
     /** 是否显示按钮阴影 */
-    protected boolean mShadow;
+    private boolean mShadow;
     /** 是否选中 */
-    protected boolean mChecked;
+    private boolean mChecked;
 
     /** 开启状态背景色 */
-    protected int mAccentColor = 0xFF4BD763;
+    private int mAccentColor = Color.parseColor("#4BD763");
     /** 开启状态按钮描边色 */
-    protected int mPrimaryDarkColor = 0xFF3AC652;
+    private int mPrimaryDarkColor = Color.parseColor("#3AC652");
     /** 关闭状态描边色 */
-    protected int mOffColor = 0xFFE3E3E3;
+    private int mOffColor = Color.parseColor("#E3E3E3");
     /** 关闭状态按钮描边色 */
-    protected int mOffDarkColor = 0xFFBFBFBF;
+    private int mOffDarkColor = Color.parseColor("#BFBFBF");
     /** 按钮阴影色 */
-    protected int mShadowColor = 0xFF333333;
+    private int mShadowColor = Color.parseColor("#333333");
     /** 监听器 */
     @Nullable
     private OnCheckedChangeListener mListener;
 
-    private float mRight;
+    private float mActuallyDrawingAreaRight;
     private float mCenterX, mCenterY;
     private float mScale;
 
     private float mOffset;
     private float mRadius, mStrokeWidth;
-    private float mWidth;
-    private float mLeft;
-    private float bRight;
+    private float mViewWidth;
+    private float mViewLeft;
+    private float mViewRight;
     private float mOnLeftX, mOn2LeftX, mOff2LeftX, mOffLeftX;
 
     private float mShadowReservedHeight;
@@ -165,23 +163,23 @@ public final class SwitchButton extends View {
             mShadowReservedHeight = (int) ((actuallyDrawingAreaBottom - actuallyDrawingAreaTop) * 0.07f);
             float left = actuallyDrawingAreaLeft;
             float top = actuallyDrawingAreaTop + mShadowReservedHeight;
-            mRight = actuallyDrawingAreaRight;
+            mActuallyDrawingAreaRight = actuallyDrawingAreaRight;
             float bottom = actuallyDrawingAreaBottom - mShadowReservedHeight;
 
             float sHeight = bottom - top;
-            mCenterX = (mRight + left) / 2;
+            mCenterX = (mActuallyDrawingAreaRight + left) / 2;
             mCenterY = (bottom + top) / 2;
 
-            mLeft = left;
-            mWidth = bottom - top;
-            bRight = left + mWidth;
+            mViewLeft = left;
+            mViewWidth = bottom - top;
+            mViewRight = left + mViewWidth;
             // OfB
-            final float halfHeightOfS = mWidth / 2;
+            final float halfHeightOfS = mViewWidth / 2;
             mRadius = halfHeightOfS * 0.95f;
             // offset of switching
             mOffset = mRadius * 0.2f;
             mStrokeWidth = (halfHeightOfS - mRadius) * 2;
-            mOnLeftX = mRight - mWidth;
+            mOnLeftX = mActuallyDrawingAreaRight - mViewWidth;
             mOn2LeftX = mOnLeftX - mOffset;
             mOffLeftX = left;
             mOff2LeftX = mOffLeftX + mOffset;
@@ -194,18 +192,18 @@ public final class SwitchButton extends View {
             bound.left = left;
             bound.right = left + sHeight;
             mBackgroundPath.arcTo(bound, 90, 180);
-            bound.left = mRight - sHeight;
-            bound.right = mRight;
+            bound.left = mActuallyDrawingAreaRight - sHeight;
+            bound.right = mActuallyDrawingAreaRight;
             mBackgroundPath.arcTo(bound, 270, 180);
             mBackgroundPath.close();
 
-            mBound.left = mLeft;
-            mBound.right = bRight;
+            mBound.left = mViewLeft;
+            mBound.right = mViewRight;
             // bTop = sTop
             mBound.top = top + mStrokeWidth / 2;
             // bBottom = sBottom
             mBound.bottom = bottom - mStrokeWidth / 2;
-            float bCenterX = (bRight + mLeft) / 2;
+            float bCenterX = (mViewRight + mViewLeft) / 2;
             float bCenterY = (bottom + top) / 2;
 
             int red = mShadowColor >> 16 & 0xFF;
@@ -218,11 +216,11 @@ public final class SwitchButton extends View {
 
     private void calcBPath(float percent) {
         mBarPath.reset();
-        mBound.left = mLeft + mStrokeWidth / 2;
-        mBound.right = bRight - mStrokeWidth / 2;
+        mBound.left = mViewLeft + mStrokeWidth / 2;
+        mBound.right = mViewRight - mStrokeWidth / 2;
         mBarPath.arcTo(mBound, 90, 180);
-        mBound.left = mLeft + percent * mOffset + mStrokeWidth / 2;
-        mBound.right = bRight + percent * mOffset - mStrokeWidth / 2;
+        mBound.left = mViewLeft + percent * mOffset + mStrokeWidth / 2;
+        mBound.right = mViewRight + percent * mOffset - mStrokeWidth / 2;
         mBarPath.arcTo(mBound, 270, 180);
         mBarPath.close();
     }
@@ -309,21 +307,20 @@ public final class SwitchButton extends View {
         final float dbAnim = mInterpolator.getInterpolation(mAnim2);
         // Draw background animation
         final float scale = mScale * (isOn ? dsAnim : 1 - dsAnim);
-        final float scaleOffset = (mRight - mCenterX - mRadius) * (isOn ? 1 - dsAnim : dsAnim);
+        final float scaleOffset = (mActuallyDrawingAreaRight - mCenterX - mRadius) * (isOn ? 1 - dsAnim : dsAnim);
         canvas.save();
         canvas.scale(scale, scale, mCenterX + scaleOffset, mCenterY);
         if (isEnabled()) {
-            mPaint.setColor(0xFFFFFFFF);
+            mPaint.setColor(Color.parseColor("#FFFFFF"));
         } else {
-            mPaint.setColor(0xFFBBBBBB);
+            mPaint.setColor(Color.parseColor("#BBBBBB"));
         }
         canvas.drawPath(mBackgroundPath, mPaint);
         canvas.restore();
         // To prepare center bar path
         canvas.save();
         canvas.translate(calcBTranslate(dbAnim), mShadowReservedHeight);
-        final boolean isState2 = (mCheckedState == STATE_SWITCH_ON2 || mCheckedState == STATE_SWITCH_OFF2);
-        calcBPath(isState2 ? 1 - dbAnim : dbAnim);
+        calcBPath((mCheckedState == STATE_SWITCH_ON2 || mCheckedState == STATE_SWITCH_OFF2) ? 1 - dbAnim : dbAnim);
         // Use center bar path to draw shadow
         if (mShadow) {
             mPaint.setStyle(Paint.Style.FILL);
@@ -333,9 +330,9 @@ public final class SwitchButton extends View {
         }
         canvas.translate(0, -mShadowReservedHeight);
         // draw bar
-        canvas.scale(0.98f, 0.98f, mWidth / 2, mWidth / 2);
+        canvas.scale(0.98f, 0.98f, mViewWidth / 2, mViewWidth / 2);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(0xFFFFFFFF);
+        mPaint.setColor(Color.parseColor("#FFFFFF"));
         canvas.drawPath(mBarPath, mPaint);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(mStrokeWidth * 0.5f);

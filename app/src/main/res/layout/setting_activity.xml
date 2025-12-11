@@ -46,9 +46,9 @@
                     android:text="new"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_15"
-                    app:shape="rectangle"
                     app:shape_radius="@dimen/dp_720"
-                    app:shape_solidColor="#F85E5E" />
+                    app:shape_solidColor="#F85E5E"
+                    app:shape_type="rectangle" />
 
             </com.hjq.widget.layout.SettingBar>
 

@@ -15,9 +15,9 @@ public interface HandlerAction {
     Handler HANDLER = new Handler(Looper.getMainLooper());
 
     /**
-     * 获取 Handler
+     * 获取 Handler 对象
      */
-    default Handler getHandler() {
+    static Handler getHandler() {
         return HANDLER;
     }
 
@@ -43,14 +43,14 @@ public interface HandlerAction {
      */
     default boolean postAtTime(Runnable runnable, long uptimeMillis) {
         // 发送和当前对象相关的消息回调
-        return HANDLER.postAtTime(runnable, this, uptimeMillis);
+        return getHandler().postAtTime(runnable, this, uptimeMillis);
     }
 
     /**
      * 移除单个消息回调
      */
     default void removeCallbacks(Runnable runnable) {
-        HANDLER.removeCallbacks(runnable);
+        getHandler().removeCallbacks(runnable);
     }
 
     /**
@@ -58,6 +58,6 @@ public interface HandlerAction {
      */
     default void removeCallbacks() {
         // 移除和当前对象相关的消息回调
-        HANDLER.removeCallbacksAndMessages(this);
+        getHandler().removeCallbacksAndMessages(this);
     }
 }

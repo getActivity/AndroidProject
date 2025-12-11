@@ -8,19 +8,25 @@
     android:gravity="center_horizontal"
     android:layoutAnimation="@anim/layout_from_bottom"
     android:orientation="vertical"
-    tools:context=".ui.activity.LoginActivity"
+    tools:context=".ui.activity.account.LoginActivity"
     tools:layoutAnimation="@null">
 
-    <com.hjq.bar.TitleBar
+    <FrameLayout
+        android:id="@+id/fl_login_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        app:barStyle="transparent"
-        app:leftIcon="@null"
-        app:rightBackground="@null"
-        app:rightTitle="@string/login_register"
-        app:rightTitleColor="@color/common_accent_color"
-        app:rightTitleSize="@dimen/sp_14"
-        app:title="" />
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tv_login_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingHorizontal="@dimen/dp_20"
+            android:paddingVertical="@dimen/dp_12"
+            android:text="@string/login_register"
+            android:textColor="@color/common_accent_color"
+            android:textSize="@dimen/sp_14" />
+    </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_login_logo"
@@ -43,7 +49,7 @@
             android:layout_marginHorizontal="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_10"
             android:hint="@string/common_phone_input_hint"
-            android:inputType="textVisiblePassword"
+            android:inputType="phone"
             android:singleLine="true"
             app:regexType="mobile" />
 
@@ -60,7 +66,7 @@
             android:layout_marginTop="@dimen/dp_15"
             android:hint="@string/common_password_input_error"
             android:imeOptions="actionDone"
-            android:maxLength="20"
+            android:maxLength="@integer/login_password_max_length"
             android:singleLine="true" />
 
         <View

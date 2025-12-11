@@ -1,8 +1,10 @@
 package com.hjq.demo.http.model;
 
+import androidx.annotation.NonNull;
 import com.hjq.demo.other.AppConfig;
+import com.hjq.http.config.IRequestBodyStrategy;
 import com.hjq.http.config.IRequestServer;
-import com.hjq.http.model.BodyType;
+import com.hjq.http.model.RequestBodyType;
 
 /**
  *    author : Android 轮子哥
@@ -12,19 +14,16 @@ import com.hjq.http.model.BodyType;
  */
 public class RequestServer implements IRequestServer {
 
+    @NonNull
     @Override
     public String getHost() {
-        return AppConfig.getHostUrl();
+        return AppConfig.getHostUrl() + "api/";
     }
 
+    @NonNull
     @Override
-    public String getPath() {
-        return "api/";
-    }
-
-    @Override
-    public BodyType getType() {
+    public IRequestBodyStrategy getBodyType() {
         // 以表单的形式提交参数
-        return BodyType.FORM;
+        return RequestBodyType.FORM;
     }
 }

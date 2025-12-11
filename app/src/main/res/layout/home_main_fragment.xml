@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.home.HomeMainFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0px">
+
+        <com.hjq.demo.widget.XCollapsingToolbarLayout
+            android:id="@+id/ctl_home_main_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_256"
+            app:contentScrim="@color/white"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:scrimVisibleHeightTrigger="@dimen/dp_100">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:srcCompat="@drawable/example_bg" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tb_home_main_title"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                app:layout_collapseMode="pin" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_home_main_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:gravity="center_vertical"
+                        android:text="广州"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_15" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_home_main_hint"
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp_15"
+                        android:layout_weight="1"
+                        android:background="@drawable/home_search_bar_transparent_bg"
+                        android:gravity="center"
+                        android:paddingVertical="@dimen/dp_5"
+                        android:text="但愿人长久，搬砖不再有"
+                        android:textColor="@color/white60"
+                        android:textSize="@dimen/sp_13" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_home_main_search"
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        app:srcCompat="@drawable/search_ic"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.hjq.demo.widget.XCollapsingToolbarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_main_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:itemCount="2"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/tab_item_design"
+            tools:spanCount="2" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.hjq.nested.scroll.layout.NestedScrollViewPager
+        android:id="@+id/vp_home_main_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

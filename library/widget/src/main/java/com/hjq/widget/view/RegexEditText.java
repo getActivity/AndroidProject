@@ -6,11 +6,8 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-
 import androidx.appcompat.widget.AppCompatEditText;
-
 import com.hjq.widget.R;
-
 import java.util.regex.Pattern;
 
 /**
@@ -35,6 +32,8 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
     public static final String REGEX_NAME = "[[\\u4e00-\\u9fa5]|[a-zA-Z]|\\d]*";
     /** 非空格的字符（不能输入空格） */
     public static final String REGEX_NONNULL = "\\S+";
+    /** 密码（只能输入英文，数字，英文符号） */
+    public static final String REGEX_PASSWORD = "[a-zA-Z|\\d|,|\\.|\\|?|!|:|/|@|\"|;|'|~|\\|\\(|\\)|<|>|\\|\\[|\\]|\\{|\\}|\\*|&|\\\\||`|#|\\$|%|\\^|_|\\|\\+|\\-|=]+";
 
     /** 正则表达式规则 */
     private Pattern mPattern;
@@ -77,6 +76,9 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
                     break;
                 case 0x07:
                     setInputRegex(REGEX_NONNULL);
+                    break;
+                case 0x08:
+                    setInputRegex(REGEX_PASSWORD);
                     break;
                 default:
                     break;

@@ -8,10 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public final class InputTextManager implements TextWatcher {
     private final boolean mAlpha;
 
     /** TextView集合 */
-    private List<TextView> mViewSet;
+    private List<TextView> mViewSet = new ArrayList<>();
 
     /** 输入监听器 */
     @Nullable
@@ -43,9 +41,6 @@ public final class InputTextManager implements TextWatcher {
      * @param alpha             是否需要设置透明度
      */
     private InputTextManager(View view, boolean alpha) {
-        if (view == null) {
-            throw new IllegalArgumentException("are you ok?");
-        }
         mView = view;
         mAlpha = alpha;
     }
@@ -67,11 +62,7 @@ public final class InputTextManager implements TextWatcher {
             return;
         }
 
-        if (mViewSet == null) {
-            mViewSet = views;
-        } else {
-            mViewSet.addAll(views);
-        }
+        mViewSet.addAll(views);
 
         for (TextView view : views) {
             view.addTextChangedListener(this);
@@ -91,10 +82,6 @@ public final class InputTextManager implements TextWatcher {
             return;
         }
 
-        if (mViewSet == null) {
-            mViewSet = new ArrayList<>(views.length);
-        }
-
         for (TextView view : views) {
             // 避免重复添加
             if (!mViewSet.contains(view)) {
@@ -110,7 +97,7 @@ public final class InputTextManager implements TextWatcher {
      * 移除 TextView 监听，避免内存泄露
      */
     public void removeViews(TextView... views) {
-        if (mViewSet == null || mViewSet.isEmpty()) {
+        if (mViewSet.isEmpty()) {
             return;
         }
 
@@ -126,10 +113,6 @@ public final class InputTextManager implements TextWatcher {
      * 移除所有 TextView 监听，避免内存泄露
      */
     public void removeAllViews() {
-        if (mViewSet == null) {
-            return;
-        }
-
         for (TextView view : mViewSet) {
             view.removeTextChangedListener(this);
         }
@@ -163,10 +146,6 @@ public final class InputTextManager implements TextWatcher {
      * 通知更新
      */
     public void notifyChanged() {
-        if (mViewSet == null) {
-            return;
-        }
-
         // 重新遍历所有的输入
         for (TextView view : mViewSet) {
             if ("".equals(view.getText().toString())) {
@@ -217,7 +196,7 @@ public final class InputTextManager implements TextWatcher {
         /** 操作按钮的 View */
         private View mView;
         /** 是否禁用后设置半透明度 */
-        private boolean isAlpha;
+        private boolean mAlpha;
         /**  TextView集合 */
         private final List<TextView> mViewSet = new ArrayList<>();
         /** 输入变化监听 */
@@ -238,7 +217,7 @@ public final class InputTextManager implements TextWatcher {
         }
 
         public Builder setAlpha(boolean alpha) {
-            isAlpha = alpha;
+            mAlpha = alpha;
             return this;
         }
 
@@ -248,7 +227,10 @@ public final class InputTextManager implements TextWatcher {
         }
 
         public InputTextManager build() {
-            InputTextManager helper = new InputTextManager(mView, isAlpha);
+            if (mView == null) {
+                throw new IllegalArgumentException("are you ok?");
+            }
+            InputTextManager helper = new InputTextManager(mView, mAlpha);
             helper.addViews(mViewSet);
             helper.setListener(mListener);
             TextInputLifecycle.register(mActivity, helper);

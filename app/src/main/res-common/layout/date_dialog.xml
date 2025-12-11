@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_5"
+    tools:context=".ui.dialog.common.DateDialog">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_date_year"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        tools:itemCount="3"
+        tools:listitem="@layout/picker_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_date_month"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:itemCount="3"
+        tools:listitem="@layout/picker_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_date_day"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:itemCount="3"
+        tools:listitem="@layout/picker_item" />
+
+</LinearLayout>

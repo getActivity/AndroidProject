@@ -1,4 +1,6 @@
-apply plugin : 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 apply from : '../../common.gradle'
 
 android {
@@ -27,19 +29,20 @@ android {
 
 // 友盟统计集成文档：https://developer.umeng.com/docs/119267/detail/118584
 // 友盟社会化集成文档：https://developer.umeng.com/docs/128606/detail/193879
+// 友盟远程仓库地址：https://repo1.maven.org/maven2
 dependencies {
     // 友盟公共库
-    api 'com.umeng.umsdk:common:9.4.0'
-    api 'com.umeng.umsdk:asms:1.2.3'
+    api 'com.umeng.umsdk:common:9.5.4'
+    api 'com.umeng.umsdk:asms:1.6.3'
     // 友盟分享库
-    api 'com.umeng.umsdk:share-core:7.1.5'
+    api 'com.umeng.umsdk:share-core:7.2.2'
     // 友盟微信分享
-    api 'com.umeng.umsdk:share-wx:7.1.5'
+    api 'com.umeng.umsdk:share-wx:7.2.2'
     // 友盟 QQ 分享
-    api 'com.umeng.umsdk:share-qq:7.1.5'
+    api 'com.umeng.umsdk:share-qq:7.2.2'
 
-    // QQ 组件：https://wiki.open.qq.com/wiki/QQ%E7%94%A8%E6%88%B7%E8%83%BD%E5%8A%9B
+    // QQ 组件：https://wikinew.open.qq.com/#/iwiki/864512440
     api 'com.tencent.tauth:qqopensdk:3.53.0'
     // 微信组件：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
-    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.7.9'
+    api 'com.tencent.mm.opensdk:wechat-sdk-android:6.8.20'
 }

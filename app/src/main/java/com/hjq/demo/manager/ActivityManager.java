@@ -1,29 +1,36 @@
 package com.hjq.demo.manager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-
+import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.ArrayMap;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
+import java.util.Iterator;
+import java.util.List;
 import timber.log.Timber;
 
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2018/11/18
- *    desc   : Activity 管理类
+ *    desc   : Activity 管理器
  */
 public final class ActivityManager implements Application.ActivityLifecycleCallbacks {
 
     private static volatile ActivityManager sInstance;
 
     /** Activity 存放集合 */
-    private final ArrayMap<String, Activity> mActivitySet = new ArrayMap<>();
+    private final List<Activity> mActivityList = new ArrayList<>();
 
     /** 应用生命周期回调 */
     private final ArrayList<ApplicationLifecycleCallback> mLifecycleCallbacks = new ArrayList<>();
@@ -38,9 +45,9 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     private ActivityManager() {}
 
     public static ActivityManager getInstance() {
-        if(sInstance == null) {
+        if (sInstance == null) {
             synchronized (ActivityManager.class) {
-                if(sInstance == null) {
+                if (sInstance == null) {
                     sInstance = new ActivityManager();
                 }
             }
@@ -56,6 +63,7 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     /**
      * 获取 Application 对象
      */
+    @NonNull
     public Application getApplication() {
         return mApplication;
     }
@@ -74,6 +82,14 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     @Nullable
     public Activity getResumedActivity() {
         return mResumedActivity;
+    }
+
+    /**
+     * 获取 Activity 集合
+     */
+    @NonNull
+    public List<Activity> getActivityList() {
+        return mActivityList;
     }
 
     /**
@@ -104,18 +120,17 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
         if (clazz == null) {
             return;
         }
-        String[] keys = mActivitySet.keySet().toArray(new String[]{});
-        for (String key : keys) {
-            Activity activity = mActivitySet.get(key);
-            if (activity == null || activity.isFinishing()) {
+
+        Iterator<Activity> iterator = mActivityList.iterator();
+        while (iterator.hasNext()) {
+            Activity activity = iterator.next();
+            if (!activity.getClass().equals(clazz)) {
                 continue;
             }
-
-            if (activity.getClass().equals(clazz)) {
+            if (!activity.isFinishing()) {
                 activity.finish();
-                mActivitySet.remove(key);
-                break;
             }
+            iterator.remove();
         }
     }
 
@@ -133,13 +148,9 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
      */
     @SafeVarargs
     public final void finishAllActivities(Class<? extends Activity>... classArray) {
-        String[] keys = mActivitySet.keySet().toArray(new String[]{});
-        for (String key : keys) {
-            Activity activity = mActivitySet.get(key);
-            if (activity == null || activity.isFinishing()) {
-                continue;
-            }
-
+        Iterator<Activity> iterator = mActivityList.iterator();
+        while (iterator.hasNext()) {
+            Activity activity = iterator.next();
             boolean whiteClazz = false;
             if (classArray != null) {
                 for (Class<? extends Activity> clazz : classArray) {
@@ -148,27 +159,27 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
                     }
                 }
             }
-
             if (whiteClazz) {
                 continue;
             }
-
             // 如果不是白名单上面的 Activity 就销毁掉
-            activity.finish();
-            mActivitySet.remove(key);
+            if (!activity.isFinishing()) {
+                activity.finish();
+            }
+            iterator.remove();
         }
     }
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         Timber.i("%s - onCreate", activity.getClass().getSimpleName());
-        if (mActivitySet.size() == 0) {
+        if (mActivityList.isEmpty()) {
             for (ApplicationLifecycleCallback callback : mLifecycleCallbacks) {
                 callback.onApplicationCreate(activity);
             }
             Timber.i("%s - onApplicationCreate", activity.getClass().getSimpleName());
         }
-        mActivitySet.put(getObjectTag(activity), activity);
+        mActivityList.add(activity);
         mTopActivity = activity;
     }
 
@@ -217,11 +228,11 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         Timber.i("%s - onDestroy", activity.getClass().getSimpleName());
-        mActivitySet.remove(getObjectTag(activity));
+        mActivityList.remove(activity);
         if (mTopActivity == activity) {
             mTopActivity = null;
         }
-        if (mActivitySet.size() == 0) {
+        if (mActivityList.isEmpty()) {
             for (ApplicationLifecycleCallback callback : mLifecycleCallbacks) {
                 callback.onApplicationDestroy(activity);
             }
@@ -230,11 +241,65 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     }
 
     /**
-     * 获取一个对象的独立无二的标记
+     * 判断是否在主进程中
      */
-    private static String getObjectTag(Object object) {
-        // 对象所在的包名 + 对象的内存地址
-        return object.getClass().getName() + Integer.toHexString(object.hashCode());
+    public static boolean isMainProcess(Context context) {
+        String processName = getProcessName();
+        if (TextUtils.isEmpty(processName)) {
+            // 如果获取不到进程名称，那么则将它当做主进程
+            return true;
+        }
+        return TextUtils.equals(processName, context.getPackageName());
+    }
+
+    /**
+     * 获取当前进程名称
+     */
+    @SuppressLint("PrivateApi, DiscouragedPrivateApi")
+    @Nullable
+    public static String getProcessName() {
+        String processName = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            processName = Application.getProcessName();
+        } else {
+            try {
+                Class<?> activityThread = Class.forName("android.app.ActivityThread");
+                Method currentProcessNameMethod = activityThread.getDeclaredMethod("currentProcessName");
+                processName = (String) currentProcessNameMethod.invoke(null);
+            } catch (ClassNotFoundException | ClassCastException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!TextUtils.isEmpty(processName)) {
+            return processName;
+        }
+
+        // 利用 Linux 系统获取进程名
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("/proc/self/cmdline");
+            byte[] buffer = new byte[256];
+            int len = 0;
+            int b;
+            while ((b = inputStream.read()) > 0 && len < buffer.length) {
+                buffer[len++] = (byte) b;
+            }
+            if (len > 0) {
+                return new String(buffer, 0, len, StandardCharsets.UTF_8);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
     /**

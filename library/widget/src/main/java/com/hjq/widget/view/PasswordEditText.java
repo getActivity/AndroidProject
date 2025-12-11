@@ -3,18 +3,16 @@ package com.hjq.widget.view;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
-import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-
 import com.hjq.widget.R;
 
 /**
@@ -56,14 +54,13 @@ public final class PasswordEditText extends RegexEditText
 
         mCurrentDrawable = mVisibleDrawable;
 
-        // 密码不可见
-        addInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         if (getInputRegex() == null) {
             // 密码输入规则
-            setInputRegex(REGEX_NONNULL);
+            setInputRegex(REGEX_PASSWORD);
         }
 
         setDrawableVisible(false);
+        setPasswordMode(true);
         super.setOnTouchListener(this);
         super.setOnFocusChangeListener(this);
         super.addTextChangedListener(this);
@@ -81,6 +78,16 @@ public final class PasswordEditText extends RegexEditText
                 drawables[1],
                 visible ? mCurrentDrawable : null,
                 drawables[3]);
+    }
+
+    private void setPasswordMode(boolean passwordMode) {
+        if (passwordMode) {
+            // 密码不可见
+            setTransformationMethod(PasswordTransformationMethod.getInstance());
+        } else {
+            // 密码可见
+            setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        }
     }
 
     private void refreshDrawableStatus() {
@@ -108,11 +115,7 @@ public final class PasswordEditText extends RegexEditText
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
-        if (hasFocus && getText() != null) {
-            setDrawableVisible(getText().length() > 0);
-        } else {
-            setDrawableVisible(false);
-        }
+        setDrawableVisible(hasFocus && !TextUtils.isEmpty(getText()));
         if (mFocusChangeListener != null) {
             mFocusChangeListener.onFocusChange(view, hasFocus);
         }
@@ -144,13 +147,11 @@ public final class PasswordEditText extends RegexEditText
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (mCurrentDrawable == mVisibleDrawable) {
                     mCurrentDrawable = mInvisibleDrawable;
-                    // 密码可见
-                    setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    setPasswordMode(false);
                     refreshDrawableStatus();
                 } else if (mCurrentDrawable == mInvisibleDrawable) {
                     mCurrentDrawable = mVisibleDrawable;
-                    // 密码不可见
-                    setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    setPasswordMode(true);
                     refreshDrawableStatus();
                 }
                 Editable editable = getText();

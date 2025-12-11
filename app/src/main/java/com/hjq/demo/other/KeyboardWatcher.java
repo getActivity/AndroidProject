@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -23,8 +22,10 @@ public final class KeyboardWatcher implements
         ViewTreeObserver.OnGlobalLayoutListener,
         Application.ActivityLifecycleCallbacks {
 
-    private Activity mActivity;
-    private View mContentView;
+    @NonNull
+    private final Activity mActivity;
+    @NonNull
+    private final View mContentView;
     @Nullable
     private SoftKeyboardStateListener mListeners;
     private boolean mSoftKeyboardOpened;
@@ -121,9 +122,6 @@ public final class KeyboardWatcher implements
                 mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
             }
             mContentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-            mActivity = null;
-            mContentView = null;
             mListeners = null;
         }
     }

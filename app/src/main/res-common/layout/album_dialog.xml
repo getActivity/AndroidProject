@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rv_album_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layoutAnimation="@anim/layout_from_bottom"
+    android:orientation="horizontal"
+    app:shape_radius="@dimen/dp_20"
+    app:shape_solidColor="@color/white"
+    app:shape_type="rectangle"
+    tools:context=".ui.dialog.common.AlbumDialog"
+    tools:itemCount="4"
+    tools:layoutAnimation="@null"
+    tools:listitem="@layout/album_item" />

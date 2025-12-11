@@ -1,7 +1,6 @@
 package com.hjq.base.action;
 
 import android.view.View;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 
@@ -21,7 +20,11 @@ public interface ClickAction extends View.OnClickListener {
 
     default void setOnClickListener(@Nullable View.OnClickListener listener, @IdRes int... ids) {
         for (int id : ids) {
-            findViewById(id).setOnClickListener(listener);
+            View view = findViewById(id);
+            if (view == null) {
+                continue;
+            }
+            view.setOnClickListener(listener);
         }
     }
 
@@ -31,6 +34,9 @@ public interface ClickAction extends View.OnClickListener {
 
     default void setOnClickListener(@Nullable View.OnClickListener listener, View... views) {
         for (View view : views) {
+            if (view == null) {
+                continue;
+            }
             view.setOnClickListener(listener);
         }
     }

@@ -13,12 +13,14 @@ ext {
     // 打印当前执行的任务名称
     println "GradleLog TaskNameOutput " + taskName
 
-    def serverType = SERVER_TYPE_PRODUCT
+    def serverType
 
     if (taskName.endsWith("Debug")) {
         serverType = SERVER_TYPE_TEST
     } else if (taskName.endsWith("Preview")) {
         serverType = SERVER_TYPE_PREVIEW
+    } else {
+        serverType = SERVER_TYPE_PRODUCT
     }
 
     // 从 Gradle 命令中读取参数配置，例如：./gradlew assembleRelease -P ServerType="test"

@@ -2,9 +2,7 @@ package com.hjq.base.action;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-
 import androidx.annotation.Nullable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -35,7 +33,7 @@ public interface BundleAction {
         return getLong(name, 0);
     }
 
-    default long getLong(String name, int defaultValue) {
+    default long getLong(String name, long defaultValue) {
         Bundle bundle = getBundle();
         if (bundle == null) {
             return defaultValue;
@@ -47,7 +45,7 @@ public interface BundleAction {
         return getFloat(name, 0);
     }
 
-    default float getFloat(String name, int defaultValue) {
+    default float getFloat(String name, float defaultValue) {
         Bundle bundle = getBundle();
         if (bundle == null) {
             return defaultValue;
@@ -59,7 +57,7 @@ public interface BundleAction {
         return getDouble(name, 0);
     }
 
-    default double getDouble(String name, int defaultValue) {
+    default double getDouble(String name, double defaultValue) {
         Bundle bundle = getBundle();
         if (bundle == null) {
             return defaultValue;

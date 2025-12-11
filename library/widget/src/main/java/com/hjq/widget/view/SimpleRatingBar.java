@@ -9,10 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
-
 import com.hjq.widget.R;
 
 /**
@@ -27,7 +25,7 @@ public final class SimpleRatingBar extends View {
     private Drawable mNormalDrawable;
     /** 选中的星星图标 */
     private Drawable mFillDrawable;
-    /** 选中的星星图标 */
+    /** 选中的半星图标 */
     private Drawable mHalfDrawable;
 
     /** 当前星等级 */
@@ -62,31 +60,24 @@ public final class SimpleRatingBar extends View {
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SimpleRatingBar);
 
-        mNormalDrawable = ContextCompat.getDrawable(getContext(), array.getResourceId(R.styleable.SimpleRatingBar_normalDrawable, R.drawable.rating_star_off_ic));
-        mHalfDrawable = ContextCompat.getDrawable(getContext(), array.getResourceId(R.styleable.SimpleRatingBar_halfDrawable, R.drawable.rating_star_half_ic));
-        mFillDrawable = ContextCompat.getDrawable(getContext(), array.getResourceId(R.styleable.SimpleRatingBar_fillDrawable, R.drawable.rating_star_fill_ic));
-        // 两张图片的宽高不一致
-        if (mNormalDrawable.getIntrinsicWidth() != mFillDrawable.getIntrinsicWidth() ||
-                mNormalDrawable.getIntrinsicWidth() != mHalfDrawable.getIntrinsicWidth() ||
-                mNormalDrawable.getIntrinsicHeight() != mFillDrawable.getIntrinsicHeight() ||
-                mNormalDrawable.getIntrinsicHeight() != mHalfDrawable.getIntrinsicHeight()) {
-            throw new IllegalStateException("The width and height of the picture do not agree");
-        }
+        setRatingDrawable(ContextCompat.getDrawable(getContext(), array.getResourceId(R.styleable.SimpleRatingBar_normalDrawable, R.drawable.rating_star_off_ic)),
+                ContextCompat.getDrawable(getContext(), array.getResourceId(R.styleable.SimpleRatingBar_halfDrawable, R.drawable.rating_star_half_ic)),
+                ContextCompat.getDrawable(getContext(), array.getResourceId(R.styleable.SimpleRatingBar_fillDrawable, R.drawable.rating_star_fill_ic)));
 
-        mCurrentGrade = array.getFloat(R.styleable.SimpleRatingBar_grade, 0);
-        mGradeCount = array.getInt(R.styleable.SimpleRatingBar_gradeCount, 5);
-        mGradeWidth = array.getDimensionPixelSize(R.styleable.SimpleRatingBar_gradeWidth, mNormalDrawable.getIntrinsicWidth());
-        mGradeHeight = array.getDimensionPixelSize(R.styleable.SimpleRatingBar_gradeHeight, mFillDrawable.getIntrinsicHeight());
-        mGradeSpace = (int) array.getDimension(R.styleable.SimpleRatingBar_gradeSpace, mGradeWidth / 4f);
+        setGradeCount(array.getInt(R.styleable.SimpleRatingBar_gradeCount, 5));
+        setGradeSpace((int) array.getDimension(R.styleable.SimpleRatingBar_gradeSpace, mGradeWidth / 4f));
+        setGradeWidth(array.getDimensionPixelSize(R.styleable.SimpleRatingBar_gradeWidth, mNormalDrawable.getIntrinsicWidth()));
+        setGradeHeight(array.getDimensionPixelSize(R.styleable.SimpleRatingBar_gradeHeight, mNormalDrawable.getIntrinsicHeight()));
         switch (array.getInt(R.styleable.SimpleRatingBar_gradeStep, 0)) {
             case 0x01:
-                mGradeStep = GradleStep.ONE;
+                setGradeStep(GradleStep.ONE);
                 break;
             case 0x00:
             default:
-                mGradeStep = GradleStep.HALF;
+                setGradeStep(GradleStep.HALF);
                 break;
         }
+        setGrade(array.getFloat(R.styleable.SimpleRatingBar_grade, 0));
 
         array.recycle();
     }
@@ -131,6 +122,7 @@ public final class SimpleRatingBar extends View {
 
                 if (grade * 10 != mCurrentGrade * 10) {
                     mCurrentGrade = grade;
+                    optimizationGradeValue();
                     invalidate();
                     if (mListener != null) {
                         mListener.onRatingChanged(this, mCurrentGrade, true);
@@ -157,7 +149,7 @@ public final class SimpleRatingBar extends View {
 
             if (mCurrentGrade > i) {
                 if (mHalfDrawable != null && mGradeStep == GradleStep.HALF &&
-                        (int) mCurrentGrade == i && mCurrentGrade - (int) mCurrentGrade == 0.5f) {
+                        (int) mCurrentGrade == i && mCurrentGrade - (float) (int) mCurrentGrade == 0.5f) {
                     mHalfDrawable.setBounds(mGradeBounds);
                     mHalfDrawable.draw(canvas);
                 } else {
@@ -188,11 +180,31 @@ public final class SimpleRatingBar extends View {
             throw new IllegalStateException("The width and height of the picture do not agree");
         }
 
+        if (halfDrawable != null) {
+            if (normalDrawable.getIntrinsicWidth() != halfDrawable.getIntrinsicWidth() ||
+                    normalDrawable.getIntrinsicHeight() != halfDrawable.getIntrinsicHeight()) {
+                throw new IllegalStateException("The width and height of the picture do not agree");
+            }
+        }
+
+        if (mNormalDrawable != null) {
+            if (mGradeWidth == mNormalDrawable.getIntrinsicWidth()) {
+                mGradeWidth = 0;
+            }
+            if (mGradeHeight == mNormalDrawable.getIntrinsicHeight()) {
+                mGradeHeight = 0;
+            }
+        }
+
         mNormalDrawable = normalDrawable;
         mHalfDrawable = halfDrawable;
         mFillDrawable = fillDrawable;
-        mGradeWidth = mNormalDrawable.getIntrinsicWidth();
-        mGradeHeight = mNormalDrawable.getIntrinsicHeight();
+        if (mGradeWidth == 0) {
+            mGradeWidth = mNormalDrawable.getIntrinsicWidth();
+        }
+        if (mGradeHeight == 0) {
+            mGradeHeight = mNormalDrawable.getIntrinsicHeight();
+        }
         requestLayout();
     }
 
@@ -201,14 +213,11 @@ public final class SimpleRatingBar extends View {
     }
 
     public void setGrade(float grade) {
-        if (grade > mGradeCount) {
-            grade = mGradeCount;
-        }
-
-        if (grade - (int) grade != 0.5f || grade - (int) grade > 0) {
-            throw new IllegalArgumentException("grade must be a multiple of 0.5f");
-        }
         mCurrentGrade = grade;
+        if (mCurrentGrade > mGradeCount) {
+            mCurrentGrade = mGradeCount;
+        }
+        optimizationGradeValue();
         invalidate();
         if (mListener != null) {
             mListener.onRatingChanged(this, mCurrentGrade, false);
@@ -220,11 +229,32 @@ public final class SimpleRatingBar extends View {
     }
 
     public void setGradeCount(int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("grade count cannot be less than or equal to 0");
+        }
         if (count > mCurrentGrade) {
             mCurrentGrade = count;
         }
         mGradeCount = count;
         invalidate();
+    }
+
+    public int getGradeWidth() {
+        return mGradeWidth;
+    }
+
+    public void setGradeWidth(int width) {
+        mGradeWidth = width;
+        requestLayout();
+    }
+
+    public int getGradeHeight() {
+        return mGradeHeight;
+    }
+
+    public void setGradeHeight(int height) {
+        mGradeHeight = height;
+        requestLayout();
     }
 
     public void setGradeSpace(int space) {
@@ -234,6 +264,7 @@ public final class SimpleRatingBar extends View {
 
     public void setGradeStep(GradleStep step) {
         mGradeStep = step;
+        optimizationGradeValue();
         invalidate();
     }
 
@@ -243,6 +274,25 @@ public final class SimpleRatingBar extends View {
 
     public void setOnRatingBarChangeListener(OnRatingChangeListener listener) {
         mListener = listener;
+    }
+
+    private void optimizationGradeValue() {
+        if (mCurrentGrade - (float) (int) mCurrentGrade == 0f) {
+            return;
+        }
+        switch (mGradeStep) {
+            case HALF:
+                if (mCurrentGrade - (float) (int) mCurrentGrade > 0.5f) {
+                    mCurrentGrade = Math.round(mCurrentGrade);
+                } else if (mCurrentGrade - (float) (int) mCurrentGrade != 0.5f) {
+                    mCurrentGrade += 0.5f;
+                }
+                break;
+            case ONE:
+            default:
+                mCurrentGrade = Math.round(mCurrentGrade);
+                break;
+        }
     }
 
     public enum GradleStep {

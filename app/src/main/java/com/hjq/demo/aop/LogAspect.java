@@ -2,9 +2,8 @@ package com.hjq.demo.aop;
 
 import android.os.Looper;
 import android.os.Trace;
-
 import androidx.annotation.NonNull;
-
+import java.util.concurrent.TimeUnit;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -12,17 +11,15 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.aspectj.lang.reflect.MethodSignature;
-
-import java.util.concurrent.TimeUnit;
-
 import timber.log.Timber;
 
 /**
  *    author : Android 轮子哥
  *    github : https://github.com/getActivity/AndroidProject
  *    time   : 2019/12/06
- *    desc   : Debug 日志切面
+ *    desc   : 日志切面
  */
+@SuppressWarnings("unused")
 @Aspect
 public class LogAspect {
 
@@ -98,7 +95,7 @@ public class LogAspect {
                 builder.append(", ");
             }
             builder.append(parameterNames[i]).append('=');
-            builder.append(parameterValues[i].toString());
+            builder.append(parameterValues[i]);
         }
         builder.append(')');
 
@@ -107,7 +104,6 @@ public class LogAspect {
         }
         return builder;
     }
-
 
     /**
      * 方法执行完毕，切出

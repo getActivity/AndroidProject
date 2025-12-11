@@ -16,6 +16,9 @@
     <!-- 拍照权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- 麦克风权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <!-- 安装权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
@@ -30,6 +33,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/launcher_ic"
         android:label="${app_name}"
+        android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
@@ -61,6 +65,7 @@
         <!-- 闪屏页 -->
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -84,34 +89,35 @@
         <!-- 首页 -->
         <activity
             android:name=".ui.activity.HomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 登录页 -->
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.account.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
         <!-- 注册页 -->
         <activity
-            android:name=".ui.activity.RegisterActivity"
+            android:name=".ui.activity.account.RegisterActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
         <!-- 崩溃展示（必须在独立进程） -->
         <activity
-            android:name=".ui.activity.CrashActivity"
+            android:name=".ui.activity.common.CrashActivity"
             android:launchMode="singleTop"
             android:process=":crash"
             android:screenOrientation="landscape" />
 
         <!-- 重启应用（必须在独立进程） -->
         <activity
-            android:name=".ui.activity.RestartActivity"
+            android:name=".ui.activity.common.RestartActivity"
             android:launchMode="singleTop"
             android:process=":restart" />
 
@@ -124,7 +130,7 @@
 
         <!-- 忘记密码 -->
         <activity
-            android:name=".ui.activity.PasswordForgetActivity"
+            android:name=".ui.activity.account.PasswordForgetActivity"
             android:label="@string/password_forget_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -132,7 +138,7 @@
 
         <!-- 重置密码 -->
         <activity
-            android:name=".ui.activity.PasswordResetActivity"
+            android:name=".ui.activity.account.PasswordResetActivity"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -140,7 +146,7 @@
 
         <!-- 更换手机 -->
         <activity
-            android:name=".ui.activity.PhoneResetActivity"
+            android:name=".ui.activity.account.PhoneResetActivity"
             android:label="@string/phone_reset_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -155,66 +161,67 @@
 
         <!-- 个人资料 -->
         <activity
-            android:name=".ui.activity.PersonalDataActivity"
+            android:name=".ui.activity.account.PersonalDataActivity"
             android:label="@string/personal_data_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 网页浏览 -->
         <activity
-            android:name=".ui.activity.BrowserActivity"
+            android:name=".ui.activity.common.BrowserActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/web_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 拍照选择 -->
         <activity
-            android:name=".ui.activity.CameraActivity"
+            android:name=".ui.activity.common.CameraActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 图片裁剪 -->
         <activity
-            android:name=".ui.activity.ImageCropActivity"
+            android:name=".ui.activity.common.ImageCropActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 图片选择 -->
         <activity
-            android:name=".ui.activity.ImageSelectActivity"
+            android:name=".ui.activity.common.ImageSelectActivity"
             android:label="@string/image_select_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 查看大图 -->
         <activity
-            android:name=".ui.activity.ImagePreviewActivity"
+            android:name=".ui.activity.common.ImagePreviewActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!-- 播放视频（自适应方向） -->
         <activity
-            android:name=".ui.activity.VideoPlayActivity"
+            android:name=".ui.activity.common.VideoPlayActivity"
             android:launchMode="singleTop"
             android:theme="@style/FullScreenTheme" />
 
         <!-- 播放视频（竖屏方向） -->
         <activity
-            android:name=".ui.activity.VideoPlayActivity$Portrait"
+            android:name=".ui.activity.common.VideoPlayActivity$Portrait"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme" />
 
         <!-- 播放视频（横屏方向） -->
         <activity
-            android:name=".ui.activity.VideoPlayActivity$Landscape"
+            android:name=".ui.activity.common.VideoPlayActivity$Landscape"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:theme="@style/FullScreenTheme" />
 
         <!-- 选择视频 -->
         <activity
-            android:name=".ui.activity.VideoSelectActivity"
+            android:name=".ui.activity.common.VideoSelectActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
@@ -229,13 +236,6 @@
             android:name=".ui.activity.StatusActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!-- 微信回调（请注意这个 Activity 放置的包名要和当前项目的包名保持一致，否则将不能正常回调） -->
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
     </application>
 

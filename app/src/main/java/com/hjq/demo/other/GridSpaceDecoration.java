@@ -3,7 +3,6 @@ package com.hjq.demo.other;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,18 +30,25 @@ public final class GridSpaceDecoration extends RecyclerView.ItemDecoration {
         int position = recyclerView.getChildAdapterPosition(view);
         int spanCount = ((GridLayoutManager) recyclerView.getLayoutManager()).getSpanCount();
 
-        // 每一行的最后一个才留出右边间隙
-        if ((position + 1) % spanCount == 0) {
-            rect.right = mSpace;
-        }
-
-        // 只有第一行才留出顶部间隙
         if (position < spanCount) {
+            // 只有第一行才留出顶部间隙
             rect.top = mSpace;
         }
 
+        if ((position + 1) % spanCount == 1) {
+            // 每一行的第一个
+            rect.left = mSpace;
+            rect.right = mSpace / (spanCount + 1);
+        } else if ((position + 1) % spanCount == 0) {
+            // 每一行的最后一个
+            rect.left = mSpace / (spanCount + 1);
+            rect.right = mSpace;
+        } else {
+            rect.left = Math.round(mSpace * ((spanCount - 1f) / spanCount));
+            rect.right = rect.left;
+        }
+
         rect.bottom = mSpace;
-        rect.left = mSpace;
     }
 
     @Override

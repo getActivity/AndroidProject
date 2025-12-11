@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Log {
 
-    String value() default "AppLog";
+    String value() default "AOPLog";
 }

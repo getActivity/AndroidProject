@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.adapter.common.ImageSelectAdapter">
+
+    <com.hjq.widget.view.ScaleImageView
+        android:id="@+id/iv_image_select_image"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/logo_big_ic" />
+
+    <FrameLayout
+        android:id="@+id/fl_image_select_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_3"
+        android:paddingBottom="@dimen/dp_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_image_select_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            app:buttonCompat="@drawable/checkbox_selector" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

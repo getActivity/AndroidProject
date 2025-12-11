@@ -1,0 +1,173 @@
+name: 提交 Bug
+description: 请告诉我框架存在的问题，我会协助你解决此问题！
+title: "[Bug]："
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## [【警告：请务必按照 issue 模板填写，不要抱有侥幸心理，一旦发现 issue 没有按照模板认真填写，一律直接关闭】](https://github.com/getActivity/IssueTemplateGuide)
+  - type: input
+    id: input_id_1
+    attributes:
+      label: 框架版本【必填】
+      description: 请输入你使用的框架版本
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_2
+    attributes:
+      label: 问题描述【必填】
+      description: 请输入你对这个问题的描述
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_3
+    attributes:
+      label: 复现步骤【必填】
+      description: 请输入问题的复现步骤
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_4
+    attributes:
+      label: 是否必现【必填】
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: input
+    id: input_id_5
+    attributes:
+      label: 项目 targetSdkVersion【必填】
+    validations:
+      required: true
+  - type: input
+    id: input_id_6
+    attributes:
+      label: 出现问题的手机信息【必填】
+      description: 请填写出现问题的品牌和机型
+    validations:
+      required: true
+  - type: input
+    id: input_id_7
+    attributes:
+      label: 出现问题的安卓版本【必填】
+      description: 请填写出现问题的 Android 版本
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_8
+    attributes:
+      label: 问题信息的来源渠道【必填】
+      multiple: true
+      options:
+        - 自己遇到的
+        - Bugly 看到的
+        - 用户反馈
+        - 其他渠道
+  - type: input
+    id: input_id_9
+    attributes:
+      label: 是部分机型还是所有机型都会出现【必答】
+      description: 部分/全部（例如：某为，某 Android 版本会出现）
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_10
+    attributes:
+      label: 框架最新的版本是否存在这个问题【必答】
+      description: 如果用的是旧版本的话，建议升级看问题是否还存在
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_11
+    attributes:
+      label: 框架文档是否提及了该问题【必答】
+      description: 文档会提供最常见的问题解答，可以先看看是否有自己想要的
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_12
+    attributes:
+      label: 是否已经查阅框架文档但还未能解决的【必答】
+      description: 如果查阅了文档但还是没有解决的话，可以选择是
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_13
+    attributes:
+      label: issue 列表中是否有人曾提过类似的问题【必答】
+      description: 可以在 issue 列表在搜索问题关键字，参考一下别人的解决方案
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_14
+    attributes:
+      label: 是否已经搜索过了 issue 列表但还未能解决的【必答】
+      description: 如果搜索过了 issue 列表但是问题没有解决的话，可以选择是
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_15
+    attributes:
+      label: 是否可以通过 Demo 来复现该问题【必答】
+      description: 排查一下是不是自己的项目代码写得有问题导致的
+      multiple: false
+      options:
+        - 未选择
+        - 是
+        - 否
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_16
+    attributes:
+      label: 提供报错堆栈
+      description: 如果有报错的话必填，注意不要拿被混淆过的代码堆栈上来
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: input_id_17
+    attributes:
+      label: 提供截图或视频
+      description: 根据需要提供，此项不强制
+    validations:
+      required: false
+  - type: textarea
+    id: input_id_18
+    attributes:
+      label: 提供解决方案
+      description: 如果已经解决了的话，此项不强制
+    validations:
+      required: false

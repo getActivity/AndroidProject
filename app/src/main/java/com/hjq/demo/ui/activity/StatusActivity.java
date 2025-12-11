@@ -1,11 +1,10 @@
 package com.hjq.demo.ui.activity;
 
 import androidx.core.content.ContextCompat;
-
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.ui.dialog.MenuDialog;
+import com.hjq.demo.ui.dialog.common.MenuDialog;
 import com.hjq.demo.widget.StatusLayout;
 
 /**
@@ -50,7 +49,7 @@ public final class StatusActivity extends AppActivity
                             showEmpty();
                             break;
                         case 3:
-                            showLayout(ContextCompat.getDrawable(getActivity(), R.drawable.status_order_ic), "暂无订单", null);
+                            showLayout(ContextCompat.getDrawable(StatusActivity.this, R.drawable.status_order_ic), "暂无订单", null);
                             break;
                         default:
                             break;

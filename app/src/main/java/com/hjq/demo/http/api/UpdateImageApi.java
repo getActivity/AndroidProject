@@ -1,7 +1,7 @@
 package com.hjq.demo.http.api;
 
+import androidx.annotation.NonNull;
 import com.hjq.http.config.IRequestApi;
-
 import java.io.File;
 
 /**
@@ -12,6 +12,7 @@ import java.io.File;
  */
 public final class UpdateImageApi implements IRequestApi {
 
+    @NonNull
     @Override
     public String getApi() {
         return "update/image";

@@ -1,6 +1,7 @@
 package com.hjq.widget.view;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,10 +15,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.animation.AccelerateInterpolator;
-
 import androidx.annotation.FloatRange;
 import androidx.appcompat.widget.AppCompatButton;
-
 import com.hjq.widget.R;
 
 /**
@@ -54,11 +53,11 @@ public final class SubmitButton extends AppCompatButton {
     private int mViewHeight;
 
     /** View 最大宽高 */
-    private int mMaxWidth;
-    private int mMaxHeight;
+    private int mMaxViewWidth;
+    private int mMaxViewHeight;
 
     /** 画布坐标原点 */
-    private int mX, mY;
+    private int mCanvasX, mCanvasY;
 
     /** 进度按钮的颜色 */
     private final int mProgressColor;
@@ -67,15 +66,15 @@ public final class SubmitButton extends AppCompatButton {
     /** 失败按钮的颜色 */
     private final int mErrorColor;
 
-    private Paint mBackgroundPaint, mLoadingPaint, mResultPaint;
+    private final Paint mBackgroundPaint, mLoadingPaint, mResultPaint;
 
-    private Path mButtonPath;
-    private Path mLoadPath;
-    private Path mDstPath;
-    private PathMeasure mPathMeasure;
-    private Path mResultPath;
+    private final Path mButtonPath;
+    private final Path mLoadPath;
+    private final Path mDstPath;
+    private final PathMeasure mPathMeasure;
+    private final Path mResultPath;
 
-    private RectF mCircleLeft, mCircleMid, mCircleRight;
+    private final RectF mCircleLeft, mCircleMid, mCircleRight;
 
     private float mLoadValue;
 
@@ -106,11 +105,6 @@ public final class SubmitButton extends AppCompatButton {
         mProgressStyle = typedArray.getInt(R.styleable.SubmitButton_progressStyle, STYLE_LOADING);
         typedArray.recycle();
 
-        initPaint();
-        resetPaint();
-    }
-
-    private void initPaint() {
         mBackgroundPaint = new Paint();
         mLoadingPaint = new Paint();
         mResultPaint = new Paint();
@@ -125,6 +119,8 @@ public final class SubmitButton extends AppCompatButton {
         mCircleRight = new RectF();
 
         mPathMeasure = new PathMeasure();
+
+        resetPaint();
     }
 
     /**
@@ -160,11 +156,11 @@ public final class SubmitButton extends AppCompatButton {
             mViewWidth = width - 10;
             mViewHeight = height - 10;
 
-            mX = (int) (width * 0.5);
-            mY = (int) (height * 0.5);
+            mCanvasX = (int) (width * 0.5);
+            mCanvasY = (int) (height * 0.5);
 
-            mMaxWidth = mViewWidth;
-            mMaxHeight = mViewHeight;
+            mMaxViewWidth = mViewWidth;
+            mMaxViewHeight = mViewHeight;
         }
     }
 
@@ -178,14 +174,14 @@ public final class SubmitButton extends AppCompatButton {
             case STATE_LOADING:
                 // 清除画布之前绘制的背景
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                canvas.translate(mX, mY);
+                canvas.translate(mCanvasX, mCanvasY);
                 drawButton(canvas);
                 drawLoading(canvas);
                 break;
             case STATE_RESULT:
                 // 清除画布之前绘制的背景
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                canvas.translate(mX, mY);
+                canvas.translate(mCanvasX, mCanvasY);
                 drawButton(canvas);
                 drawResult(canvas, mSucceed);
                 break;
@@ -213,7 +209,7 @@ public final class SubmitButton extends AppCompatButton {
      */
     private void drawLoading(Canvas canvas) {
         mDstPath.reset();
-        mCircleMid.set(- mMaxHeight / 2f, - mMaxHeight / 2f, mMaxHeight / 2f, mMaxHeight / 2f);
+        mCircleMid.set(-mMaxViewHeight / 2f, -mMaxViewHeight / 2f, mMaxViewHeight / 2f, mMaxViewHeight / 2f);
         mLoadPath.addArc(mCircleMid, 270, 359.999f);
         mPathMeasure.setPath(mLoadPath, true);
         float startD = 0f, stopD;
@@ -230,8 +226,8 @@ public final class SubmitButton extends AppCompatButton {
     /**
      * 绘制结果按钮
      */
-    private void drawResult(Canvas canvas, boolean isSucceed) {
-        if (isSucceed) {
+    private void drawResult(Canvas canvas, boolean succeed) {
+        if (succeed) {
             mResultPath.moveTo(- mViewHeight / 6f, 0);
             mResultPath.lineTo(0, (float) (- mViewHeight / 6 + (1 + Math.sqrt(5)) * mViewHeight / 12));
             mResultPath.lineTo(mViewHeight / 6f, - mViewHeight / 6f);
@@ -249,22 +245,10 @@ public final class SubmitButton extends AppCompatButton {
      */
     private void startSubmitAnim() {
         mButtonState = STATE_SUBMIT;
-        mSubmitAnim = ValueAnimator.ofInt(mMaxWidth, mMaxHeight);
-        mSubmitAnim.addUpdateListener(animation -> {
-            mViewWidth = (int) animation.getAnimatedValue();
-            if (mViewWidth == mViewHeight) {
-                mBackgroundPaint.setColor(Color.parseColor("#DDDDDD"));
-                mBackgroundPaint.setStyle(Paint.Style.STROKE);
-            }
-            invalidate();
-        });
+        mSubmitAnim = ValueAnimator.ofInt(mMaxViewWidth, mMaxViewHeight);
         mSubmitAnim.setDuration(300);
         mSubmitAnim.setInterpolator(new AccelerateInterpolator());
-        mSubmitAnim.start();
-        mSubmitAnim.addListener(new Animator.AnimatorListener() {
-
-            @Override
-            public void onAnimationStart(Animator animation) {}
+        mSubmitAnim.addListener(new AnimatorListenerAdapter() {
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -274,13 +258,16 @@ public final class SubmitButton extends AppCompatButton {
                     startLoadingAnim();
                 }
             }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {}
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {}
         });
+        mSubmitAnim.addUpdateListener(animation -> {
+            mViewWidth = (int) animation.getAnimatedValue();
+            if (mViewWidth == mViewHeight) {
+                mBackgroundPaint.setColor(Color.parseColor("#DDDDDD"));
+                mBackgroundPaint.setStyle(Paint.Style.STROKE);
+            }
+            invalidate();
+        });
+        mSubmitAnim.start();
     }
 
     /**
@@ -292,12 +279,12 @@ public final class SubmitButton extends AppCompatButton {
             return;
         }
         mLoadingAnim = ValueAnimator.ofFloat(0f, 1f);
+        mLoadingAnim.setDuration(2000);
+        mLoadingAnim.setRepeatCount(ValueAnimator.INFINITE);
         mLoadingAnim.addUpdateListener(animation -> {
             mLoadValue = (float) animation.getAnimatedValue();
             invalidate();
         });
-        mLoadingAnim.setDuration(2000);
-        mLoadingAnim.setRepeatCount(ValueAnimator.INFINITE);
         mLoadingAnim.start();
     }
 
@@ -309,10 +296,20 @@ public final class SubmitButton extends AppCompatButton {
         if (mLoadingAnim != null) {
             mLoadingAnim.cancel();
         }
-        mResultAnim = ValueAnimator.ofInt(mMaxHeight, mMaxWidth);
+        mResultAnim = ValueAnimator.ofInt(mMaxViewHeight, mMaxViewWidth);
+        mResultAnim.setDuration(300);
+        mResultAnim.setInterpolator(new AccelerateInterpolator());
+        mResultAnim.addListener(new AnimatorListenerAdapter() {
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // 请求重新测量自身，因为 onMeasure 方法中避开了动画执行中获取 View 宽高
+                requestLayout();
+            }
+        });
         mResultAnim.addUpdateListener(animation -> {
             mViewWidth = (int) animation.getAnimatedValue();
-            mResultPaint.setAlpha(((mViewWidth - mViewHeight) * 255) / (mMaxWidth - mMaxHeight));
+            mResultPaint.setAlpha(((mViewWidth - mViewHeight) * 255) / (mMaxViewWidth - mMaxViewHeight));
             if (mViewWidth == mViewHeight) {
                 if (mSucceed) {
                     mBackgroundPaint.setColor(mSucceedColor);
@@ -323,25 +320,6 @@ public final class SubmitButton extends AppCompatButton {
             }
             invalidate();
         });
-        mResultAnim.addListener(new Animator.AnimatorListener() {
-
-            @Override
-            public void onAnimationStart(Animator animation) {}
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                // 请求重新测量自身，因为 onMeasure 方法中避开了动画执行中获取 View 宽高
-                requestLayout();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {}
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {}
-        });
-        mResultAnim.setDuration(300);
-        mResultAnim.setInterpolator(new AccelerateInterpolator());
         mResultAnim.start();
     }
 
@@ -427,8 +405,8 @@ public final class SubmitButton extends AppCompatButton {
             mResultAnim.cancel();
         }
         mButtonState = STATE_NONE;
-        mViewWidth = mMaxWidth;
-        mViewHeight = mMaxHeight;
+        mViewWidth = mMaxViewWidth;
+        mViewHeight = mMaxViewHeight;
         mSucceed = false;
         mDoResult = false;
         mCurrentProgress = 0;
