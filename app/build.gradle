@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'io.github.wurensen.android-aspectjx'
+    id 'android.aop'
 //    id 'com.starter.easylauncher'
 }
 
@@ -121,10 +121,7 @@ android {
     }
 
     // AOP 配置（exclude 和 include 二选一）
-    // 需要进行配置，否则就会引发冲突，具体表现为：
-    // 第一种：编译不过去，报错：java.util.zip.ZipException：Cause: zip file is empty
-    // 第二种：编译能过去，但运行时报错：ClassNotFoundException: Didn't find class on path: DexPathList
-    aspectjx {
+    androidAopConfig {
         // 排除一些第三方库的包名（Gson、 LeakCanary 和 AOP 有冲突）
         // exclude 'androidx', 'com.google', 'com.squareup', 'org.apache', 'com.alipay', 'com.taobao', 'versions.9'
         // 只对以下包名做 AOP 处理
@@ -251,6 +248,10 @@ dependencies {
 
     // 软键盘遮挡解决方案：https://github.com/liangjingkanji/soft-input-event
     implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
+
+    // Android AOP 框架：https://github.com/FlyJingFish/AndroidAOP
+    implementation 'io.github.flyjingfish:androidaop-core:2.7.4'
+    annotationProcessor 'io.github.flyjingfish:androidaop-apt:2.7.4'
 
     // 多语种：https://github.com/getActivity/MultiLanguages
     // 悬浮窗：https://github.com/getActivity/EasyWindow
