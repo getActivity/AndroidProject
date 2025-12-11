@@ -4,5 +4,5 @@
   <groupId>com.umeng.umsdk</groupId>
   <artifactId>share-qq</artifactId>
   <version>7.2.2</version>
-  <packaging>aar</packaging>
+  <packaging>jar</packaging>
 </project>
