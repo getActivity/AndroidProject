@@ -250,8 +250,8 @@ dependencies {
     }
 
     // 内存泄漏监测框架：https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
-    previewImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-8'
+    previewImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-8'
 
     // 软键盘遮挡解决方案：https://github.com/liangjingkanji/soft-input-event
     implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
