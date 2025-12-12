@@ -46,7 +46,8 @@ ext {
         case SERVER_TYPE_TEST:
         case SERVER_TYPE_PREVIEW:
             LOG_ENABLE = true
-            BUGLY_ID = "请自行替换 Bugly 上面的 AppID"
+            BUGLY_ID = "请自行替换 Bugly 上面的 AppId"
+            BUGLY_KEY = "请自行替换 Bugly 上面的 AppKey"
             if (serverType == SERVER_TYPE_PREVIEW) {
                 HOST_URL = "https://www.pre.baidu.com/"
             } else {
@@ -55,7 +56,8 @@ ext {
             break
         case SERVER_TYPE_PRODUCT:
             LOG_ENABLE = false
-            BUGLY_ID = "请自行替换 Bugly 上面的 AppID"
+            BUGLY_ID = "请自行替换 Bugly 上面的 AppId"
+            BUGLY_KEY = "请自行替换 Bugly 上面的 AppKey"
             HOST_URL = "https://www.baidu.com/"
             break
     }

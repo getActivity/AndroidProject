@@ -31,12 +31,14 @@ android {
         // 混淆配置
         proguardFiles 'proguard-sdk.pro', 'proguard-app.pro'
 
-        // 日志打印开关
+        // 日志开关
         buildConfigField('boolean', 'LOG_ENABLE', '' + LOG_ENABLE + '')
-        // 测试包下的 BuglyId
-        buildConfigField('String', 'BUGLY_ID', '"' + BUGLY_ID + '"')
-        // 测试服务器的主机地址
+        // 主机地址
         buildConfigField('String', 'HOST_URL', '"' + HOST_URL + '"')
+        // BuglyId
+        buildConfigField('String', 'BUGLY_ID', '"' + BUGLY_ID + '"')
+        // BuglyKey
+        buildConfigField('String', 'BUGLY_KEY', '"' + BUGLY_KEY + '"')
     }
 
     sourceSets {
@@ -224,9 +226,8 @@ dependencies {
     // 手势 ImageView：https://github.com/Baseflow/PhotoView
     implementation 'com.github.Baseflow:PhotoView:2.3.0'
 
-    // Bugly 异常捕捉：https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20190418140644
-    implementation 'com.tencent.bugly:crashreport:4.1.9.3'
-    implementation 'com.tencent.bugly:nativecrashreport:3.9.2'
+    // Bugly 异常捕捉：https://bugly.tds.qq.com/docs/sdk/android/
+    implementation 'com.tencent.bugly_16kb:bugly-pro:4.4.7.3'
 
     // 动画解析库：https://github.com/airbnb/lottie-android
     // 动画资源：https://lottiefiles.com、https://icons8.com/animated-icons

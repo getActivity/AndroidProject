@@ -35,7 +35,8 @@ import com.hjq.http.request.HttpRequest;
 import com.hjq.toast.Toaster;
 import com.hjq.umeng.UmengClient;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.library.Bugly;
+import com.tencent.bugly.library.BuglyBuilder;
 import com.tencent.mmkv.MMKV;
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
@@ -115,7 +116,9 @@ public final class InitManager {
         CrashHandler.register(application);
 
         // Bugly 异常捕捉
-        CrashReport.initCrashReport(application, AppConfig.getBuglyId(), AppConfig.isDebug());
+        BuglyBuilder builder = new BuglyBuilder(AppConfig.getBuglyId(), AppConfig.getBuglyKey());
+        builder.debugMode = AppConfig.isDebug();
+        Bugly.init(application, builder);
 
         // Activity 栈管理初始化
         ActivityManager.getInstance().init(application);
@@ -171,11 +174,12 @@ public final class InitManager {
             }
 
             private void handlerGsonParseException(String message) {
+                IllegalArgumentException e = new IllegalArgumentException(message);
                 if (AppConfig.isDebug()) {
-                    throw new IllegalArgumentException(message);
+                    throw e;
                 } else {
                     // 上报到 Bugly 错误列表中
-                    CrashReport.postCatchedException(new IllegalArgumentException(message));
+                    Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
                 }
             }
         });

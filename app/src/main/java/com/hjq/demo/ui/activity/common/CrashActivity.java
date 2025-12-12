@@ -25,7 +25,7 @@ import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.manager.ThreadPoolManager;
 import com.hjq.demo.other.AppConfig;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.library.Bugly;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
@@ -210,7 +210,7 @@ public final class CrashActivity extends AppActivity {
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            CrashReport.postCatchedException(e);
+            Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
         }
     }
 

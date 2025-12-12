@@ -18,7 +18,7 @@ import com.hjq.demo.permission.PermissionDescription;
 import com.hjq.demo.permission.PermissionInterceptor;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.library.Bugly;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -200,7 +200,7 @@ public final class ImageCropActivity extends AppActivity {
             });
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-            CrashReport.postCatchedException(e);
+            Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
             setResult(RESULT_ERROR, new Intent().putExtra(INTENT_KEY_OUT_ERROR, getString(R.string.image_crop_error_not_support)));
             finish();
         }

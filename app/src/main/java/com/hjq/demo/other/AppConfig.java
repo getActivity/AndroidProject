@@ -53,16 +53,23 @@ public final class AppConfig {
     }
 
     /**
-     * 获取 Bugly Id
+     * 获取服务器主机地址
+     */
+    public static String getHostUrl() {
+        return BuildConfig.HOST_URL;
+    }
+
+    /**
+     * 获取 BuglyId
      */
     public static String getBuglyId() {
         return BuildConfig.BUGLY_ID;
     }
 
     /**
-     * 获取服务器主机地址
+     * 获取 BuglyKey
      */
-    public static String getHostUrl() {
-        return BuildConfig.HOST_URL;
+    public static String getBuglyKey() {
+        return BuildConfig.BUGLY_KEY;
     }
 }

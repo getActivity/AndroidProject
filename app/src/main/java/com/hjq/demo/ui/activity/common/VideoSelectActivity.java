@@ -33,7 +33,7 @@ import com.hjq.demo.widget.StatusLayout;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
 import com.hjq.widget.view.FloatActionButton;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.library.Bugly;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -546,7 +546,7 @@ public final class VideoSelectActivity extends AppActivity
                 // 荣耀 LLD AL20 Android 8.0 出现：java.lang.IllegalArgumentException
                 // 荣耀 HLK AL00 Android 10.0 出现：java.lang.RuntimeException：setDataSource failed: status = 0x80000000
                 e.printStackTrace();
-                CrashReport.postCatchedException(e);
+                Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
             }
 
             long videoSize = new File(videoPath).length();

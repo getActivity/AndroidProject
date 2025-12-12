@@ -27,7 +27,7 @@ import com.hjq.demo.ui.activity.common.VideoPlayActivity;
 import com.hjq.demo.ui.activity.common.VideoSelectActivity;
 import com.hjq.demo.ui.dialog.common.InputDialog;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.library.Bugly;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,11 +167,12 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_mine_crash) {
 
+            IllegalStateException e = new IllegalStateException("are you ok?");
             // 上报错误到 Bugly 上
-            CrashReport.postCatchedException(new IllegalStateException("are you ok?"));
+            Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
             // 关闭 Bugly 异常捕捉
-            CrashReport.closeBugly();
-            throw new IllegalStateException("are you ok?");
+            Bugly.setCrashMonitorAble(Bugly.JAVA_CRASH, false);
+            throw e;
 
         } else if (viewId == R.id.btn_home_mine_donate) {
 

@@ -19,7 +19,7 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.ui.adapter.common.TabAdapter;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.library.Bugly;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -505,7 +505,7 @@ public final class AddressDialog {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                CrashReport.postCatchedException(e);
+                Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
             }
             return null;
         }
@@ -529,7 +529,7 @@ public final class AddressDialog {
                 return list;
             } catch (JSONException e) {
                 e.printStackTrace();
-                CrashReport.postCatchedException(e);
+                Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
                 return null;
             }
         }
@@ -553,7 +553,7 @@ public final class AddressDialog {
                 return list;
             } catch (JSONException e) {
                 e.printStackTrace();
-                CrashReport.postCatchedException(e);
+                Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
                 return null;
             }
         }
@@ -575,7 +575,7 @@ public final class AddressDialog {
                 return new JSONArray(outStream.toString());
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                CrashReport.postCatchedException(e);
+                Bugly.handleCatchException(Thread.currentThread(), e, e.getMessage(), null, true);
             }
             return null;
         }
