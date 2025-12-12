@@ -215,8 +215,8 @@ dependencies {
 
     // 图片加载框架：https://github.com/bumptech/glide
     // 官方使用文档：https://github.com/Muyangmin/glide-docs-cn
-    implementation 'com.github.bumptech.glide:glide:4.16.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
 
     // 沉浸式框架：https://github.com/gyf-dev/ImmersionBar
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
