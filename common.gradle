@@ -69,7 +69,7 @@ dependencies {
 
     // AndroidX 库：https://github.com/androidx/androidx
     // 更新日志：https://developer.android.google.cn/jetpack/androidx/releases/appcompat?hl=zh-cn
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     // Material 库：https://github.com/material-components/material-components-android
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.13.0'
 }
