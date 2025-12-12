@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 应用主题样式 -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -46,6 +46,11 @@
         <!-- https://www.jianshu.com/p/d0d907754603 -->
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowDisablePreview">true</item>
+        <!-- 适配 Android 12 SplashScreen 特性  -->
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/transparent</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="31">@color/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@color/transparent</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="31">@color/transparent</item>
     </style>
 
 </resources>
