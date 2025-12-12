@@ -244,7 +244,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     // 腾讯 MMKV：https://github.com/Tencent/MMKV
-    implementation ('com.tencent:mmkv-static:1.3.12') {
+    implementation ('com.tencent:mmkv-static:2.3.0') {
         // 避免版本不一致导致的依赖冲突，从而导致编译报错
         exclude group: 'androidx.annotation', module: 'annotation'
     }
