@@ -39,6 +39,11 @@ android {
         buildConfigField('String', 'BUGLY_ID', '"' + BUGLY_ID + '"')
         // BuglyKey
         buildConfigField('String', 'BUGLY_KEY', '"' + BUGLY_KEY + '"')
+
+        // 仅保留 arm64-v8a 架构（需要注意的是 mmkv 库在 2.0 及之后的版本已经不支持在 32 位的机器上面运行）
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
     }
 
     sourceSets {
@@ -82,10 +87,6 @@ android {
             addManifestPlaceholders([
                     'app_name'    :    '@string/app_name_debug'
             ])
-            // 调试模式下只保留一种架构的 so 库，提升打包速度
-            ndk {
-                abiFilters 'arm64-v8a'
-            }
         }
 
         preview.initWith(debug)
@@ -113,13 +114,6 @@ android {
             addManifestPlaceholders([
                     'app_name'    :    '@string/app_name'
             ])
-            // 仅保留两种架构的 so 库，根据 Bugly 统计得出
-            ndk {
-                // armeabi：万金油架构平台（占用率：0%）
-                // armeabi-v7a：曾经主流的架构平台（占用率：5%）
-                // arm64-v8a：目前主流架构平台（占用率：95%）
-                abiFilters 'armeabi-v7a', 'arm64-v8a'
-            }
         }
     }
 
