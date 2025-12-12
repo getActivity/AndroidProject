@@ -9,6 +9,12 @@ apply from : '../common.gradle'
 
 // Android 代码规范文档：https://github.com/getActivity/AndroidCodeStandard
 android {
+    namespace 'com.hjq.demo'
+
+    buildFeatures {
+        // 是否生成 BuildConfig 类
+        buildConfig true
+    }
 
     // 资源目录存放指引：https://developer.android.google.cn/guide/topics/resources/providing-resources
     defaultConfig {

@@ -1,7 +1,8 @@
 // AndroidProject 版本：v15.0
 plugins {
-    id 'com.android.application' version '7.4.2' apply false
-    id 'org.jetbrains.kotlin.android' version '1.8.22' apply false
+    id 'com.android.application' version '8.13.2' apply false
+    id 'com.android.library' version '8.13.2' apply false
+    id 'org.jetbrains.kotlin.android' version '2.2.21' apply false
     // AOP 插件：https://github.com/FlyJingFish/AndroidAOP
     id 'io.github.flyjingfish.androidaop' version '2.7.4' apply false
     // 多 buildType 图标插件：https://github.com/usefulness/easylauncher-gradle-plugin

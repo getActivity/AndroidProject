@@ -4,6 +4,7 @@ plugins {
 apply from : '../../common.gradle'
 
 android {
+    namespace 'com.hjq.base'
 
     defaultConfig {
         // 模块混淆配置

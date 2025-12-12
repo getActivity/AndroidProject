@@ -36,11 +36,10 @@ android {
     }
 
     // 代码警告配置
-    lintOptions {
-        // 禁用文本硬编码警告
-        disable 'HardcodedText'
-        // 禁用图片描述警告
-        disable 'ContentDescription'
+    lint {
+        // HardcodedText：禁用文本硬编码警告
+        // ContentDescription：禁用图片描述警告
+        disable 'HardcodedText', 'ContentDescription'
     }
 
     // 读取 local.properties 文件配置
@@ -62,15 +61,7 @@ android {
     }
 }
 
-afterEvaluate {
-    // 前提条件是这个 Module 工程必须是 Library 类型，并且排除名为 umeng 的 Module 工程
-    if (android.defaultConfig.applicationId == null && "umeng" != getName()) {
-        // 排除 BuildConfig.class
-        generateReleaseBuildConfig.enabled = false
-        generatePreviewBuildConfig.enabled = false
-        generateDebugBuildConfig.enabled = false
-    }
-}
+
 
 dependencies {
     // 依赖 libs 目录下所有的 jar 和 aar 包

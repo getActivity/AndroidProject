@@ -4,6 +4,12 @@ plugins {
 apply from : '../../common.gradle'
 
 android {
+    namespace 'com.hjq.umeng'
+
+    buildFeatures {
+        // 是否生成 BuildConfig 类
+        buildConfig true
+    }
 
     defaultConfig {
         // 模块混淆配置

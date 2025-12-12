@@ -16,8 +16,6 @@ pluginManagement {
         mavenCentral()
         // Google 仓库：https://maven.google.com/web/index.html
         google()
-        // noinspection JcenterRepositoryObsolete
-        jcenter()
     }
 }
 dependencyResolutionManagement {
@@ -36,8 +34,6 @@ dependencyResolutionManagement {
         mavenCentral()
         // Google 仓库：https://maven.google.com/web/index.html
         google()
-        // noinspection JcenterRepositoryObsolete
-        jcenter()
     }
 }
 
