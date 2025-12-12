@@ -199,7 +199,7 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
     }
     // Json 解析框架：https://github.com/google/gson
-    implementation ('com.google.code.gson:gson:2.13.1') {
+    implementation ('com.google.code.gson:gson:2.13.2') {
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
     }
     // Kotlin 反射库：用于反射 Kotlin data class 类对象
