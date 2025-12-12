@@ -1,6 +1,7 @@
 .gradle
 .idea
 .cxx
+.kotlin
 .externalNativeBuild
 build
 captures
