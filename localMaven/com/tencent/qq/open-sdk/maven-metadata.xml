@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.tencent.qq</groupId>
+  <artifactId>open-sdk</artifactId>
+  <versioning>
+    <latest>3.5.18.0</latest>
+    <release>3.5.18.0</release>
+    <versions>
+      <version>3.5.18.0</version>
+    </versions>
+    <lastUpdated>20251117000000</lastUpdated>
+  </versioning>
+</metadata>

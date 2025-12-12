@@ -3,11 +3,11 @@
   <groupId>com.umeng.umsdk</groupId>
   <artifactId>share-wx</artifactId>
   <versioning>
-    <latest>7.2.2</latest>
-    <release>7.2.2</release>
+    <latest>7.3.7</latest>
+    <release>7.3.7</release>
     <versions>
-      <version>7.2.2</version>
+      <version>7.3.7</version>
     </versions>
-    <lastUpdated>20221202112024</lastUpdated>
+    <lastUpdated>20251212121800</lastUpdated>
   </versioning>
 </metadata>
