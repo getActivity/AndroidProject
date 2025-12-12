@@ -1,0 +1,144 @@
+[versions]
+agp = "8.13.2"
+kotlin = "2.2.21"
+androidAop = "2.7.4"
+easyLauncher = "6.4.1"
+appCompat = "1.7.1"
+material = "1.13.0"
+deviceCompat = "2.5"
+xxPermissions = "28.0"
+titleBar = "10.8"
+toaster = "13.8"
+easyHttp = "13.0"
+okHttp = "3.12.13"
+gsonFactory = "10.3"
+gson = "2.13.2"
+kotlinReflect = "2.2.20"
+shapeView = "10.0"
+shapeDrawable = "3.3"
+nestedScrollLayout = "2.0"
+glide = "5.0.5"
+immersionBar = "3.2.2"
+photoView = "2.3.0"
+buglyPro = "4.4.7.3"
+lottie = "6.7.1"
+refreshAlpha = "3.0.0-alpha"
+timber = "5.0.1"
+circleIndicator = "2.1.6"
+mmkv = "2.3.0"
+leakCanary = "3.0-alpha-8"
+softInputEvent = "1.0.9"
+umengCommon = "9.8.8"
+umengAsms = "1.8.7.2"
+umengShareCore = "7.3.7"
+umengShareWX = "7.3.7"
+umengShareQQ = "7.3.7"
+qqSdk = "3.5.18.0"
+wechatSdk = "6.8.34"
+
+[plugins]
+# Android 应用构建插件（AGP）：https://developer.android.com/build
+application = { id = "com.android.application", version.ref = "agp" }
+# Android 库构建插件（AGP Library）：https://developer.android.com/build
+library = { id = "com.android.library", version.ref = "agp" }
+# Kotlin Android 插件：Kotlin 代码与 Android 集成：https://kotlinlang.org/docs/gradle.html
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+# Android AOP 插件：切面编程框架：https://github.com/FlyJingFish/AndroidAOP
+aop = { id = "io.github.flyjingfish.androidaop", version.ref = "androidAop" }
+# 多构建类型图标标记插件：在不同 buildType 添加角标：https://github.com/usefulness/easylauncher-gradle-plugin
+easylauncher = { id = "com.starter.easylauncher", version.ref = "easyLauncher" }
+
+[libraries]
+# AndroidX AppCompat：兼容支持库（ActionBar 等）
+# 发布说明：https://developer.android.google.cn/jetpack/androidx/releases/appcompat
+appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+# Material 组件库：Material Design 组件
+# 项目主页：https://github.com/material-components/material-components-android
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
+# 设备兼容框架：统一设备品牌、系统等差异 https://github.com/getActivity/DeviceCompat
+deviceCompat = { module = "com.github.getActivity:DeviceCompat", version.ref = "deviceCompat" }
+# 权限请求框架：https://github.com/getActivity/XXPermissions
+xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxPermissions" }
+
+# 标题栏框架：https://github.com/getActivity/TitleBar
+titleBar = { module = "com.github.getActivity:TitleBar", version.ref = "titleBar" }
+
+# 吐司框架：https://github.com/getActivity/Toaster
+toaster = { module = "com.github.getActivity:Toaster", version.ref = "toaster" }
+
+# 网络请求封装：https://github.com/getActivity/EasyHttp
+easyHttp = { module = "com.github.getActivity:EasyHttp", version.ref = "easyHttp" }
+
+# OkHttp 客户端：https://github.com/square/okhttp
+okHttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
+
+# Gson 容错工厂：提升解析稳定性 https://github.com/getActivity/GsonFactory
+gsonFactory = { module = "com.github.getActivity:GsonFactory", version.ref = "gsonFactory" }
+# Gson JSON 解析库：https://github.com/google/gson
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+# Kotlin 反射库：反射 data class 等 https://kotlinlang.org/docs/reflection.html
+kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflect" }
+
+# ShapeView：形状控件封装 https://github.com/getActivity/ShapeView
+shapeView = { module = "com.github.getActivity:ShapeView", version.ref = "shapeView" }
+# ShapeDrawable：更灵活的 Shape 绘制 https://github.com/getActivity/ShapeDrawable
+shapeDrawable = { module = "com.github.getActivity:ShapeDrawable", version.ref = "shapeDrawable" }
+
+# NestedScrollLayout：嵌套滚动容器 https://github.com/getActivity/NestedScrollLayout
+nestedScrollLayout = { module = "com.github.getActivity:NestedScrollLayout", version.ref = "nestedScrollLayout" }
+
+# Glide 图片加载：https://github.com/bumptech/glide
+# 中文文档：https://github.com/Muyangmin/glide-docs-cn
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+# Glide 编译期注解处理器
+glideCompiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+
+# 沉浸式状态栏框架：https://github.com/gyf-dev/ImmersionBar
+immersionBar = { module = "com.geyifeng.immersionbar:immersionbar", version.ref = "immersionBar" }
+
+# 手势缩放 ImageView：https://github.com/Baseflow/PhotoView
+photoView = { module = "com.github.Baseflow:PhotoView", version.ref = "photoView" }
+
+# Bugly 异常捕捉与上报：https://bugly.tds.qq.com/docs/sdk/android/
+buglyPro = { module = "com.tencent.bugly_16kb:bugly-pro", version.ref = "buglyPro" }
+
+# Lottie 动画解析：https://github.com/airbnb/lottie-android
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+
+# SmartRefreshLayout 刷新控件：https://github.com/scwang90/SmartRefreshLayout
+refreshLayoutKernel = { module = "io.github.scwang90:refresh-layout-kernel", version.ref = "refreshAlpha" }
+refreshHeaderMaterial = { module = "io.github.scwang90:refresh-header-material", version.ref = "refreshAlpha" }
+
+# Timber 日志打印：https://github.com/JakeWharton/timber
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+# ViewPager 指示器：https://github.com/ongakuer/CircleIndicator
+circleIndicator = { module = "me.relex:circleindicator", version.ref = "circleIndicator" }
+
+# 腾讯 MMKV 高性能 Key-Value 存储：https://github.com/Tencent/MMKV
+mmkvStatic = { module = "com.tencent:mmkv-static", version.ref = "mmkv" }
+
+# LeakCanary 内存泄漏监测：https://github.com/square/leakcanary
+leakCanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }
+
+# 软键盘遮挡解决方案：https://github.com/liangjingkanji/soft-input-event
+softInputEvent = { module = "com.github.liangjingkanji:soft-input-event", version.ref = "softInputEvent" }
+
+# Android AOP 核心与注解处理器：https://github.com/FlyJingFish/AndroidAOP
+androidAopCore = { module = "io.github.flyjingfish:androidaop-core", version.ref = "androidAop" }
+androidAopApt = { module = "io.github.flyjingfish:androidaop-apt", version.ref = "androidAop" }
+
+# 友盟 SDK：统计 & 分享组件
+# 统计文档：https://developer.umeng.com/docs/119267/detail/118584
+# 社会化分享文档：https://developer.umeng.com/docs/128606/detail/193879
+umengCommon = { module = "com.umeng.umsdk:common", version.ref = "umengCommon" }
+umengAsms = { module = "com.umeng.umsdk:asms", version.ref = "umengAsms" }
+umengShareCore = { module = "com.umeng.umsdk:share-core", version.ref = "umengShareCore" }
+umengShareWX = { module = "com.umeng.umsdk:share-wx", version.ref = "umengShareWX" }
+umengShareQQ = { module = "com.umeng.umsdk:share-qq", version.ref = "umengShareQQ" }
+
+# QQ 开放平台组件文档：https://wikinew.open.qq.com/#/iwiki/4007776153
+ qqSdk = { module = "com.tencent.qq:open-sdk", version.ref = "qqSdk" }
+# 微信开放平台组件文档：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
+ wechatSdk = { module = "com.tencent.mm.opensdk:wechat-sdk-android", version.ref = "wechatSdk" }

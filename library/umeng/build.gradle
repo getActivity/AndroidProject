@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.library'
+    alias(libs.plugins.library)
 }
 apply from : '../../common.gradle'
 
@@ -37,18 +37,13 @@ android {
 // 友盟社会化集成文档：https://developer.umeng.com/docs/128606/detail/193879
 // 友盟远程仓库地址：https://repo1.maven.org/maven2
 dependencies {
-    // 友盟公共库
-    api 'com.umeng.umsdk:common:9.8.8'
-    api 'com.umeng.umsdk:asms:1.8.7.2'
-    // 友盟分享库
-    api 'com.umeng.umsdk:share-core:7.3.7'
-    // 友盟微信分享
-    api 'com.umeng.umsdk:share-wx:7.3.7'
-    // 友盟 QQ 分享
-    api 'com.umeng.umsdk:share-qq:7.3.7'
+    api libs.umengCommon
+    api libs.umengAsms
 
-    // QQ 组件：https://wikinew.open.qq.com/#/iwiki/4007776153
-    api 'com.tencent.qq:open-sdk:3.5.18.0'
-    // 微信组件：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
-    api 'com.tencent.mm.opensdk:wechat-sdk-android:6.8.34'
+    api libs.umengShareCore
+    api libs.umengShareWX
+    api libs.umengShareQQ
+
+    api libs.qqSdk
+    api libs.wechatSdk
 }

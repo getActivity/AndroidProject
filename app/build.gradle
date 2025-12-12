@@ -1,8 +1,8 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'android.aop'
-    id 'com.starter.easylauncher'
+    alias(libs.plugins.application)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.aop)
+    alias(libs.plugins.easylauncher)
 }
 
 apply from : '../common.gradle'
@@ -179,86 +179,57 @@ dependencies {
     // 友盟封装
     implementation project(':library:umeng')
 
-    // 设备兼容框架：https://github.com/getActivity/DeviceCompat
-    implementation 'com.github.getActivity:DeviceCompat:2.5'
-    // 权限请求框架：https://github.com/getActivity/XXPermissions
-    implementation 'com.github.getActivity:XXPermissions:28.0'
+    implementation libs.deviceCompat
+    implementation libs.xxPermissions
 
-    // 标题栏框架：https://github.com/getActivity/TitleBar
-    implementation 'com.github.getActivity:TitleBar:10.8'
+    implementation libs.titleBar
 
-    // 吐司框架：https://github.com/getActivity/Toaster
-    implementation 'com.github.getActivity:Toaster:13.8'
+    implementation libs.toaster
 
-    // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation 'com.github.getActivity:EasyHttp:13.0'
-    // OkHttp 框架：https://github.com/square/okhttp
-    // noinspection GradleDependency
-    implementation 'com.squareup.okhttp3:okhttp:3.12.13'
+    implementation libs.easyHttp
+    implementation libs.okHttp
 
-    // Gson 解析容错：https://github.com/getActivity/GsonFactory
-    implementation ('com.github.getActivity:GsonFactory:10.3') {
+    implementation(libs.gsonFactory) {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
     }
-    // Json 解析框架：https://github.com/google/gson
-    implementation ('com.google.code.gson:gson:2.13.2') {
+    implementation(libs.gson) {
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
     }
-    // Kotlin 反射库：用于反射 Kotlin data class 类对象
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:2.2.20'
+    implementation libs.kotlinReflect
 
-    // ShapeView：https://github.com/getActivity/ShapeView
-    implementation 'com.github.getActivity:ShapeView:10.0'
-    // ShapeDrawable：https://github.com/getActivity/ShapeDrawable
-    implementation 'com.github.getActivity:ShapeDrawable:3.3'
+    implementation libs.shapeView
+    implementation libs.shapeDrawable
 
-    // 嵌套滚动布局：https://github.com/getActivity/NestedScrollLayout
-    implementation 'com.github.getActivity:NestedScrollLayout:2.0'
+    implementation libs.nestedScrollLayout
 
-    // 图片加载框架：https://github.com/bumptech/glide
-    // 官方使用文档：https://github.com/Muyangmin/glide-docs-cn
-    implementation 'com.github.bumptech.glide:glide:5.0.5'
-    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
+    implementation libs.glide
+    annotationProcessor libs.glideCompiler
 
-    // 沉浸式框架：https://github.com/gyf-dev/ImmersionBar
-    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+    implementation libs.immersionBar
 
-    // 手势 ImageView：https://github.com/Baseflow/PhotoView
-    implementation 'com.github.Baseflow:PhotoView:2.3.0'
+    implementation libs.photoView
 
-    // Bugly 异常捕捉：https://bugly.tds.qq.com/docs/sdk/android/
-    implementation 'com.tencent.bugly_16kb:bugly-pro:4.4.7.3'
+    implementation libs.buglyPro
 
-    // 动画解析库：https://github.com/airbnb/lottie-android
-    // 动画资源：https://lottiefiles.com、https://icons8.com/animated-icons
-    implementation 'com.airbnb.android:lottie:6.7.1'
+    implementation libs.lottie
 
-    // 上拉刷新下拉加载框架：https://github.com/scwang90/SmartRefreshLayout
-    implementation 'io.github.scwang90:refresh-layout-kernel:3.0.0-alpha'
-    implementation 'io.github.scwang90:refresh-header-material:3.0.0-alpha'
+    implementation libs.refreshLayoutKernel
+    implementation libs.refreshHeaderMaterial
 
-    // 日志打印框架：https://github.com/JakeWharton/timber
-    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation libs.timber
 
-    // 指示器框架：https://github.com/ongakuer/CircleIndicator
-    implementation 'me.relex:circleindicator:2.1.6'
+    implementation libs.circleIndicator
 
-    // 腾讯 MMKV：https://github.com/Tencent/MMKV
-    implementation ('com.tencent:mmkv-static:2.3.0') {
-        // 避免版本不一致导致的依赖冲突，从而导致编译报错
+    implementation(libs.mmkvStatic) {
         exclude group: 'androidx.annotation', module: 'annotation'
     }
 
-    // 内存泄漏监测框架：https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-8'
-    previewImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-8'
+    implementation libs.softInputEvent
+    implementation libs.androidAopCore
+    annotationProcessor libs.androidAopApt
 
-    // 软键盘遮挡解决方案：https://github.com/liangjingkanji/soft-input-event
-    implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
-
-    // Android AOP 框架：https://github.com/FlyJingFish/AndroidAOP
-    implementation 'io.github.flyjingfish:androidaop-core:2.7.4'
-    annotationProcessor 'io.github.flyjingfish:androidaop-apt:2.7.4'
+    debugImplementation libs.leakCanary
+    previewImplementation libs.leakCanary
 
     // 多语种：https://github.com/getActivity/MultiLanguages
     // 悬浮窗：https://github.com/getActivity/EasyWindow
