@@ -203,7 +203,7 @@ public final class UpdateDialog {
 
             // 创建要下载的文件对象
             mApkFile = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    getString(R.string.app_name) + "_v" + mNameView.getText().toString() + "1.apk");
+                    getString(R.string.app_name) + "_v" + mNameView.getText().toString() + ".apk");
             EasyHttp.download(getDialog())
                     .method(HttpMethod.GET)
                     .file(mApkFile)
