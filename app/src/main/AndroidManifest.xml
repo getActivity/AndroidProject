@@ -9,9 +9,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- 外部存储 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <!-- 发送通知权限（Android 13.0 新增的权限）-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- 读取外部存储权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 
     <!-- 拍照权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -177,12 +179,6 @@
         <!-- 拍照选择 -->
         <activity
             android:name=".ui.activity.common.CameraActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-        <!-- 图片裁剪 -->
-        <activity
-            android:name=".ui.activity.common.ImageCropActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 

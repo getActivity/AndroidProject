@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions;
@@ -20,15 +19,12 @@ import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.permission.PermissionDescription;
 import com.hjq.demo.permission.PermissionInterceptor;
-import com.hjq.demo.ui.activity.common.ImageSelectActivity;
-import com.hjq.demo.ui.activity.common.VideoSelectActivity;
 import com.hjq.demo.ui.dialog.common.InputDialog;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
 import com.hjq.demo.ui.dialog.common.TipsDialog;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
 import com.hjq.permissions.permission.base.IPermission;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -310,65 +306,8 @@ public class BrowserChromeClient extends WebChromeClient {
      */
     private void openSystemFileChooser(BaseActivity activity, FileChooserParams params, ValueCallback<Uri[]> callback) {
         Intent intent = params.createIntent();
-        String[] mimeTypes = params.getAcceptTypes();
-        boolean multipleSelect = params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE;
-        if (mimeTypes != null && mimeTypes.length > 0 && !TextUtils.isEmpty(mimeTypes[0])) {
-            // 要过滤的文件类型
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-            if (mimeTypes.length == 1) {
-                switch (mimeTypes[0]) {
-                    case "image/*":
-                        ImageSelectActivity.start(activity, multipleSelect ? Integer.MAX_VALUE : 1,
-                            new ImageSelectActivity.OnPhotoSelectListener() {
-
-                                @Override
-                                public void onSelected(List<String> data) {
-                                    List<Uri> uris = new ArrayList<>(data.size());
-                                    for (String filePath : data) {
-                                        uris.add(Uri.fromFile(new File(filePath)));
-                                    }
-                                    Uri[] result = uris.toArray(new Uri[0]);
-                                    log(String.format("onShowFileChooser: callback.onReceiveValue(%s)", Arrays.toString(result)));
-                                    callback.onReceiveValue(result);
-                                }
-
-                                @Override
-                                public void onCancel() {
-                                    log("onShowFileChooser: callback.onReceiveValue(null)");
-                                    callback.onReceiveValue(null);
-                                }
-                            });
-                        return;
-                    case "video/*":
-                        VideoSelectActivity.start(activity, multipleSelect ? Integer.MAX_VALUE : 1,
-                            new VideoSelectActivity.OnVideoSelectListener() {
-
-                                @Override
-                                public void onSelected(List<VideoSelectActivity.VideoBean> data) {
-                                    List<Uri> uris = new ArrayList<>(data.size());
-                                    for (VideoSelectActivity.VideoBean bean : data) {
-                                        uris.add(Uri.fromFile(new File(bean.getVideoPath())));
-                                    }
-                                    Uri[] result = uris.toArray(new Uri[0]);
-                                    log(String.format("onShowFileChooser: callback.onReceiveValue(%s)", Arrays.toString(result)));
-                                    callback.onReceiveValue(result);
-                                }
-
-                                @Override
-                                public void onCancel() {
-                                    log("onShowFileChooser: callback.onReceiveValue(null)");
-                                    callback.onReceiveValue(null);
-                                }
-                            });
-                        return;
-                    default:
-                        break;
-                }
-            }
-        }
-
         // 是否是多选模式
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multipleSelect);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE);
         Intent chooserIntent = Intent.createChooser(intent, params.getTitle());
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivityForResult(chooserIntent, (resultCode, data) -> {

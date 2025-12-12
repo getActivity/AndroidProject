@@ -8,6 +8,10 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.PickVisualMediaRequest.Builder;
+import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia;
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.bar.TitleBar;
@@ -51,61 +55,97 @@ public final class ImageSelectActivity extends AppActivity
 
     private static final String INTENT_KEY_OUT_IMAGE_LIST = "imageList";
 
-    public static void start(BaseActivity activity, OnPhotoSelectListener listener) {
+    public static void start(BaseActivity activity, OnImageSelectListener listener) {
         start(activity, 1, listener);
     }
 
     @Log
-    public static void start(BaseActivity activity, int maxSelect, OnPhotoSelectListener listener) {
+    public static void start(BaseActivity activity, int maxSelect, OnImageSelectListener listener) {
         if (maxSelect < 1) {
             // 最少要选择一个图片
             throw new IllegalArgumentException("are you ok?");
         }
+
+        if (PickVisualMedia.isPhotoPickerAvailable(activity)) {
+            PickVisualMediaRequest visualMediaRequest = new Builder()
+                // 只选择图片
+                .setMediaType(PickVisualMedia.ImageOnly.INSTANCE)
+                .build();
+
+            if (maxSelect > 1) {
+                PickMultipleVisualMedia multipleVisualMedia = new PickMultipleVisualMedia(maxSelect);
+                Intent intent = multipleVisualMedia.createIntent(activity, visualMediaRequest);
+                activity.startActivityForResult(intent, (resultCode, data) -> {
+                    List<Uri> uris = multipleVisualMedia.parseResult(resultCode, data);
+                    if (uris.isEmpty()) {
+                        return;
+                    }
+                    List<String> list = new ArrayList<>();
+                    for (int i = 0; i < uris.size(); i++) {
+                        list.add(uris.get(i).toString());
+                    }
+                    listener.onSelected(list);
+                });
+            } else {
+                PickVisualMedia pickVisualMedia = new PickVisualMedia();
+                Intent intent = pickVisualMedia.createIntent(activity, visualMediaRequest);
+                activity.startActivityForResult(intent, (resultCode, data) -> {
+                    Uri uri = pickVisualMedia.parseResult(resultCode, data);
+                    if (uri == null) {
+                        return;
+                    }
+                    List<String> list = new ArrayList<>();
+                    list.add(uri.toString());
+                    listener.onSelected(list);
+                });
+            }
+            return;
+        }
+
         XXPermissions.with(activity)
-                .permission(PermissionLists.getReadMediaImagesPermission())
-                .permission(PermissionLists.getReadMediaVisualUserSelectedPermission())
-                .permission(PermissionLists.getWriteExternalStoragePermission())
-                .interceptor(new PermissionInterceptor())
-                .description(new PermissionDescription())
-                .request((grantedList, deniedList) -> {
-                    boolean allGranted = deniedList.isEmpty();
-                    if (!allGranted) {
+            .permission(PermissionLists.getReadExternalStoragePermission())
+            .interceptor(new PermissionInterceptor())
+            .description(new PermissionDescription())
+            .unchecked()
+            .request((grantedList, deniedList) -> {
+                boolean allGranted = deniedList.isEmpty();
+                if (!allGranted) {
+                    return;
+                }
+
+                Intent intent = new Intent(activity, ImageSelectActivity.class);
+                intent.putExtra(INTENT_KEY_IN_MAX_SELECT, maxSelect);
+                activity.startActivityForResult(intent, (resultCode, data) -> {
+
+                    if (listener == null) {
                         return;
                     }
 
-                    Intent intent = new Intent(activity, ImageSelectActivity.class);
-                    intent.putExtra(INTENT_KEY_IN_MAX_SELECT, maxSelect);
-                    activity.startActivityForResult(intent, (resultCode, data) -> {
-
-                        if (listener == null) {
-                            return;
-                        }
-
-                        if (data == null) {
-                            listener.onCancel();
-                            return;
-                        }
-
-                        ArrayList<String> list = data.getStringArrayListExtra(INTENT_KEY_OUT_IMAGE_LIST);
-                        if (list == null || list.isEmpty()) {
-                            listener.onCancel();
-                            return;
-                        }
-
-                        Iterator<String> iterator = list.iterator();
-                        while (iterator.hasNext()) {
-                            if (!new File(iterator.next()).isFile()) {
-                                iterator.remove();
-                            }
-                        }
-
-                        if (resultCode == RESULT_OK && !list.isEmpty()) {
-                            listener.onSelected(list);
-                            return;
-                        }
+                    if (data == null) {
                         listener.onCancel();
-                    });
+                        return;
+                    }
+
+                    List<String> list = data.getStringArrayListExtra(INTENT_KEY_OUT_IMAGE_LIST);
+                    if (list == null || list.isEmpty()) {
+                        listener.onCancel();
+                        return;
+                    }
+
+                    Iterator<String> iterator = list.iterator();
+                    while (iterator.hasNext()) {
+                        if (!new File(iterator.next()).isFile()) {
+                            iterator.remove();
+                        }
+                    }
+
+                    if (resultCode == RESULT_OK && !list.isEmpty()) {
+                        listener.onSelected(list);
+                        return;
+                    }
+                    listener.onCancel();
                 });
+            });
     }
 
     private StatusLayout mHintLayout;
@@ -491,7 +531,7 @@ public final class ImageSelectActivity extends AppActivity
     /**
      * 图片选择监听
      */
-    public interface OnPhotoSelectListener {
+    public interface OnImageSelectListener {
 
         /**
          * 选择回调

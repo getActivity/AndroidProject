@@ -2,18 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hjq.umeng">
 
-    <!-- 共同权限 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- 友盟统计 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <!-- 友盟社会化 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application>
 
         <!-- 友盟 Key（请在 Gradle 中配置，请不要在此处修改） -->

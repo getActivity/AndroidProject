@@ -1,32 +1,21 @@
 package com.hjq.demo.ui.activity.account;
 
 import android.net.Uri;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import androidx.annotation.NonNull;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
-import com.hjq.demo.http.api.UpdateImageApi;
 import com.hjq.demo.http.glide.GlideApp;
-import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.ui.activity.common.ImageCropActivity;
 import com.hjq.demo.ui.activity.common.ImagePreviewActivity;
 import com.hjq.demo.ui.activity.common.ImageSelectActivity;
 import com.hjq.demo.ui.dialog.common.AddressDialog;
 import com.hjq.demo.ui.dialog.common.InputDialog;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallbackProxy;
-import com.hjq.http.model.FileContentResolver;
 import com.hjq.widget.layout.SettingBar;
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  *    author : Android 轮子哥
@@ -89,7 +78,7 @@ public final class PersonalDataActivity extends AppActivity {
         if (view == mAvatarLayout) {
             ImageSelectActivity.start(this, data -> {
                 // 裁剪头像
-                cropImageFile(new File(data.get(0)));
+                cropImageFile(data.get(0));
             });
         } else if (view == mAvatarView) {
             if (mAvatarUrl != null) {
@@ -140,67 +129,11 @@ public final class PersonalDataActivity extends AppActivity {
     /**
      * 裁剪图片
      */
-    private void cropImageFile(File sourceFile) {
-        ImageCropActivity.start(this, sourceFile, 1, 1, new ImageCropActivity.OnCropListener() {
-
-            @Override
-            public void onImageCropSuccess(Uri fileUri, String fileName) {
-                File outputFile;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    outputFile = new FileContentResolver(PersonalDataActivity.this, fileUri, fileName);
-                } else {
-                    try {
-                        outputFile = new File(new URI(fileUri.toString()));
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                        outputFile = new File(fileUri.toString());
-                    }
-                }
-                updateCropImage(outputFile, true);
-            }
-
-            @Override
-            public void onImageCropError(String details) {
-                // 没有的话就不裁剪，直接上传原图片
-                // 但是这种情况极其少见，可以忽略不计
-                updateCropImage(sourceFile, false);
-            }
-        });
-    }
-
-    /**
-     * 上传裁剪后的图片
-     */
-    private void updateCropImage(File file, boolean deleteFile) {
-        if (true) {
-            if (file instanceof FileContentResolver) {
-                mAvatarUrl = ((FileContentResolver) file).getContentUri();
-            } else {
-                mAvatarUrl = Uri.fromFile(file);
-            }
-            GlideApp.with(this)
-                    .load(mAvatarUrl)
-                    .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
-                    .into(mAvatarView);
-            return;
-        }
-
-        EasyHttp.post(this)
-                .api(new UpdateImageApi()
-                        .setImage(file))
-                .request(new HttpCallbackProxy<HttpData<String>>(this) {
-
-                    @Override
-                    public void onHttpSuccess(@NonNull HttpData<String> data) {
-                        mAvatarUrl = Uri.parse(data.getData());
-                        GlideApp.with(PersonalDataActivity.this)
-                                .load(mAvatarUrl)
-                                .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
-                                .into(mAvatarView);
-                        if (deleteFile) {
-                            file.delete();
-                        }
-                    }
-                });
+    private void cropImageFile(String imagePath) {
+        mAvatarUrl = Uri.parse(imagePath);
+        GlideApp.with(this)
+            .load(imagePath)
+            .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
+            .into(mAvatarView);
     }
 }

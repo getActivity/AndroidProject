@@ -7,7 +7,7 @@ android {
         // 最低安装版本
         minSdk 23
         // Android 版本适配指南：https://github.com/getActivity/AndroidVersionAdapter
-        targetSdk 32
+        targetSdk 36
         versionName '1.0'
         versionCode 10
     }
@@ -62,8 +62,6 @@ android {
         setBuildDir(new File(rootDir, "build/${path.replaceAll(':', '/')}"))
     }
 }
-
-
 
 dependencies {
     // 依赖 libs 目录下所有的 jar 和 aar 包

@@ -23,6 +23,7 @@ import com.hjq.demo.ui.activity.account.RegisterActivity;
 import com.hjq.demo.ui.activity.common.BrowserActivity;
 import com.hjq.demo.ui.activity.common.ImagePreviewActivity;
 import com.hjq.demo.ui.activity.common.ImageSelectActivity;
+import com.hjq.demo.ui.activity.common.ImageSelectActivity.OnImageSelectListener;
 import com.hjq.demo.ui.activity.common.VideoPlayActivity;
 import com.hjq.demo.ui.activity.common.VideoSelectActivity;
 import com.hjq.demo.ui.dialog.common.InputDialog;
@@ -122,7 +123,7 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_mine_image_select) {
 
-            ImageSelectActivity.start(getAttachActivity(), new ImageSelectActivity.OnPhotoSelectListener() {
+            ImageSelectActivity.start(getAttachActivity(), new OnImageSelectListener() {
 
                 @Override
                 public void onSelected(List<String> data) {
@@ -147,7 +148,7 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
             VideoSelectActivity.start(getAttachActivity(), new VideoSelectActivity.OnVideoSelectListener() {
 
                 @Override
-                public void onSelected(List<VideoSelectActivity.VideoBean> data) {
+                public void onSelected(List<String> data) {
                     toast("选择了" + data.toString());
                 }
 

@@ -12,6 +12,10 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.PickVisualMediaRequest.Builder;
+import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia;
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,12 +72,48 @@ public final class VideoSelectActivity extends AppActivity
             // 最少要选择一个视频
             throw new IllegalArgumentException("are you ok?");
         }
+
+        if (PickVisualMedia.isPhotoPickerAvailable(activity)) {
+            PickVisualMediaRequest visualMediaRequest = new Builder()
+                // 只选择视频
+                .setMediaType(PickVisualMedia.VideoOnly.INSTANCE)
+                .build();
+
+            if (maxSelect > 1) {
+                PickMultipleVisualMedia multipleVisualMedia = new PickMultipleVisualMedia(maxSelect);
+                Intent intent = multipleVisualMedia.createIntent(activity, visualMediaRequest);
+                activity.startActivityForResult(intent, (resultCode, data) -> {
+                    List<Uri> uris = multipleVisualMedia.parseResult(resultCode, data);
+                    if (uris.isEmpty()) {
+                        return;
+                    }
+                    List<String> list = new ArrayList<>();
+                    for (int i = 0; i < uris.size(); i++) {
+                        list.add(uris.get(i).toString());
+                    }
+                    listener.onSelected(list);
+                });
+            } else {
+                PickVisualMedia pickVisualMedia = new PickVisualMedia();
+                Intent intent = pickVisualMedia.createIntent(activity, visualMediaRequest);
+                activity.startActivityForResult(intent, (resultCode, data) -> {
+                    Uri uri = pickVisualMedia.parseResult(resultCode, data);
+                    if (uri == null) {
+                        return;
+                    }
+                    List<String> list = new ArrayList<>();
+                    list.add(uri.toString());
+                    listener.onSelected(list);
+                });
+            }
+            return;
+        }
+
         XXPermissions.with(activity)
-                .permission(PermissionLists.getReadMediaVideoPermission())
-                .permission(PermissionLists.getReadMediaVisualUserSelectedPermission())
-                .permission(PermissionLists.getWriteExternalStoragePermission())
+                .permission(PermissionLists.getReadExternalStoragePermission())
                 .interceptor(new PermissionInterceptor())
                 .description(new PermissionDescription())
+                .unchecked()
                 .request((grantedList, deniedList) -> {
                     boolean allGranted = deniedList.isEmpty();
                     if (!allGranted) {
@@ -93,17 +133,22 @@ public final class VideoSelectActivity extends AppActivity
                             return;
                         }
 
-                        ArrayList<VideoBean> list = data.getParcelableArrayListExtra(INTENT_KEY_OUT_VIDEO_LIST);
-                        if (list == null || list.isEmpty()) {
+                        ArrayList<VideoBean> videoBeans = data.getParcelableArrayListExtra(INTENT_KEY_OUT_VIDEO_LIST);
+                        if (videoBeans == null || videoBeans.isEmpty()) {
                             listener.onCancel();
                             return;
                         }
 
-                        Iterator<VideoBean> iterator = list.iterator();
+                        Iterator<VideoBean> iterator = videoBeans.iterator();
                         while (iterator.hasNext()) {
                             if (!new File(iterator.next().getVideoPath()).isFile()) {
                                 iterator.remove();
                             }
+                        }
+
+                        List<String> list = new ArrayList<>();
+                        for (VideoBean videoBean : videoBeans) {
+                            list.add(videoBean.getVideoPath());
                         }
 
                         if (resultCode == RESULT_OK && !list.isEmpty()) {
@@ -645,7 +690,7 @@ public final class VideoSelectActivity extends AppActivity
          *
          * @param data          视频列表
          */
-        void onSelected(List<VideoBean> data);
+        void onSelected(List<String> data);
 
         /**
          * 取消回调

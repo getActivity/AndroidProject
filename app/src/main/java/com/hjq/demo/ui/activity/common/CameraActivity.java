@@ -16,7 +16,6 @@ import com.hjq.demo.permission.PermissionDescription;
 import com.hjq.demo.permission.PermissionInterceptor;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
-import com.hjq.permissions.permission.base.IPermission;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,8 +41,6 @@ public final class CameraActivity extends AppActivity {
     @Log
     public static void start(BaseActivity activity, boolean video, OnCameraListener listener) {
         XXPermissions.with(activity)
-                .permission(PermissionLists.getWriteExternalStoragePermission())
-                .permission(PermissionLists.getReadExternalStoragePermission())
                 .permission(PermissionLists.getCameraPermission())
                 .interceptor(new PermissionInterceptor())
                 .description(new PermissionDescription())
@@ -110,10 +107,7 @@ public final class CameraActivity extends AppActivity {
         }
 
         if (intent.resolveActivity(getPackageManager()) == null ||
-                !XXPermissions.isGrantedPermissions(this, new IPermission[]{
-                                                                    PermissionLists.getReadExternalStoragePermission(),
-                                                                    PermissionLists.getWriteExternalStoragePermission(),
-                                                                    PermissionLists.getCameraPermission()})) {
+                !XXPermissions.isGrantedPermission(this, PermissionLists.getCameraPermission())) {
             setResult(RESULT_ERROR, new Intent().putExtra(INTENT_KEY_OUT_ERROR, getString(R.string.camera_launch_fail)));
             finish();
             return;
