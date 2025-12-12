@@ -3,7 +3,6 @@ package com.hjq.demo.other;
 import android.app.Activity;
 import android.app.Application;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -39,7 +38,7 @@ public final class KeyboardWatcher implements
         mActivity = activity;
         mContentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (AndroidVersion.isAndroid10()) {
             mActivity.registerActivityLifecycleCallbacks(this);
         } else {
             mActivity.getApplication().registerActivityLifecycleCallbacks(this);
@@ -116,7 +115,7 @@ public final class KeyboardWatcher implements
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         if (mActivity == activity) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 mActivity.unregisterActivityLifecycleCallbacks(this);
             } else {
                 mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);

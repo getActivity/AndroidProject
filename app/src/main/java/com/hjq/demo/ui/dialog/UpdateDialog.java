@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.CheckNet;
 import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.other.AndroidVersion;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.permission.PermissionDescription;
 import com.hjq.demo.permission.PermissionInterceptor;
@@ -245,7 +245,7 @@ public final class UpdateDialog {
                         @Override
                         public void onDownloadSuccess(@NonNull File file) {
                             int pendingIntentFlag;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            if (AndroidVersion.isAndroid12()) {
                                 // Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE or FLAG_MUTABLE be specified when creating a PendingIntent.
                                 // Strongly consider using FLAG_IMMUTABLE, only use FLAG_MUTABLE if some functionality depends on the PendingIntent being mutable, e.g.
                                 // if it needs to be used with inline replies or bubbles.
@@ -319,7 +319,7 @@ public final class UpdateDialog {
         private Intent getInstallIntent() {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri uri;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (AndroidVersion.isAndroid7()) {
                 uri = FileProvider.getUriForFile(getContext(), AppConfig.getPackageName() + ".provider", mApkFile);
             } else {
                 uri = Uri.fromFile(mApkFile);

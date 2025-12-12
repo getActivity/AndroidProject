@@ -3,13 +3,13 @@ package com.hjq.demo.permission;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.demo.R;
+import com.hjq.demo.other.AndroidVersion;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.OnPermissionInterceptor;
@@ -144,7 +144,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
         } else if (deniedSensorsPermissionCount == deniedPermissionCount && VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
             if (deniedPermissionCount == 1) {
                 if (XXPermissions.equalsPermission(deniedList.get(0), PermissionNames.BODY_SENSORS_BACKGROUND)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+                    if (AndroidVersion.isAndroid16()) {
                         return activity.getString(R.string.common_permission_fail_hint_1,
                             activity.getString(R.string.common_permission_health_data_background),
                             activity.getString(R.string.common_permission_health_data_background_option));
@@ -156,7 +156,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
                 }
             } else {
                 if (doNotAskAgain) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+                    if (AndroidVersion.isAndroid16()) {
                         return activity.getString(R.string.common_permission_fail_hint_1,
                             activity.getString(R.string.common_permission_health_data),
                             activity.getString(R.string.common_permission_allow_all_option));
@@ -225,7 +225,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
     @NonNull
     private String getBackgroundPermissionOptionLabel(Context context) {
         PackageManager packageManager = context.getPackageManager();
-        if (packageManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (packageManager != null && AndroidVersion.isAndroid11()) {
             CharSequence backgroundPermissionOptionLabel = packageManager.getBackgroundPermissionOptionLabel();
             if (!TextUtils.isEmpty(backgroundPermissionOptionLabel)) {
                 return backgroundPermissionOptionLabel.toString();

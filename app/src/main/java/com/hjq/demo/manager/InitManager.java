@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
@@ -17,6 +16,7 @@ import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
 import com.hjq.demo.http.model.RequestHandler;
 import com.hjq.demo.http.model.RequestServer;
+import com.hjq.demo.other.AndroidVersion;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.demo.other.CrashHandler;
 import com.hjq.demo.other.DebugLoggerTree;
@@ -186,7 +186,7 @@ public final class InitManager {
 
         // 注册网络状态变化监听
         ConnectivityManager connectivityManager = ContextCompat.getSystemService(application, ConnectivityManager.class);
-        if (connectivityManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (connectivityManager != null && AndroidVersion.isAndroid7()) {
             connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
 
                 @Override

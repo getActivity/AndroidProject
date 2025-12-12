@@ -7,6 +7,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.demo.R;
+import com.hjq.demo.other.AndroidVersion;
 import com.hjq.permissions.permission.PermissionGroups;
 import com.hjq.permissions.permission.PermissionNames;
 import com.hjq.permissions.permission.base.IPermission;
@@ -47,7 +48,7 @@ public final class PermissionConverter {
 
         PERMISSION_NAME_MAP.put(PermissionGroups.NEARBY_DEVICES, R.string.common_permission_nearby_devices);
         // 注意：在 Android 13 的时候，WIFI 相关的权限已经归到附近设备的权限组了，但是在 Android 13 之前，WIFI 相关的权限归属定位权限组
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)  {
+        if (AndroidVersion.isAndroid13())  {
             // 需要填充文案：蓝牙权限描述 + WIFI 权限描述
             PERMISSION_DESCRIPTION_MAP.put(R.string.common_permission_nearby_devices, R.string.common_permission_nearby_devices_description);
         } else {
@@ -58,10 +59,10 @@ public final class PermissionConverter {
         PERMISSION_NAME_MAP.put(PermissionGroups.LOCATION, R.string.common_permission_location);
         // 注意：在 Android 12 的时候，蓝牙相关的权限已经归到附近设备的权限组了，但是在 Android 12 之前，蓝牙相关的权限归属定位权限组
         // 注意：在 Android 13 的时候，WIFI 相关的权限已经归到附近设备的权限组了，但是在 Android 13 之前，WIFI 相关的权限归属定位权限组
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)  {
+        if (AndroidVersion.isAndroid13())  {
             // 需要填充文案：前台定位权限描述
             PERMISSION_DESCRIPTION_MAP.put(R.string.common_permission_location, R.string.common_permission_location_description);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)  {
+        } else if (AndroidVersion.isAndroid12())  {
             // 需要填充文案：前台定位权限描述 + WIFI 权限描述
             PERMISSION_DESCRIPTION_MAP.put(R.string.common_permission_location, R.string.common_permission_location_description);
         } else {
@@ -74,7 +75,7 @@ public final class PermissionConverter {
         PERMISSION_DESCRIPTION_MAP.put(R.string.common_permission_location_background, R.string.common_permission_location_background_description);
 
         int sensorsPermissionNameStringId;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+        if (AndroidVersion.isAndroid16()) {
             sensorsPermissionNameStringId = R.string.common_permission_health_data;
         } else {
             sensorsPermissionNameStringId = R.string.common_permission_body_sensors;
@@ -84,7 +85,7 @@ public final class PermissionConverter {
 
         // 后台传感器权限虽然属于传感器权限组，但是只要是属于后台权限，都有独属于自己的一套规则
         int bodySensorsBackgroundPermissionNameStringId;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+        if (AndroidVersion.isAndroid16()) {
             bodySensorsBackgroundPermissionNameStringId = R.string.common_permission_health_data_background;
         } else {
             bodySensorsBackgroundPermissionNameStringId = R.string.common_permission_body_sensors_background;
@@ -107,7 +108,7 @@ public final class PermissionConverter {
 
         PERMISSION_NAME_MAP.put(PermissionGroups.PHONE, R.string.common_permission_phone);
         // 注意：在 Android 9.0 的时候，读写通话记录权限已经归到一个单独的权限组了，但是在 Android 9.0 之前，读写通话记录权限归属电话权限组
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)  {
+        if (AndroidVersion.isAndroid9())  {
             // 需要填充文案：电话权限描述
             PERMISSION_DESCRIPTION_MAP.put(R.string.common_permission_phone, R.string.common_permission_phone_description);
         } else {
@@ -123,7 +124,7 @@ public final class PermissionConverter {
 
         // 注意：在 Android 10 的版本，这个权限的名称为《健身运动权限》，但是到了 Android 11 的时候，这个权限的名称被修改成了《身体活动权限》
         // 没错就改了一下权限的叫法，其他的一切没有变，Google 产品经理真的是闲的蛋疼，但是吐槽归吐槽，框架也要灵活应对一下，避免小白用户跳转到设置页找不到对应的选项
-        int activityRecognitionPermissionNameStringId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? R.string.common_permission_activity_recognition_api30 : R.string.common_permission_activity_recognition_api29;
+        int activityRecognitionPermissionNameStringId = AndroidVersion.isAndroid11() ? R.string.common_permission_activity_recognition_api30 : R.string.common_permission_activity_recognition_api29;
         PERMISSION_NAME_MAP.put(PermissionNames.ACTIVITY_RECOGNITION, activityRecognitionPermissionNameStringId);
         PERMISSION_DESCRIPTION_MAP.put(activityRecognitionPermissionNameStringId, R.string.common_permission_activity_recognition_description);
 

@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.hjq.demo.other.AndroidVersion;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -259,7 +259,7 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     @Nullable
     public static String getProcessName() {
         String processName = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (AndroidVersion.isAndroid9()) {
             processName = Application.getProcessName();
         } else {
             try {

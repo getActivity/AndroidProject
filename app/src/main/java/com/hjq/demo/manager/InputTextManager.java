@@ -2,7 +2,6 @@ package com.hjq.demo.manager;
 
 import android.app.Activity;
 import android.app.Application;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.hjq.demo.other.AndroidVersion;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -250,7 +250,7 @@ public final class InputTextManager implements TextWatcher {
 
         private static void register(Activity activity, InputTextManager helper) {
             TextInputLifecycle lifecycle = new TextInputLifecycle(activity, helper);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 activity.registerActivityLifecycleCallbacks(lifecycle);
             } else {
                 activity.getApplication().registerActivityLifecycleCallbacks(lifecycle);
@@ -281,7 +281,7 @@ public final class InputTextManager implements TextWatcher {
                 return;
             }
             mTextHelper.removeAllViews();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 mActivity.unregisterActivityLifecycleCallbacks(this);
             } else {
                 mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
