@@ -231,7 +231,7 @@ dependencies {
 
     // 动画解析库：https://github.com/airbnb/lottie-android
     // 动画资源：https://lottiefiles.com、https://icons8.com/animated-icons
-    implementation 'com.airbnb.android:lottie:5.2.0'
+    implementation 'com.airbnb.android:lottie:6.7.1'
 
     // 上拉刷新下拉加载框架：https://github.com/scwang90/SmartRefreshLayout
     implementation 'io.github.scwang90:refresh-layout-kernel:3.0.0-alpha'
