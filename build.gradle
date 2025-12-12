@@ -6,7 +6,7 @@ plugins {
     // AOP 插件：https://github.com/FlyJingFish/AndroidAOP
     id 'io.github.flyjingfish.androidaop' version '2.7.4' apply false
     // 多 buildType 图标插件：https://github.com/usefulness/easylauncher-gradle-plugin
-//    id 'com.starter.easylauncher' version '6.1.0' apply false
+    id 'com.starter.easylauncher' version '6.4.1' apply false
 }
 
 // 导入配置文件
