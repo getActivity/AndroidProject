@@ -203,7 +203,7 @@ dependencies {
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
     }
     // Kotlin 反射库：用于反射 Kotlin data class 类对象
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.9.23'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:2.2.20'
 
     // ShapeView：https://github.com/getActivity/ShapeView
     implementation 'com.github.getActivity:ShapeView:9.8'
