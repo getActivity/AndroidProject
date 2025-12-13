@@ -148,7 +148,7 @@ public final class ImageSelectActivity extends AppActivity
             });
     }
 
-    private StatusLayout mHintLayout;
+    private StatusLayout mStatusLayout;
     private RecyclerView mRecyclerView;
     private FloatActionButton mFloatingView;
 
@@ -175,7 +175,7 @@ public final class ImageSelectActivity extends AppActivity
 
     @Override
     protected void initView() {
-        mHintLayout = findViewById(R.id.hl_image_select_hint);
+        mStatusLayout = findViewById(R.id.sl_image_select_status);
         mRecyclerView = findViewById(R.id.rv_image_select_list);
         mFloatingView = findViewById(R.id.fab_image_select_floating);
         setOnClickListener(mFloatingView);
@@ -218,8 +218,8 @@ public final class ImageSelectActivity extends AppActivity
     }
 
     @Override
-    public StatusLayout getStatusLayout() {
-        return mHintLayout;
+    public StatusLayout acquireStatusLayout() {
+        return mStatusLayout;
     }
 
     @SingleClick

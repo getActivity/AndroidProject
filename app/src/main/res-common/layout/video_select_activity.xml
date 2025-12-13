@@ -17,7 +17,7 @@
         android:layout_height="match_parent">
 
         <com.hjq.demo.widget.StatusLayout
-            android:id="@+id/hl_video_select_hint"
+            android:id="@+id/sl_video_select_status"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

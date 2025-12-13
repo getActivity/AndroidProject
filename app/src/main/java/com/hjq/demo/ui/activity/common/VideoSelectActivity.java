@@ -160,7 +160,7 @@ public final class VideoSelectActivity extends AppActivity
                 });
     }
 
-    private StatusLayout mHintLayout;
+    private StatusLayout mStatusLayout;
     private RecyclerView mRecyclerView;
     private FloatActionButton mFloatingView;
 
@@ -187,7 +187,7 @@ public final class VideoSelectActivity extends AppActivity
 
     @Override
     protected void initView() {
-        mHintLayout = findViewById(R.id.hl_video_select_hint);
+        mStatusLayout = findViewById(R.id.sl_video_select_status);
         mRecyclerView = findViewById(R.id.rv_video_select_list);
         mFloatingView = findViewById(R.id.fab_video_select_floating);
         setOnClickListener(mFloatingView);
@@ -230,8 +230,8 @@ public final class VideoSelectActivity extends AppActivity
     }
 
     @Override
-    public StatusLayout getStatusLayout() {
-        return mHintLayout;
+    public StatusLayout acquireStatusLayout() {
+        return mStatusLayout;
     }
 
     @SingleClick

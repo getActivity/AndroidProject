@@ -13,7 +13,7 @@
         app:title="界面状态案例" />
 
     <com.hjq.demo.widget.StatusLayout
-        android:id="@+id/hl_status_hint"
+        android:id="@+id/sl_demo_status"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

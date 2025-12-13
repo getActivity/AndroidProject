@@ -22,7 +22,7 @@
         android:visibility="gone" />
 
     <com.hjq.demo.widget.StatusLayout
-        android:id="@+id/hl_browser_hint"
+        android:id="@+id/sl_browser_status"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

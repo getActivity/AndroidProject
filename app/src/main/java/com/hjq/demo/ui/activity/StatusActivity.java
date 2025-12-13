@@ -25,7 +25,7 @@ public final class StatusActivity extends AppActivity
 
     @Override
     protected void initView() {
-        mStatusLayout = findViewById(R.id.hl_status_hint);
+        mStatusLayout = findViewById(R.id.sl_demo_status);
     }
 
     @Override
@@ -59,7 +59,7 @@ public final class StatusActivity extends AppActivity
     }
 
     @Override
-    public StatusLayout getStatusLayout() {
+    public StatusLayout acquireStatusLayout() {
         return mStatusLayout;
     }
 }

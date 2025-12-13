@@ -22,7 +22,7 @@ public interface StatusAction {
     /**
      * 获取状态布局
      */
-    StatusLayout getStatusLayout();
+    StatusLayout acquireStatusLayout();
 
     /**
      * 显示加载中
@@ -32,7 +32,7 @@ public interface StatusAction {
     }
 
     default void showLoading(@RawRes int id) {
-        StatusLayout layout = getStatusLayout();
+        StatusLayout layout = acquireStatusLayout();
         if (layout == null) {
             return;
         }
@@ -46,7 +46,7 @@ public interface StatusAction {
      * 显示加载完成
      */
     default void showComplete() {
-        StatusLayout layout = getStatusLayout();
+        StatusLayout layout = acquireStatusLayout();
         if (layout == null || !layout.isShow()) {
             return;
         }
@@ -64,7 +64,7 @@ public interface StatusAction {
      * 显示错误提示
      */
     default void showError(StatusLayout.OnRetryListener listener) {
-        StatusLayout layout = getStatusLayout();
+        StatusLayout layout = acquireStatusLayout();
         if (layout == null) {
             return;
         }
@@ -85,7 +85,7 @@ public interface StatusAction {
      * 显示自定义提示
      */
     default void showLayout(@DrawableRes int drawableId, @StringRes int stringId, StatusLayout.OnRetryListener listener) {
-        StatusLayout layout = getStatusLayout();
+        StatusLayout layout = acquireStatusLayout();
         if (layout == null) {
             return;
         }
@@ -94,7 +94,7 @@ public interface StatusAction {
     }
 
     default void showLayout(Drawable drawable, CharSequence hint, StatusLayout.OnRetryListener listener) {
-        StatusLayout layout = getStatusLayout();
+        StatusLayout layout = acquireStatusLayout();
         if (layout == null) {
             return;
         }

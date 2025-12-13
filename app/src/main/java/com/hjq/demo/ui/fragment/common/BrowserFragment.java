@@ -45,7 +45,7 @@ public final class BrowserFragment extends AppFragment<AppActivity>
 
     private final FullScreenModeController mFullScreenModeController = new FullScreenModeController();
 
-    private StatusLayout mHintLayout;
+    private StatusLayout mStatusLayout;
     private SmartRefreshLayout mRefreshLayout;
     private BrowserView mBrowserView;
 
@@ -56,7 +56,7 @@ public final class BrowserFragment extends AppFragment<AppActivity>
 
     @Override
     protected void initView() {
-        mHintLayout = findViewById(R.id.hl_browser_hint);
+        mStatusLayout = findViewById(R.id.sl_browser_status);
         mRefreshLayout = findViewById(R.id.sl_browser_refresh);
         mBrowserView = findViewById(R.id.wv_browser_view);
 
@@ -78,8 +78,8 @@ public final class BrowserFragment extends AppFragment<AppActivity>
     }
 
     @Override
-    public StatusLayout getStatusLayout() {
-        return mHintLayout;
+    public StatusLayout acquireStatusLayout() {
+        return mStatusLayout;
     }
 
     @Override
