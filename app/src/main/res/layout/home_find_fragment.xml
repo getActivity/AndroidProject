@@ -66,7 +66,7 @@
                     style="@style/ButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="普通按钮" />
+                    android:text="圆角按钮" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     style="@style/ButtonStyle"
@@ -74,14 +74,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
                     android:enabled="false"
-                    android:text="禁用了的按钮" />
+                    android:text="禁用状态" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     style="@style/RectButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
-                    android:text="不带圆角的" />
+                    android:text="直角样式" />
 
             </LinearLayout>
 
