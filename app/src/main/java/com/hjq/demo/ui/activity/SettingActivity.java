@@ -3,6 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.view.Gravity;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
@@ -70,6 +71,12 @@ public final class SettingActivity extends AppActivity
         mLanguageView.setRightText("简体中文");
         mPhoneView.setRightText("181****1413");
         mPasswordView.setRightText("密码强度较低");
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return findViewById(R.id.ll_setting_content);
     }
 
     @SingleClick

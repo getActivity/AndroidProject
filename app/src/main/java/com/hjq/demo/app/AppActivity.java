@@ -1,7 +1,10 @@
 package com.hjq.demo.app;
 
 import android.content.Intent;
+import android.graphics.Insets;
 import android.view.View;
+import android.view.View.OnApplyWindowInsetsListener;
+import android.view.WindowInsets;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -9,9 +12,11 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.demo.R;
+import com.hjq.demo.action.ImmersionAction;
 import com.hjq.demo.action.TitleBarAction;
 import com.hjq.demo.action.ToastAction;
 import com.hjq.demo.http.model.HttpData;
+import com.hjq.demo.other.AndroidVersion;
 import com.hjq.demo.ui.dialog.common.WaitDialog;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.OnHttpListener;
@@ -24,7 +29,7 @@ import com.hjq.umeng.UmengClient;
  *    desc   : Activity 业务基类
  */
 public abstract class AppActivity extends BaseActivity
-        implements ToastAction, TitleBarAction, OnHttpListener<Object> {
+    implements ToastAction, TitleBarAction, ImmersionAction, OnHttpListener<Object> {
 
     /** 标题栏对象 */
     private TitleBar mTitleBar;
@@ -105,9 +110,39 @@ public abstract class AppActivity extends BaseActivity
             getStatusBarConfig().init();
         }
 
-        View immersionView = getImmersionView();
-        if (immersionView != null) {
-            ImmersionBar.setTitleBar(this, immersionView);
+        // 适配 Android 15 EdgeToEdge 特性，这里你可能好奇为什么判断的是 Android 16？
+        // 因为我在主题样式中注册了一个 windowOptOutEdgeToEdgeEnforcement 属性，
+        // 代表跳过在 Android 15 的 EdgeToEdge 特性适配，但到了 Android 16 上面就失效了。
+        if (AndroidVersion.isAndroid16()) {
+            getWindow().getDecorView().setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener()  {
+
+                @NonNull
+                @Override
+                public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
+                    Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
+                    View immersionTopView = getImmersionTopView();
+                    View immersionBottomView = getImmersionBottomView();
+                    if (immersionTopView != null && immersionTopView == immersionBottomView) {
+                        immersionTopView.setPadding(immersionTopView.getPaddingLeft(), systemBars.top,
+                                                    immersionTopView.getPaddingRight(), systemBars.bottom);
+                        return insets;
+                    }
+                    if (immersionTopView != null) {
+                        immersionTopView.setPadding(immersionTopView.getPaddingLeft(), systemBars.top,
+                                                    immersionTopView.getPaddingRight(), immersionTopView.getPaddingBottom());
+                    }
+                    if (immersionBottomView != null) {
+                        immersionBottomView.setPadding(immersionBottomView.getPaddingLeft(), immersionBottomView.getPaddingTop(),
+                                                       immersionBottomView.getPaddingRight(), systemBars.bottom);
+                    }
+                    return insets;
+                }
+            });
+        } else {
+            View immersionTopView = getImmersionTopView();
+            if (immersionTopView != null) {
+                ImmersionBar.setTitleBar(this, immersionTopView);
+            }
         }
     }
 
@@ -169,8 +204,8 @@ public abstract class AppActivity extends BaseActivity
         }
     }
 
-    @Override
     @Nullable
+    @Override
     public TitleBar getTitleBar() {
         if (mTitleBar == null) {
             mTitleBar = obtainTitleBar(getContentView());
@@ -178,7 +213,12 @@ public abstract class AppActivity extends BaseActivity
         return mTitleBar;
     }
 
-    public View getImmersionView() {
+    /**
+     * 获取需要沉浸的顶部 View 对象
+     */
+    @Nullable
+    @Override
+    public View getImmersionTopView() {
         return getTitleBar();
     }
 

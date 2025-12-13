@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
@@ -135,6 +136,18 @@ public final class LoginActivity extends AppActivity
         // 自动填充手机号和密码
         mPhoneView.setText(getString(INTENT_KEY_IN_PHONE));
         mPasswordView.setText(getString(INTENT_KEY_IN_PASSWORD));
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionTopView() {
+        return findViewById(R.id.fl_login_bar);
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return findViewById(R.id.ll_login_platform);
     }
 
     @SingleClick
@@ -355,10 +368,5 @@ public final class LoginActivity extends AppActivity
         return super.createStatusBarConfig()
                 // 指定导航栏背景颜色
                 .navigationBarColor(R.color.white);
-    }
-
-    @Override
-    public View getImmersionView() {
-        return findViewById(R.id.fl_login_bar);
     }
 }

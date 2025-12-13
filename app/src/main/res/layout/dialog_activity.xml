@@ -18,9 +18,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/ll_dialog_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/dp_30"
+            android:paddingHorizontal="@dimen/dp_30"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton

@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
@@ -82,6 +83,12 @@ public final class GuideActivity extends AppActivity {
         mViewPager.setAdapter(mAdapter);
         mViewPager.registerOnPageChangeCallback(mCallback);
         mIndicatorView.setViewPager(mViewPager);
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return findViewById(R.id.fl_guide_control);
     }
 
     @SingleClick

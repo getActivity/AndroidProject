@@ -3,6 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import androidx.annotation.Nullable;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
@@ -65,6 +66,12 @@ public final class DialogActivity extends AppActivity {
     @Override
     protected void initData() {
 
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return findViewById(R.id.ll_dialog_content);
     }
 
     @SingleClick

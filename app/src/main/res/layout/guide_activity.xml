@@ -11,13 +11,14 @@
         android:id="@+id/vp_guide_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/dp_30" />
+        android:paddingBottom="@dimen/dp_40" />
 
     <FrameLayout
+        android:id="@+id/fl_guide_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/dp_30">
+        android:layout_marginBottom="@dimen/dp_15" >
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/cv_guide_indicator"

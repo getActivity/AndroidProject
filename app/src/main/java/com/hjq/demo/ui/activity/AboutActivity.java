@@ -1,5 +1,7 @@
 package com.hjq.demo.ui.activity;
 
+import android.view.View;
+import androidx.annotation.Nullable;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
 
@@ -21,4 +23,10 @@ public final class AboutActivity extends AppActivity {
 
     @Override
     protected void initData() {}
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return findViewById(R.id.tv_about_copyright);
+    }
 }

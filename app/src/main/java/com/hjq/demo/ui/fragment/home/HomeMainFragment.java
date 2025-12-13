@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BasePagerAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppFragment;
@@ -69,6 +70,8 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
         mTabAdapter = new TabAdapter(getAttachActivity());
         mTabView.setAdapter(mTabAdapter);
 
+        ImmersionBar.setTitleBarMarginTop(getAttachActivity(), findViewById(R.id.tb_home_main_title));
+
         // 设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);
     }
@@ -85,11 +88,6 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
     public boolean isStatusBarEnabled() {
         // 使用沉浸式状态栏
         return !super.isStatusBarEnabled();
-    }
-
-    @Override
-    public View getImmersionView() {
-        return findViewById(R.id.tb_home_main_title);
     }
 
     @Override

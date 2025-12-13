@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -86,6 +88,12 @@ public final class HomeActivity extends AppActivity
         mViewPager.setAdapter(mPagerAdapter);
 
         onNewIntent(getIntent());
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return mNavigationView;
     }
 
     @Override

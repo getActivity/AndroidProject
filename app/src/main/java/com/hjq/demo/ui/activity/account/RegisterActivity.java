@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.demo.R;
@@ -98,6 +99,17 @@ public final class RegisterActivity extends AppActivity
         mPhoneView.setText(getString(INTENT_KEY_PHONE));
         mFirstPassword.setText(getString(INTENT_KEY_PASSWORD));
         mSecondPassword.setText(getString(INTENT_KEY_PASSWORD));
+    }
+
+    @Override
+    public View getImmersionTopView() {
+        return findViewById(R.id.fl_register_container);
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return findViewById(R.id.fl_register_container);
     }
 
     @SingleClick
@@ -233,11 +245,6 @@ public final class RegisterActivity extends AppActivity
             return true;
         }
         return false;
-    }
-
-    @Override
-    public View getImmersionView() {
-        return findViewById(R.id.fl_register_container);
     }
 
     /**

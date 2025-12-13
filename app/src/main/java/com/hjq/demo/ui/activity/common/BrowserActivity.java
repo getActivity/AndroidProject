@@ -12,6 +12,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.drake.softinput.SoftInputKt;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
@@ -88,6 +89,12 @@ public final class BrowserActivity extends AppActivity
         mBrowserView.setBrowserViewClient(new AppBrowserViewClient());
         mBrowserView.setBrowserChromeClient(new AppBrowserChromeClient(mBrowserView));
         mBrowserView.loadUrl(getString(INTENT_KEY_IN_URL));
+    }
+
+    @Nullable
+    @Override
+    public View getImmersionBottomView() {
+        return mHintLayout;
     }
 
     @Override

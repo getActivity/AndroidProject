@@ -17,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.gyf.immersionbar.ImmersionBar;
@@ -248,8 +249,9 @@ public final class CrashActivity extends AppActivity {
                 .navigationBarColor(R.color.white);
     }
 
+    @Nullable
     @Override
-    public View getImmersionView() {
+    public View getImmersionTopView() {
         return findViewById(R.id.ll_crash_bar);
     }
 
