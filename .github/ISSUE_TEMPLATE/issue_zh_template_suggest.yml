@@ -22,9 +22,9 @@ body:
       description: 一旦出现重复提问我将不会再次解答
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -34,9 +34,9 @@ body:
       description: 文档会提供最常见的问题解答，可以先看看是否有自己想要的
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -46,9 +46,9 @@ body:
       description: 如果查阅了文档但还是没有解决的话，可以选择是
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: textarea

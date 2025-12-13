@@ -1,0 +1,65 @@
+name: Ask a Question
+description: Ask your questions, and I will provide you with answers.
+title: "[Question]:"
+labels: ["question"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## [Warning: Please make sure to fill in the issue template accurately. If an issue is found to be filled incorrectly, it will be closed without further notice.](https://github.com/getActivity/IssueTemplateGuide)
+  - type: textarea
+    id: input_id_1
+    attributes:
+      label: Question Description [Required]
+      description: Please describe your question (Note, If it is a framework bug, please do not raise it here, as it will not be accepted).
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_2
+    attributes:
+      label: Is the issue mentioned in the framework documentation? [Required]
+      description: The documentation provides answers to frequently asked questions. Please check if the information you are looking for is already provided.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_3
+    attributes:
+      label: Did you consult the framework documentation but couldn't find a solution? [Required]
+      description: If you have consulted the documentation but still couldn't find a solution, you can select "Yes."
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_4
+    attributes:
+      label: Has a similar issue been reported in the issue list? [Required]
+      description: You can search the issue list for keywords related to your problem and refer to the solutions provided by others.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_5
+    attributes:
+      label: Have you searched the issue list but couldn't find a solution? [Required]
+      description: If you have searched the issue list and couldn't find a solution, you can select "Yes."
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true

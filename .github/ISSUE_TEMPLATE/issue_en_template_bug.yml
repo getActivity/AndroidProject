@@ -1,0 +1,173 @@
+name: Submit Bug
+description: Please let me know the issues with the framework, and I will assist you in resolving them!
+title: "[Bug]:"
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## [Warning: Please make sure to fill in the issue template accurately. If an issue is found to be filled incorrectly, it will be closed without further notice.](https://github.com/getActivity/IssueTemplateGuide)
+  - type: input
+    id: input_id_1
+    attributes:
+      label: Framework Version [Required]
+      description: Please enter the version of the framework you are using.
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_2
+    attributes:
+      label: Issue Description [Required]
+      description: Please describe the issue you are facing.
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_3
+    attributes:
+      label: Steps to Reproduce [Required]
+      description: Please provide steps to reproduce the issue.
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_4
+    attributes:
+      label: Is the Issue Reproducible? [Required]
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: input
+    id: input_id_5
+    attributes:
+      label: Project targetSdkVersion [Required]
+    validations:
+      required: true
+  - type: input
+    id: input_id_6
+    attributes:
+      label: Device Information [Required]
+      description: Please provide the brand and model of the device where the issue occurred.
+    validations:
+      required: true
+  - type: input
+    id: input_id_7
+    attributes:
+      label: Android Version [Required]
+      description: Please provide the Android version where the issue occurred.
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_8
+    attributes:
+      label: Issue Source Channel [Required]
+      multiple: true
+      options:
+        - Encountered by myself
+        - Identified in Bugly
+        - User feedback
+        - Other channels
+  - type: input
+    id: input_id_9
+    attributes:
+      label: Is it specific to certain device models? [Required]
+      description: Specify whether the issue is specific to certain devices (e.g., specific brand or Android version).
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_10
+    attributes:
+      label: Does the latest version of the framework have this issue? [Required]
+      description: If you are using an older version, it is recommended to upgrade and check if the issue still persists.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_11
+    attributes:
+      label: Is the issue mentioned in the framework documentation? [Required]
+      description: The documentation provides answers to frequently asked questions. Please check if the information you are looking for is already provided.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_12
+    attributes:
+      label: Did you consult the framework documentation but couldn't find a solution? [Required]
+      description: If you have consulted the documentation but still couldn't find a solution, you can select "Yes."
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_13
+    attributes:
+      label: Has a similar issue been reported in the issue list? [Required]
+      description: You can search the issue list for keywords related to your problem and refer to the solutions provided by others.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_14
+    attributes:
+      label: Have you searched the issue list but couldn't find a solution? [Required]
+      description: If you have searched the issue list and couldn't find a solution, you can select "Yes."
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_15
+    attributes:
+      label: Can the issue be reproduced with a demo project? [Required]
+      description: Check if the issue can be reproduced in a minimal demo project to isolate potential issues in your own code.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_16
+    attributes:
+      label: Provide Error Stack Trace
+      description: If there is an error, please provide the stack trace. Note, Do not include obfuscated code in the stack trace.
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: input_id_17
+    attributes:
+      label: Provide Screenshots or Videos
+      description: Provide screenshots or videos if necessary. This field is optional.
+    validations:
+      required: false
+  - type: textarea
+    id: input_id_18
+    attributes:
+      label: Provide a Solution
+      description: If you have already found a solution, this field is optional.
+    validations:
+      required: false

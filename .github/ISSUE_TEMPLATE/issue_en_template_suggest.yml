@@ -1,0 +1,60 @@
+name: Submit Suggestion
+description: Please let me know the shortcomings of the framework, so that I can improve it!
+title: "[Suggestion]:"
+labels: ["help wanted"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## [Warning: Please make sure to fill in the issue template accurately. If an issue is found to be filled incorrectly, it will be closed without further notice.](https://github.com/getActivity/IssueTemplateGuide)
+  - type: textarea
+    id: input_id_1
+    attributes:
+      label: What are the shortcomings you have noticed in the framework? [Required]
+      description: You can describe any aspects of the framework that you are not satisfied with.
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_2
+    attributes:
+      label: Has a similar suggestion been made in the issue list? [Required]
+      description: If a similar suggestion has already been made, I will not address it again.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_3
+    attributes:
+      label: Is the suggestion mentioned in the framework documentation? [Required]
+      description: The documentation provides answers to frequently asked questions. Please check if the information you are looking for is already provided.
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: input_id_4
+    attributes:
+      label: Did you consult the framework documentation but couldn't find a solution? [Required]
+      description: If you have consulted the documentation but still couldn't find a solution, you can select "Yes."
+      multiple: false
+      options:
+        - "Not Selected"
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: input_id_5
+    attributes:
+      label: How do you suggest improving it? [Optional]
+      description: You can provide your ideas or approaches for the author's reference.
+    validations:
+      required: false

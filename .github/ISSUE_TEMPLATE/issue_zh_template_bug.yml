@@ -35,9 +35,9 @@ body:
       label: 是否必现【必填】
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: input
@@ -84,9 +84,9 @@ body:
       description: 如果用的是旧版本的话，建议升级看问题是否还存在
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -96,9 +96,9 @@ body:
       description: 文档会提供最常见的问题解答，可以先看看是否有自己想要的
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -108,9 +108,9 @@ body:
       description: 如果查阅了文档但还是没有解决的话，可以选择是
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -120,9 +120,9 @@ body:
       description: 可以在 issue 列表在搜索问题关键字，参考一下别人的解决方案
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -132,9 +132,9 @@ body:
       description: 如果搜索过了 issue 列表但是问题没有解决的话，可以选择是
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: dropdown
@@ -144,9 +144,9 @@ body:
       description: 排查一下是不是自己的项目代码写得有问题导致的
       multiple: false
       options:
-        - 未选择
-        - 是
-        - 否
+        - "未选择"
+        - "是"
+        - "否"
     validations:
       required: true
   - type: textarea
