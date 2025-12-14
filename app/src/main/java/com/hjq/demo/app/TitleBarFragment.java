@@ -44,10 +44,8 @@ public abstract class TitleBarFragment<A extends AppActivity>
             getStatusBarConfig().init();
         }
 
-        // 适配 Android 15 EdgeToEdge 特性，这里你可能好奇为什么判断的是 Android 16？
-        // 因为我在主题样式中注册了一个 windowOptOutEdgeToEdgeEnforcement 属性，
-        // 代表跳过在 Android 15 的 EdgeToEdge 特性适配，但到了 Android 16 上面就失效了。
-        if (AndroidVersion.isAndroid16()) {
+        // 适配 Android 15 EdgeToEdge 特性
+        if (AndroidVersion.isAndroid15()) {
             view.setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener()  {
 
                 @NonNull

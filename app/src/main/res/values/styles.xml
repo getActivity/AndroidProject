@@ -34,8 +34,6 @@
         <item name="android:includeFontPadding">false</item>
         <!-- Activity 动画效果 -->
         <item name="android:windowAnimationStyle">@style/LeftToRightAnimStyle</item>
-        <!-- 跳过在 Android 15 上面适配 EdgeToEdge 特性，但到了 Android 16 上面就失效了 -->
-        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- 全屏主题样式 -->
