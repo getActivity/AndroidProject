@@ -20,7 +20,7 @@ nestedScrollLayout = "2.0"
 glide = "5.0.5"
 immersionBar = "3.2.2"
 photoView = "2.3.0"
-buglyPro = "4.4.7.3"
+bugly = "4.4.7.3"
 lottie = "6.7.1"
 refreshAlpha = "3.0.0-alpha"
 timber = "4.7.1"
@@ -101,7 +101,7 @@ immersionBar = { module = "com.geyifeng.immersionbar:immersionbar", version.ref 
 photoView = { module = "com.github.Baseflow:PhotoView", version.ref = "photoView" }
 
 # Bugly 异常捕捉与上报：https://bugly.tds.qq.com/docs/sdk/android/
-buglyPro = { module = "com.tencent.bugly_16kb:bugly-pro", version.ref = "buglyPro" }
+bugly = { module = "com.tencent.bugly_16kb:bugly-pro", version.ref = "bugly" }
 
 # Lottie 动画解析：https://github.com/airbnb/lottie-android
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
