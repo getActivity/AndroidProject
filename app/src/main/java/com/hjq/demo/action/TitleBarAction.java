@@ -20,13 +20,13 @@ public interface TitleBarAction extends OnTitleBarListener {
      * 获取标题栏对象
      */
     @Nullable
-    TitleBar getTitleBar();
+    TitleBar acquireTitleBar();
 
     /**
      * 设置标题栏的标题
      */
     default void setTitle(@StringRes int id) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -37,7 +37,7 @@ public interface TitleBarAction extends OnTitleBarListener {
      * 设置标题栏的标题
      */
     default void setTitle(CharSequence title) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -48,7 +48,7 @@ public interface TitleBarAction extends OnTitleBarListener {
      * 设置标题栏的左标题
      */
     default void setLeftTitle(int id) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -56,7 +56,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     }
 
     default void setLeftTitle(CharSequence text) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -64,7 +64,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     }
 
     default CharSequence getLeftTitle() {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return "";
         }
@@ -75,7 +75,7 @@ public interface TitleBarAction extends OnTitleBarListener {
      * 设置标题栏的右标题
      */
     default void setRightTitle(int id) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -83,7 +83,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     }
 
     default void setRightTitle(CharSequence text) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -91,7 +91,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     }
 
     default CharSequence getRightTitle() {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return "";
         }
@@ -102,7 +102,7 @@ public interface TitleBarAction extends OnTitleBarListener {
      * 设置标题栏的左图标
      */
     default void setLeftIcon(int id) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -110,7 +110,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     }
 
     default void setLeftIcon(Drawable drawable) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -119,7 +119,7 @@ public interface TitleBarAction extends OnTitleBarListener {
 
     @Nullable
     default Drawable getLeftIcon() {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return null;
         }
@@ -130,7 +130,7 @@ public interface TitleBarAction extends OnTitleBarListener {
      * 设置标题栏的右图标
      */
     default void setRightIcon(int id) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -138,7 +138,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     }
 
     default void setRightIcon(Drawable drawable) {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return;
         }
@@ -147,7 +147,7 @@ public interface TitleBarAction extends OnTitleBarListener {
 
     @Nullable
     default Drawable getRightIcon() {
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar == null) {
             return null;
         }
@@ -157,7 +157,7 @@ public interface TitleBarAction extends OnTitleBarListener {
     /**
      * 递归获取 ViewGroup 中的 TitleBar 对象
      */
-    default TitleBar obtainTitleBar(ViewGroup group) {
+    default TitleBar findTitleBar(ViewGroup group) {
         if (group == null) {
             return null;
         }
@@ -168,7 +168,7 @@ public interface TitleBarAction extends OnTitleBarListener {
             }
 
             if (view instanceof ViewGroup) {
-                TitleBar titleBar = obtainTitleBar((ViewGroup) view);
+                TitleBar titleBar = findTitleBar((ViewGroup) view);
                 if (titleBar != null) {
                     return titleBar;
                 }

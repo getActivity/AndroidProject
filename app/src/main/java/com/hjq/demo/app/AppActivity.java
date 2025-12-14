@@ -100,7 +100,7 @@ public abstract class AppActivity extends BaseActivity
     protected void initLayout() {
         super.initLayout();
 
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar != null) {
             titleBar.setOnTitleBarListener(this);
         }
@@ -199,16 +199,17 @@ public abstract class AppActivity extends BaseActivity
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
-        if (getTitleBar() != null) {
-            getTitleBar().setTitle(title);
+        TitleBar titleBar = acquireTitleBar();
+        if (titleBar != null) {
+            titleBar.setTitle(title);
         }
     }
 
     @Nullable
     @Override
-    public TitleBar getTitleBar() {
+    public TitleBar acquireTitleBar() {
         if (mTitleBar == null) {
-            mTitleBar = obtainTitleBar(getContentView());
+            mTitleBar = findTitleBar(getContentView());
         }
         return mTitleBar;
     }
@@ -219,7 +220,7 @@ public abstract class AppActivity extends BaseActivity
     @Nullable
     @Override
     public View getImmersionTopView() {
-        return getTitleBar();
+        return acquireTitleBar();
     }
 
     @Override

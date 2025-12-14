@@ -34,7 +34,7 @@ public abstract class TitleBarFragment<A extends AppActivity>
         super.onViewCreated(view, savedInstanceState);
 
         // 设置标题栏点击监听
-        TitleBar titleBar = getTitleBar();
+        TitleBar titleBar = acquireTitleBar();
         if (titleBar != null) {
             titleBar.setOnTitleBarListener(this);
         }
@@ -131,9 +131,9 @@ public abstract class TitleBarFragment<A extends AppActivity>
 
     @Override
     @Nullable
-    public TitleBar getTitleBar() {
+    public TitleBar acquireTitleBar() {
         if (mTitleBar == null || !isLoading()) {
-            mTitleBar = obtainTitleBar((ViewGroup) getView());
+            mTitleBar = findTitleBar((ViewGroup) getView());
         }
         return mTitleBar;
     }
@@ -141,6 +141,6 @@ public abstract class TitleBarFragment<A extends AppActivity>
     @Nullable
     @Override
     public View getImmersionTopView() {
-        return getTitleBar();
+        return acquireTitleBar();
     }
 }
