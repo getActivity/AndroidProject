@@ -22,9 +22,94 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.hjq.widget.view.ClearEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:text="这是一个带清除的按钮的EditText" />
+
+            <com.hjq.widget.view.PasswordEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:singleLine="true"
+                android:text="78797078" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_5"
+                android:hint="这里只能输入手机号（只能以 1 开头）"
+                app:regexType="mobile" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:hint="这里只能输入中文（普通的中文字符）"
+                app:regexType="chinese" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:hint="这里只能输入英文（大写和小写的英文）"
+                app:regexType="english" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:hint="这里只能输入数字（只允许输入纯数字）"
+                app:regexType="number" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:hint="这里只能输入数量（非 0 开头的数字）"
+                app:regexType="count" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:hint="这里只能输入用户名（中文、英文、数字）"
+                app:regexType="name" />
+
+            <com.hjq.widget.view.RegexEditText
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:hint="这里只能输入非空格的字符"
+                app:regexType="nonnull" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:text="这是一条华丽的分割线" />
+
+            <View
+                style="@style/HorizontalLineStyle" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/dp_20">
@@ -249,6 +334,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20"
                 android:gravity="center"
                 android:paddingTop="@dimen/dp_30"
                 android:paddingBottom="@dimen/dp_30"
@@ -260,93 +346,6 @@
                 app:shape_shadowSize="@dimen/dp_10"
                 app:shape_solidColor="@color/white"
                 app:shape_type="rectangle" />
-
-            <com.hjq.widget.view.ClearEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="这是一个带清除的按钮的EditText" />
-
-            <com.hjq.widget.view.PasswordEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_10"
-                android:singleLine="true"
-                android:text="78797078" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_20"
-                android:hint="这里只能输入手机号（只能以 1 开头）"
-                app:regexType="mobile" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:hint="这里只能输入中文（普通的中文字符）"
-                app:regexType="chinese" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:hint="这里只能输入英文（大写和小写的英文）"
-                app:regexType="english" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:hint="这里只能输入数字（只允许输入纯数字）"
-                app:regexType="number" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:hint="这里只能输入数量（非 0 开头的数字）"
-                app:regexType="count" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:hint="这里只能输入用户名（中文、英文、数字）"
-                app:regexType="name" />
-
-            <com.hjq.widget.view.RegexEditText
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_40"
-                android:hint="这里只能输入非空格的字符"
-                app:regexType="nonnull" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:layout_marginBottom="@dimen/dp_10"
-                android:text="这是一条华丽的分割线" />
-
-            <View
-                style="@style/HorizontalLineStyle"
-                android:layout_marginBottom="@dimen/dp_20" />
 
         </LinearLayout>
 
