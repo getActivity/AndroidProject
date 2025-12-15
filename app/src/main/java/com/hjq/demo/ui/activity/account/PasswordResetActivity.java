@@ -113,10 +113,10 @@ public final class PasswordResetActivity extends AppActivity
                             .setPhone(mPhoneNumber)
                             .setCode(mVerifyCode)
                             .setPassword(mFirstPassword.getText().toString()))
-                    .request(new HttpCallbackProxy<HttpData<Void>>(this) {
+                    .request(new HttpCallbackProxy<HttpData<?>>(this) {
 
                         @Override
-                        public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                        public void onHttpSuccess(@NonNull HttpData<?> data) {
                             new TipsDialog.Builder(PasswordResetActivity.this)
                                     .setIcon(TipsDialog.ICON_FINISH)
                                     .setMessage(R.string.password_reset_success)

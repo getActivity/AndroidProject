@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonToken;
 import com.hjq.bar.TitleBar;
 import com.hjq.demo.R;
+import com.hjq.demo.http.model.HttpCacheStrategy;
 import com.hjq.demo.http.model.RequestHandler;
 import com.hjq.demo.http.model.RequestServer;
 import com.hjq.demo.other.AndroidVersion;
@@ -137,6 +138,8 @@ public final class InitManager {
             .setServer(new RequestServer())
             // 设置请求处理策略
             .setHandler(new RequestHandler(application))
+            // 设置请求缓存实现策略（非必须）
+            .setCacheStrategy(new HttpCacheStrategy())
             // 设置请求重试次数
             .setRetryCount(1)
             .setInterceptor(new IRequestInterceptor() {

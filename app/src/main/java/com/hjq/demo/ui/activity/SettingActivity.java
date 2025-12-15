@@ -164,10 +164,10 @@ public final class SettingActivity extends AppActivity
             // 退出登录
             EasyHttp.post(this)
                     .api(new LogoutApi())
-                    .request(new HttpCallbackProxy<HttpData<Void>>(this) {
+                    .request(new HttpCallbackProxy<HttpData<?>>(this) {
 
                         @Override
-                        public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                        public void onHttpSuccess(@NonNull HttpData<?> data) {
                             startActivity(LoginActivity.class);
                             // 进行内存优化，销毁除登录页之外的所有界面
                             ActivityManager.getInstance().finishAllActivities(LoginActivity.class);

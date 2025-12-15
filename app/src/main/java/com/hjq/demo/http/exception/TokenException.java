@@ -1,5 +1,6 @@
 package com.hjq.demo.http.exception;
 
+import androidx.annotation.NonNull;
 import com.hjq.http.exception.HttpException;
 
 /**
@@ -10,11 +11,11 @@ import com.hjq.http.exception.HttpException;
  */
 public final class TokenException extends HttpException {
 
-    public TokenException(String message) {
+    public TokenException(@NonNull String message) {
         super(message);
     }
 
-    public TokenException(String message, Throwable cause) {
+    public TokenException(@NonNull String message, @NonNull Throwable cause) {
         super(message, cause);
     }
 }

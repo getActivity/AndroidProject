@@ -211,9 +211,12 @@ public final class LoginActivity extends AppActivity
 
                         @Override
                         public void onHttpSuccess(@NonNull HttpData<LoginApi.Bean> data) {
+                            LoginApi.Bean bean = data.getData();
+                            if (bean == null) {
+                                return;
+                            }
                             // 更新 Token
-                            EasyConfig.getInstance()
-                                    .addHeader("token", data.getData().getToken());
+                            EasyConfig.getInstance().addHeader("token", bean.getToken());
                             postDelayed(() -> {
                                 mCommitView.showSucceed();
                                 postDelayed(() -> {

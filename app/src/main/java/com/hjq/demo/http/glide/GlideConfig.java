@@ -67,8 +67,7 @@ public final class GlideConfig extends AppGlideModule {
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
         // Glide 默认使用的是 HttpURLConnection 来做网络请求，这里切换成更高效的 OkHttp
-        registry.replace(GlideUrl.class, InputStream.class,
-                new OkHttpLoader.Factory(EasyConfig.getInstance().getClient()));
+        registry.replace(GlideUrl.class, InputStream.class, new OkHttpLoader.Factory(EasyConfig.getInstance().getClient()));
     }
 
     @Override

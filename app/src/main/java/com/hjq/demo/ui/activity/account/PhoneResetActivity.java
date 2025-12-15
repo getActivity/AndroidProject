@@ -103,10 +103,10 @@ public final class PhoneResetActivity extends AppActivity
             EasyHttp.post(this)
                     .api(new GetCodeApi()
                             .setPhone(mPhoneView.getText().toString()))
-                    .request(new HttpCallbackProxy<HttpData<Void>>(this) {
+                    .request(new HttpCallbackProxy<HttpData<?>>(this) {
 
                         @Override
-                        public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                        public void onHttpSuccess(@NonNull HttpData<?> data) {
                             toast(R.string.common_code_send_hint);
                             mCountdownView.start();
                         }
@@ -143,10 +143,10 @@ public final class PhoneResetActivity extends AppActivity
                             .setPreCode(mVerifyCode)
                             .setPhone(mPhoneView.getText().toString())
                             .setCode(mCodeView.getText().toString()))
-                    .request(new HttpCallbackProxy<HttpData<Void>>(this) {
+                    .request(new HttpCallbackProxy<HttpData<?>>(this) {
 
                         @Override
-                        public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                        public void onHttpSuccess(@NonNull HttpData<?> data) {
                             new TipsDialog.Builder(PhoneResetActivity.this)
                                     .setIcon(TipsDialog.ICON_FINISH)
                                     .setMessage(R.string.phone_reset_commit_succeed)

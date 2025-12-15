@@ -79,10 +79,10 @@ public final class SafeDialog {
                 EasyHttp.post(getDialog())
                         .api(new GetCodeApi()
                                 .setPhone(mPhoneNumber))
-                        .request(new OnHttpListener<HttpData<Void>>() {
+                        .request(new OnHttpListener<HttpData<?>>() {
 
                             @Override
-                            public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                            public void onHttpSuccess(@NonNull HttpData<?> data) {
                                 Toaster.show(R.string.common_code_send_hint);
                                 mCountdownView.start();
                                 setCancelable(false);
@@ -113,10 +113,10 @@ public final class SafeDialog {
                         .api(new VerifyCodeApi()
                                 .setPhone(mPhoneNumber)
                                 .setCode(mCodeView.getText().toString()))
-                        .request(new OnHttpListener<HttpData<Void>>() {
+                        .request(new OnHttpListener<HttpData<?>>() {
 
                             @Override
-                            public void onHttpSuccess(@NonNull HttpData<Void> data) {
+                            public void onHttpSuccess(@NonNull HttpData<?> data) {
                                 performClickDismiss();
                                 if (mListener == null) {
                                     return;

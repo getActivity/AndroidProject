@@ -1,5 +1,6 @@
 package com.hjq.demo.http.model;
 
+import androidx.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -19,17 +20,21 @@ public class HttpListData<T> extends HttpData<HttpListData.ListBean<T>> {
         /** 总数量 */
         private int totalNumber;
         /** 数据 */
+        @Nullable
         private List<T> items;
 
         /**
          * 判断是否是最后一页
          */
         public boolean isLastPage() {
+            if (items == null) {
+                return true;
+            }
             if (pageSize == 0) {
                 // 避免出现除零异常
                 return true;
             }
-            return Math.ceil((float) totalNumber / (float) pageSize) <= pageIndex;
+            return Math.ceil((float) totalNumber / pageSize) <= pageIndex;
         }
 
         public int getTotalNumber() {
@@ -44,6 +49,7 @@ public class HttpListData<T> extends HttpData<HttpListData.ListBean<T>> {
             return pageSize;
         }
 
+        @Nullable
         public List<T> getItems() {
             return items;
         }

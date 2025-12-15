@@ -17,6 +17,7 @@ import okhttp3.Call;
  */
 public final class OkHttpLoader implements ModelLoader<GlideUrl, InputStream> {
 
+    @NonNull
     private final Call.Factory mFactory;
 
     private OkHttpLoader(@NonNull Call.Factory factory) {
@@ -35,6 +36,7 @@ public final class OkHttpLoader implements ModelLoader<GlideUrl, InputStream> {
 
     public static class Factory implements ModelLoaderFactory<GlideUrl, InputStream> {
 
+        @NonNull
         private final Call.Factory mFactory;
 
         Factory(@NonNull Call.Factory factory) {

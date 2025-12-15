@@ -12,14 +12,15 @@ import com.hjq.http.exception.HttpException;
  */
 public final class ResultException extends HttpException {
 
+    @NonNull
     private final HttpData<?> mData;
 
-    public ResultException(String message, HttpData<?> data) {
+    public ResultException(@NonNull String message, @NonNull HttpData<?> data) {
         super(message);
         mData = data;
     }
 
-    public ResultException(String message, Throwable cause, HttpData<?> data) {
+    public ResultException(@NonNull String message, @NonNull Throwable cause, @NonNull HttpData<?> data) {
         super(message, cause);
         mData = data;
     }
