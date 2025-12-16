@@ -18,9 +18,12 @@ import com.hjq.demo.permission.PermissionDescription;
 import com.hjq.demo.permission.PermissionInterceptor;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
+import com.hjq.permissions.permission.base.IPermission;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -42,10 +45,18 @@ public final class CameraActivity extends AppActivity {
 
     @Log
     public static void start(@NonNull BaseActivity activity, boolean video, @Nullable OnCameraListener listener) {
+        List<IPermission> permissions = new ArrayList<>();
+        permissions.add(PermissionLists.getCameraPermission());
+        if (!AndroidVersion.isAndroid11()) {
+            permissions.add(PermissionLists.getReadExternalStoragePermission());
+            permissions.add(PermissionLists.getWriteExternalStoragePermission());
+        }
         XXPermissions.with(activity)
-                .permission(PermissionLists.getCameraPermission())
+                .permissions(permissions)
                 .interceptor(new PermissionInterceptor())
                 .description(new PermissionDescription())
+                // 设置不触发错误检测机制
+                .unchecked()
                 .request((grantedList, deniedList) -> {
                     boolean allGranted = deniedList.isEmpty();
                     if (!allGranted) {
@@ -110,8 +121,14 @@ public final class CameraActivity extends AppActivity {
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         }
 
+        List<IPermission> permissions = new ArrayList<>();
+        permissions.add(PermissionLists.getCameraPermission());
+        if (!AndroidVersion.isAndroid11()) {
+            permissions.add(PermissionLists.getReadExternalStoragePermission());
+            permissions.add(PermissionLists.getWriteExternalStoragePermission());
+        }
         if (intent.resolveActivity(getPackageManager()) == null ||
-                !XXPermissions.isGrantedPermission(this, PermissionLists.getCameraPermission())) {
+                !XXPermissions.isGrantedPermissions(this, permissions)) {
             setResult(RESULT_ERROR, new Intent().putExtra(INTENT_KEY_OUT_ERROR, getString(R.string.camera_launch_fail)));
             finish();
             return;

@@ -14,6 +14,8 @@
 
     <!-- 读取外部存储权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <!-- 写入外部存储权限（注意：这个权限在 targetSdk >= Android 11 并且 Android 11 及以上的设备上面不起作用，请适配分区存储特性代替权限申请）-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="31" tools:ignore="ScopedStorage" />
 
     <!-- 拍照权限 -->
     <uses-permission android:name="android.permission.CAMERA" />

@@ -119,6 +119,7 @@ public final class VideoSelectActivity extends AppActivity
                 .permission(PermissionLists.getReadExternalStoragePermission())
                 .interceptor(new PermissionInterceptor())
                 .description(new PermissionDescription())
+                // 设置不触发错误检测机制
                 .unchecked()
                 .request((grantedList, deniedList) -> {
                     boolean allGranted = deniedList.isEmpty();
