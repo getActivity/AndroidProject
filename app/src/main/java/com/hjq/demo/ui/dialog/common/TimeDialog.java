@@ -26,23 +26,32 @@ public final class TimeDialog {
     public static final class Builder
             extends StyleDialog.Builder<Builder> {
 
+        @NonNull
         private final RecyclerView mHourView;
+        @NonNull
         private final RecyclerView mMinuteView;
+        @NonNull
         private final RecyclerView mSecondView;
 
+        @NonNull
         private final PickerLayoutManager mHourManager;
+        @NonNull
         private final PickerLayoutManager mMinuteManager;
+        @NonNull
         private final PickerLayoutManager mSecondManager;
 
+        @NonNull
         private final PickerAdapter mHourAdapter;
+        @NonNull
         private final PickerAdapter mMinuteAdapter;
+        @NonNull
         private final PickerAdapter mSecondAdapter;
 
         @Nullable
         private OnListener mListener;
 
         @SuppressWarnings("all")
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
             setCustomView(R.layout.time_dialog);
             setTitle(R.string.time_title);
@@ -98,7 +107,7 @@ public final class TimeDialog {
             setSecond(calendar.get(Calendar.SECOND));
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
@@ -185,7 +194,7 @@ public final class TimeDialog {
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 performClickDismiss();
@@ -205,7 +214,7 @@ public final class TimeDialog {
 
     private static final class PickerAdapter extends AppAdapter<String> {
 
-        private PickerAdapter(Context context) {
+        private PickerAdapter(@NonNull Context context) {
             super(context);
         }
 
@@ -240,11 +249,13 @@ public final class TimeDialog {
          * @param minute            分钟
          * @param second            秒钟
          */
-        void onSelected(BaseDialog dialog, int hour, int minute, int second);
+        void onSelected(@NonNull BaseDialog dialog, int hour, int minute, int second);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

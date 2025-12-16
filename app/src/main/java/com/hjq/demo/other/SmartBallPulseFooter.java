@@ -47,11 +47,11 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
 
     private final float mTextWidth;
 
-    public SmartBallPulseFooter(Context context) {
+    public SmartBallPulseFooter(@NonNull Context context) {
         this(context, null);
     }
 
-    public SmartBallPulseFooter(Context context, @Nullable AttributeSet attrs) {
+    public SmartBallPulseFooter(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
 
         setMinimumHeight((int) getResources().getDimension(R.dimen.dp_60));
@@ -69,7 +69,7 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         final int width = getWidth();
         final int height = getHeight();
         if (mNoMoreData) {

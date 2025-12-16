@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.hjq.widget.R;
 
 /**
@@ -22,19 +24,19 @@ public class SimpleLayout extends ViewGroup {
     /** 布局最大高度 */
     private int mMaxHeight;
 
-    public SimpleLayout(Context context) {
+    public SimpleLayout(@NonNull Context context) {
         this(context, null);
     }
 
-    public SimpleLayout(Context context, AttributeSet attrs) {
+    public SimpleLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SimpleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SimpleLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public SimpleLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SimpleLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SimpleLayout);
@@ -108,23 +110,26 @@ public class SimpleLayout extends ViewGroup {
         }
     }
 
+    @Nullable
     @Override
-    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+    public LayoutParams generateLayoutParams(@Nullable AttributeSet attrs) {
         return new MarginLayoutParams(getContext(), attrs);
     }
 
+    @Nullable
+    @Override
+    protected LayoutParams generateLayoutParams(@NonNull LayoutParams params) {
+        return new MarginLayoutParams(params);
+    }
+
+    @NonNull
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
         return new MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
     @Override
-    protected LayoutParams generateLayoutParams(LayoutParams params) {
-        return new MarginLayoutParams(params);
-    }
-
-    @Override
-    protected boolean checkLayoutParams(LayoutParams params) {
+    protected boolean checkLayoutParams(@Nullable LayoutParams params) {
         return params instanceof MarginLayoutParams;
     }
 

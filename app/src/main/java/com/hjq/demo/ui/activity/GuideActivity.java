@@ -25,6 +25,7 @@ public final class GuideActivity extends AppActivity {
     private CircleIndicator3 mIndicatorView;
     private View mCompleteView;
 
+    @NonNull
     private final GuideAdapter mAdapter = new GuideAdapter(this);
 
     private final ViewPager2.OnPageChangeCallback mCallback = new ViewPager2.OnPageChangeCallback() {
@@ -93,7 +94,7 @@ public final class GuideActivity extends AppActivity {
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mCompleteView) {
             HomeActivity.start(getContext());
             finish();

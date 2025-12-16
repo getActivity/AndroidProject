@@ -2,6 +2,7 @@ package com.hjq.base.action;
 
 import android.view.View;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
@@ -42,7 +43,7 @@ public interface ClickAction extends View.OnClickListener {
     }
 
     @Override
-    default void onClick(View view) {
+    default void onClick(@NonNull View view) {
         // 默认不实现，让子类实现
     }
 }

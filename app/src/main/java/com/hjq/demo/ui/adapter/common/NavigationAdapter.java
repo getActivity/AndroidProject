@@ -32,7 +32,7 @@ public final class NavigationAdapter extends AppAdapter<NavigationItem>
     @Nullable
     private OnNavigationListener mListener;
 
-    public NavigationAdapter(Context context) {
+    public NavigationAdapter(@NonNull Context context) {
         super(context);
         setOnItemClickListener(this);
     }
@@ -43,8 +43,9 @@ public final class NavigationAdapter extends AppAdapter<NavigationItem>
         return new ViewHolder();
     }
 
+    @NonNull
     @Override
-    protected RecyclerView.LayoutManager generateDefaultLayoutManager(Context context) {
+    protected RecyclerView.LayoutManager generateDefaultLayoutManager(@NonNull Context context) {
         return new GridLayoutManager(context, getCount(), RecyclerView.VERTICAL, false);
     }
 
@@ -70,7 +71,7 @@ public final class NavigationAdapter extends AppAdapter<NavigationItem>
      */
 
     @Override
-    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+    public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
         if (mSelectedPosition == position) {
             return;
         }

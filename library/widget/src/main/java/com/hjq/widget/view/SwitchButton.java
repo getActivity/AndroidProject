@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.widget.R;
 
@@ -32,10 +33,16 @@ public final class SwitchButton extends View {
     private static final int STATE_SWITCH_ON = 3;
     private static final int STATE_SWITCH_ON2 = 4;
 
+    @NonNull
     private final AccelerateInterpolator mInterpolator = new AccelerateInterpolator(2f);
+
+    @NonNull
     private final Paint mPaint = new Paint();
+    @NonNull
     private final Path mBackgroundPath = new Path();
+    @NonNull
     private final Path mBarPath = new Path();
+    @NonNull
     private final RectF mBound = new RectF();
 
     private float mAnim1, mAnim2;
@@ -85,19 +92,19 @@ public final class SwitchButton extends View {
 
     private float mShadowReservedHeight;
 
-    public SwitchButton(Context context) {
+    public SwitchButton(@NonNull Context context) {
         this(context, null);
     }
 
-    public SwitchButton(Context context, @Nullable AttributeSet attrs) {
+    public SwitchButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SwitchButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SwitchButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public SwitchButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SwitchButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
@@ -272,8 +279,9 @@ public final class SwitchButton extends View {
                 // on -> off
                 result = mOffLeftX + (mOnLeftX - mOffLeftX) * percent;
                 break;
-            default: // init
             case 0:
+            default:
+                // init
                 if (mCheckedState == STATE_SWITCH_OFF) {
                     //  off -> off
                     result = mOffLeftX;
@@ -287,7 +295,7 @@ public final class SwitchButton extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         if (!mCanVisibleDrawing) {
             return;
         }
@@ -348,7 +356,7 @@ public final class SwitchButton extends View {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         super.onTouchEvent(event);
 
         if (isEnabled()
@@ -487,7 +495,7 @@ public final class SwitchButton extends View {
          * @param button            切换按钮
          * @param checked           是否选中
          */
-        void onCheckedChanged(SwitchButton button, boolean checked);
+        void onCheckedChanged(@NonNull SwitchButton button, boolean checked);
     }
 
     /**

@@ -27,7 +27,7 @@ public final class UmengClient {
     /**
      * 初始化友盟相关 SDK
      */
-    public static void init(Application application, boolean logEnable) {
+    public static void init(@NonNull Application application, boolean logEnable) {
         preInit(application, logEnable);
         // 友盟统计：https://developer.umeng.com/docs/66632/detail/101814#h1-u521Du59CBu5316u53CAu901Au7528u63A5u53E32
         UMConfigure.init(application, BuildConfig.UM_KEY,"umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
@@ -41,7 +41,7 @@ public final class UmengClient {
     /**
      * 预初始化 SDK（在用户没有同意隐私协议前调用）
      */
-    public static void preInit(Application application, boolean logEnable) {
+    public static void preInit(@NonNull Application application, boolean logEnable) {
         UMConfigure.preInit(application, BuildConfig.UM_KEY,"umeng");
         // 选用自动采集模式：https://developer.umeng.com/docs/119267/detail/118588#h1-u9875u9762u91C7u96C63
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
@@ -67,7 +67,7 @@ public final class UmengClient {
      * @param action                分享意图
      * @param listener              分享监听
      */
-    public static void share(Activity activity, Platform platform, ShareAction action, @Nullable UmengShare.OnShareListener listener) {
+    public static void share(@NonNull Activity activity, @NonNull Platform platform, @NonNull ShareAction action, @Nullable UmengShare.OnShareListener listener) {
         if (!isAppInstalled(activity, platform.getPackageName())) {
             // 当分享的平台软件可能没有被安装的时候
             if (listener == null) {
@@ -88,7 +88,7 @@ public final class UmengClient {
      * @param platform              登录平台
      * @param listener              登录监听
      */
-    public static void login(Activity activity, Platform platform, @Nullable UmengLogin.OnLoginListener listener) {
+    public static void login(@NonNull Activity activity, @NonNull Platform platform, @Nullable UmengLogin.OnLoginListener listener) {
         if (!isAppInstalled(activity, platform)) {
             // 当登录的平台软件可能没有被安装的时候
             if (listener == null) {
@@ -113,7 +113,7 @@ public final class UmengClient {
     /**
      * 设置回调
      */
-    public static void onActivityResult(Activity activity, int requestCode, int resultCode, @Nullable Intent data) {
+    public static void onActivityResult(@NonNull Activity activity, int requestCode, int resultCode, @Nullable Intent data) {
         UMShareAPI.get(activity).onActivityResult(requestCode, resultCode, data);
     }
 
@@ -127,11 +127,11 @@ public final class UmengClient {
     /**
      * 判断 App 是否安装
      */
-    public static boolean isAppInstalled(Context context, Platform platform) {
+    public static boolean isAppInstalled(@NonNull Context context, @NonNull Platform platform) {
         return isAppInstalled(context, platform.getPackageName());
     }
 
-    private static boolean isAppInstalled(Context context, @NonNull String packageName) {
+    private static boolean isAppInstalled(@NonNull Context context, @NonNull String packageName) {
         try {
             context.getPackageManager().getApplicationInfo(packageName, 0);
             return true;

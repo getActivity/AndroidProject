@@ -16,7 +16,7 @@ import com.hjq.demo.app.AppAdapter;
  */
 public final class StatusAdapter extends AppAdapter<String> {
 
-    public StatusAdapter(Context context) {
+    public StatusAdapter(@NonNull Context context) {
         super(context);
     }
 

@@ -26,15 +26,15 @@ public final class CustomViewStub extends FrameLayout {
 
     private View mInflateView;
 
-    public CustomViewStub(Context context) {
+    public CustomViewStub(@NonNull Context context) {
         this(context, null);
     }
 
-    public CustomViewStub(Context context, AttributeSet attrs) {
+    public CustomViewStub(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CustomViewStub(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomViewStub(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
@@ -103,7 +103,7 @@ public final class CustomViewStub extends FrameLayout {
          * @param stub              当前 ViewStub 对象
          * @param inflatedView      填充布局对象
          */
-        void onInflate(CustomViewStub stub, View inflatedView);
+        void onInflate(@NonNull CustomViewStub stub, View inflatedView);
 
         /**
          * 可见状态改变（可在此中做 View 更新）
@@ -111,6 +111,6 @@ public final class CustomViewStub extends FrameLayout {
          * @param stub              当前 ViewStub 对象
          * @param visibility        可见状态参数改变
          */
-        void onVisibility(CustomViewStub stub, int visibility);
+        void onVisibility(@NonNull CustomViewStub stub, int visibility);
     }
 }

@@ -16,6 +16,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.animation.AccelerateInterpolator;
 import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import com.hjq.widget.R;
 
@@ -68,16 +70,23 @@ public final class SubmitButton extends AppCompatButton {
 
     private final Paint mBackgroundPaint, mLoadingPaint, mResultPaint;
 
+    @NonNull
     private final Path mButtonPath;
+    @NonNull
     private final Path mLoadPath;
+    @NonNull
     private final Path mDstPath;
+    @NonNull
     private final PathMeasure mPathMeasure;
+    @NonNull
     private final Path mResultPath;
 
+    @NonNull
     private final RectF mCircleLeft, mCircleMid, mCircleRight;
 
     private float mLoadValue;
 
+    @Nullable
     private ValueAnimator mSubmitAnim, mLoadingAnim, mResultAnim;
 
     /** 是否有结果 */
@@ -85,15 +94,15 @@ public final class SubmitButton extends AppCompatButton {
     /** 是否成功了 */
     private boolean mSucceed;
 
-    public SubmitButton(Context context) {
+    public SubmitButton(@NonNull Context context) {
         this(context, null);
     }
 
-    public SubmitButton(Context context, AttributeSet attrs) {
+    public SubmitButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SubmitButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SubmitButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         // 关闭硬件加速
         setLayerType(LAYER_TYPE_SOFTWARE, null);
@@ -165,7 +174,7 @@ public final class SubmitButton extends AppCompatButton {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         switch (mButtonState) {
             case STATE_NONE:
                 super.onDraw(canvas);
@@ -193,7 +202,7 @@ public final class SubmitButton extends AppCompatButton {
     /**
      * 绘制按钮
      */
-    private void drawButton(Canvas canvas) {
+    private void drawButton(@NonNull Canvas canvas) {
         mButtonPath.reset();
         mCircleLeft.set(- mViewWidth / 2f, - mViewHeight / 2f, - mViewWidth / 2f + mViewHeight, mViewHeight / 2f);
         mButtonPath.arcTo(mCircleLeft, 90, 180);
@@ -207,7 +216,7 @@ public final class SubmitButton extends AppCompatButton {
     /**
      * 绘制加载转圈
      */
-    private void drawLoading(Canvas canvas) {
+    private void drawLoading(@NonNull Canvas canvas) {
         mDstPath.reset();
         mCircleMid.set(-mMaxViewHeight / 2f, -mMaxViewHeight / 2f, mMaxViewHeight / 2f, mMaxViewHeight / 2f);
         mLoadPath.addArc(mCircleMid, 270, 359.999f);
@@ -226,10 +235,10 @@ public final class SubmitButton extends AppCompatButton {
     /**
      * 绘制结果按钮
      */
-    private void drawResult(Canvas canvas, boolean succeed) {
+    private void drawResult(@NonNull Canvas canvas, boolean succeed) {
         if (succeed) {
             mResultPath.moveTo(- mViewHeight / 6f, 0);
-            mResultPath.lineTo(0, (float) (- mViewHeight / 6 + (1 + Math.sqrt(5)) * mViewHeight / 12));
+            mResultPath.lineTo(0, (float) (-mViewHeight / 6f + (1 + Math.sqrt(5)) * mViewHeight / 12));
             mResultPath.lineTo(mViewHeight / 6f, - mViewHeight / 6f);
         } else {
             mResultPath.moveTo(- mViewHeight / 6f, mViewHeight / 6f);

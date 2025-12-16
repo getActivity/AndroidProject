@@ -1,9 +1,10 @@
 package com.hjq.demo.ui.fragment.home;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.res.ColorStateList;
-import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,10 +68,13 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
 
-        mTabAdapter = new TabAdapter(getAttachActivity());
+        mTabAdapter = new TabAdapter(mTabView.getContext());
         mTabView.setAdapter(mTabAdapter);
 
-        ImmersionBar.setTitleBarMarginTop(getAttachActivity(), findViewById(R.id.tb_home_main_title));
+        Activity activity = getAttachActivity();
+        if (activity != null) {
+            ImmersionBar.setTitleBarMarginTop(activity, findViewById(R.id.tb_home_main_title));
+        }
 
         // 设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);
@@ -100,7 +104,7 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
      */
 
     @Override
-    public boolean onTabSelected(RecyclerView recyclerView, int position) {
+    public boolean onTabSelected(@NonNull RecyclerView recyclerView, int position) {
         mViewPager.setCurrentItem(position);
         return true;
     }
@@ -110,7 +114,9 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
      */
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        // default implementation ignored
+    }
 
     @Override
     public void onPageSelected(int position) {
@@ -121,7 +127,9 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {}
+    public void onPageScrollStateChanged(int state) {
+        // default implementation ignored
+    }
 
     /**
      * CollapsingToolbarLayout 渐变回调
@@ -130,12 +138,16 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
      */
     @SuppressLint("RestrictedApi")
     @Override
-    public void onScrimsStateChange(XCollapsingToolbarLayout layout, boolean shown) {
+    public void onScrimsStateChange(@NonNull XCollapsingToolbarLayout layout, boolean shown) {
         getStatusBarConfig().statusBarDarkFont(shown).init();
-        mAddressView.setTextColor(ContextCompat.getColor(getAttachActivity(), shown ? R.color.black : R.color.white));
+        Activity activity = getAttachActivity();
+        if (activity == null) {
+            return;
+        }
+        mAddressView.setTextColor(ContextCompat.getColor(activity, shown ? R.color.black : R.color.white));
         mHintView.setBackgroundResource(shown ? R.drawable.home_search_bar_gray_bg : R.drawable.home_search_bar_transparent_bg);
-        mHintView.setTextColor(ContextCompat.getColor(getAttachActivity(), shown ? R.color.black60 : R.color.white60));
-        mSearchView.setSupportImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getAttachActivity(), shown ? R.color.common_icon_color : R.color.white)));
+        mHintView.setTextColor(ContextCompat.getColor(activity, shown ? R.color.black60 : R.color.white60));
+        mSearchView.setSupportImageTintList(ColorStateList.valueOf(ContextCompat.getColor(activity, shown ? R.color.common_icon_color : R.color.white)));
     }
 
     @Override

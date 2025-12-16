@@ -1,12 +1,15 @@
 package com.hjq.demo.ui.fragment.common;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.drake.softinput.SoftInputKt;
+import com.hjq.base.BaseActivity;
 import com.hjq.demo.R;
 import com.hjq.demo.action.StatusAction;
 import com.hjq.demo.aop.CheckNet;
@@ -16,9 +19,9 @@ import com.hjq.demo.app.AppFragment;
 import com.hjq.demo.ui.activity.common.BrowserActivity;
 import com.hjq.demo.widget.StatusLayout;
 import com.hjq.demo.widget.webview.BrowserChromeClient;
+import com.hjq.demo.widget.webview.BrowserFullScreenController;
 import com.hjq.demo.widget.webview.BrowserView;
 import com.hjq.demo.widget.webview.BrowserViewClient;
-import com.hjq.demo.widget.webview.FullScreenModeController;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -43,7 +46,8 @@ public final class BrowserFragment extends AppFragment<AppActivity>
         return fragment;
     }
 
-    private final FullScreenModeController mFullScreenModeController = new FullScreenModeController();
+    @NonNull
+    private final BrowserFullScreenController mFullScreenController = new BrowserFullScreenController();
 
     private StatusLayout mStatusLayout;
     private SmartRefreshLayout mRefreshLayout;
@@ -83,10 +87,11 @@ public final class BrowserFragment extends AppFragment<AppActivity>
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mFullScreenModeController.isFullScreenMode()) {
-                mFullScreenModeController.exitFullScreenMode(getAttachActivity());
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+        Activity activity = getAttachActivity();
+        if (keyCode == KeyEvent.KEYCODE_BACK && activity != null) {
+            if (mFullScreenController.isFullScreen()) {
+                mFullScreenController.exitFullScreen(activity);
                 return true;
             }
         }
@@ -113,7 +118,7 @@ public final class BrowserFragment extends AppFragment<AppActivity>
     private class AppBrowserViewClient extends BrowserViewClient {
 
         @Override
-        public void onWebPageLoadFinished(WebView view, String url, boolean success) {
+        public void onWebPageLoadFinished(@NonNull WebView view, @NonNull String url, boolean success) {
             super.onWebPageLoadFinished(view, url, success);
             mRefreshLayout.finishRefresh();
             if (success) {
@@ -127,7 +132,7 @@ public final class BrowserFragment extends AppFragment<AppActivity>
          * 跳转到其他链接
          */
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+        public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull String url) {
             String scheme = Uri.parse(url).getScheme();
             if (scheme == null) {
                 return true;
@@ -136,7 +141,10 @@ public final class BrowserFragment extends AppFragment<AppActivity>
                 // 如果这是跳链接操作
                 case "http":
                 case "https":
-                    BrowserActivity.start(getAttachActivity(), url);
+                    BaseActivity activity = getAttachActivity();
+                    if (activity != null) {
+                        BrowserActivity.start(activity, url);
+                    }
                     break;
                 default:
                     break;
@@ -156,8 +164,12 @@ public final class BrowserFragment extends AppFragment<AppActivity>
          * 播放视频时进入全屏回调
          */
         @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
-            mFullScreenModeController.enterFullScreenMode(getAttachActivity(), view, callback);
+        public void onShowCustomView(@Nullable View view, @Nullable CustomViewCallback callback) {
+            Activity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+            mFullScreenController.enterFullScreen(getAttachActivity(), view, callback);
         }
 
         /**
@@ -165,7 +177,11 @@ public final class BrowserFragment extends AppFragment<AppActivity>
          */
         @Override
         public void onHideCustomView() {
-            mFullScreenModeController.exitFullScreenMode(getAttachActivity());
+            Activity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+            mFullScreenController.exitFullScreen(activity);
         }
     }
 }

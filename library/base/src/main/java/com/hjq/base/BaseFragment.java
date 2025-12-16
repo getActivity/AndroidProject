@@ -29,13 +29,16 @@ import java.util.List;
  *    desc   : Fragment 技术基类
  */
 public abstract class BaseFragment<A extends BaseActivity> extends Fragment implements
-    Application.ActivityLifecycleCallbacks,
-    HandlerAction, ClickAction, BundleAction, KeyboardAction {
+        Application.ActivityLifecycleCallbacks, HandlerAction, ClickAction, BundleAction, KeyboardAction {
 
     /** Activity 对象 */
+    @Nullable
     private A mActivity;
+
     /** 根布局 */
+    @Nullable
     private View mRootView;
+
     /** 当前是否加载过 */
     private boolean mLoading;
 
@@ -49,7 +52,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getLayoutId() <= 0) {
             return null;
         }
@@ -73,27 +76,37 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     /**
      * Activity 获取焦点回调
      */
-    protected void onActivityStart(A attachActivity) {}
+    protected void onActivityStart(@NonNull A attachActivity) {
+        // default implementation ignored
+    }
 
     /**
      * Activity 可见回调
      */
-    protected void onActivityResume(A attachActivity) {}
+    protected void onActivityResume(@NonNull A attachActivity) {
+        // default implementation ignored
+    }
 
     /**
      * Activity 不可见回调
      */
-    protected void onActivityPause(A attachActivity) {}
+    protected void onActivityPause(@NonNull A attachActivity) {
+        // default implementation ignored
+    }
 
     /**
      * Activity 失去焦点回调
      */
-    protected void onActivityStop(A attachActivity) {}
+    protected void onActivityStop(@NonNull A attachActivity) {
+        // default implementation ignored
+    }
 
     /**
      * Activity 销毁时回调
      */
-    protected void onActivityDestroy(A attachActivity) {}
+    protected void onActivityDestroy(@NonNull A attachActivity) {
+        // default implementation ignored
+    }
 
     @Override
     public void onDestroyView() {
@@ -122,7 +135,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         return mLoading;
     }
 
-    @NonNull
+    @Nullable
     @Override
     public View getView() {
         return mRootView;
@@ -131,6 +144,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     /**
      * 获取绑定的 Activity，防止出现 getActivity 为空
      */
+    @Nullable
     public A getAttachActivity() {
         return mActivity;
     }
@@ -162,9 +176,13 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
      */
     @Override
     public <V extends View> V findViewById(@IdRes int id) {
+        if (mRootView == null) {
+            return null;
+        }
         return mRootView.findViewById(id);
     }
 
+    @Nullable
     @Override
     public Bundle getBundle() {
         return getArguments();
@@ -215,7 +233,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     /**
      * Fragment 按键事件派发
      */
-    public boolean dispatchKeyEvent(KeyEvent event) {
+    public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
         List<Fragment> fragments = getChildFragmentManager().getFragments();
         for (Fragment fragment : fragments) {
             // 这个子 Fragment 必须是 BaseFragment 的子类，并且处于可见状态
@@ -242,7 +260,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     /**
      * 按键按下事件回调
      */
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         // 默认不拦截按键事件
         return false;
     }
@@ -250,13 +268,15 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     /**
      * 按键抬起事件回调
      */
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
         // 默认不拦截按键事件
         return false;
     }
 
     @Override
-    public final void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
+    public final void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        // default implementation ignored
+    }
 
     @Override
     public final void onActivityStarted(@NonNull Activity activity) {
@@ -291,7 +311,9 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
     }
 
     @Override
-    public final void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+    public final void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+        // default implementation ignored
+    }
 
     @Override
     public final void onActivityDestroyed(@NonNull Activity activity) {

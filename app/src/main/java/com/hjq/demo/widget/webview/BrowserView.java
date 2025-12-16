@@ -32,20 +32,20 @@ public final class BrowserView extends NestedScrollWebView
         WebView.setWebContentsDebuggingEnabled(AppConfig.isDebug());
     }
 
-    public BrowserView(Context context) {
+    public BrowserView(@NonNull Context context) {
         this(context, null);
     }
 
-    public BrowserView(Context context, AttributeSet attrs) {
+    public BrowserView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, android.R.attr.webViewStyle);
     }
 
-    public BrowserView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BrowserView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    public BrowserView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BrowserView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         WebSettings settings = getSettings();
@@ -179,7 +179,7 @@ public final class BrowserView extends NestedScrollWebView
         super.setWebViewClient(client);
     }
 
-    public void setBrowserViewClient(BrowserViewClient client) {
+    public void setBrowserViewClient(@Nullable BrowserViewClient client) {
         if (client == null) {
             super.setWebViewClient(new WebViewClient());
             return;
@@ -192,15 +192,18 @@ public final class BrowserView extends NestedScrollWebView
      */
     @Deprecated
     @Override
-    public void setWebChromeClient(WebChromeClient client) {
+    public void setWebChromeClient(@Nullable WebChromeClient client) {
         super.setWebChromeClient(client);
     }
 
-    public void setBrowserChromeClient(BrowserChromeClient client) {
+    public void setBrowserChromeClient(@Nullable BrowserChromeClient client) {
         super.setWebChromeClient(client);
     }
 
-    protected void log(String message) {
+    protected void log(@Nullable String message) {
+        if (message == null) {
+            return;
+        }
         Timber.i(message);
     }
 }

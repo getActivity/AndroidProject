@@ -15,7 +15,7 @@ public class LinkClickableSpan extends ClickableSpan {
 
    private final String mTargetUrl;
 
-   public LinkClickableSpan(String url) {
+   public LinkClickableSpan(@NonNull String url) {
       mTargetUrl = url;
    }
 

@@ -3,6 +3,7 @@ package com.hjq.demo.ui.activity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseDialog;
@@ -30,8 +31,8 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *    author : Android 轮子哥
@@ -76,7 +77,7 @@ public final class DialogActivity extends AppActivity {
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int viewId = view.getId();
         if (viewId == R.id.btn_dialog_message) {
 
@@ -95,12 +96,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new MessageDialog.OnListener() {
 
                         @Override
-                        public void onConfirm(BaseDialog dialog) {
+                        public void onConfirm(@NonNull BaseDialog dialog) {
                             toast("确定了");
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -125,12 +126,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new InputDialog.OnListener() {
 
                         @Override
-                        public void onConfirm(BaseDialog dialog, String content) {
+                        public void onConfirm(@NonNull BaseDialog dialog, String content) {
                             toast("确定了：" + content);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -152,12 +153,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new MenuDialog.OnListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, int position, String data) {
+                        public void onSelected(@NonNull BaseDialog dialog, int position, String data) {
                             toast("位置：" + position + "，文本：" + data);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -180,12 +181,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new MenuDialog.OnListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, int position, String data) {
+                        public void onSelected(@NonNull BaseDialog dialog, int position, String data) {
                             toast("位置：" + position + "，文本：" + data);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -204,12 +205,12 @@ public final class DialogActivity extends AppActivity {
                     .setSingleListener(new SelectDialog.OnSingleListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, int position, String data) {
+                        public void onSelected(@NonNull BaseDialog dialog, int position, String data) {
                             toast("位置：" + position + "，数据：" + data);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -228,12 +229,12 @@ public final class DialogActivity extends AppActivity {
                     .setMultiListener(new SelectDialog.OnMultiListener<String>() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
+                        public void onSelected(@NonNull BaseDialog dialog, Map<Integer, String> data) {
                             toast("确定了：" + data.toString());
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -287,12 +288,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new PayPasswordDialog.OnListener() {
 
                         @Override
-                        public void onCompleted(BaseDialog dialog, String password) {
+                        public void onCompleted(@NonNull BaseDialog dialog, String password) {
                             toast(password);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -312,12 +313,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new AddressDialog.OnListener() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, String province, String city, String area) {
+                        public void onSelected(@NonNull BaseDialog dialog, @NonNull String province, @NonNull String city, @NonNull String area) {
                             toast(province + city + area);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -346,7 +347,7 @@ public final class DialogActivity extends AppActivity {
                     //.setIgnoreDay()
                     .setListener(new DateDialog.OnListener() {
                         @Override
-                        public void onSelected(BaseDialog dialog, int year, int month, int day) {
+                        public void onSelected(@NonNull BaseDialog dialog, int year, int month, int day) {
                             toast(year + getString(R.string.common_year) + month + getString(R.string.common_month) + day + getString(R.string.common_day));
 
                             // 如果不指定时分秒则默认为现在的时间
@@ -360,7 +361,7 @@ public final class DialogActivity extends AppActivity {
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -389,7 +390,7 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new TimeDialog.OnListener() {
 
                         @Override
-                        public void onSelected(BaseDialog dialog, int hour, int minute, int second) {
+                        public void onSelected(@NonNull BaseDialog dialog, int hour, int minute, int second) {
                             toast(hour + getString(R.string.common_hour) + minute + getString(R.string.common_minute) + second + getString(R.string.common_second));
 
                             // 如果不指定年月日则默认为今天的日期
@@ -402,7 +403,7 @@ public final class DialogActivity extends AppActivity {
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -423,17 +424,17 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new UmengShare.OnShareListener() {
 
                         @Override
-                        public void onShareSuccess(Platform platform) {
+                        public void onShareSuccess(@NonNull Platform platform) {
                             toast("分享成功");
                         }
 
                         @Override
-                        public void onShareFail(Platform platform, Throwable t) {
-                            toast(t.getMessage());
+                        public void onShareFail(@NonNull Platform platform, @NonNull Throwable throwable) {
+                            toast(throwable.getMessage());
                         }
 
                         @Override
-                        public void onShareCancel(Platform platform) {
+                        public void onShareCancel(@NonNull Platform platform) {
                             toast("分享取消");
                         }
                     })
@@ -462,12 +463,12 @@ public final class DialogActivity extends AppActivity {
                     .setListener(new SafeDialog.OnListener() {
 
                         @Override
-                        public void onConfirm(BaseDialog dialog, String phone, String code) {
+                        public void onConfirm(@NonNull BaseDialog dialog, @NonNull String phone, @NonNull String code) {
                             toast("手机号：" + phone + "\n验证码：" + code);
                         }
 
                         @Override
-                        public void onCancel(BaseDialog dialog) {
+                        public void onCancel(@NonNull BaseDialog dialog) {
                             toast("取消了");
                         }
                     })
@@ -479,8 +480,6 @@ public final class DialogActivity extends AppActivity {
             new BaseDialog.Builder<>(this)
                     .setContentView(R.layout.custom_dialog)
                     .setAnimStyle(BaseDialog.ANIM_SCALE)
-                    //.setText(id, "我是预设置的文本")
-                    .setOnClickListener(R.id.btn_dialog_custom_ok, (BaseDialog.OnClickListener<Button>) (dialog, button) -> dialog.dismiss())
                     .setOnCreateListener(dialog -> toast("Dialog 创建了"))
                     .addOnShowListener(dialog -> toast("Dialog 显示了"))
                     .addOnCancelListener(dialog -> toast("Dialog 取消了"))
@@ -489,6 +488,7 @@ public final class DialogActivity extends AppActivity {
                         toast("按键代码：" + event.getKeyCode());
                         return false;
                     })
+                    .setOnClickListenerByView(R.id.btn_dialog_custom_ok, (BaseDialog.OnClickListener<Button>) (dialog, button) -> dialog.dismiss())
                     .show();
 
         } else if (viewId == R.id.btn_dialog_multi) {

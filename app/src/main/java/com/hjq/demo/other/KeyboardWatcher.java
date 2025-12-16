@@ -95,22 +95,34 @@ public final class KeyboardWatcher implements
      */
 
     @Override
-    public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {}
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        // default implementation ignored
+    }
 
     @Override
-    public void onActivityStarted(@NonNull Activity activity) {}
+    public void onActivityStarted(@NonNull Activity activity) {
+        // default implementation ignored
+    }
 
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {}
+    public void onActivityResumed(@NonNull Activity activity) {
+        // default implementation ignored
+    }
 
     @Override
-    public void onActivityPaused(@NonNull Activity activity) {}
+    public void onActivityPaused(@NonNull Activity activity) {
+        // default implementation ignored
+    }
 
     @Override
-    public void onActivityStopped(@NonNull Activity activity) {}
+    public void onActivityStopped(@NonNull Activity activity) {
+        // default implementation ignored
+    }
 
     @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+        // default implementation ignored
+    }
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
@@ -25,14 +26,19 @@ public final class StyleDialog {
 
         private boolean mClickDismiss = true;
 
+        @NonNull
         private final ViewGroup mContainerLayout;
+        @NonNull
         private final TextView mTitleView;
 
+        @NonNull
         private final TextView mCancelView;
+        @NonNull
         private final View mLineView;
+        @NonNull
         private final TextView mConfirmView;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setContentView(R.layout.ui_dialog);

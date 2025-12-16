@@ -3,8 +3,6 @@ package com.hjq.demo.permission;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -111,13 +109,13 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
             }
         }
 
-        if (deniedLocationPermissionCount == deniedPermissionCount && VERSION.SDK_INT >= VERSION_CODES.Q) {
+        if (deniedLocationPermissionCount == deniedPermissionCount && AndroidVersion.isAndroid10()) {
             if (deniedLocationPermissionCount == 1) {
                 if (XXPermissions.equalsPermission(deniedList.get(0), PermissionNames.ACCESS_BACKGROUND_LOCATION)) {
                     return activity.getString(R.string.common_permission_fail_hint_1,
                         activity.getString(R.string.common_permission_location_background),
                         getBackgroundPermissionOptionLabel(activity));
-                } else if (VERSION.SDK_INT >= VERSION_CODES.S &&
+                } else if (AndroidVersion.isAndroid12() &&
                     XXPermissions.equalsPermission(deniedList.get(0), PermissionNames.ACCESS_FINE_LOCATION)) {
                     // 如果请求的定位权限中，既包含了精确定位权限，又包含了模糊定位权限或者后台定位权限，
                     // 但是用户只同意了模糊定位权限的情况或者后台定位权限，并没有同意精确定位权限的情况，就提示用户开启确切位置选项
@@ -128,7 +126,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
                 }
             } else {
                 if (XXPermissions.containsPermission(deniedList, PermissionNames.ACCESS_BACKGROUND_LOCATION)) {
-                    if (VERSION.SDK_INT >= VERSION_CODES.S &&
+                    if (AndroidVersion.isAndroid12() &&
                         XXPermissions.containsPermission(deniedList, PermissionNames.ACCESS_FINE_LOCATION)) {
                         return activity.getString(R.string.common_permission_fail_hint_2,
                             activity.getString(R.string.common_permission_location),
@@ -141,7 +139,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
                     }
                 }
             }
-        } else if (deniedSensorsPermissionCount == deniedPermissionCount && VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+        } else if (deniedSensorsPermissionCount == deniedPermissionCount && AndroidVersion.isAndroid13()) {
             if (deniedPermissionCount == 1) {
                 if (XXPermissions.equalsPermission(deniedList.get(0), PermissionNames.BODY_SENSORS_BACKGROUND)) {
                     if (AndroidVersion.isAndroid16()) {
@@ -167,7 +165,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
                     }
                 }
             }
-        } else if (deniedHealthPermissionCount == deniedPermissionCount && VERSION.SDK_INT >= VERSION_CODES.BAKLAVA) {
+        } else if (deniedHealthPermissionCount == deniedPermissionCount && AndroidVersion.isAndroid16()) {
 
             switch (deniedPermissionCount) {
                 case 1:
@@ -223,7 +221,7 @@ public final class PermissionInterceptor implements OnPermissionInterceptor {
      * 获取后台权限的《始终允许》选项的文案
      */
     @NonNull
-    private String getBackgroundPermissionOptionLabel(Context context) {
+    private String getBackgroundPermissionOptionLabel(@NonNull Context context) {
         PackageManager packageManager = context.getPackageManager();
         if (packageManager != null && AndroidVersion.isAndroid11()) {
             CharSequence backgroundPermissionOptionLabel = packageManager.getBackgroundPermissionOptionLabel();

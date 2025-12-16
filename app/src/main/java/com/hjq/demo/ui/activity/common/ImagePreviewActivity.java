@@ -33,19 +33,19 @@ public final class ImagePreviewActivity extends AppActivity
     private static final String INTENT_KEY_IN_IMAGE_LIST = "imageList";
     private static final String INTENT_KEY_IN_IMAGE_INDEX = "imageIndex";
 
-    public static void start(Context context, String url) {
+    public static void start(@NonNull Context context, @NonNull String url) {
         ArrayList<String> images = new ArrayList<>(1);
         images.add(url);
         start(context, images);
     }
 
-    public static void start(Context context, List<String> urls) {
+    public static void start(@NonNull Context context, @NonNull List<String> urls) {
         start(context, urls, 0);
     }
 
     @Log
-    public static void start(Context context, List<String> urls, int index) {
-        if (urls == null || urls.isEmpty()) {
+    public static void start(@NonNull Context context, @NonNull List<String> urls, int index) {
+        if (urls.isEmpty()) {
             return;
         }
         Intent intent = new Intent(context, ImagePreviewActivity.class);
@@ -157,7 +157,7 @@ public final class ImagePreviewActivity extends AppActivity
      * @param position          被点击的条目位置
      */
     @Override
-    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+    public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
         if (isFinishing() || isDestroyed()) {
             return;
         }

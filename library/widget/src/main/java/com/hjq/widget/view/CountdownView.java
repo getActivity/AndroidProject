@@ -3,6 +3,7 @@ package com.hjq.widget.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -24,15 +25,15 @@ public final class CountdownView extends AppCompatTextView implements Runnable {
     /** 记录原有的文本 */
     private CharSequence mRecordText;
 
-    public CountdownView(Context context) {
+    public CountdownView(@NonNull Context context) {
         super(context);
     }
 
-    public CountdownView(Context context, @Nullable AttributeSet attrs) {
+    public CountdownView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CountdownView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CountdownView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

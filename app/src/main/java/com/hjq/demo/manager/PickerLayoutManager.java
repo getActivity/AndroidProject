@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,25 +16,27 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public final class PickerLayoutManager extends LinearLayoutManager {
 
-    private final LinearSnapHelper mLinearSnapHelper;
+    @NonNull
+    private final LinearSnapHelper mLinearSnapHelper = new LinearSnapHelper();
+
     private final int mMaxItem;
     private final float mScale;
     private final boolean mAlpha;
 
+    @Nullable
     private RecyclerView mRecyclerView;
     @Nullable
     private OnPickerListener mListener;
 
-    private PickerLayoutManager(Context context, int orientation, boolean reverseLayout, int maxItem, float scale, boolean alpha) {
+    private PickerLayoutManager(@NonNull Context context, int orientation, boolean reverseLayout, int maxItem, float scale, boolean alpha) {
         super(context, orientation, reverseLayout);
-        mLinearSnapHelper = new LinearSnapHelper();
         mMaxItem = maxItem;
         mAlpha = alpha;
         mScale = scale;
     }
 
     @Override
-    public void onAttachedToWindow(RecyclerView recyclerView) {
+    public void onAttachedToWindow(@NonNull RecyclerView recyclerView) {
         super.onAttachedToWindow(recyclerView);
         mRecyclerView = recyclerView;
         // 设置子控件的边界可以超过父布局的范围
@@ -45,7 +46,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    public void onDetachedFromWindow(RecyclerView recyclerView, RecyclerView.Recycler recycler) {
+    public void onDetachedFromWindow(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.Recycler recycler) {
         super.onDetachedFromWindow(recyclerView, recycler);
         mRecyclerView = null;
     }
@@ -57,12 +58,8 @@ public final class PickerLayoutManager extends LinearLayoutManager {
 
     @Override
     public void onMeasure(@NonNull RecyclerView.Recycler recycler, @NonNull RecyclerView.State state, int widthSpec, int heightSpec) {
-        int width = RecyclerView.LayoutManager.chooseSize(widthSpec,
-                getPaddingLeft() + getPaddingRight(),
-                ViewCompat.getMinimumWidth(mRecyclerView));
-        int height = RecyclerView.LayoutManager.chooseSize(heightSpec,
-                getPaddingTop() + getPaddingBottom(),
-                ViewCompat.getMinimumHeight(mRecyclerView));
+        int width = RecyclerView.LayoutManager.chooseSize(widthSpec, getPaddingLeft() + getPaddingRight(), mRecyclerView.getMinimumWidth());
+        int height = RecyclerView.LayoutManager.chooseSize(heightSpec, getPaddingTop() + getPaddingBottom(), mRecyclerView.getMinimumHeight());
 
         if (state.getItemCount() != 0 && mMaxItem != 0) {
 
@@ -189,11 +186,12 @@ public final class PickerLayoutManager extends LinearLayoutManager {
          * @param recyclerView              RecyclerView 对象
          * @param position                  当前滚动的位置
          */
-        void onPicked(RecyclerView recyclerView, int position);
+        void onPicked(@NonNull RecyclerView recyclerView, int position);
     }
 
     public static final class Builder {
 
+        @NonNull
         private final Context mContext;
         private int mOrientation = VERTICAL;
         private boolean mReverseLayout;
@@ -203,7 +201,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
         private float mScale = 0.6f;
         private boolean mAlpha = true;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             mContext = context;
         }
 
@@ -247,7 +245,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
             return this;
         }
 
-        public Builder setOnPickerListener(OnPickerListener listener) {
+        public Builder setOnPickerListener(@Nullable OnPickerListener listener) {
             mListener = listener;
             return this;
         }
@@ -264,7 +262,7 @@ public final class PickerLayoutManager extends LinearLayoutManager {
         /**
          * 应用到 RecyclerView
          */
-        public void into(RecyclerView recyclerView) {
+        public void into(@NonNull RecyclerView recyclerView) {
             recyclerView.setLayoutManager(build());
         }
     }

@@ -40,11 +40,11 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
     /** Tab 宽度是否固定 */
     private final boolean mFixed;
 
-    public TabAdapter(Context context) {
+    public TabAdapter(@NonNull Context context) {
         this(context, TAB_MODE_DESIGN, true);
     }
 
-    public TabAdapter(Context context, int tabMode, boolean fixed) {
+    public TabAdapter(@NonNull Context context, int tabMode, boolean fixed) {
         super(context);
         mTabMode = tabMode;
         mFixed = fixed;
@@ -70,8 +70,9 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
         }
     }
 
+    @NonNull
     @Override
-    protected RecyclerView.LayoutManager generateDefaultLayoutManager(Context context) {
+    protected RecyclerView.LayoutManager generateDefaultLayoutManager(@NonNull Context context) {
         if (mFixed) {
             int count = getCount();
             if (count < 1) {
@@ -148,7 +149,7 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
      */
 
     @Override
-    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+    public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
         if (mSelectedPosition == position) {
             return;
         }
@@ -267,10 +268,14 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
         }
 
         @Override
-        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {}
+        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onItemRangeChanged(int positionStart, int itemCount) {}
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            // default implementation ignored
+        }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -286,7 +291,9 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
         }
 
         @Override
-        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {}
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+            // default implementation ignored
+        }
 
         private void refreshLayoutManager() {
             if (!mFixed) {
@@ -308,6 +315,6 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
         /**
          * Tab 被选中了
          */
-        boolean onTabSelected(RecyclerView recyclerView, int position);
+        boolean onTabSelected(@NonNull RecyclerView recyclerView, int position);
     }
 }

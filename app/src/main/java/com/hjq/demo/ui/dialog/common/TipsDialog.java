@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
@@ -25,12 +26,14 @@ public final class TipsDialog {
             extends BaseDialog.Builder<Builder>
             implements Runnable, BaseDialog.OnShowListener {
 
+        @NonNull
         private final TextView mMessageView;
+        @NonNull
         private final ImageView mIconView;
 
         private int mDuration = 2000;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
             setContentView(R.layout.tips_dialog);
             setAnimStyle(BaseDialog.ANIM_TOAST);
@@ -76,7 +79,7 @@ public final class TipsDialog {
         }
 
         @Override
-        public void onShow(BaseDialog dialog) {
+        public void onShow(@NonNull BaseDialog dialog) {
             // 延迟自动关闭
             postDelayed(this, mDuration);
         }

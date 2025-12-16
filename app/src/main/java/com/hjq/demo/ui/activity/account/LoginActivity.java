@@ -53,7 +53,7 @@ public final class LoginActivity extends AppActivity
     private static final String INTENT_KEY_IN_PASSWORD = "password";
 
     @Log
-    public static void start(Context context, String phone, String password) {
+    public static void start(@NonNull Context context, @Nullable String phone, @Nullable String password) {
         Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(INTENT_KEY_IN_PHONE, phone);
         intent.putExtra(INTENT_KEY_IN_PASSWORD, password);
@@ -152,7 +152,7 @@ public final class LoginActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mRegisterView) {
             // 跳转到注册界面
             RegisterActivity.start(this, mPhoneView.getText().toString(),
@@ -207,7 +207,9 @@ public final class LoginActivity extends AppActivity
                         }
 
                         @Override
-                        public void onHttpEnd(@NonNull IRequestApi api) {}
+                        public void onHttpEnd(@NonNull IRequestApi api) {
+                            // default implementation ignored
+                        }
 
                         @Override
                         public void onHttpSuccess(@NonNull HttpData<LoginApi.Bean> data) {
@@ -266,7 +268,7 @@ public final class LoginActivity extends AppActivity
      * @param data          用户资料返回
      */
     @Override
-    public void onLoginSuccess(Platform platform, UmengLogin.LoginData data) {
+    public void onLoginSuccess(@NonNull Platform platform, @NonNull UmengLogin.LoginData data) {
         if (isFinishing() || isDestroyed()) {
             // Glide：You cannot start a load for a destroyed activity
             return;
@@ -297,11 +299,11 @@ public final class LoginActivity extends AppActivity
      * 授权失败的回调
      *
      * @param platform      平台名称
-     * @param t             错误原因
+     * @param throwable     错误原因
      */
     @Override
-    public void onLoginFail(Platform platform, Throwable t) {
-        toast("第三方登录出错：" + t.getMessage());
+    public void onLoginFail(@NonNull Platform platform, @NonNull Throwable throwable) {
+        toast("第三方登录出错：" + throwable.getMessage());
     }
 
     /**
@@ -356,7 +358,7 @@ public final class LoginActivity extends AppActivity
      * {@link TextView.OnEditorActionListener}
      */
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
             // 模拟点击登录按钮
             onClick(mCommitView);

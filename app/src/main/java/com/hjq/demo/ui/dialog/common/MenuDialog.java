@@ -34,17 +34,22 @@ public final class MenuDialog {
             implements BaseAdapter.OnItemClickListener {
 
         @SuppressWarnings("rawtypes")
-        @Nullable
-        private OnListener mListener;
         private boolean mAutoDismiss = true;
 
+        @NonNull
         private final SimpleLayout mSimpleLayout;
+        @NonNull
         private final RecyclerView mRecyclerView;
+        @NonNull
         private final TextView mCancelView;
 
+        @NonNull
         private final MenuAdapter mAdapter;
 
-        public Builder(Context context) {
+        @Nullable
+        private OnListener mListener;
+
+        public Builder(@NonNull Context context) {
             super(context);
             setContentView(R.layout.menu_dialog);
             setAnimStyle(BaseDialog.ANIM_BOTTOM);
@@ -111,14 +116,14 @@ public final class MenuDialog {
         }
 
         @SuppressWarnings("rawtypes")
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (mAutoDismiss) {
                 dismiss();
             }
@@ -136,7 +141,7 @@ public final class MenuDialog {
          */
         @SuppressWarnings("all")
         @Override
-        public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
             if (mAutoDismiss) {
                 dismiss();
             }
@@ -159,7 +164,7 @@ public final class MenuDialog {
 
     private static final class MenuAdapter extends AppAdapter<Object> {
 
-        private MenuAdapter(Context context) {
+        private MenuAdapter(@NonNull Context context) {
             super(context);
         }
 
@@ -205,11 +210,13 @@ public final class MenuDialog {
         /**
          * 选择条目时回调
          */
-        void onSelected(BaseDialog dialog, int position, T data);
+        void onSelected(@NonNull BaseDialog dialog, int position, T data);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

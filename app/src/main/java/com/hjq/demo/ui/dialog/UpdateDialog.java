@@ -41,11 +41,16 @@ public final class UpdateDialog {
     public static final class Builder
             extends BaseDialog.Builder<Builder> {
 
+        @NonNull
         private final TextView mNameView;
+        @NonNull
         private final TextView mDetailsView;
+        @NonNull
         private final ProgressBar mProgressView;
 
+        @NonNull
         private final TextView mUpdateView;
+        @NonNull
         private final TextView mCloseView;
 
         /** Apk 文件 */
@@ -62,7 +67,7 @@ public final class UpdateDialog {
         /** 当前是否下载完毕 */
         private boolean mDownloadComplete;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setContentView(R.layout.update_dialog);
@@ -125,7 +130,7 @@ public final class UpdateDialog {
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (view == mCloseView) {
                 dismiss();
                 return;
@@ -171,7 +176,7 @@ public final class UpdateDialog {
             int notificationId = getContext().getApplicationInfo().uid;
             String channelId = "";
             // 适配 Android 8.0 通知渠道新特性
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (notificationManager != null && AndroidVersion.isAndroid8()) {
                 NotificationChannel channel = new NotificationChannel(getString(R.string.update_notification_channel_id), getString(R.string.update_notification_channel_name), NotificationManager.IMPORTANCE_LOW);
                 channel.enableLights(false);
                 channel.enableVibration(false);
@@ -228,6 +233,9 @@ public final class UpdateDialog {
                         public void onDownloadProgressChange(@NonNull File file, int progress) {
                             mUpdateView.setText(String.format(getString(R.string.update_status_running), progress));
                             mProgressView.setProgress(progress);
+                            if (notificationManager == null) {
+                                return;
+                            }
                             // 更新下载通知
                             notificationManager.notify(notificationId, notificationBuilder
                                     // 设置通知的文本
@@ -244,6 +252,14 @@ public final class UpdateDialog {
 
                         @Override
                         public void onDownloadSuccess(@NonNull File file) {
+                            mUpdateView.setText(R.string.update_status_successful);
+                            // 标记成下载完成
+                            mDownloadComplete = true;
+                            // 安装 Apk
+                            startInstall();
+                            if (notificationManager == null) {
+                                return;
+                            }
                             int pendingIntentFlag;
                             if (AndroidVersion.isAndroid12()) {
                                 // Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE or FLAG_MUTABLE be specified when creating a PendingIntent.
@@ -255,22 +271,17 @@ public final class UpdateDialog {
                             }
                             // 显示下载成功通知
                             notificationManager.notify(notificationId, notificationBuilder
-                                    // 设置通知的文本
-                                    .setContentText(String.format(getString(R.string.update_status_successful), 100))
-                                    // 设置下载的进度
-                                    .setProgress(100, 100, false)
-                                    // 设置通知点击之后的意图
-                                    .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), pendingIntentFlag))
-                                    // 设置点击通知后是否自动消失
-                                    .setAutoCancel(true)
-                                    // 是否正在交互中
-                                    .setOngoing(false)
-                                    .build());
-                            mUpdateView.setText(R.string.update_status_successful);
-                            // 标记成下载完成
-                            mDownloadComplete = true;
-                            // 安装 Apk
-                            startInstall();
+                                // 设置通知的文本
+                                .setContentText(String.format(getString(R.string.update_status_successful), 100))
+                                // 设置下载的进度
+                                .setProgress(100, 100, false)
+                                // 设置通知点击之后的意图
+                                .setContentIntent(PendingIntent.getActivity(getContext(), 1, getInstallIntent(), pendingIntentFlag))
+                                // 设置点击通知后是否自动消失
+                                .setAutoCancel(true)
+                                // 是否正在交互中
+                                .setOngoing(false)
+                                .build());
                         }
 
                         @SuppressWarnings("ResultOfMethodCallIgnored")

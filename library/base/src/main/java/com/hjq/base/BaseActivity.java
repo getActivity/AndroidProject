@@ -8,19 +8,17 @@ import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.Window;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-
 import com.hjq.base.action.ActivityAction;
 import com.hjq.base.action.BundleAction;
 import com.hjq.base.action.ClickAction;
 import com.hjq.base.action.FixOrientationAction;
 import com.hjq.base.action.HandlerAction;
 import com.hjq.base.action.KeyboardAction;
-
 import java.util.List;
 import java.util.Random;
 
@@ -41,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity
     private SparseArray<OnActivityCallback> mActivityCallbacks;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (!isAllowOrientation(this)) {
             fixScreenOrientation(this);
         }
@@ -114,6 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity
         setIntent(intent);
     }
 
+    @Nullable
     @Override
     public Bundle getBundle() {
         return getIntent().getExtras();
@@ -140,7 +139,7 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
+    public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         for (Fragment fragment : fragments) {
             // 这个 Fragment 必须是 BaseFragment 的子类，并且处于可见状态
@@ -157,35 +156,40 @@ public abstract class BaseActivity extends AppCompatActivity
         return super.dispatchKeyEvent(event);
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
-        // 隐藏软键，避免内存泄漏
-        hideKeyboard(getCurrentFocus());
-        // 查看源码得知 startActivity 最终也会调用 startActivityForResult
-        super.startActivityForResult(intent, requestCode, options);
-    }
-
     /**
      * startActivityForResult 方法优化
      */
 
-    public void startActivityForResult(Class<? extends Activity> clazz, OnActivityCallback callback) {
+    public void startActivityForResult(@NonNull Class<? extends Activity> clazz, @Nullable OnActivityCallback callback) {
         startActivityForResult(new Intent(this, clazz), null, callback);
     }
 
-    public void startActivityForResult(Intent intent, OnActivityCallback callback) {
+    public void startActivityForResult(@NonNull Intent intent, @Nullable OnActivityCallback callback) {
         startActivityForResult(intent, null, callback);
     }
 
-    public void startActivityForResult(Intent intent, @Nullable Bundle options, OnActivityCallback callback) {
+    public void startActivityForResult(@NonNull Intent intent, @Nullable Bundle options, @Nullable OnActivityCallback callback) {
         if (mActivityCallbacks == null) {
             mActivityCallbacks = new SparseArray<>(1);
         }
+
         // 请求码必须在 2 的 16 次方以内
-        int requestCode = new Random().nextInt((int) Math.pow(2, 16));
+        int requestCode;
+        do {
+            requestCode = new Random().nextInt((int) Math.pow(2, 16));
+        } while (mActivityCallbacks.indexOfKey(requestCode) != -1);
         mActivityCallbacks.put(requestCode, callback);
+
         startActivityForResult(intent, requestCode, options);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void startActivityForResult(@NonNull Intent intent, int requestCode, @Nullable Bundle options) {
+        // 隐藏软键，避免内存泄漏
+        hideKeyboard(getCurrentFocus());
+        // 查看源码得知 startActivity 最终也会调用 startActivityForResult
+        super.startActivityForResult(intent, requestCode, options);
     }
 
     @Override

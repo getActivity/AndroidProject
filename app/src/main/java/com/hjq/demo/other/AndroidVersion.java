@@ -14,33 +14,40 @@ import android.os.Build;
 public final class AndroidVersion {
 
     /** {@link Build.VERSION_CODES#BAKLAVA} */
-    public static final int ANDROID_16 = 36;
+    public static final int ANDROID_16 = Build.VERSION_CODES.BAKLAVA;
     /** {@link Build.VERSION_CODES#VANILLA_ICE_CREAM} */
-    public static final int ANDROID_15 = 35;
+    public static final int ANDROID_15 = Build.VERSION_CODES.VANILLA_ICE_CREAM;
     /** {@link Build.VERSION_CODES#UPSIDE_DOWN_CAKE} */
-    public static final int ANDROID_14 = 34;
+    public static final int ANDROID_14 = Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
     /** {@link Build.VERSION_CODES#TIRAMISU} */
-    public static final int ANDROID_13 = 33;
+    public static final int ANDROID_13 = Build.VERSION_CODES.TIRAMISU;
     /** {@link Build.VERSION_CODES#S_V2} */
-    public static final int ANDROID_12_1 = 32;
+    public static final int ANDROID_12_1 = Build.VERSION_CODES.S_V2;
     /** {@link Build.VERSION_CODES#S} */
-    public static final int ANDROID_12 = 31;
+    public static final int ANDROID_12 = Build.VERSION_CODES.S;
     /** {@link Build.VERSION_CODES#R} */
-    public static final int ANDROID_11 = 30;
+    public static final int ANDROID_11 = Build.VERSION_CODES.R;
     /** {@link Build.VERSION_CODES#Q} */
-    public static final int ANDROID_10 = 29;
+    public static final int ANDROID_10 = Build.VERSION_CODES.Q;
     /** {@link Build.VERSION_CODES#P} */
-    public static final int ANDROID_9 = 28;
+    public static final int ANDROID_9 = Build.VERSION_CODES.P;
     /** {@link Build.VERSION_CODES#O_MR1} */
-    public static final int ANDROID_8_1 = 27;
+    public static final int ANDROID_8_1 = Build.VERSION_CODES.O_MR1;
     /** {@link Build.VERSION_CODES#O} */
-    public static final int ANDROID_8 = 26;
+    public static final int ANDROID_8 = Build.VERSION_CODES.O;
     /** {@link Build.VERSION_CODES#N_MR1} */
-    public static final int ANDROID_7_1 = 25;
+    public static final int ANDROID_7_1 = Build.VERSION_CODES.N_MR1;
     /** {@link Build.VERSION_CODES#N} */
-    public static final int ANDROID_7 = 24;
+    public static final int ANDROID_7 = Build.VERSION_CODES.N;
 
     private AndroidVersion() {}
+
+    /**
+     * 获取当前 SDK 版本
+     */
+    public static int getSdkVersion() {
+        return Build.VERSION.SDK_INT;
+    }
 
     /**
      * 是否是 Android 16 及以上版本

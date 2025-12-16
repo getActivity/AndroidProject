@@ -38,12 +38,16 @@ public final class GlideConfig extends AppGlideModule {
         // 如果这个路径是一个文件
         if (diskCacheFile.exists() && diskCacheFile.isFile()) {
             // 执行删除操作
+            // noinspection ResultOfMethodCallIgnored
             diskCacheFile.delete();
         }
         // 如果这个路径不存在
         if (!diskCacheFile.exists()) {
             // 创建多级目录
-            diskCacheFile.mkdirs();
+            if (!diskCacheFile.mkdirs()) {
+                // 如果创建失败，并且文件夹不存在
+                return;
+            }
         }
         builder.setDiskCache(() -> DiskLruCacheWrapper.create(diskCacheFile, IMAGE_DISK_CACHE_MAX_SIZE));
 

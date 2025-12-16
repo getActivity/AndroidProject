@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import androidx.annotation.NonNull;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -74,7 +75,7 @@ public final class PersonalDataActivity extends AppActivity {
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mAvatarLayout) {
             ImageSelectActivity.start(this, data -> {
                 // 裁剪头像

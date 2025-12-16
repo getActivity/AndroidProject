@@ -7,6 +7,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat;
  */
 public interface ResourcesAction {
 
+    @NonNull
     Context getContext();
 
     default Resources getResources() {
@@ -41,6 +43,7 @@ public interface ResourcesAction {
         return ContextCompat.getColor(getContext(), id);
     }
 
+    @Nullable
     default <S> S getSystemService(@NonNull Class<S> serviceClass) {
         return ContextCompat.getSystemService(getContext(), serviceClass);
     }

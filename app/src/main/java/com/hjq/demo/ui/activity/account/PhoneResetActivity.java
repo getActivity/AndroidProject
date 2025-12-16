@@ -31,13 +31,12 @@ import com.hjq.widget.view.CountdownView;
  *    time   : 2019/04/20
  *    desc   : 设置手机号
  */
-public final class PhoneResetActivity extends AppActivity
-        implements TextView.OnEditorActionListener {
+public final class PhoneResetActivity extends AppActivity implements TextView.OnEditorActionListener {
 
     private static final String INTENT_KEY_IN_CODE = "code";
 
     @Log
-    public static void start(Context context, String code) {
+    public static void start(@NonNull Context context, @NonNull String code) {
         Intent intent = new Intent(context, PhoneResetActivity.class);
         intent.putExtra(INTENT_KEY_IN_CODE, code);
         if (!(context instanceof Activity)) {
@@ -84,7 +83,7 @@ public final class PhoneResetActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mCountdownView) {
 
             if (mPhoneView.getText().toString().length() != 11) {
@@ -162,7 +161,7 @@ public final class PhoneResetActivity extends AppActivity
      * {@link TextView.OnEditorActionListener}
      */
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
             // 模拟点击提交按钮
             onClick(mCommitView);

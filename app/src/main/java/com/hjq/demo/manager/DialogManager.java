@@ -1,6 +1,7 @@
 package com.hjq.demo.manager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -19,6 +20,7 @@ import java.util.Map;
 @SuppressWarnings("MapOrSetKeyShouldOverrideHashCodeEquals")
 public final class DialogManager implements LifecycleEventObserver, BaseDialog.OnDismissListener {
 
+    @NonNull
     private static final Map<LifecycleOwner, DialogManager> DIALOG_MANAGER = new HashMap<>();
 
     public static DialogManager getInstance(LifecycleOwner lifecycleOwner) {
@@ -30,9 +32,11 @@ public final class DialogManager implements LifecycleEventObserver, BaseDialog.O
         return manager;
     }
 
+    @NonNull
     private final List<BaseDialog> mDialogList = new ArrayList<>();
 
-    private final HashMap<BaseDialog, Integer> mDialogPriority = new HashMap<>();
+    @NonNull
+    private final Map<BaseDialog, Integer> mDialogPriority = new HashMap<>();
 
     private DialogManager(LifecycleOwner lifecycleOwner) {
         lifecycleOwner.getLifecycle().addObserver(this);
@@ -41,11 +45,12 @@ public final class DialogManager implements LifecycleEventObserver, BaseDialog.O
     /**
      * 获取所有排队显示的对话框
      */
+    @NonNull
     public List<BaseDialog> getDialogList() {
         return mDialogList;
     }
 
-    public void addDialog(BaseDialog dialog) {
+    public void addDialog(@Nullable BaseDialog dialog) {
         addDialog(dialog, 0);
     }
 
@@ -54,7 +59,7 @@ public final class DialogManager implements LifecycleEventObserver, BaseDialog.O
      *
      * @param priority        弹窗优先级
      */
-    public void addDialog(BaseDialog dialog, int priority) {
+    public void addDialog(@Nullable BaseDialog dialog, int priority) {
         if (dialog == null) {
             return;
         }
@@ -109,7 +114,7 @@ public final class DialogManager implements LifecycleEventObserver, BaseDialog.O
     }
 
     @Override
-    public void onDismiss(BaseDialog dialog) {
+    public void onDismiss(@NonNull BaseDialog dialog) {
         dialog.removeOnDismissListener(this);
         mDialogList.remove(dialog);
         mDialogPriority.remove(dialog);
@@ -127,12 +132,12 @@ public final class DialogManager implements LifecycleEventObserver, BaseDialog.O
      */
 
     @Override
-    public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
+    public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
         if (event != Lifecycle.Event.ON_DESTROY) {
             return;
         }
-        DIALOG_MANAGER.remove(lifecycleOwner);
-        lifecycleOwner.getLifecycle().removeObserver(this);
+        DIALOG_MANAGER.remove(source);
+        source.getLifecycle().removeObserver(this);
         clearShow();
     }
 }

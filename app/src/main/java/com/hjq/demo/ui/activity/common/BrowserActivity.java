@@ -22,9 +22,9 @@ import com.hjq.demo.aop.Log;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.widget.StatusLayout;
 import com.hjq.demo.widget.webview.BrowserChromeClient;
+import com.hjq.demo.widget.webview.BrowserFullScreenController;
 import com.hjq.demo.widget.webview.BrowserView;
 import com.hjq.demo.widget.webview.BrowserViewClient;
-import com.hjq.demo.widget.webview.FullScreenModeController;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -42,7 +42,7 @@ public final class BrowserActivity extends AppActivity
 
     @CheckNet
     @Log
-    public static void start(Context context, String url) {
+    public static void start(@NonNull Context context, @NonNull String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -54,7 +54,8 @@ public final class BrowserActivity extends AppActivity
         context.startActivity(intent);
     }
 
-    private final FullScreenModeController mFullScreenModeController = new FullScreenModeController();
+    @NonNull
+    private final BrowserFullScreenController mFullScreenController = new BrowserFullScreenController();
 
     private StatusLayout mStatusLayout;
     private ProgressBar mProgressBar;
@@ -103,15 +104,15 @@ public final class BrowserActivity extends AppActivity
     }
 
     @Override
-    public void onLeftClick(TitleBar titleBar) {
+    public void onLeftClick(@NonNull TitleBar titleBar) {
         finish();
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mFullScreenModeController.isFullScreenMode()) {
-                mFullScreenModeController.exitFullScreenMode(this);
+            if (mFullScreenController.isFullScreen()) {
+                mFullScreenController.exitFullScreen(this);
                 return true;
             }
 
@@ -144,7 +145,7 @@ public final class BrowserActivity extends AppActivity
     private class AppBrowserViewClient extends BrowserViewClient {
 
         @Override
-        protected void onUserRefuseSslError(SslErrorHandler handler) {
+        protected void onUserRefuseSslError(@Nullable SslErrorHandler handler) {
             super.onUserRefuseSslError(handler);
             if (mBrowserView.canGoBack()) {
                 return;
@@ -154,13 +155,13 @@ public final class BrowserActivity extends AppActivity
         }
 
         @Override
-        public void onWebPageLoadStarted(WebView view, String url, Bitmap favicon) {
+        public void onWebPageLoadStarted(@NonNull WebView view, @NonNull String url, @Nullable Bitmap favicon) {
             super.onWebPageLoadStarted(view, url, favicon);
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
-        public void onWebPageLoadFinished(WebView view, String url, boolean success) {
+        public void onWebPageLoadFinished(@NonNull WebView view, @NonNull String url, boolean success) {
             super.onWebPageLoadFinished(view, url, success);
             mProgressBar.setVisibility(View.GONE);
             mRefreshLayout.finishRefresh();
@@ -182,18 +183,15 @@ public final class BrowserActivity extends AppActivity
          * 收到网页标题
          */
         @Override
-        public void onReceivedTitle(WebView view, String title) {
-            if (title == null) {
-                return;
-            }
+        public void onReceivedTitle(@NonNull WebView view, @NonNull String title) {
             setTitle(title);
         }
 
+        /**
+         * 收到网页图标
+         */
         @Override
-        public void onReceivedIcon(WebView view, Bitmap icon) {
-            if (icon == null) {
-                return;
-            }
+        public void onReceivedIcon(@NonNull WebView view, @NonNull Bitmap icon) {
             setRightIcon(new BitmapDrawable(getResources(), icon));
         }
 
@@ -201,7 +199,7 @@ public final class BrowserActivity extends AppActivity
          * 收到加载进度变化
          */
         @Override
-        public void onProgressChanged(WebView view, int newProgress) {
+        public void onProgressChanged(@NonNull WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
             mProgressBar.setProgress(newProgress);
         }
@@ -210,9 +208,9 @@ public final class BrowserActivity extends AppActivity
          * 播放视频时进入全屏回调
          */
         @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
+        public void onShowCustomView(@Nullable View view, @Nullable CustomViewCallback callback) {
             mBrowserView.setVisibility(View.INVISIBLE);
-            mFullScreenModeController.enterFullScreenMode(BrowserActivity.this, view, callback);
+            mFullScreenController.enterFullScreen(BrowserActivity.this, view, callback);
             mBrowserView.setVisibility(View.VISIBLE);
         }
 
@@ -221,7 +219,7 @@ public final class BrowserActivity extends AppActivity
          */
         @Override
         public void onHideCustomView() {
-            mFullScreenModeController.exitFullScreenMode(BrowserActivity.this);
+            mFullScreenController.exitFullScreen(BrowserActivity.this);
         }
     }
 }

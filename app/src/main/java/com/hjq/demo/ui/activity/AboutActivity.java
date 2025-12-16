@@ -19,10 +19,14 @@ public final class AboutActivity extends AppActivity {
     }
 
     @Override
-    protected void initView() {}
+    protected void initView() {
+
+    }
 
     @Override
-    protected void initData() {}
+    protected void initData() {
+
+    }
 
     @Nullable
     @Override

@@ -13,6 +13,8 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
@@ -32,7 +34,7 @@ public class BrowserViewClient extends WebViewClient {
     private String mFailingUrl;
 
     @Override
-    public final void onPageStarted(WebView view, String url, Bitmap favicon) {
+    public final void onPageStarted(@NonNull WebView view, @NonNull String url, @Nullable Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
         log(String.format("onPageStarted: url = %s", url));
         mLoadingFail = false;
@@ -44,7 +46,7 @@ public class BrowserViewClient extends WebViewClient {
      */
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+    public void onReceivedError(@NonNull WebView view, @NonNull WebResourceRequest request, @NonNull WebResourceError error) {
         if (!request.isForMainFrame()) {
             return;
         }
@@ -57,7 +59,7 @@ public class BrowserViewClient extends WebViewClient {
      * 网页加载错误时回调，需要注意的是：这个方法会在 onPageFinished 之前调用
      */
     @Override
-    public final void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+    public final void onReceivedError(@NonNull WebView view, int errorCode, @NonNull String description, @NonNull String failingUrl) {
         super.onReceivedError(view, errorCode, description, failingUrl);
         log(String.format("onReceivedError: errorCode = %s, description = %s, failingUrl = %s",
                             errorCode, description, failingUrl));
@@ -68,7 +70,7 @@ public class BrowserViewClient extends WebViewClient {
     }
 
     @Override
-    public final void onPageFinished(WebView view, String url) {
+    public final void onPageFinished(@NonNull WebView view, @NonNull String url) {
         super.onPageFinished(view, url);
         log(String.format("onPageFinished: url = %s", url));
         int progress = view.getProgress();
@@ -87,20 +89,20 @@ public class BrowserViewClient extends WebViewClient {
         onWebPageLoadFinished(view, url, !mLoadingFail);
     }
 
-    public void onWebPageLoadStarted(WebView view, String url, Bitmap favicon) {
+    public void onWebPageLoadStarted(@NonNull WebView view, @NonNull String url, @Nullable Bitmap favicon) {
         log(String.format("onWebPageLoadStarted: url = %s", url));
     }
 
-    public void onWebPageLoadSuccess(WebView view, String url) {
+    public void onWebPageLoadSuccess(@NonNull WebView view, @NonNull String url) {
         log(String.format("onWebPageLoadSuccess: url = %s", url));
     }
 
-    public void onWebPageLoadFail(WebView view, int errorCode, String description, String failingUrl) {
+    public void onWebPageLoadFail(@NonNull WebView view, int errorCode, @NonNull String description, @NonNull String failingUrl) {
         log(String.format("onWebPageLoadFail: errorCode = %s, description = %s, failingUrl = %s",
             errorCode, description, failingUrl));
     }
 
-    public void onWebPageLoadFinished(WebView view, String url, boolean success) {
+    public void onWebPageLoadFinished(@NonNull WebView view, @NonNull String url, boolean success) {
         log(String.format("onWebPageLoadFinished: url = %s", url));
     }
 
@@ -108,8 +110,8 @@ public class BrowserViewClient extends WebViewClient {
      * 网站证书校验错误
      */
     @Override
-    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-        log(String.format("onReceivedSslError: error = %s", error.toString()));
+    public void onReceivedSslError(@NonNull WebView view, @Nullable SslErrorHandler handler, @NonNull SslError error) {
+        log(String.format("onReceivedSslError: error = %s", error));
         Context context = view.getContext();
         if (context == null) {
             return;
@@ -150,12 +152,12 @@ public class BrowserViewClient extends WebViewClient {
 
                 @SuppressLint("WebViewClientOnReceivedSslError")
                 @Override
-                public void onConfirm(BaseDialog dialog) {
+                public void onConfirm(@NonNull BaseDialog dialog) {
                     onUserProceedSslError(handler);
                 }
 
                 @Override
-                public void onCancel(BaseDialog dialog) {
+                public void onCancel(@NonNull BaseDialog dialog) {
                     onUserRefuseSslError(handler);
                 }
             })
@@ -165,7 +167,7 @@ public class BrowserViewClient extends WebViewClient {
     /**
      * 用户接受了 SSL 证书错误
      */
-    protected void onUserProceedSslError(SslErrorHandler handler) {
+    protected void onUserProceedSslError(@Nullable SslErrorHandler handler) {
         log("onUserProceedSslError");
         if (handler == null) {
             return;
@@ -176,7 +178,7 @@ public class BrowserViewClient extends WebViewClient {
     /**
      * 用户拒绝了 SSL 证书错误
      */
-    protected void onUserRefuseSslError(SslErrorHandler handler) {
+    protected void onUserRefuseSslError(@Nullable SslErrorHandler handler) {
         log("onUserRefuseSslError");
         if (handler == null) {
             return;
@@ -189,7 +191,7 @@ public class BrowserViewClient extends WebViewClient {
      */
     @TargetApi(Build.VERSION_CODES.N)
     @Override
-    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+    public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull WebResourceRequest request) {
         return shouldOverrideUrlLoading(view, request.getUrl().toString());
     }
 
@@ -197,7 +199,7 @@ public class BrowserViewClient extends WebViewClient {
      * 跳转到其他链接
      */
     @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+    public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull String url) {
         log(String.format("shouldOverrideUrlLoading: url = %s", url));
         String scheme = Uri.parse(url).getScheme();
         if (scheme == null) {
@@ -222,7 +224,7 @@ public class BrowserViewClient extends WebViewClient {
     /**
      * 跳转到拨号界面
      */
-    protected void showDialAskDialog(WebView view, String url) {
+    protected void showDialAskDialog(@NonNull WebView view, @NonNull String url) {
         Context context = view.getContext();
         if (context == null) {
             return;
@@ -242,7 +244,10 @@ public class BrowserViewClient extends WebViewClient {
             .show();
     }
 
-    protected void log(String message) {
+    protected void log(@Nullable String message) {
+        if (message == null) {
+            return;
+        }
         Timber.i(message);
     }
 }

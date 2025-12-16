@@ -32,13 +32,15 @@ public final class ListPopup {
             implements BaseAdapter.OnItemClickListener {
 
         @SuppressWarnings("rawtypes")
-        @Nullable
-        private OnListener mListener;
         private boolean mAutoDismiss = true;
 
+        @NonNull
         private final MenuAdapter mAdapter;
 
-        public Builder(Context context) {
+        @Nullable
+        private OnListener mListener;
+
+        public Builder(@NonNull Context context) {
             super(context);
 
             RecyclerView recyclerView = new RecyclerView(context);
@@ -96,7 +98,7 @@ public final class ListPopup {
         }
 
         @SuppressWarnings("rawtypes")
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
@@ -106,7 +108,7 @@ public final class ListPopup {
          */
         @SuppressWarnings("all")
         @Override
-        public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
             if (mAutoDismiss) {
                 dismiss();
             }
@@ -120,7 +122,7 @@ public final class ListPopup {
 
     private static final class MenuAdapter extends AppAdapter<Object> {
 
-        private MenuAdapter(Context context) {
+        private MenuAdapter(@NonNull Context context) {
             super(context);
         }
 
@@ -158,6 +160,6 @@ public final class ListPopup {
         /**
          * 选择条目时回调
          */
-        void onSelected(BasePopupWindow popupWindow, int position, T data);
+        void onSelected(@NonNull BasePopupWindow popupWindow, int position, T data);
     }
 }

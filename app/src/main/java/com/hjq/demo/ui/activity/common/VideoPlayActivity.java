@@ -61,12 +61,12 @@ public class VideoPlayActivity extends AppActivity
      * {@link PlayerView.OnPlayListener}
      */
     @Override
-    public void onClickBack(PlayerView view) {
+    public void onClickBack(@NonNull PlayerView view) {
         onBackPressed();
     }
 
     @Override
-    public void onPlayStart(PlayerView view) {
+    public void onPlayStart(@NonNull PlayerView view) {
         int progress = mBuilder.getPlayProgress();
         if (progress > 0) {
             mPlayerView.setProgress(progress);
@@ -74,13 +74,13 @@ public class VideoPlayActivity extends AppActivity
     }
 
     @Override
-    public void onPlayProgress(PlayerView view) {
+    public void onPlayProgress(@NonNull PlayerView view) {
         // 记录播放进度
         mBuilder.setPlayProgress(view.getProgress());
     }
 
     @Override
-    public void onPlayEnd(PlayerView view) {
+    public void onPlayEnd(@NonNull PlayerView view) {
         if (mBuilder.isLoopPlay()) {
             mPlayerView.setProgress(0);
             mPlayerView.start();
@@ -234,7 +234,7 @@ public class VideoPlayActivity extends AppActivity
             return this;
         }
 
-        public void start(Context context) {
+        public void start(@NonNull Context context) {
             Intent intent = new Intent();
             switch (activityOrientation) {
                 case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:

@@ -3,6 +3,7 @@ package com.hjq.demo.ui.popup;
 import android.content.Context;
 import android.view.WindowManager;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import com.hjq.base.BasePopupWindow;
 import com.hjq.demo.R;
 
@@ -19,13 +20,14 @@ public final class PermissionDescriptionPopup {
 
         private final TextView mDescriptionView;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setContentView(R.layout.permission_description_popup);
             setWidth(WindowManager.LayoutParams.MATCH_PARENT);
             setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
             setAnimStyle(android.R.style.Animation_Dialog);
+            setBackgroundDimAmount(0.1f);
             setTouchable(true);
             setOutsideTouchable(true);
 

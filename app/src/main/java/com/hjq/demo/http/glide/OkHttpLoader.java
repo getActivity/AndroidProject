@@ -50,6 +50,8 @@ public final class OkHttpLoader implements ModelLoader<GlideUrl, InputStream> {
         }
 
         @Override
-        public void teardown() {}
+        public void teardown() {
+            // default implementation ignored
+        }
     }
 }

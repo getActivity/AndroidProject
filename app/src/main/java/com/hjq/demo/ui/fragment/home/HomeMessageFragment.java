@@ -2,9 +2,11 @@ package com.hjq.demo.ui.fragment.home;
 
 import android.view.View;
 import android.widget.ImageView;
+import androidx.annotation.NonNull;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
+import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.app.TitleBarFragment;
 import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.permission.PermissionDescription;
@@ -53,7 +55,7 @@ public final class HomeMessageFragment extends TitleBarFragment<HomeActivity> {
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int viewId = view.getId();
         if (viewId == R.id.btn_home_message_image1) {
 
@@ -92,21 +94,29 @@ public final class HomeMessageFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_message_black) {
 
-            getAttachActivity()
-                    .getStatusBarConfig()
+            AppActivity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            activity.getStatusBarConfig()
                     .statusBarDarkFont(true)
                     .init();
 
         } else if (viewId == R.id.btn_home_message_white) {
 
-            getAttachActivity()
-                    .getStatusBarConfig()
+            AppActivity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            activity.getStatusBarConfig()
                     .statusBarDarkFont(false)
                     .init();
 
         } else if (viewId == R.id.btn_home_message_tab) {
 
-            HomeActivity.start(getActivity(), HomeMainFragment.class);
+            HomeActivity.start(view.getContext(), HomeMainFragment.class);
         }
     }
 

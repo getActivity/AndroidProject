@@ -81,7 +81,7 @@ public final class SettingActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int viewId = view.getId();
         if (viewId == R.id.sb_setting_language) {
 
@@ -182,7 +182,7 @@ public final class SettingActivity extends AppActivity
      */
 
     @Override
-    public void onCheckedChanged(SwitchButton button, boolean checked) {
+    public void onCheckedChanged(@NonNull SwitchButton button, boolean checked) {
         toast(checked);
     }
 }

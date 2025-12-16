@@ -24,9 +24,10 @@ import java.util.List;
  */
 public final class VideoSelectAdapter extends AppAdapter<VideoSelectActivity.VideoBean> {
 
+    @NonNull
     private final List<VideoSelectActivity.VideoBean> mSelectVideo;
 
-    public VideoSelectAdapter(Context context, List<VideoSelectActivity.VideoBean> images) {
+    public VideoSelectAdapter(@NonNull Context context, @NonNull List<VideoSelectActivity.VideoBean> images) {
         super(context);
         mSelectVideo = images;
     }
@@ -69,8 +70,9 @@ public final class VideoSelectAdapter extends AppAdapter<VideoSelectActivity.Vid
         }
     }
 
+    @NonNull
     @Override
-    protected RecyclerView.LayoutManager generateDefaultLayoutManager(Context context) {
+    protected RecyclerView.LayoutManager generateDefaultLayoutManager(@NonNull Context context) {
         return new GridLayoutManager(context, 2);
     }
 }

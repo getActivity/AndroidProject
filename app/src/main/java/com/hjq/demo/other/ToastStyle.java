@@ -3,6 +3,7 @@ package com.hjq.demo.other;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import androidx.annotation.NonNull;
 import com.hjq.demo.R;
 import com.hjq.toast.style.BlackToastStyle;
 
@@ -15,7 +16,7 @@ import com.hjq.toast.style.BlackToastStyle;
 public final class ToastStyle extends BlackToastStyle {
 
     @Override
-    protected Drawable getBackgroundDrawable(Context context) {
+    protected Drawable getBackgroundDrawable(@NonNull Context context) {
         GradientDrawable drawable = new GradientDrawable();
         // 设置颜色
         drawable.setColor(0X88000000);
@@ -25,17 +26,17 @@ public final class ToastStyle extends BlackToastStyle {
     }
 
     @Override
-    protected float getTextSize(Context context) {
+    protected float getTextSize(@NonNull Context context) {
         return context.getResources().getDimension(R.dimen.sp_14);
     }
 
     @Override
-    protected int getHorizontalPadding(Context context) {
+    protected int getHorizontalPadding(@NonNull Context context) {
         return (int) context.getResources().getDimension(R.dimen.sp_24);
     }
 
     @Override
-    protected int getVerticalPadding(Context context) {
+    protected int getVerticalPadding(@NonNull Context context) {
         return (int) context.getResources().getDimension(R.dimen.sp_16);
     }
 }

@@ -25,6 +25,7 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.manager.ThreadPoolManager;
+import com.hjq.demo.other.AndroidVersion;
 import com.hjq.demo.other.AppConfig;
 import com.tencent.bugly.library.Bugly;
 import java.io.PrintWriter;
@@ -32,6 +33,7 @@ import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -56,10 +58,7 @@ public final class CrashActivity extends AppActivity {
     /** 报错代码行数正则表达式 */
     private static final Pattern CODE_REGEX = Pattern.compile("\\(\\w+\\.\\w+:\\d+\\)");
 
-    public static void start(Application application, Throwable throwable) {
-        if (throwable == null) {
-            return;
-        }
+    public static void start(@NonNull Application application, @NonNull Throwable throwable) {
         Intent intent = new Intent(application, CrashActivity.class);
         intent.putExtra(INTENT_KEY_IN_THROWABLE, throwable);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -178,7 +177,7 @@ public final class CrashActivity extends AppActivity {
                 .append("\n最小宽度：\t").append((int) smallestWidth);
 
         builder.append("\n安卓版本：\t").append(Build.VERSION.RELEASE)
-                .append("\nAPI 版本：\t").append(Build.VERSION.SDK_INT)
+                .append("\nAPI 版本：\t").append(AndroidVersion.getSdkVersion())
                 .append("\nCPU 架构：\t").append(Build.SUPPORTED_ABIS[0]);
 
         builder.append("\n应用版本：\t").append(AppConfig.getVersionName())
@@ -190,9 +189,13 @@ public final class CrashActivity extends AppActivity {
             builder.append("\n首次安装：\t").append(dateFormat.format(new Date(packageInfo.firstInstallTime)))
                     .append("\n最近安装：\t").append(dateFormat.format(new Date(packageInfo.lastUpdateTime)))
                     .append("\n崩溃时间：\t").append(dateFormat.format(new Date()));
-
-            List<String> permissions = Arrays.asList(packageInfo.requestedPermissions);
-            if (permissions.contains(Manifest.permission.INTERNET)) {
+            List<String> permissionsManifest;
+            if (packageInfo.requestedPermissions != null) {
+                permissionsManifest = Arrays.asList(packageInfo.requestedPermissions);
+            } else {
+                permissionsManifest = new ArrayList<>();
+            }
+            if (permissionsManifest.contains(Manifest.permission.INTERNET)) {
                 builder.append("\n当前网络访问：\t");
 
                 ThreadPoolManager.getInstance().execute(() -> {
@@ -217,7 +220,7 @@ public final class CrashActivity extends AppActivity {
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int viewId = view.getId();
         if (viewId == R.id.iv_crash_info) {
             mDrawerLayout.openDrawer(GravityCompat.START);

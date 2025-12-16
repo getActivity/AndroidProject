@@ -132,10 +132,14 @@ public final class InputTextManager implements TextWatcher {
      */
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        // default implementation ignored
+    }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        // default implementation ignored
+    }
 
     @Override
     public void afterTextChanged(Editable s) {
@@ -228,7 +232,7 @@ public final class InputTextManager implements TextWatcher {
 
         public InputTextManager build() {
             if (mView == null) {
-                throw new IllegalArgumentException("are you ok?");
+                throw new IllegalArgumentException("The View to be operated cannot be null");
             }
             InputTextManager helper = new InputTextManager(mView, mAlpha);
             helper.addViews(mViewSet);
@@ -258,22 +262,34 @@ public final class InputTextManager implements TextWatcher {
         }
 
         @Override
-        public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {}
+        public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityStarted(@NonNull Activity activity) {}
+        public void onActivityStarted(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityResumed(@NonNull Activity activity) {}
+        public void onActivityResumed(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityPaused(@NonNull Activity activity) {}
+        public void onActivityPaused(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityStopped(@NonNull Activity activity) {}
+        public void onActivityStopped(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+        public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+            // default implementation ignored
+        }
 
         @Override
         public void onActivityDestroyed(@NonNull Activity activity) {
@@ -301,6 +317,6 @@ public final class InputTextManager implements TextWatcher {
          *
          * @return          返回按钮的 Enabled 状态
          */
-        boolean onInputChange(InputTextManager manager);
+        boolean onInputChange(@NonNull InputTextManager manager);
     }
 }

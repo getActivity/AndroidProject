@@ -14,6 +14,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
@@ -38,6 +39,7 @@ import timber.log.Timber;
  */
 public class BrowserChromeClient extends WebChromeClient {
 
+    @NonNull
     private final BrowserView mBrowserView;
 
     public BrowserChromeClient(@NonNull BrowserView view) {
@@ -45,7 +47,7 @@ public class BrowserChromeClient extends WebChromeClient {
     }
 
     @Override
-    public void onProgressChanged(WebView view, int newProgress) {
+    public void onProgressChanged(@NonNull WebView view, int newProgress) {
         super.onProgressChanged(view, newProgress);
         log(String.format("onProgressChanged: newProgress = %s", newProgress));
     }
@@ -54,31 +56,29 @@ public class BrowserChromeClient extends WebChromeClient {
      * 网页在控制台打印日志时回调
      */
     @Override
-    public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-        if (consoleMessage != null) {
-            int priority = -1;
-            switch (consoleMessage.messageLevel()) {
-                case TIP:
-                case LOG:
-                    priority = Log.INFO;
-                    break;
-                case WARNING:
-                    priority = Log.WARN;
-                    break;
-                case ERROR:
-                    priority = Log.ERROR;
-                    break;
-                case DEBUG:
-                    priority = Log.DEBUG;
-                    break;
-                default:
-                    break;
-            }
-            if (priority > 0) {
-                // 打印一份网页的日志到 Logcat 上面
-                Timber.log(priority, "onConsoleMessage: lineNumber = %s, sourceId = %s, message = %s",
-                    String.valueOf(consoleMessage.lineNumber()), consoleMessage.sourceId(), consoleMessage.message());
-            }
+    public boolean onConsoleMessage(@NonNull ConsoleMessage consoleMessage) {
+        int priority = -1;
+        switch (consoleMessage.messageLevel()) {
+            case TIP:
+            case LOG:
+                priority = Log.INFO;
+                break;
+            case WARNING:
+                priority = Log.WARN;
+                break;
+            case ERROR:
+                priority = Log.ERROR;
+                break;
+            case DEBUG:
+                priority = Log.DEBUG;
+                break;
+            default:
+                break;
+        }
+        if (priority > 0) {
+            // 打印一份网页的日志到 Logcat 上面
+            Timber.log(priority, "onConsoleMessage: lineNumber = %s, sourceId = %s, message = %s",
+                String.valueOf(consoleMessage.lineNumber()), consoleMessage.sourceId(), consoleMessage.message());
         }
         return super.onConsoleMessage(consoleMessage);
     }
@@ -87,7 +87,7 @@ public class BrowserChromeClient extends WebChromeClient {
      * 请求权限
      */
     @Override
-    public void onPermissionRequest(PermissionRequest request) {
+    public void onPermissionRequest(@NonNull PermissionRequest request) {
         log(String.format("onPermissionRequest: requestOrigin = %s, requestResources = %s",
             request.getOrigin(), Arrays.toString(request.getResources())));
         List<IPermission> permissions = new ArrayList<>();
@@ -151,7 +151,7 @@ public class BrowserChromeClient extends WebChromeClient {
      * 网页弹出警告框
      */
     @Override
-    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+    public boolean onJsAlert(@NonNull WebView view, @NonNull String url, @NonNull String message, @Nullable JsResult result) {
         log(String.format("onJsAlert: url = %s, message = %s", url, message));
         Activity activity = mBrowserView.getActivity();
         if (activity == null) {
@@ -164,6 +164,9 @@ public class BrowserChromeClient extends WebChromeClient {
             .setCancelable(false)
             .addOnDismissListener(dialog -> {
                 log("onJsAlert: call result.confirm()");
+                if (result == null) {
+                    return;
+                }
                 result.confirm();
             })
             .show();
@@ -174,7 +177,7 @@ public class BrowserChromeClient extends WebChromeClient {
      * 网页弹出确定取消框
      */
     @Override
-    public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+    public boolean onJsConfirm(@NonNull WebView view, @NonNull String url, @NonNull String message, @Nullable JsResult result) {
         log(String.format("onJsConfirm: url = %s, message = %s", url, message));
         Activity activity = mBrowserView.getActivity();
         if (activity == null) {
@@ -187,14 +190,20 @@ public class BrowserChromeClient extends WebChromeClient {
             .setListener(new MessageDialog.OnListener() {
 
                 @Override
-                public void onConfirm(BaseDialog dialog) {
+                public void onConfirm(@NonNull BaseDialog dialog) {
                     log("onJsConfirm: call result.confirm()");
+                    if (result == null) {
+                        return;
+                    }
                     result.confirm();
                 }
 
                 @Override
-                public void onCancel(BaseDialog dialog) {
+                public void onCancel(@NonNull BaseDialog dialog) {
                     log("onJsConfirm: call result.cancel()");
+                    if (result == null) {
+                        return;
+                    }
                     result.cancel();
                 }
             })
@@ -206,7 +215,8 @@ public class BrowserChromeClient extends WebChromeClient {
      * 网页弹出输入框
      */
     @Override
-    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+    public boolean onJsPrompt(@NonNull WebView view, @NonNull String url, @NonNull String message,
+                              @NonNull String defaultValue, @Nullable JsPromptResult result) {
         log(String.format("onJsPrompt: url = %s, message = %s, defaultValue = %s", url, message, defaultValue));
         Activity activity = mBrowserView.getActivity();
         if (activity == null) {
@@ -220,14 +230,20 @@ public class BrowserChromeClient extends WebChromeClient {
             .setListener(new InputDialog.OnListener() {
 
                 @Override
-                public void onConfirm(BaseDialog dialog, String content) {
+                public void onConfirm(@NonNull BaseDialog dialog, String content) {
                     log(String.format("onJsPrompt: call result.confirm(%s)", content));
+                    if (result == null) {
+                        return;
+                    }
                     result.confirm(content);
                 }
 
                 @Override
-                public void onCancel(BaseDialog dialog) {
+                public void onCancel(@NonNull BaseDialog dialog) {
                     log("onJsPrompt: call result.cancel()");
+                    if (result == null) {
+                        return;
+                    }
                     result.cancel();
                 }
             })
@@ -240,7 +256,7 @@ public class BrowserChromeClient extends WebChromeClient {
      * 测试地址：https://map.baidu.com/
      */
     @Override
-    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+    public void onGeolocationPermissionsShowPrompt(@NonNull String origin, @Nullable GeolocationPermissions.Callback callback) {
         log(String.format("onGeolocationPermissionsShowPrompt: origin = %s", origin));
         Activity activity = mBrowserView.getActivity();
         if (activity == null) {
@@ -255,7 +271,7 @@ public class BrowserChromeClient extends WebChromeClient {
             .setListener(new MessageDialog.OnListener() {
 
                 @Override
-                public void onConfirm(BaseDialog dialog) {
+                public void onConfirm(@NonNull BaseDialog dialog) {
                     XXPermissions.with(activity)
                         .permission(PermissionLists.getAccessFineLocationPermission())
                         .permission(PermissionLists.getAccessCoarseLocationPermission())
@@ -267,13 +283,19 @@ public class BrowserChromeClient extends WebChromeClient {
                                 return;
                             }
                             log(String.format("onGeolocationPermissionsShowPrompt: callback.invoke(%s, true, true)", origin));
+                            if (callback == null) {
+                                return;
+                            }
                             callback.invoke(origin, true, true);
                         });
                 }
 
                 @Override
-                public void onCancel(BaseDialog dialog) {
+                public void onCancel(@NonNull BaseDialog dialog) {
                     log(String.format("onGeolocationPermissionsShowPrompt: callback.invoke(%s, false, true)", origin));
+                    if (callback == null) {
+                        return;
+                    }
                     callback.invoke(origin, false, true);
                 }
             })
@@ -288,7 +310,7 @@ public class BrowserChromeClient extends WebChromeClient {
      * @param params                文件选择参数
      */
     @Override
-    public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, FileChooserParams params) {
+    public boolean onShowFileChooser(@NonNull WebView webView, @Nullable ValueCallback<Uri[]> callback, @NonNull FileChooserParams params) {
         log(String.format("onShowFileChooser: paramsTitle = %s, paramsMode = %s, paramsFilenameHint = %s, paramsAcceptTypes = %s",
             params.getTitle(), params.getMode(), params.getFilenameHint(), Arrays.toString(params.getAcceptTypes())));
 
@@ -304,7 +326,7 @@ public class BrowserChromeClient extends WebChromeClient {
     /**
      * 打开系统文件选择器
      */
-    private void openSystemFileChooser(BaseActivity activity, FileChooserParams params, ValueCallback<Uri[]> callback) {
+    private void openSystemFileChooser(@NonNull BaseActivity activity, @NonNull FileChooserParams params, @Nullable ValueCallback<Uri[]> callback) {
         Intent intent = params.createIntent();
         // 是否是多选模式
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE);
@@ -329,6 +351,9 @@ public class BrowserChromeClient extends WebChromeClient {
             }
             Uri[] result = uris.toArray(new Uri[0]);
             log(String.format("onShowFileChooser: callback.onReceiveValue(%s)", Arrays.toString(result)));
+            if (callback == null) {
+                return;
+            }
             // 不管用户最后有没有选择文件，最后必须要调用 onReceiveValue，如果没有调用就会导致网页再次点击上传无响应
             callback.onReceiveValue(result);
         });

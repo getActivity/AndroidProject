@@ -1,9 +1,11 @@
 package com.hjq.demo.ui.dialog.common;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import com.hjq.base.BaseDialog;
@@ -24,9 +26,10 @@ public final class MessageDialog {
         @Nullable
         private OnListener mListener;
 
+        @NonNull
         private final TextView mMessageView;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
             setCustomView(R.layout.message_dialog);
             mMessageView = findViewById(R.id.tv_message_message);
@@ -43,7 +46,7 @@ public final class MessageDialog {
             return this;
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
@@ -51,7 +54,7 @@ public final class MessageDialog {
         @Override
         public BaseDialog create() {
             // 如果内容为空就抛出异常
-            if ("".equals(mMessageView.getText().toString())) {
+            if (TextUtils.isEmpty(mMessageView.getText().toString())) {
                 throw new IllegalArgumentException("Dialog message not null");
             }
             return super.create();
@@ -59,7 +62,7 @@ public final class MessageDialog {
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 performClickDismiss();
@@ -76,6 +79,7 @@ public final class MessageDialog {
             }
         }
 
+        @NonNull
         public TextView getMessageView() {
             return mMessageView;
         }
@@ -86,11 +90,13 @@ public final class MessageDialog {
         /**
          * 点击确定时回调
          */
-        void onConfirm(BaseDialog dialog);
+        void onConfirm(@NonNull BaseDialog dialog);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

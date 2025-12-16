@@ -16,7 +16,7 @@ import com.hjq.demo.http.glide.GlideApp;
  */
 public final class ImagePreviewAdapter extends AppAdapter<String> {
 
-    public ImagePreviewAdapter(Context context) {
+    public ImagePreviewAdapter(@NonNull Context context) {
         super(context);
     }
 

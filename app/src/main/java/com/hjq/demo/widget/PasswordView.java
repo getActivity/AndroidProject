@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.demo.R;
 
@@ -42,19 +43,19 @@ public final class PasswordView extends View {
     /** 已经输入的密码个数，也就是需要显示的小黑点个数 */
     private int mCurrentIndex = 0;
 
-    public PasswordView(Context context) {
+    public PasswordView(@NonNull Context context) {
         this(context, null);
     }
 
-    public PasswordView(Context context, @Nullable AttributeSet attrs) {
+    public PasswordView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PasswordView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PasswordView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public PasswordView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PasswordView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         mItemWidth = (int) getResources().getDimension(R.dimen.dp_44);
@@ -107,7 +108,7 @@ public final class PasswordView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         mPaint.setStrokeWidth(5);
         canvas.drawPath(mPath, mPaint);
 

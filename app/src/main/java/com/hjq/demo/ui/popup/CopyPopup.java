@@ -1,6 +1,7 @@
 package com.hjq.demo.ui.popup;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
 import com.hjq.base.BasePopupWindow;
 import com.hjq.demo.R;
 
@@ -15,7 +16,7 @@ public final class CopyPopup {
     public static final class Builder
             extends BasePopupWindow.Builder<Builder> {
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setContentView(R.layout.copy_popup);

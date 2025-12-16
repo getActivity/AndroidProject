@@ -2,6 +2,7 @@ package com.hjq.demo.manager;
 
 import android.content.Context;
 import android.os.Environment;
+import androidx.annotation.NonNull;
 import java.io.File;
 import java.math.BigDecimal;
 
@@ -16,7 +17,7 @@ public final class CacheDataManager {
     /**
      * 获取缓存大小
      */
-    public static String getTotalCacheSize(Context context) {
+    public static String getTotalCacheSize(@NonNull Context context) {
         long cacheSize = getFolderSize(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File externalCacheDir = context.getExternalCacheDir();
@@ -30,7 +31,7 @@ public final class CacheDataManager {
     /**
      * 清除缓存
      */
-    public static void clearAllCache(Context context) {
+    public static void clearAllCache(@NonNull Context context) {
         deleteDir(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             deleteDir(context.getExternalCacheDir());
@@ -45,6 +46,7 @@ public final class CacheDataManager {
             return false;
         }
         if (!dir.isDirectory()) {
+            // noinspection ResultOfMethodCallIgnored
             return dir.delete();
         }
 

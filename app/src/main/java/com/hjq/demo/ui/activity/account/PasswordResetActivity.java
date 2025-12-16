@@ -35,7 +35,7 @@ public final class PasswordResetActivity extends AppActivity
     private static final String INTENT_KEY_IN_CODE = "code";
 
     @Log
-    public static void start(Context context, String phone, String code) {
+    public static void start(@NonNull Context context, @NonNull String phone, @NonNull String code) {
         Intent intent = new Intent(context, PasswordResetActivity.class);
         intent.putExtra(INTENT_KEY_IN_PHONE, phone);
         intent.putExtra(INTENT_KEY_IN_CODE, code);
@@ -84,7 +84,7 @@ public final class PasswordResetActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mCommitView) {
 
             if (!mFirstPassword.getText().toString().equals(mSecondPassword.getText().toString())) {
@@ -132,7 +132,7 @@ public final class PasswordResetActivity extends AppActivity
      * {@link TextView.OnEditorActionListener}
      */
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
             // 模拟点击提交按钮
             onClick(mCommitView);

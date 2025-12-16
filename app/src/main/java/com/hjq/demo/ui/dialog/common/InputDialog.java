@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import com.hjq.base.BaseDialog;
@@ -26,11 +27,13 @@ public final class InputDialog {
             implements BaseDialog.OnShowListener,
             TextView.OnEditorActionListener {
 
-        @Nullable
-        private OnListener mListener;
+        @NonNull
         private final RegexEditText mInputView;
 
-        public Builder(Context context) {
+        @Nullable
+        private OnListener mListener;
+
+        public Builder(@NonNull Context context) {
             super(context);
             setCustomView(R.layout.input_dialog);
 
@@ -71,7 +74,7 @@ public final class InputDialog {
             return this;
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
@@ -80,13 +83,13 @@ public final class InputDialog {
          * {@link BaseDialog.OnShowListener}
          */
         @Override
-        public void onShow(BaseDialog dialog) {
+        public void onShow(@NonNull BaseDialog dialog) {
             postDelayed(() -> showKeyboard(mInputView), 500);
         }
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 performClickDismiss();
@@ -108,7 +111,7 @@ public final class InputDialog {
          * {@link TextView.OnEditorActionListener}
          */
         @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // 模拟点击确认按钮
                 onClick(findViewById(R.id.tv_ui_confirm));
@@ -123,11 +126,13 @@ public final class InputDialog {
         /**
          * 点击确定时回调
          */
-        void onConfirm(BaseDialog dialog, String content);
+        void onConfirm(@NonNull BaseDialog dialog, String content);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

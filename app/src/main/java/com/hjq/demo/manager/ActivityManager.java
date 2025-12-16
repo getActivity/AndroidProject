@@ -30,16 +30,23 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     private static volatile ActivityManager sInstance;
 
     /** Activity 存放集合 */
+    @NonNull
     private final List<Activity> mActivityList = new ArrayList<>();
 
     /** 应用生命周期回调 */
+    @NonNull
     private final ArrayList<ApplicationLifecycleCallback> mLifecycleCallbacks = new ArrayList<>();
 
     /** 当前应用上下文对象 */
+    @NonNull
     private Application mApplication;
+
     /** 栈顶的 Activity 对象 */
+    @Nullable
     private Activity mTopActivity;
+
     /** 前台并且可见的 Activity 对象 */
+    @Nullable
     private Activity mResumedActivity;
 
     private ActivityManager() {}
@@ -55,7 +62,7 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
         return sInstance;
     }
 
-    public void init(Application application) {
+    public void init(@NonNull Application application) {
         mApplication = application;
         mApplication.registerActivityLifecycleCallbacks(this);
     }
@@ -243,7 +250,7 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
     /**
      * 判断是否在主进程中
      */
-    public static boolean isMainProcess(Context context) {
+    public static boolean isMainProcess(@NonNull Context context) {
         String processName = getProcessName();
         if (TextUtils.isEmpty(processName)) {
             // 如果获取不到进程名称，那么则将它当做主进程
@@ -310,21 +317,21 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
         /**
          * 第一个 Activity 创建了
          */
-        void onApplicationCreate(Activity activity);
+        void onApplicationCreate(@NonNull Activity activity);
 
         /**
          * 最后一个 Activity 销毁了
          */
-        void onApplicationDestroy(Activity activity);
+        void onApplicationDestroy(@NonNull Activity activity);
 
         /**
          * 应用从前台进入到后台
          */
-        void onApplicationBackground(Activity activity);
+        void onApplicationBackground(@NonNull Activity activity);
 
         /**
          * 应用从后台进入到前台
          */
-        void onApplicationForeground(Activity activity);
+        void onApplicationForeground(@NonNull Activity activity);
     }
 }

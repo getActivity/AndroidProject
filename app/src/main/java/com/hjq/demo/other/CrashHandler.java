@@ -36,7 +36,7 @@ public final class CrashHandler implements Thread.UncaughtExceptionHandler {
         mNextHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (mNextHandler != null && getClass().getName().equals(mNextHandler.getClass().getName())) {
             // 请不要重复注册 Crash 监听
-            throw new IllegalStateException("are you ok?");
+            throw new IllegalStateException("CrashHandler has already been registered");
         }
     }
 

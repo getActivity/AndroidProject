@@ -233,6 +233,8 @@ public abstract class AppAdapter<T> extends BaseAdapter<AppAdapter<T>.AppViewHol
         }
 
         @Override
-        public void onBindView(int position) {}
+        public void onBindView(int position) {
+            // default implementation ignored
+        }
     }
 }

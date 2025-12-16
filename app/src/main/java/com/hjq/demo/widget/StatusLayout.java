@@ -190,6 +190,6 @@ public final class StatusLayout extends FrameLayout {
         /**
          * 点击了重试
          */
-        void onRetry(StatusLayout layout);
+        void onRetry(@NonNull StatusLayout layout);
     }
 }

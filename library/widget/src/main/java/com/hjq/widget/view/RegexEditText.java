@@ -6,6 +6,8 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import com.hjq.widget.R;
 import java.util.regex.Pattern;
@@ -38,15 +40,15 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
     /** 正则表达式规则 */
     private Pattern mPattern;
 
-    public RegexEditText(Context context) {
+    public RegexEditText(@NonNull Context context) {
         this(context, null);
     }
 
-    public RegexEditText(Context context, AttributeSet attrs) {
+    public RegexEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, android.R.attr.editTextStyle);
     }
 
-    public RegexEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RegexEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RegexEditText);
@@ -112,11 +114,10 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
     /**
      * 设置输入正则
      */
-    public void setInputRegex(String regex) {
+    public void setInputRegex(@Nullable String regex) {
         if (TextUtils.isEmpty(regex)) {
             return;
         }
-
         mPattern = Pattern.compile(regex);
         addFilters(this);
     }
@@ -172,7 +173,7 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
      * @return              返回字符串将会加入到内容中
      */
     @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int destStart, int destEnd) {
+    public CharSequence filter(@NonNull CharSequence source, int start, int end, @NonNull Spanned dest, int destStart, int destEnd) {
         if (mPattern == null) {
             return source;
         }
@@ -193,7 +194,7 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
             // 如果是删除字符
             if (!mPattern.matcher(result).matches()) {
                 // 如果不匹配则不让删除（删空操作除外）
-                if (!"".equals(result)) {
+                if (!result.isEmpty()) {
                     return dest.toString().substring(destStart, destEnd);
                 }
             }

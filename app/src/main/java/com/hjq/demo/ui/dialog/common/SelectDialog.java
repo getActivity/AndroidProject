@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,15 +37,18 @@ public final class SelectDialog {
     public static final class Builder
             extends StyleDialog.Builder<Builder> {
 
+        @NonNull
+        private final SimpleLayout mSimpleLayout;
+        @NonNull
+        private final RecyclerView mRecyclerView;
+        @NonNull
+        private final SelectAdapter mAdapter;
+
         @SuppressWarnings("rawtypes")
         @Nullable
         private OnMultiListener mListener;
 
-        private final SimpleLayout mSimpleLayout;
-        private final RecyclerView mRecyclerView;
-        private final SelectAdapter mAdapter;
-
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setCustomView(R.layout.select_dialog);
@@ -121,7 +125,7 @@ public final class SelectDialog {
          * 设置单选监听
          */
         @SuppressWarnings("rawtypes")
-        public Builder setSingleListener(OnSingleListener listener) {
+        public Builder setSingleListener(@Nullable OnSingleListener listener) {
             mListener = listener;
             return this;
         }
@@ -129,10 +133,10 @@ public final class SelectDialog {
         @SingleClick
         @SuppressWarnings("all")
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
-                HashMap<Integer, Object> data = mAdapter.getSelectSet();
+                Map<Integer, Object> data = mAdapter.getSelectSet();
                 if (data.size() >= mAdapter.getMinSelect()) {
                     performClickDismiss();
                     if (mListener == null) {
@@ -171,9 +175,10 @@ public final class SelectDialog {
 
         /** 选择对象集合 */
         @SuppressLint("UseSparseArrays")
-        private final HashMap<Integer, Object> mSelectSet = new HashMap<>();
+        @NonNull
+        private final Map<Integer, Object> mSelectSet = new HashMap<>();
 
-        private SelectAdapter(Context context) {
+        private SelectAdapter(@NonNull Context context) {
             super(context);
             setOnItemClickListener(this);
         }
@@ -213,7 +218,8 @@ public final class SelectDialog {
             return mMaxSelect == 1 && mMinSelect == 1;
         }
 
-        private HashMap<Integer, Object> getSelectSet() {
+        @NonNull
+        private Map<Integer, Object> getSelectSet() {
             return mSelectSet;
         }
 
@@ -222,7 +228,7 @@ public final class SelectDialog {
          */
 
         @Override
-        public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
             if (mSelectSet.containsKey(position)) {
                 // 当前必须不是单选模式才能取消选中
                 if (!isSingleSelect()) {
@@ -275,18 +281,20 @@ public final class SelectDialog {
          *
          * @param data              选择的位置和数据
          */
-        void onSelected(BaseDialog dialog, HashMap<Integer, T> data);
+        void onSelected(@NonNull BaseDialog dialog, Map<Integer, T> data);
 
         /**
          * 取消回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 
     public interface OnSingleListener<T> extends OnMultiListener<T> {
 
         @Override
-        default void onSelected(BaseDialog dialog, HashMap<Integer, T> data) {
+        default void onSelected(@NonNull BaseDialog dialog, Map<Integer, T> data) {
             Set<Integer> keys = data.keySet();
             Iterator<Integer> iterator = keys.iterator();
             if (!iterator.hasNext()) {
@@ -305,6 +313,6 @@ public final class SelectDialog {
          * @param position          选择的位置
          * @param data              选择的数据
          */
-        void onSelected(BaseDialog dialog, int position, T data);
+        void onSelected(@NonNull BaseDialog dialog, int position, T data);
     }
 }

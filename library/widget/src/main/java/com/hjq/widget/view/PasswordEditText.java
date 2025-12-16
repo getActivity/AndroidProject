@@ -10,6 +10,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -34,16 +35,16 @@ public final class PasswordEditText extends RegexEditText
     @Nullable
     private OnFocusChangeListener mFocusChangeListener;
 
-    public PasswordEditText(Context context) {
+    public PasswordEditText(@NonNull Context context) {
         this(context, null);
     }
 
-    public PasswordEditText(Context context, AttributeSet attrs) {
+    public PasswordEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, android.R.attr.editTextStyle);
     }
 
     @SuppressWarnings("all")
-    public PasswordEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PasswordEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         mVisibleDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.password_off_ic));
@@ -114,7 +115,7 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public void onFocusChange(View view, boolean hasFocus) {
+    public void onFocusChange(@NonNull View view, boolean hasFocus) {
         setDrawableVisible(hasFocus && !TextUtils.isEmpty(getText()));
         if (mFocusChangeListener != null) {
             mFocusChangeListener.onFocusChange(view, hasFocus);
@@ -126,7 +127,7 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
+    public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         int x = (int) event.getX();
 
         // 是否触摸了 Drawable
@@ -169,15 +170,19 @@ public final class PasswordEditText extends RegexEditText
      */
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    public void onTextChanged(@NonNull CharSequence s, int start, int before, int count) {
         if (isFocused()) {
             setDrawableVisible(s.length() > 0);
         }
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(@NonNull CharSequence s, int start, int count, int after) {
+        // default implementation ignored
+    }
 
     @Override
-    public void afterTextChanged(Editable s) {}
+    public void afterTextChanged(@NonNull Editable s) {
+        // default implementation ignored
+    }
 }

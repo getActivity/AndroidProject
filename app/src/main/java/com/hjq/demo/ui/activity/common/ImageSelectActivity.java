@@ -13,6 +13,7 @@ import androidx.activity.result.PickVisualMediaRequest.Builder;
 import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia;
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
@@ -55,12 +56,12 @@ public final class ImageSelectActivity extends AppActivity
 
     private static final String INTENT_KEY_OUT_IMAGE_LIST = "imageList";
 
-    public static void start(BaseActivity activity, OnImageSelectListener listener) {
+    public static void start(@NonNull BaseActivity activity, @Nullable OnImageSelectListener listener) {
         start(activity, 1, listener);
     }
 
     @Log
-    public static void start(BaseActivity activity, int maxSelect, OnImageSelectListener listener) {
+    public static void start(@NonNull BaseActivity activity, int maxSelect, @Nullable OnImageSelectListener listener) {
         if (maxSelect < 1) {
             // 最少要选择一个图片
             throw new IllegalArgumentException("are you ok?");
@@ -84,6 +85,9 @@ public final class ImageSelectActivity extends AppActivity
                     for (int i = 0; i < uris.size(); i++) {
                         list.add(uris.get(i).toString());
                     }
+                    if (listener == null) {
+                        return;
+                    }
                     listener.onSelected(list);
                 });
             } else {
@@ -96,6 +100,9 @@ public final class ImageSelectActivity extends AppActivity
                     }
                     List<String> list = new ArrayList<>();
                     list.add(uri.toString());
+                    if (listener == null) {
+                        return;
+                    }
                     listener.onSelected(list);
                 });
             }
@@ -224,7 +231,7 @@ public final class ImageSelectActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onRightClick(TitleBar titleBar) {
+    public void onRightClick(@NonNull TitleBar titleBar) {
         if (mAllImage.isEmpty()) {
             return;
         }
@@ -248,7 +255,6 @@ public final class ImageSelectActivity extends AppActivity
         if (mAlbumDialog == null) {
             mAlbumDialog = new AlbumDialog.Builder(this)
                     .setListener((dialog, position, bean) -> {
-
                         setRightTitle(bean.getName());
                         // 滚动回第一个位置
                         mRecyclerView.scrollToPosition(0);
@@ -305,13 +311,13 @@ public final class ImageSelectActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view.getId() == R.id.fab_image_select_floating) {
             if (mSelectImage.isEmpty()) {
                 // 点击拍照
                 CameraActivity.start(this, new CameraActivity.OnCameraListener() {
                     @Override
-                    public void onSelected(File file) {
+                    public void onSelected(@NonNull File file) {
                         // 当前选中图片的数量必须小于最大选中数
                         if (mSelectImage.size() < mMaxSelect) {
                             mSelectImage.add(file.getPath());
@@ -325,7 +331,7 @@ public final class ImageSelectActivity extends AppActivity
                     }
 
                     @Override
-                    public void onError(String details) {
+                    public void onError(@NonNull String details) {
                         toast(details);
                     }
                 });
@@ -345,7 +351,7 @@ public final class ImageSelectActivity extends AppActivity
      * @param position          被点击的条目位置
      */
     @Override
-    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+    public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
         ImagePreviewActivity.start(this, mAdapter.getData(), position);
     }
 
@@ -356,7 +362,7 @@ public final class ImageSelectActivity extends AppActivity
      * @param position          被点击的条目位置
      */
     @Override
-    public boolean onItemLongClick(RecyclerView recyclerView, View itemView, int position) {
+    public boolean onItemLongClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
         if (mSelectImage.size() < mMaxSelect) {
             // 长按的时候模拟选中
             return itemView.findViewById(R.id.fl_image_select_check).performClick();
@@ -371,7 +377,7 @@ public final class ImageSelectActivity extends AppActivity
      * @param position          被点击的条目位置
      */
     @Override
-    public void onChildClick(RecyclerView recyclerView, View childView, int position) {
+    public void onChildClick(@NonNull RecyclerView recyclerView, @NonNull View childView, int position) {
         if (childView.getId() == R.id.fl_image_select_check) {
 
             String path = mAdapter.getItem(position);
@@ -538,11 +544,13 @@ public final class ImageSelectActivity extends AppActivity
          *
          * @param data          图片列表
          */
-        void onSelected(List<String> data);
+        void onSelected(@NonNull List<String> data);
 
         /**
          * 取消回调
          */
-        default void onCancel() {}
+        default void onCancel() {
+            // default implementation ignored
+        }
     }
 }

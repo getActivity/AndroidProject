@@ -157,20 +157,26 @@ public interface TitleBarAction extends OnTitleBarListener {
     /**
      * 递归获取 ViewGroup 中的 TitleBar 对象
      */
-    default TitleBar findTitleBar(ViewGroup group) {
-        if (group == null) {
+    default TitleBar findTitleBar(@Nullable View contentView) {
+        if (contentView == null) {
             return null;
         }
-        for (int i = 0; i < group.getChildCount(); i++) {
-            View view = group.getChildAt(i);
-            if ((view instanceof TitleBar)) {
-                return (TitleBar) view;
-            }
+        if (contentView instanceof TitleBar) {
+            return (TitleBar) contentView;
+        }
+        if (contentView instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) contentView;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View view = viewGroup.getChildAt(i);
+                if ((view instanceof TitleBar)) {
+                    return (TitleBar) view;
+                }
 
-            if (view instanceof ViewGroup) {
-                TitleBar titleBar = findTitleBar((ViewGroup) view);
-                if (titleBar != null) {
-                    return titleBar;
+                if (view instanceof ViewGroup) {
+                    TitleBar titleBar = findTitleBar(view);
+                    if (titleBar != null) {
+                        return titleBar;
+                    }
                 }
             }
         }

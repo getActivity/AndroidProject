@@ -4,25 +4,21 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.demo.R;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
+import com.hjq.demo.ui.popup.PermissionDescriptionPopup;
 import com.hjq.permissions.OnPermissionDescription;
 import com.hjq.permissions.permission.PermissionPageType;
 import com.hjq.permissions.permission.base.IPermission;
@@ -183,18 +179,9 @@ public final class PermissionDescription implements OnPermissionDescription {
             return;
         }
         ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
-        View contentView = LayoutInflater.from(activity)
-            .inflate(R.layout.permission_description_popup, decorView, false);
-        mPermissionPopupWindow = new PopupWindow(activity);
-        mPermissionPopupWindow.setContentView(contentView);
-        mPermissionPopupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
-        mPermissionPopupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        mPermissionPopupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
-        mPermissionPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mPermissionPopupWindow.setTouchable(true);
-        mPermissionPopupWindow.setOutsideTouchable(true);
-        TextView messageView = mPermissionPopupWindow.getContentView().findViewById(R.id.tv_permission_description_message);
-        messageView.setText(content);
+        mPermissionPopupWindow = new PermissionDescriptionPopup.Builder(activity)
+            .setDescription(content)
+            .create();
         mPermissionPopupWindow.showAtLocation(decorView, Gravity.TOP, 0, 0);
     }
 

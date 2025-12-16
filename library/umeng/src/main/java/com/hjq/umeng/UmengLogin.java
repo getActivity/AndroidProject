@@ -1,5 +1,6 @@
 package com.hjq.umeng;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -16,17 +17,29 @@ public final class UmengLogin {
     public static final class LoginData {
 
         /** 用户 id */
-        private final String mId;
-        /** 昵称 */
-        private final String mName;
-        /** 性别 */
-        private final String mSex;
-        /** 头像 */
-        private final String mAvatar;
-        /** Token */
-        private final String mToken;
+        @Nullable
+        private String mId;
 
-        LoginData(Map<String, String> data) {
+        /** 昵称 */
+        @Nullable
+        private String mName;
+
+        /** 性别 */
+        @Nullable
+        private String mSex;
+
+        /** 头像 */
+        @Nullable
+        private String mAvatar;
+
+        /** Token */
+        @Nullable
+        private String mToken;
+
+        LoginData(@Nullable Map<String, String> data) {
+            if (data == null) {
+                return;
+            }
             // 第三方登录获取用户资料：https://developer.umeng.com/docs/66632/detail/66639#h3-u83B7u53D6u7528u6237u8D44u6599
             mId = data.get("uid");
             mName =  data.get("name");
@@ -35,22 +48,27 @@ public final class UmengLogin {
             mToken = data.get("accessToken");
         }
 
+        @Nullable
         public String getName() {
             return mName;
         }
 
+        @Nullable
         public String getSex() {
             return mSex;
         }
 
+        @Nullable
         public String getAvatar() {
             return mAvatar;
         }
 
+        @Nullable
         public String getId() {
             return mId;
         }
 
+        @Nullable
         public String getToken() {
             return mToken;
         }
@@ -68,11 +86,13 @@ public final class UmengLogin {
      */
     public static final class LoginListenerWrapper implements UMAuthListener {
 
-        @Nullable
-        private OnLoginListener mListener;
+        @NonNull
         private final Platform mPlatform;
 
-        LoginListenerWrapper(SHARE_MEDIA platform, @Nullable OnLoginListener listener) {
+        @Nullable
+        private OnLoginListener mListener;
+
+        LoginListenerWrapper(@NonNull SHARE_MEDIA platform, @Nullable OnLoginListener listener) {
             mListener = listener;
             switch (platform) {
                 case QQ:
@@ -92,7 +112,7 @@ public final class UmengLogin {
          * @param platform      平台名称
          */
         @Override
-        public void onStart(SHARE_MEDIA platform) {
+        public void onStart(@NonNull SHARE_MEDIA platform) {
             if (mListener == null) {
                 return;
             }
@@ -107,7 +127,7 @@ public final class UmengLogin {
          * @param data          用户资料返回
          */
         @Override
-        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+        public void onComplete(@NonNull SHARE_MEDIA platform, int action, @Nullable Map<String, String> data) {
             if (mListener == null) {
                 return;
             }
@@ -123,7 +143,7 @@ public final class UmengLogin {
          * @param t             错误原因
          */
         @Override
-        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+        public void onError(@NonNull SHARE_MEDIA platform, int action, @NonNull Throwable t) {
             t.printStackTrace();
             if (mListener == null) {
                 return;
@@ -139,7 +159,7 @@ public final class UmengLogin {
          * @param action        行为序号，开发者用不上
          */
         @Override
-        public void onCancel(SHARE_MEDIA platform, int action) {
+        public void onCancel(@NonNull SHARE_MEDIA platform, int action) {
             if (mListener == null) {
                 return;
             }
@@ -155,7 +175,9 @@ public final class UmengLogin {
          *
          * @param platform      平台对象
          */
-        default void onLoginStart(Platform platform) {}
+        default void onLoginStart(@NonNull Platform platform) {
+            // default implementation ignored
+        }
 
         /**
          * 授权成功的回调
@@ -163,21 +185,25 @@ public final class UmengLogin {
          * @param platform      平台对象
          * @param data          用户资料返回
          */
-        void onLoginSuccess(Platform platform, LoginData data);
+        void onLoginSuccess(@NonNull Platform platform, @NonNull LoginData data);
 
         /**
          * 授权失败的回调
          *
          * @param platform      平台对象
-         * @param t             错误原因
+         * @param throwable     错误原因
          */
-        default void onLoginFail(Platform platform, Throwable t) {}
+        default void onLoginFail(@NonNull Platform platform, @NonNull Throwable throwable) {
+            // default implementation ignored
+        }
 
         /**
          * 授权取消的回调
          *
          * @param platform      平台对象
          */
-        default void onLoginCancel(Platform platform) {}
+        default void onLoginCancel(@NonNull Platform platform) {
+            // default implementation ignored
+        }
     }
 }

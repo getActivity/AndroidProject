@@ -15,7 +15,7 @@ import com.hjq.demo.app.AppAdapter;
  */
 public final class GuideAdapter extends AppAdapter<Integer> {
 
-    public GuideAdapter(Context context) {
+    public GuideAdapter(@NonNull Context context) {
         super(context);
     }
 

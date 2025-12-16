@@ -14,7 +14,7 @@ import com.hjq.demo.app.AppAdapter;
  */
 public final class CopyAdapter extends AppAdapter<String> {
 
-    public CopyAdapter(Context context) {
+    public CopyAdapter(@NonNull Context context) {
         super(context);
     }
 

@@ -45,27 +45,38 @@ public final class AddressDialog {
             Runnable, RecyclerViewAdapter.OnSelectListener,
             BaseDialog.OnShowListener, BaseDialog.OnDismissListener {
 
+        @NonNull
         private final TextView mTitleView;
+        @NonNull
         private final ImageView mCloseView;
+        @NonNull
         private final RecyclerView mTabView;
 
+        @NonNull
         private final ViewPager2 mViewPager2;
 
+        @NonNull
         private final TabAdapter mTabAdapter;
+        @NonNull
         private final RecyclerViewAdapter mAdapter;
+
+        @NonNull
         private final ViewPager2.OnPageChangeCallback mCallback;
 
         @Nullable
         private OnListener mListener;
 
+        @NonNull
         private String mProvince = "";
+        @NonNull
         private String mCity = "";
+        @NonNull
         private String mArea = "";
 
         private boolean mIgnoreArea;
 
         @SuppressWarnings("all")
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
             setContentView(R.layout.address_dialog);
             setHeight(getResources().getDisplayMetrics().heightPixels / 2);
@@ -99,7 +110,9 @@ public final class AddressDialog {
                 }
 
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    // default implementation ignored
+                }
             };
 
             // 显示省份列表
@@ -183,7 +196,7 @@ public final class AddressDialog {
             return this;
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
@@ -269,7 +282,7 @@ public final class AddressDialog {
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (view == mCloseView) {
                 dismiss();
                 if (mListener == null) {
@@ -284,7 +297,7 @@ public final class AddressDialog {
          */
 
         @Override
-        public boolean onTabSelected(RecyclerView recyclerView, int position) {
+        public boolean onTabSelected(@NonNull RecyclerView recyclerView, int position) {
             synchronized (this) {
                 if (mViewPager2.getCurrentItem() != position) {
                     mViewPager2.setCurrentItem(position);
@@ -326,7 +339,7 @@ public final class AddressDialog {
          */
 
         @Override
-        public void onShow(BaseDialog dialog) {
+        public void onShow(@NonNull BaseDialog dialog) {
             // 注册 ViewPager 滑动监听
             mViewPager2.registerOnPageChangeCallback(mCallback);
         }
@@ -336,7 +349,7 @@ public final class AddressDialog {
          */
 
         @Override
-        public void onDismiss(BaseDialog dialog) {
+        public void onDismiss(@NonNull BaseDialog dialog) {
             // 反注册 ViewPager 滑动监听
             mViewPager2.unregisterOnPageChangeCallback(mCallback);
         }
@@ -370,7 +383,7 @@ public final class AddressDialog {
         @Nullable
         private OnSelectListener mListener;
 
-        private RecyclerViewAdapter(Context context) {
+        private RecyclerViewAdapter(@NonNull Context context) {
             super(context);
         }
 
@@ -400,7 +413,7 @@ public final class AddressDialog {
             }
 
             @Override
-            public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+            public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
                 if (mListener == null) {
                     return;
                 }
@@ -420,7 +433,7 @@ public final class AddressDialog {
 
     private static final class AddressAdapter extends AppAdapter<AddressBean> {
 
-        private AddressAdapter(Context context) {
+        private AddressAdapter(@NonNull Context context) {
             super(context);
         }
 
@@ -485,7 +498,7 @@ public final class AddressDialog {
         /**
          * 获取省列表
          */
-        private static List<AddressBean> getProvinceList(Context context) {
+        private static List<AddressBean> getProvinceList(@NonNull Context context) {
             try {
                 // 省市区Json数据文件来源：https://github.com/getActivity/ProvinceJson
                 JSONArray jsonArray = getProvinceJson(context);
@@ -561,7 +574,7 @@ public final class AddressDialog {
         /**
          * 获取资产目录下面文件的字符串
          */
-        private static JSONArray getProvinceJson(Context context) {
+        private static JSONArray getProvinceJson(@NonNull Context context) {
             try {
                 InputStream inputStream = context.getResources().openRawResource(R.raw.province);
                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -590,11 +603,13 @@ public final class AddressDialog {
          * @param city              市
          * @param area              区
          */
-        void onSelected(BaseDialog dialog, String province, String city, String area);
+        void onSelected(@NonNull BaseDialog dialog, @NonNull String province, @NonNull String city, @NonNull String area);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

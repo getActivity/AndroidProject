@@ -8,8 +8,6 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.gson.JsonSyntaxException;
 import com.hjq.demo.R;
 import com.hjq.demo.http.exception.ResultException;
 import com.hjq.demo.http.exception.TokenException;

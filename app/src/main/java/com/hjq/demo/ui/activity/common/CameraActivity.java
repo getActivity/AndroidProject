@@ -5,6 +5,8 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import com.hjq.base.BaseActivity;
 import com.hjq.demo.R;
@@ -34,12 +36,12 @@ public final class CameraActivity extends AppActivity {
 
     public static final String INTENT_KEY_OUT_ERROR = "error";
 
-    public static void start(BaseActivity activity, OnCameraListener listener) {
+    public static void start(@NonNull BaseActivity activity, @Nullable OnCameraListener listener) {
         start(activity, false, listener);
     }
 
     @Log
-    public static void start(BaseActivity activity, boolean video, OnCameraListener listener) {
+    public static void start(@NonNull BaseActivity activity, boolean video, @Nullable OnCameraListener listener) {
         XXPermissions.with(activity)
                 .permission(PermissionLists.getCameraPermission())
                 .interceptor(new PermissionInterceptor())
@@ -92,7 +94,9 @@ public final class CameraActivity extends AppActivity {
     }
 
     @Override
-    protected void initView() {}
+    protected void initView() {
+
+    }
 
     @Override
     protected void initData() {
@@ -145,6 +149,7 @@ public final class CameraActivity extends AppActivity {
      * 创建一个拍照图片文件路径
      */
     @SuppressWarnings("deprecation")
+    @NonNull
     private static File createCameraFile(boolean video) {
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
         if (!folder.exists() || !folder.isDirectory()) {
@@ -168,18 +173,20 @@ public final class CameraActivity extends AppActivity {
          *
          * @param file          文件
          */
-        void onSelected(File file);
+        void onSelected(@NonNull File file);
 
         /**
          * 错误回调
          *
          * @param details       错误详情
          */
-        void onError(String details);
+        void onError(@NonNull String details);
 
         /**
          * 取消回调
          */
-        default void onCancel() {}
+        default void onCancel() {
+            // default implementation ignored
+        }
     }
 }

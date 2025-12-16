@@ -58,7 +58,7 @@ public final class InitManager {
     /**
      * 是否同意了隐私协议
      */
-    public static boolean isAgreePrivacy(Context context) {
+    public static boolean isAgreePrivacy(@NonNull Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(AGREE_PRIVACY_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(KEY_AGREE_PRIVACY_RESULT, false);
     }
@@ -66,7 +66,7 @@ public final class InitManager {
     /**
      * 设置隐私协议结果
      */
-    public static void setAgreePrivacy(Context context, boolean result) {
+    public static void setAgreePrivacy(@NonNull Context context, boolean result) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(AGREE_PRIVACY_NAME, Context.MODE_PRIVATE);
         sharedPreferences.edit().putBoolean(KEY_AGREE_PRIVACY_RESULT, result).apply();
     }
@@ -74,7 +74,7 @@ public final class InitManager {
     /**
      * 预初始化第三方 SDK
      */
-    public static void preInitSdk(Application application) {
+    public static void preInitSdk(@NonNull Application application) {
         // 初始化日志打印
         if (AppConfig.isLogEnable()) {
             Timber.plant(new DebugLoggerTree());
@@ -216,7 +216,7 @@ public final class InitManager {
     /**
      * 初始化第三方 SDK
      */
-    public static void initSdk(Application application) {
+    public static void initSdk(@NonNull Application application) {
         // 友盟统计、登录、分享 SDK
         UmengClient.init(application, AppConfig.isLogEnable());
     }

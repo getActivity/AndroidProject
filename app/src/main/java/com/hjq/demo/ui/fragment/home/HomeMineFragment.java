@@ -1,10 +1,13 @@
 package com.hjq.demo.ui.fragment.home;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.view.View;
+import androidx.annotation.NonNull;
+import com.hjq.base.BaseActivity;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.TitleBarFragment;
@@ -64,7 +67,7 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int viewId = view.getId();
         if (viewId == R.id.btn_home_mine_dialog) {
 
@@ -112,22 +115,32 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_mine_browser) {
 
-            new InputDialog.Builder(getAttachActivity())
+            Activity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            new InputDialog.Builder(activity)
                     .setTitle("跳转到网页")
                     .setContent("https://juejin.cn/user/712139265815144/posts")
                     .setHint("请输入网页地址")
                     .setConfirm(getString(R.string.common_confirm))
                     .setCancel(getString(R.string.common_cancel))
-                    .setListener((dialog, content) -> BrowserActivity.start(getAttachActivity(), content))
+                    .setListener((dialog, content) -> BrowserActivity.start(activity, content))
                     .show();
 
         } else if (viewId == R.id.btn_home_mine_image_select) {
 
-            ImageSelectActivity.start(getAttachActivity(), new OnImageSelectListener() {
+            BaseActivity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            ImageSelectActivity.start(activity, new OnImageSelectListener() {
 
                 @Override
-                public void onSelected(List<String> data) {
-                    toast("选择了" + data.toString());
+                public void onSelected(@NonNull List<String> data) {
+                    toast("选择了" + data);
                 }
 
                 @Override
@@ -138,18 +151,28 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_mine_image_preview) {
 
-            ArrayList<String> images = new ArrayList<>();
+            Activity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            List<String> images = new ArrayList<>();
             images.add("https://www.baidu.com/img/bd_logo.png");
             images.add("https://avatars1.githubusercontent.com/u/28616817");
-            ImagePreviewActivity.start(getAttachActivity(), images, images.size() - 1);
+            ImagePreviewActivity.start(activity, images, images.size() - 1);
 
         } else if (viewId == R.id.btn_home_mine_video_select) {
 
-            VideoSelectActivity.start(getAttachActivity(), new VideoSelectActivity.OnVideoSelectListener() {
+            BaseActivity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            VideoSelectActivity.start(activity, new VideoSelectActivity.OnVideoSelectListener() {
 
                 @Override
-                public void onSelected(List<String> data) {
-                    toast("选择了" + data.toString());
+                public void onSelected(@NonNull List<String> data) {
+                    toast("选择了" + data);
                 }
 
                 @Override
@@ -160,11 +183,16 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_mine_video_play) {
 
+            Activity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
             new VideoPlayActivity.Builder()
                     .setVideoTitle("速度与激情特别行动")
                     .setVideoSource("http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4")
                     .setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-                    .start(getAttachActivity());
+                    .start(activity);
 
         } else if (viewId == R.id.btn_home_mine_crash) {
 
@@ -177,14 +205,19 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
 
         } else if (viewId == R.id.btn_home_mine_donate) {
 
-            new MessageDialog.Builder(getAttachActivity())
+            Activity activity = getAttachActivity();
+            if (activity == null) {
+                return;
+            }
+
+            new MessageDialog.Builder(activity)
                     .setTitle("捐赠")
                     .setMessage("如果你觉得这个开源项目很棒，希望它能更好地坚持开发下去，可否愿意花一点点钱（推荐 10.24 元）作为对于开发者的激励")
                     .setConfirm("支付宝")
                     .setCancel(null)
                     //.setAutoDismiss(false)
                     .setListener(dialog -> {
-                        BrowserActivity.start(getAttachActivity(), "https://github.com/getActivity/Donate");
+                        BrowserActivity.start(activity, "https://github.com/getActivity/Donate");
                         toast("AndroidProject 因为有你的支持而能够不断更新、完善，非常感谢支持！");
                         postDelayed(() -> {
                             try {

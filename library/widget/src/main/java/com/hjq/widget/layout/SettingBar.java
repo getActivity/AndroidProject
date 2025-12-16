@@ -37,9 +37,16 @@ public final class SettingBar extends FrameLayout {
     /** 无色值 */
     public static final int NO_COLOR = Color.TRANSPARENT;
 
+    @NonNull
     private final LinearLayout mMainLayout;
+
+    @NonNull
     private final TextView mLeftView;
+
+    @NonNull
     private final TextView mRightView;
+
+    @NonNull
     private final View mLineView;
 
     /** 图标着色器 */
@@ -48,15 +55,15 @@ public final class SettingBar extends FrameLayout {
     /** 图标显示大小 */
     private int mLeftDrawableSize, mRightDrawableSize;
 
-    public SettingBar(Context context) {
+    public SettingBar(@NonNull Context context) {
         this(context, null);
     }
 
-    public SettingBar(Context context, AttributeSet attrs) {
+    public SettingBar(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SettingBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SettingBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
@@ -477,6 +484,7 @@ public final class SettingBar extends FrameLayout {
     /**
      * 获取主布局
      */
+    @NonNull
     public LinearLayout getMainLayout() {
         return mMainLayout;
     }
@@ -484,6 +492,7 @@ public final class SettingBar extends FrameLayout {
     /**
      * 获取左 TextView
      */
+    @NonNull
     public TextView getLeftView() {
         return mLeftView;
     }
@@ -491,6 +500,7 @@ public final class SettingBar extends FrameLayout {
     /**
      * 获取右 TextView
      */
+    @NonNull
     public TextView getRightView() {
         return mRightView;
     }
@@ -498,6 +508,7 @@ public final class SettingBar extends FrameLayout {
     /**
      * 获取分割线
      */
+    @NonNull
     public View getLineView() {
         return mLineView;
     }

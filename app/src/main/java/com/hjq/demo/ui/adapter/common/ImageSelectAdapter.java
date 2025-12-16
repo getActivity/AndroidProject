@@ -20,9 +20,10 @@ import java.util.List;
  */
 public final class ImageSelectAdapter extends AppAdapter<String> {
 
+    @NonNull
     private final List<String> mSelectImages;
 
-    public ImageSelectAdapter(Context context, List<String> images) {
+    public ImageSelectAdapter(@NonNull Context context, @NonNull List<String> images) {
         super(context);
         mSelectImages = images;
     }
@@ -56,8 +57,9 @@ public final class ImageSelectAdapter extends AppAdapter<String> {
         }
     }
 
+    @NonNull
     @Override
-    protected RecyclerView.LayoutManager generateDefaultLayoutManager(Context context) {
+    protected RecyclerView.LayoutManager generateDefaultLayoutManager(@NonNull Context context) {
         return new GridLayoutManager(context, 3);
     }
 }

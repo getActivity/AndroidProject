@@ -56,7 +56,10 @@ public class BasePopupWindow extends PopupWindow
 
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
+    @NonNull
     private final Context mContext;
+
+    @Nullable
     private PopupBackground mPopupBackground;
 
     @NonNull
@@ -279,8 +282,10 @@ public class BasePopupWindow extends PopupWindow
         private static final int DEFAULT_ANCHORED_GRAVITY = Gravity.TOP | Gravity.START;
 
         /** Activity 对象 */
+        @Nullable
         private final Activity mActivity;
         /** Context 对象 */
+        @NonNull
         private final Context mContext;
         /** PopupWindow 对象 */
         private BasePopupWindow mPopupWindow;
@@ -324,11 +329,11 @@ public class BasePopupWindow extends PopupWindow
         /** 点击事件集合 */
         private SparseArray<BasePopupWindow.OnClickListener<? extends View>> mClickArray;
 
-        public Builder(Activity activity) {
+        public Builder(@NonNull Activity activity) {
             this((Context) activity);
         }
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             mContext = context;
             mActivity = getActivity();
         }
@@ -577,10 +582,10 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置文本
          */
-        public B setText(@IdRes int viewId, @StringRes int stringId) {
-            return setText(viewId, getString(stringId));
+        public B setTextByTextView(@IdRes int viewId, @StringRes int stringId) {
+            return setTextByTextView(viewId, getString(stringId));
         }
-        public B setText(@IdRes int id, CharSequence text) {
+        public B setTextByTextView(@IdRes int id, CharSequence text) {
             ((TextView) findViewById(id)).setText(text);
             return (B) this;
         }
@@ -588,26 +593,15 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置文本颜色
          */
-        public B setTextColor(@IdRes int id, @ColorInt int color) {
+        public B setTextColorByTextView(@IdRes int id, @ColorInt int color) {
             ((TextView) findViewById(id)).setTextColor(color);
-            return (B) this;
-        }
-
-        /**
-         * 设置提示
-         */
-        public B setHint(@IdRes int viewId, @StringRes int stringId) {
-            return setHint(viewId, getString(stringId));
-        }
-        public B setHint(@IdRes int id, CharSequence text) {
-            ((TextView) findViewById(id)).setHint(text);
             return (B) this;
         }
 
         /**
          * 设置可见状态
          */
-        public B setVisibility(@IdRes int id, int visibility) {
+        public B setVisibilityByView(@IdRes int id, int visibility) {
             findViewById(id).setVisibility(visibility);
             return (B) this;
         }
@@ -615,10 +609,10 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置背景
          */
-        public B setBackground(@IdRes int viewId, @DrawableRes int drawableId) {
-            return setBackground(viewId, getDrawable(drawableId));
+        public B setBackgroundByView(@IdRes int viewId, @DrawableRes int drawableId) {
+            return setBackgroundByView(viewId, getDrawable(drawableId));
         }
-        public B setBackground(@IdRes int id, Drawable drawable) {
+        public B setBackgroundByView(@IdRes int id, Drawable drawable) {
             findViewById(id).setBackground(drawable);
             return (B) this;
         }
@@ -626,10 +620,10 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置图片
          */
-        public B setImageDrawable(@IdRes int viewId, @DrawableRes int drawableId) {
-            return setBackground(viewId, getDrawable(drawableId));
+        public B setDrawableByImageView(@IdRes int viewId, @DrawableRes int drawableId) {
+            return setBackgroundByView(viewId, getDrawable(drawableId));
         }
-        public B setImageDrawable(@IdRes int id, Drawable drawable) {
+        public B setDrawableByImageView(@IdRes int id, Drawable drawable) {
             ((ImageView) findViewById(id)).setImageDrawable(drawable);
             return (B) this;
         }
@@ -637,7 +631,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 设置点击事件
          */
-        public B setOnClickListener(@IdRes int id, @NonNull BasePopupWindow.OnClickListener<?> listener) {
+        public B setOnClickListenerByView(@IdRes int id, @NonNull BasePopupWindow.OnClickListener<?> listener) {
             if (mClickArray == null) {
                 mClickArray = new SparseArray<>();
             }
@@ -760,6 +754,7 @@ public class BasePopupWindow extends PopupWindow
             mPopupWindow.showAtLocation(parent, mGravity, mXOffset, mYOffset);
         }
 
+        @NonNull
         @Override
         public Context getContext() {
             return mContext;
@@ -797,7 +792,7 @@ public class BasePopupWindow extends PopupWindow
          * 创建 PopupWindow 对象（子类可以重写此方法来改变 PopupWindow 类型）
          */
         @NonNull
-        protected BasePopupWindow createPopupWindow(Context context) {
+        protected BasePopupWindow createPopupWindow(@NonNull Context context) {
             return new BasePopupWindow(context);
         }
 
@@ -840,7 +835,7 @@ public class BasePopupWindow extends PopupWindow
             addOnShowListener(new OnShowListener() {
 
                 @Override
-                public void onShow(BasePopupWindow popupWindow) {
+                public void onShow(@NonNull BasePopupWindow popupWindow) {
                     removeOnShowListener(this);
                     popupWindow.post(runnable);
                 }
@@ -859,7 +854,7 @@ public class BasePopupWindow extends PopupWindow
             addOnShowListener(new OnShowListener() {
 
                 @Override
-                public void onShow(BasePopupWindow popupWindow) {
+                public void onShow(@NonNull BasePopupWindow popupWindow) {
                     removeOnShowListener(this);
                     popupWindow.postDelayed(runnable, delayMillis);
                 }
@@ -870,41 +865,51 @@ public class BasePopupWindow extends PopupWindow
     /**
      * PopupWindow 生命周期绑定
      */
-    private static final class PopupWindowLifecycle implements
-            Application.ActivityLifecycleCallbacks,
-            BasePopupWindow.OnShowListener,
-            BasePopupWindow.OnDismissListener {
+    private static final class PopupWindowLifecycle implements Application.ActivityLifecycleCallbacks,
+                                                    BasePopupWindow.OnShowListener, BasePopupWindow.OnDismissListener {
 
-        private static void with(Activity activity, BasePopupWindow popupWindow) {
+        private static void with(@NonNull Activity activity, @NonNull BasePopupWindow popupWindow) {
             new PopupWindowLifecycle(activity, popupWindow);
         }
 
         private BasePopupWindow mPopupWindow;
         private Activity mActivity;
 
-        private PopupWindowLifecycle(Activity activity, BasePopupWindow popupWindow) {
+        private PopupWindowLifecycle(@NonNull Activity activity, @NonNull BasePopupWindow popupWindow) {
             mActivity = activity;
             popupWindow.addOnShowListener(this);
             popupWindow.addOnDismissListener(this);
         }
 
         @Override
-        public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
+        public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityStarted(@NonNull Activity activity) {}
+        public void onActivityStarted(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityResumed(@NonNull Activity activity) {}
+        public void onActivityResumed(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityPaused(@NonNull Activity activity) {}
+        public void onActivityPaused(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivityStopped(@NonNull Activity activity) {}
+        public void onActivityStopped(@NonNull Activity activity) {
+            // default implementation ignored
+        }
 
         @Override
-        public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+        public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+            // default implementation ignored
+        }
 
         @Override
         public void onActivityDestroyed(@NonNull Activity activity) {
@@ -927,13 +932,13 @@ public class BasePopupWindow extends PopupWindow
         }
 
         @Override
-        public void onShow(BasePopupWindow popupWindow) {
+        public void onShow(@NonNull BasePopupWindow popupWindow) {
             mPopupWindow = popupWindow;
             registerActivityLifecycleCallbacks();
         }
 
         @Override
-        public void onDismiss(BasePopupWindow popupWindow) {
+        public void onDismiss(@NonNull BasePopupWindow popupWindow) {
             mPopupWindow = null;
             unregisterActivityLifecycleCallbacks();
         }
@@ -975,8 +980,8 @@ public class BasePopupWindow extends PopupWindow
     private static final class ListenersWrapper<T extends PopupWindow.OnDismissListener>
             extends SoftReference<T> implements PopupWindow.OnDismissListener {
 
-        private ListenersWrapper(T referent) {
-            super(referent);
+        private ListenersWrapper(T listener) {
+            super(listener);
         }
 
         @Override
@@ -991,9 +996,7 @@ public class BasePopupWindow extends PopupWindow
     /**
      * PopupWindow 背景遮盖层实现类
      */
-    private static class PopupBackground implements
-            BasePopupWindow.OnShowListener,
-            BasePopupWindow.OnDismissListener {
+    private static class PopupBackground implements BasePopupWindow.OnShowListener, BasePopupWindow.OnDismissListener {
 
         private float mAlpha;
 
@@ -1002,12 +1005,12 @@ public class BasePopupWindow extends PopupWindow
         }
 
         @Override
-        public void onShow(BasePopupWindow popupWindow) {
+        public void onShow(@NonNull BasePopupWindow popupWindow) {
             popupWindow.setActivityAlpha(mAlpha);
         }
 
         @Override
-        public void onDismiss(BasePopupWindow popupWindow) {
+        public void onDismiss(@NonNull BasePopupWindow popupWindow) {
             popupWindow.setActivityAlpha(1);
         }
     }
@@ -1015,16 +1018,15 @@ public class BasePopupWindow extends PopupWindow
     /**
      * 销毁监听包装类
      */
-    private static final class DismissListenerWrapper
-            extends SoftReference<PopupWindow.OnDismissListener>
-            implements BasePopupWindow.OnDismissListener {
+    private static final class DismissListenerWrapper extends SoftReference<PopupWindow.OnDismissListener>
+                                                      implements BasePopupWindow.OnDismissListener {
 
-        private DismissListenerWrapper(PopupWindow.OnDismissListener referent) {
-            super(referent);
+        private DismissListenerWrapper(PopupWindow.OnDismissListener listener) {
+            super(listener);
         }
 
         @Override
-        public void onDismiss(BasePopupWindow popupWindow) {
+        public void onDismiss(@NonNull BasePopupWindow popupWindow) {
             // 在横竖屏切换后监听对象会为空
             if (get() == null) {
                 return;
@@ -1037,46 +1039,25 @@ public class BasePopupWindow extends PopupWindow
      * 点击事件包装类
      */
     @SuppressWarnings("rawtypes")
-    private static final class ViewClickWrapper
-            implements View.OnClickListener {
+    private static final class ViewClickWrapper implements View.OnClickListener {
 
+        @NonNull
         private final BasePopupWindow mBasePopupWindow;
         @Nullable
         private final BasePopupWindow.OnClickListener mListener;
 
-        private ViewClickWrapper(BasePopupWindow popupWindow, @Nullable BasePopupWindow.OnClickListener listener) {
+        private ViewClickWrapper(@NonNull BasePopupWindow popupWindow, @Nullable BasePopupWindow.OnClickListener listener) {
             mBasePopupWindow = popupWindow;
             mListener = listener;
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public final void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (mListener == null) {
                 return;
             }
             mListener.onClick(mBasePopupWindow, view);
-        }
-    }
-
-    /**
-     * post 任务包装类
-     */
-    private static final class ShowPostWrapper implements OnShowListener {
-
-        private final Runnable mRunnable;
-
-        private ShowPostWrapper(Runnable runnable) {
-            mRunnable = runnable;
-        }
-
-        @Override
-        public void onShow(BasePopupWindow popupWindow) {
-            if (mRunnable == null) {
-                return;
-            }
-            popupWindow.removeOnShowListener(this);
-            popupWindow.post(mRunnable);
         }
     }
 
@@ -1088,7 +1069,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * 点击事件触发了
          */
-        void onClick(BasePopupWindow popupWindow, V view);
+        void onClick(@NonNull BasePopupWindow popupWindow, V view);
     }
 
     /**
@@ -1099,7 +1080,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * PopupWindow 创建了
          */
-        void onCreate(BasePopupWindow popupWindow);
+        void onCreate(@NonNull BasePopupWindow popupWindow);
     }
 
     /**
@@ -1110,7 +1091,7 @@ public class BasePopupWindow extends PopupWindow
         /**
          * PopupWindow 显示了
          */
-        void onShow(BasePopupWindow popupWindow);
+        void onShow(@NonNull BasePopupWindow popupWindow);
     }
 
     /**
@@ -1121,6 +1102,6 @@ public class BasePopupWindow extends PopupWindow
         /**
          * PopupWindow 销毁了
          */
-        void onDismiss(BasePopupWindow popupWindow);
+        void onDismiss(@NonNull BasePopupWindow popupWindow);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import com.hjq.demo.R;
 import com.scwang.smart.refresh.header.material.CircleImageView;
@@ -53,11 +54,11 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
     private boolean mShowBezierWave = false;
     private boolean mScrollableWhenRefreshing = true;
 
-    public MaterialHeader(Context context) {
+    public MaterialHeader(@NonNull Context context) {
         this(context, null);
     }
 
-    public MaterialHeader(Context context, AttributeSet attrs) {
+    public MaterialHeader(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
 
         mSpinnerStyle = SpinnerStyle.MatchLayout;
@@ -140,7 +141,7 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         if (mShowBezierWave) {
             // 重置画笔
             mBezierPath.reset();

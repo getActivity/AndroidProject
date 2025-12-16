@@ -35,6 +35,7 @@ public final class ArrowDrawable extends Drawable {
 
     private ArrowDrawable(Builder builder) {
         mBuilder = builder;
+        mPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -66,7 +67,7 @@ public final class ArrowDrawable extends Drawable {
 
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
-    protected void onBoundsChange(Rect viewRect) {
+    protected void onBoundsChange(@NonNull Rect viewRect) {
         if (mPath == null) {
             mPath = new Path();
         } else {
@@ -177,6 +178,7 @@ public final class ArrowDrawable extends Drawable {
     public static final class Builder {
 
         /** 上下文对象 */
+        @NonNull
         private final Context mContext;
         /** 箭头高度 */
         private int mArrowHeight;
@@ -197,7 +199,7 @@ public final class ArrowDrawable extends Drawable {
         /** 阴影颜色 */
         private int mShadowColor;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             mContext = context;
             mBackgroundColor = ContextCompat.getColor(context, R.color.black);
             mShadowColor = ContextCompat.getColor(context, R.color.black20);
@@ -255,7 +257,7 @@ public final class ArrowDrawable extends Drawable {
                     break;
                 default:
                     // 箭头只能在左上右下这四个位置
-                    throw new IllegalArgumentException("are you ok?");
+                    throw new IllegalArgumentException("The arrow can only be in the four positions: left, top, right, and bottom");
             }
             return this;
         }
@@ -283,13 +285,13 @@ public final class ArrowDrawable extends Drawable {
                 case Gravity.LEFT:
                 case Gravity.RIGHT:
                     if (mArrowOrientation == Gravity.LEFT || mArrowOrientation == Gravity.RIGHT) {
-                        throw new IllegalArgumentException("are you ok?");
+                        throw new IllegalArgumentException("The arrow direction cannot be the same as the arrow gravity");
                     }
                     break;
                 case Gravity.TOP:
                 case Gravity.BOTTOM:
                     if (mArrowOrientation == Gravity.TOP || mArrowOrientation == Gravity.BOTTOM) {
-                        throw new IllegalArgumentException("are you ok?");
+                        throw new IllegalArgumentException("The arrow direction cannot be the same as the arrow gravity");
                     }
                     break;
                 case Gravity.CENTER_VERTICAL:
@@ -297,7 +299,7 @@ public final class ArrowDrawable extends Drawable {
                     break;
                 default:
                     // 箭头只能在左上右下这四个位置
-                    throw new IllegalArgumentException("are you ok?");
+                    throw new IllegalArgumentException("The arrow can only be in the four positions: left, top, right, and bottom");
             }
             mArrowGravity = gravity;
             return this;
@@ -330,10 +332,10 @@ public final class ArrowDrawable extends Drawable {
         /**
          * 构建 Drawable
          */
-        public Drawable build() {
+        public ArrowDrawable build() {
             if (mArrowOrientation == Gravity.NO_GRAVITY || mArrowGravity == Gravity.NO_GRAVITY) {
                 // 必须要先设置箭头的方向及重心
-                throw new IllegalArgumentException("are you ok?");
+                throw new IllegalArgumentException("You must set the direction and gravity of the arrow");
             }
             return new ArrowDrawable(this);
         }

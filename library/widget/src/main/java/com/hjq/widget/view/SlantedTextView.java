@@ -19,6 +19,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import com.hjq.widget.R;
 
@@ -35,8 +36,10 @@ public final class SlantedTextView extends View {
     public static final int ROTATE_ANGLE = 45;
 
     /** 背景画笔 */
+    @NonNull
     private final Paint mBackgroundPaint;
     /** 文字画笔 */
+    @NonNull
     private final TextPaint mTextPaint;
 
     /** 显示的文本 */
@@ -50,19 +53,20 @@ public final class SlantedTextView extends View {
     private int mColorBackground;
 
     /** 文字测量范围装载 */
+    @NonNull
     private final Rect mTextBounds = new Rect();
     /** 测量出来的文本高度 */
     private int mTextHeight;
 
-    public SlantedTextView(Context context) {
+    public SlantedTextView(@NonNull Context context) {
         this(context, null);
     }
 
-    public SlantedTextView(Context context, AttributeSet attrs) {
+    public SlantedTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SlantedTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SlantedTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         mBackgroundPaint = new Paint();
@@ -121,7 +125,7 @@ public final class SlantedTextView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         drawBackground(canvas);
         drawText(canvas);
     }
@@ -129,7 +133,7 @@ public final class SlantedTextView extends View {
     /**
      * 绘制背景
      */
-    private void drawBackground(Canvas canvas) {
+    private void drawBackground(@NonNull Canvas canvas) {
         Path path = new Path();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
@@ -196,7 +200,7 @@ public final class SlantedTextView extends View {
     /**
      * 绘制文本
      */
-    private void drawText(Canvas canvas) {
+    private void drawText(@NonNull Canvas canvas) {
         int width = canvas.getWidth() - mTextHeight / 2;
         int height = canvas.getHeight() - mTextHeight / 2;
         Rect rect;
@@ -281,6 +285,7 @@ public final class SlantedTextView extends View {
     /**
      * 获取显示文本
      */
+    @NonNull
     public String getText() {
         return mText;
     }
@@ -344,6 +349,7 @@ public final class SlantedTextView extends View {
     /**
      * 获取文本样式
      */
+    @Nullable
     public Typeface getTextStyle() {
         return mTextPaint.getTypeface();
     }
@@ -351,9 +357,9 @@ public final class SlantedTextView extends View {
     /**
      * 设置文本样式
      */
-    public void setTextStyle(Typeface tf) {
-        if (getTextStyle() != tf) {
-            mTextPaint.setTypeface(tf);
+    public void setTextStyle(@Nullable Typeface typeface) {
+        if (getTextStyle() != typeface) {
+            mTextPaint.setTypeface(typeface);
             invalidate();
         }
     }

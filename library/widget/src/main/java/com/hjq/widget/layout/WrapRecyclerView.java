@@ -26,25 +26,27 @@ import java.util.List;
 public final class WrapRecyclerView extends RecyclerView {
 
     /** 原有的适配器 */
+    @Nullable
     private RecyclerView.Adapter mRealAdapter;
 
     /** 支持添加头部和底部的适配器 */
+    @NonNull
     private final WrapRecyclerAdapter mWrapAdapter = new WrapRecyclerAdapter();
 
-    public WrapRecyclerView(Context context) {
+    public WrapRecyclerView(@NonNull Context context) {
         super(context);
     }
 
-    public WrapRecyclerView(Context context, @Nullable AttributeSet attrs) {
+    public WrapRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public WrapRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public WrapRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
-    public void setAdapter(Adapter adapter) {
+    public void setAdapter(@Nullable Adapter adapter) {
         mRealAdapter = adapter;
         // 偷梁换柱
         mWrapAdapter.setRealAdapter(mRealAdapter);
@@ -53,6 +55,7 @@ public final class WrapRecyclerView extends RecyclerView {
         super.setAdapter(mWrapAdapter);
     }
 
+    @Nullable
     @Override
     public Adapter getAdapter() {
         return mRealAdapter;
@@ -61,11 +64,12 @@ public final class WrapRecyclerView extends RecyclerView {
     /**
      * 添加头部View
      */
-    public void addHeaderView(View view) {
+    public void addHeaderView(@Nullable View view) {
         mWrapAdapter.addHeaderView(view);
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     public <V extends View> V addHeaderView(@LayoutRes int id) {
         View headerView = LayoutInflater.from(getContext()).inflate(id, this, false);
         addHeaderView(headerView);
@@ -75,18 +79,19 @@ public final class WrapRecyclerView extends RecyclerView {
     /**
      * 移除头部View
      */
-    public void removeHeaderView(View view) {
+    public void removeHeaderView(@Nullable View view) {
         mWrapAdapter.removeHeaderView(view);
     }
 
     /**
      * 添加底部View
      */
-    public void addFooterView(View view) {
+    public void addFooterView(@Nullable View view) {
         mWrapAdapter.addFooterView(view);
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     public <V extends View> V addFooterView(@LayoutRes int id) {
         View footerView = LayoutInflater.from(getContext()).inflate(id, this, false);
         addFooterView(footerView);
@@ -96,7 +101,7 @@ public final class WrapRecyclerView extends RecyclerView {
     /**
      * 移除底部View
      */
-    public void removeFooterView(View view) {
+    public void removeFooterView(@Nullable View view) {
         mWrapAdapter.removeFooterView(view);
     }
 
@@ -117,6 +122,7 @@ public final class WrapRecyclerView extends RecyclerView {
     /**
      * 获取头部View集合
      */
+    @NonNull
     public List<View> getHeaderViews() {
         return mWrapAdapter.getHeaderViews();
     }
@@ -124,6 +130,7 @@ public final class WrapRecyclerView extends RecyclerView {
     /**
      * 获取底部View集合
      */
+    @NonNull
     public List<View> getFooterViews() {
         return mWrapAdapter.getFooterViews();
     }
@@ -166,15 +173,22 @@ public final class WrapRecyclerView extends RecyclerView {
         private static final int FOOTER_VIEW_TYPE = Integer.MAX_VALUE >> 1;
 
         /** 原有的适配器 */
+        @Nullable
         private RecyclerView.Adapter mRealAdapter;
+
         /** 头部View集合 */
+        @NonNull
         private final List<View> mHeaderViews = new ArrayList<>();
+
         /** 底部View集合 */
+        @NonNull
         private final List<View> mFooterViews = new ArrayList<>();
+
         /** 当前调用的位置 */
         private int mCurrentPosition;
 
         /** RecyclerView对象 */
+        @Nullable
         private RecyclerView mRecyclerView;
 
         /** 数据观察者对象 */
@@ -187,7 +201,7 @@ public final class WrapRecyclerView extends RecyclerView {
 
             if (mRealAdapter != null) {
                 if (mObserver != null) {
-                    // 为原有的RecyclerAdapter移除数据监听对象
+                    // 为原有的 RecyclerAdapter 移除数据监听对象
                     mRealAdapter.unregisterAdapterDataObserver(mObserver);
                 }
             }
@@ -200,9 +214,9 @@ public final class WrapRecyclerView extends RecyclerView {
             if (mObserver == null) {
                 mObserver = new WrapAdapterDataObserver(this);
             }
-            // 为原有的RecyclerAdapter添加数据监听对象
+            // 为原有的 RecyclerAdapter 添加数据监听对象
             mRealAdapter.registerAdapterDataObserver(mObserver);
-            // 适配器不是第一次被绑定到RecyclerView上需要发送通知，因为第一次绑定会自动通知
+            // 适配器不是第一次被绑定到 RecyclerView 上需要发送通知，因为第一次绑定会自动通知
             if (mRecyclerView != null) {
                 notifyDataSetChanged();
             }
@@ -276,7 +290,8 @@ public final class WrapRecyclerView extends RecyclerView {
             }
         }
 
-        private WrapViewHolder newWrapViewHolder(View view) {
+        @NonNull
+        private WrapViewHolder newWrapViewHolder(@NonNull View view) {
             ViewParent parent = view.getParent();
             if (parent instanceof ViewGroup) {
                 // IllegalStateException: ViewHolder views must not be attached when created.
@@ -356,8 +371,11 @@ public final class WrapRecyclerView extends RecyclerView {
         /**
          * 添加头部View
          */
-        private void addHeaderView(View view) {
-            // 不能添加同一个View对象，否则会导致RecyclerView复用异常
+        private void addHeaderView(@Nullable View view) {
+            if (view == null) {
+                return;
+            }
+            // 不能添加同一个 View 对象，否则会导致 RecyclerView 复用异常
             if (!mHeaderViews.contains(view) && !mFooterViews.contains(view)) {
                 mHeaderViews.add(view);
                 notifyDataSetChanged();
@@ -367,7 +385,10 @@ public final class WrapRecyclerView extends RecyclerView {
         /**
          * 移除头部View
          */
-        private void removeHeaderView(View view) {
+        private void removeHeaderView(@Nullable View view) {
+            if (view == null) {
+                return;
+            }
             if (mHeaderViews.remove(view)) {
                 notifyDataSetChanged();
             }
@@ -376,8 +397,11 @@ public final class WrapRecyclerView extends RecyclerView {
         /**
          * 添加底部View
          */
-        private void addFooterView(View view) {
-            // 不能添加同一个View对象，否则会导致RecyclerView复用异常
+        private void addFooterView(@Nullable View view) {
+            if (view == null) {
+                return;
+            }
+            // 不能添加同一个 View 对象，否则会导致 RecyclerView 复用异常
             if (!mFooterViews.contains(view) && !mHeaderViews.contains(view)) {
                 mFooterViews.add(view);
                 notifyDataSetChanged();
@@ -387,7 +411,10 @@ public final class WrapRecyclerView extends RecyclerView {
         /**
          * 移除底部View
          */
-        private void removeFooterView(View view) {
+        private void removeFooterView(@Nullable View view) {
+            if (view == null) {
+                return;
+            }
             if (mFooterViews.remove(view)) {
                 notifyDataSetChanged();
             }
@@ -437,9 +464,10 @@ public final class WrapRecyclerView extends RecyclerView {
      */
     private static final class WrapAdapterDataObserver extends RecyclerView.AdapterDataObserver {
 
+        @NonNull
         private final WrapRecyclerAdapter mWrapAdapter;
 
-        private WrapAdapterDataObserver(WrapRecyclerAdapter adapter) {
+        private WrapAdapterDataObserver(@NonNull WrapRecyclerAdapter adapter) {
             mWrapAdapter = adapter;
         }
 

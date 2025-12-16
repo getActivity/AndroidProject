@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import com.hjq.demo.R;
 import com.hjq.demo.other.LinkClickableSpan;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
@@ -21,7 +22,7 @@ public final class PrivacyAgreementDialog {
     public static final class Builder
             extends MessageDialog.Builder {
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setTitle(getString(R.string.privacy_agreement_title));
@@ -35,14 +36,16 @@ public final class PrivacyAgreementDialog {
             int userAgreementTextStart = privacyAgreementContent.indexOf(userAgreement);
             int userAgreementTextEnd = userAgreementTextStart + userAgreement.length();
             if (userAgreementTextStart != -1 && userAgreementTextEnd < privacyAgreementContent.length()) {
-                spannable.setSpan(new LinkClickableSpan(getString(R.string.privacy_agreement_user_agreement_link)), userAgreementTextStart, userAgreementTextEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new LinkClickableSpan(getString(R.string.privacy_agreement_user_agreement_link)),
+                    userAgreementTextStart, userAgreementTextEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             String privacyPolicy = getString(R.string.privacy_agreement_privacy_policy_text);
             int privacyPolicyTextStart = privacyAgreementContent.indexOf(privacyPolicy);
             int privacyPolicyTextEnd = privacyPolicyTextStart + privacyPolicy.length();
             if (privacyPolicyTextStart != -1 && privacyPolicyTextEnd < privacyAgreementContent.length()) {
-                spannable.setSpan(new LinkClickableSpan(getString(R.string.privacy_agreement_privacy_policy_link)), privacyPolicyTextStart, privacyPolicyTextEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new LinkClickableSpan(getString(R.string.privacy_agreement_privacy_policy_link)),
+                    privacyPolicyTextStart, privacyPolicyTextEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             TextView messageView = getMessageView();

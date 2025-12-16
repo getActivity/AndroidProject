@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 /**
@@ -16,23 +17,23 @@ import androidx.viewpager.widget.ViewPager;
  */
 public final class NoScrollViewPager extends ViewPager {
 
-    public NoScrollViewPager(Context context) {
+    public NoScrollViewPager(@NonNull Context context) {
         super(context);
     }
 
-    public NoScrollViewPager(Context context, AttributeSet attrs) {
+    public NoScrollViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(@NonNull MotionEvent ev) {
         // 不拦截这个事件
         return false;
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(@NonNull MotionEvent ev) {
         // 不处理这个事件
         return false;
     }

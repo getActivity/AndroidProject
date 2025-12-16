@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.widget.R;
 
@@ -43,7 +44,11 @@ public final class PlayButton extends View {
 
     private int mCircleRadius;
 
-    private RectF mRectF, mBgRectF;
+    @NonNull
+    private final RectF mRectF = new RectF();
+
+    @NonNull
+    private final RectF mBgRectF = new RectF();;
 
     private float mFraction = 1;
 
@@ -53,15 +58,15 @@ public final class PlayButton extends View {
 
     private float mPathLength;
 
-    public PlayButton(Context context) {
+    public PlayButton(@NonNull Context context) {
         this(context, null);
     }
 
-    public PlayButton(Context context, @Nullable AttributeSet attrs) {
+    public PlayButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PlayButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PlayButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PlayButton);
@@ -93,10 +98,10 @@ public final class PlayButton extends View {
         mCircleRadius = mViewWidth / (int) getResources().getDimension(R.dimen.dp_4);
         mCenterX = width / 2;
         mCenterY = height / 2;
-        mRectF = new RectF(mCenterX - mCircleRadius, mCenterY + 0.6f * mCircleRadius,
-                mCenterX + mCircleRadius, mCenterY + 2.6f * mCircleRadius);
-        mBgRectF = new RectF(mCenterX - mViewWidth / 2f ,mCenterY - mViewHeight / 2f ,
-                mCenterX + mViewWidth / 2f, mCenterY + mViewHeight / 2f);
+        mRectF.set(mCenterX - mCircleRadius, mCenterY + 0.6f * mCircleRadius,
+                  mCenterX + mCircleRadius, mCenterY + 2.6f * mCircleRadius);
+        mBgRectF.set(mCenterX - mViewWidth / 2f ,mCenterY - mViewHeight / 2f ,
+                    mCenterX + mViewWidth / 2f, mCenterY + mViewHeight / 2f);
         mPath.moveTo(mCenterX - mCircleRadius, mCenterY + 1.8f * mCircleRadius);
         mPath.lineTo(mCenterX - mCircleRadius, mCenterY - 1.8f * mCircleRadius);
         mPath.lineTo(mCenterX + mCircleRadius, mCenterY);
@@ -131,7 +136,7 @@ public final class PlayButton extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawCircle(mCenterX, mCenterY, mViewWidth / 2f, mPaint);
         if (mFraction < 0) {

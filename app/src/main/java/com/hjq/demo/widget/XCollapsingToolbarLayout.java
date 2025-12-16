@@ -2,6 +2,7 @@ package com.hjq.demo.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -13,21 +14,22 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
  */
 public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
 
-    /** 渐变监听 */
-    @Nullable
-    private OnScrimsListener mListener;
     /** 当前渐变状态 */
     private boolean mScrimsShownStatus;
 
-    public XCollapsingToolbarLayout(Context context) {
+    /** 渐变监听 */
+    @Nullable
+    private OnScrimsListener mListener;
+
+    public XCollapsingToolbarLayout(@NonNull Context context) {
         super(context);
     }
 
-    public XCollapsingToolbarLayout(Context context, AttributeSet attrs) {
+    public XCollapsingToolbarLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public XCollapsingToolbarLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public XCollapsingToolbarLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -70,6 +72,6 @@ public final class XCollapsingToolbarLayout extends CollapsingToolbarLayout {
          *
          * @param shown         渐变开关
          */
-        void onScrimsStateChange(XCollapsingToolbarLayout layout, boolean shown);
+        void onScrimsStateChange(@NonNull XCollapsingToolbarLayout layout, boolean shown);
     }
 }

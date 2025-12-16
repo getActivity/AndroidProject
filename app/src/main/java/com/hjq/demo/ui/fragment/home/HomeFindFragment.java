@@ -2,6 +2,7 @@ package com.hjq.demo.ui.fragment.home;
 
 import android.view.View;
 import android.widget.ImageView;
+import androidx.annotation.NonNull;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -72,7 +73,7 @@ public final class HomeFindFragment extends TitleBarFragment<HomeActivity>
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mCountdownView) {
             toast(R.string.common_code_send_hint);
             mCountdownView.start();
@@ -90,7 +91,7 @@ public final class HomeFindFragment extends TitleBarFragment<HomeActivity>
      */
 
     @Override
-    public void onCheckedChanged(SwitchButton button, boolean checked) {
+    public void onCheckedChanged(@NonNull SwitchButton button, boolean checked) {
         toast(checked);
     }
 
@@ -98,7 +99,7 @@ public final class HomeFindFragment extends TitleBarFragment<HomeActivity>
      * {@link SimpleRatingBar.OnRatingChangeListener}
      */
     @Override
-    public void onRatingChanged(SimpleRatingBar ratingBar, float grade, boolean touch) {
+    public void onRatingChanged(@NonNull SimpleRatingBar ratingBar, float grade, boolean touch) {
         toast(grade);
     }
 }

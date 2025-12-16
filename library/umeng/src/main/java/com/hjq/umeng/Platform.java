@@ -1,5 +1,6 @@
 package com.hjq.umeng;
 
+import androidx.annotation.NonNull;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
@@ -21,19 +22,24 @@ public enum Platform {
     QZONE(SHARE_MEDIA.QZONE, "com.tencent.mobileqq");
 
     /** 第三方平台 */
+    @NonNull
     private final SHARE_MEDIA mThirdParty;
+
     /** 第三方包名 */
+    @NonNull
     private final String mPackageName;
 
-    Platform(SHARE_MEDIA thirdParty, String packageName) {
+    Platform(@NonNull SHARE_MEDIA thirdParty, @NonNull String packageName) {
         mThirdParty = thirdParty;
         mPackageName = packageName;
     }
 
+    @NonNull
     SHARE_MEDIA getThirdParty() {
         return mThirdParty;
     }
 
+    @NonNull
     String getPackageName() {
         return mPackageName;
     }

@@ -38,18 +38,20 @@ public final class RegisterActivity extends AppActivity
     private static final String INTENT_KEY_PASSWORD = "password";
 
     @Log
-    public static void start(BaseActivity activity, String phone, String password, OnRegisterListener listener) {
+    public static void start(@NonNull BaseActivity activity, @Nullable String phone, @Nullable String password, @Nullable OnRegisterListener listener) {
         Intent intent = new Intent(activity, RegisterActivity.class);
         intent.putExtra(INTENT_KEY_PHONE, phone);
         intent.putExtra(INTENT_KEY_PASSWORD, password);
         activity.startActivityForResult(intent, (resultCode, data) -> {
-
             if (listener == null || data == null) {
                 return;
             }
 
             if (resultCode == RESULT_OK) {
-                listener.onRegisterSuccess(data.getStringExtra(INTENT_KEY_PHONE), data.getStringExtra(INTENT_KEY_PASSWORD));
+                String registerPhone = data.getStringExtra(INTENT_KEY_PHONE);
+                String registerPassword = data.getStringExtra(INTENT_KEY_PASSWORD);
+                listener.onRegisterSuccess(registerPhone != null ? registerPhone :"",
+                                           registerPassword != null ? registerPassword : "");
             } else {
                 listener.onRegisterCancel();
             }
@@ -114,7 +116,7 @@ public final class RegisterActivity extends AppActivity
 
     @SingleClick
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == mCountdownView) {
             if (mPhoneView.getText().toString().length() != 11) {
                 mPhoneView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake_anim));
@@ -200,7 +202,9 @@ public final class RegisterActivity extends AppActivity
                         }
 
                         @Override
-                        public void onHttpEnd(@NonNull IRequestApi api) {}
+                        public void onHttpEnd(@NonNull IRequestApi api) {
+                            // default implementation ignored
+                        }
 
                         @Override
                         public void onHttpSuccess(@NonNull HttpData<RegisterApi.Bean> data) {
@@ -238,7 +242,7 @@ public final class RegisterActivity extends AppActivity
      * {@link TextView.OnEditorActionListener}
      */
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
             // 模拟点击注册按钮
             onClick(mCommitView);
@@ -258,11 +262,13 @@ public final class RegisterActivity extends AppActivity
          * @param phone             手机号
          * @param password          密码
          */
-        void onRegisterSuccess(String phone, String password);
+        void onRegisterSuccess(@NonNull String phone, @NonNull String password);
 
         /**
          * 取消注册
          */
-        default void onRegisterCancel() {}
+        default void onRegisterCancel() {
+            // default implementation ignored
+        }
     }
 }

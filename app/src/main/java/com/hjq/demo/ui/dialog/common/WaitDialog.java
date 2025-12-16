@@ -3,6 +3,8 @@ package com.hjq.demo.ui.dialog.common;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
@@ -18,9 +20,10 @@ public final class WaitDialog {
     public static final class Builder
             extends BaseDialog.Builder<Builder> {
 
+        @NonNull
         private final TextView mMessageView;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
             setContentView(R.layout.wait_dialog);
             setAnimStyle(BaseDialog.ANIM_TOAST);
@@ -34,7 +37,7 @@ public final class WaitDialog {
             return setMessage(getString(id));
         }
 
-        public Builder setMessage(CharSequence text) {
+        public Builder setMessage(@Nullable CharSequence text) {
             mMessageView.setText(text);
             mMessageView.setVisibility(text == null ? View.GONE : View.VISIBLE);
             return this;

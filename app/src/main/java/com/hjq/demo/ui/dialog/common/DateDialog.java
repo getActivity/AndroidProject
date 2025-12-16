@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
@@ -32,29 +33,39 @@ public final class DateDialog {
 
         private final int mStartYear;
 
+        @NonNull
         private final RecyclerView mYearView;
+        @NonNull
         private final RecyclerView mMonthView;
+        @NonNull
         private final RecyclerView mDayView;
 
+        @NonNull
         private final PickerLayoutManager mYearManager;
+        @NonNull
         private final PickerLayoutManager mMonthManager;
+        @NonNull
         private final PickerLayoutManager mDayManager;
 
+        @NonNull
         private final PickerAdapter mYearAdapter;
+        @NonNull
         private final PickerAdapter mMonthAdapter;
+        @NonNull
         private final PickerAdapter mDayAdapter;
 
+        @Nullable
         private OnListener mListener;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             this(context, Calendar.getInstance(Locale.CHINA).get(Calendar.YEAR) - 100);
         }
 
-        public Builder(Context context, int startYear) {
+        public Builder(@NonNull Context context, int startYear) {
             this(context, startYear, Calendar.getInstance(Locale.CHINA).get(Calendar.YEAR));
         }
 
-        public Builder(Context context, int startYear, int endYear) {
+        public Builder(@NonNull Context context, int startYear, int endYear) {
             super(context);
             mStartYear = startYear;
 
@@ -117,7 +128,7 @@ public final class DateDialog {
             mMonthManager.setOnPickerListener(this);
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
@@ -202,7 +213,7 @@ public final class DateDialog {
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int viewId = view.getId();
             if (viewId == R.id.tv_ui_confirm) {
                 performClickDismiss();
@@ -229,7 +240,7 @@ public final class DateDialog {
          * @param position                  当前滚动的位置
          */
         @Override
-        public void onPicked(RecyclerView recyclerView, int position) {
+        public void onPicked(@NonNull RecyclerView recyclerView, int position) {
             postRefreshMonthMaximumDay();
         }
 
@@ -265,7 +276,7 @@ public final class DateDialog {
 
         private static final class PickerAdapter extends AppAdapter<String> {
 
-            private PickerAdapter(Context context) {
+            private PickerAdapter(@NonNull Context context) {
                 super(context);
             }
 
@@ -301,11 +312,13 @@ public final class DateDialog {
          * @param month             月
          * @param day               日
          */
-        void onSelected(BaseDialog dialog, int year, int month, int day);
+        void onSelected(@NonNull BaseDialog dialog, int year, int month, int day);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

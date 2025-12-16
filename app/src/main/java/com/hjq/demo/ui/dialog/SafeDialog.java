@@ -29,8 +29,11 @@ public final class SafeDialog {
     public static final class Builder
             extends StyleDialog.Builder<Builder> {
 
+        @NonNull
         private final TextView mPhoneView;
+        @NonNull
         private final EditText mCodeView;
+        @NonNull
         private final CountdownView mCountdownView;
 
         @Nullable
@@ -39,7 +42,7 @@ public final class SafeDialog {
         /** 当前手机号 */
         private final String mPhoneNumber;
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
             setTitle(R.string.safe_title);
             setCustomView(R.layout.safe_dialog);
@@ -58,14 +61,14 @@ public final class SafeDialog {
             return this;
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
 
         @SingleClick
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int viewId = view.getId();
             if (viewId == R.id.cv_safe_countdown) {
                 if (true) {
@@ -144,11 +147,13 @@ public final class SafeDialog {
         /**
          * 点击确定时回调
          */
-        void onConfirm(BaseDialog dialog, String phone, String code);
+        void onConfirm(@NonNull BaseDialog dialog, @NonNull String phone, @NonNull String code);
 
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(@NonNull BaseDialog dialog) {
+            // default implementation ignored
+        }
     }
 }

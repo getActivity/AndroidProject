@@ -29,13 +29,15 @@ public final class AlbumDialog  {
             extends BaseDialog.Builder<Builder>
             implements BaseAdapter.OnItemClickListener {
 
+        @NonNull
+        private final RecyclerView mRecyclerView;
+        @NonNull
+        private final AlbumAdapter mAdapter;
+
         @Nullable
         private OnListener mListener;
 
-        private final RecyclerView mRecyclerView;
-        private final AlbumAdapter mAdapter;
-
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setContentView(R.layout.album_dialog);
@@ -58,13 +60,13 @@ public final class AlbumDialog  {
             return this;
         }
 
-        public Builder setListener(OnListener listener) {
+        public Builder setListener(@Nullable OnListener listener) {
             mListener = listener;
             return this;
         }
 
         @Override
-        public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
             List<AlbumInfo> data = mAdapter.getData();
 
             for (AlbumInfo info : data) {
@@ -89,7 +91,7 @@ public final class AlbumDialog  {
 
         @NonNull
         @Override
-        protected BaseDialog createDialog(Context context, int themeId) {
+        protected BaseDialog createDialog(@NonNull Context context, int themeId) {
             BottomSheetDialog dialog = new BottomSheetDialog(context, themeId);
             dialog.getBottomSheetBehavior().setPeekHeight(getResources().getDisplayMetrics().heightPixels / 2);
             return dialog;
@@ -98,7 +100,7 @@ public final class AlbumDialog  {
 
     private static final class AlbumAdapter extends AppAdapter<AlbumInfo> {
 
-        private AlbumAdapter(Context context) {
+        private AlbumAdapter(@NonNull Context context) {
             super(context);
         }
 
@@ -146,11 +148,11 @@ public final class AlbumDialog  {
     public static class AlbumInfo {
 
         /** 封面 */
-        private String icon;
+        private final String icon;
         /** 名称 */
-        private String name;
+        private final String name;
         /** 备注 */
-        private String remark;
+        private final String remark;
         /** 选中 */
         private boolean select;
 
@@ -158,14 +160,6 @@ public final class AlbumDialog  {
             this.icon = icon;
             this.name = name;
             this.remark = remark;
-            this.select = select;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setSelect(boolean select) {
             this.select = select;
         }
 
@@ -184,6 +178,10 @@ public final class AlbumDialog  {
         public boolean isSelect() {
             return select;
         }
+
+        public void setSelect(boolean select) {
+            this.select = select;
+        }
     }
 
     public interface OnListener {
@@ -191,6 +189,6 @@ public final class AlbumDialog  {
         /**
          * 选择条目时回调
          */
-        void onSelected(BaseDialog dialog, int position, AlbumInfo bean);
+        void onSelected(@NonNull BaseDialog dialog, int position, @NonNull AlbumInfo bean);
     }
 }

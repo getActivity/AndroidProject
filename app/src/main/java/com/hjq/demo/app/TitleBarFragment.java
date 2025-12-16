@@ -4,7 +4,6 @@ import android.graphics.Insets;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnApplyWindowInsetsListener;
-import android.view.ViewGroup;
 import android.view.WindowInsets;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -123,15 +122,19 @@ public abstract class TitleBarFragment<A extends AppActivity>
      * 获取状态栏字体颜色
      */
     protected boolean isStatusBarDarkFont() {
+        A activity = getAttachActivity();
+        if (activity == null) {
+            return false;
+        }
         // 返回真表示黑色字体
-        return getAttachActivity().isStatusBarDarkFont();
+        return activity.isStatusBarDarkFont();
     }
 
     @Override
     @Nullable
     public TitleBar acquireTitleBar() {
         if (mTitleBar == null || !isLoading()) {
-            mTitleBar = findTitleBar((ViewGroup) getView());
+            mTitleBar = findTitleBar(getView());
         }
         return mTitleBar;
     }

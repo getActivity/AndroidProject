@@ -2,6 +2,7 @@ package com.hjq.demo.ui.dialog;
 
 import android.content.Context;
 import android.view.Gravity;
+import androidx.annotation.NonNull;
 import com.hjq.base.BaseDialog;
 import com.hjq.demo.R;
 
@@ -16,7 +17,7 @@ public final class CopyDialog {
     public static final class Builder
             extends BaseDialog.Builder<Builder> {
 
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             super(context);
 
             setContentView(R.layout.copy_dialog);

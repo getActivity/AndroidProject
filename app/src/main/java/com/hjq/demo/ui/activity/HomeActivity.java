@@ -42,11 +42,11 @@ public final class HomeActivity extends AppActivity
     private NavigationAdapter mNavigationAdapter;
     private BasePagerAdapter<AppFragment<?>> mPagerAdapter;
 
-    public static void start(Context context) {
+    public static void start(@NonNull Context context) {
         start(context, HomeMainFragment.class);
     }
 
-    public static void start(Context context, Class<? extends AppFragment<?>> fragmentClass) {
+    public static void start(@NonNull Context context, @NonNull Class<? extends AppFragment<?>> fragmentClass) {
         Intent intent = new Intent(context, HomeActivity.class);
         intent.putExtra(INTENT_KEY_IN_FRAGMENT_CLASS, fragmentClass);
         if (!(context instanceof Activity)) {

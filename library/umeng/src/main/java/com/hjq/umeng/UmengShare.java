@@ -1,5 +1,6 @@
 package com.hjq.umeng;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -17,11 +18,13 @@ public final class UmengShare {
      */
     public static final class ShareListenerWrapper implements UMShareListener {
 
+        @NonNull
         private final Platform mPlatform;
+
         @Nullable
         private OnShareListener mListener;
 
-        ShareListenerWrapper(SHARE_MEDIA platform, @Nullable OnShareListener listener) {
+        ShareListenerWrapper(@NonNull SHARE_MEDIA platform, @Nullable OnShareListener listener) {
             mListener = listener;
             switch (platform) {
                 case QQ:
@@ -47,7 +50,7 @@ public final class UmengShare {
          * @param platform      平台名称
          */
         @Override
-        public void onStart(SHARE_MEDIA platform) {
+        public void onStart(@NonNull SHARE_MEDIA platform) {
             if (mListener == null) {
                 return;
             }
@@ -60,7 +63,7 @@ public final class UmengShare {
          * @param platform      平台名称
          */
         @Override
-        public void onResult(SHARE_MEDIA platform) {
+        public void onResult(@NonNull SHARE_MEDIA platform) {
             if (mListener == null) {
                 return;
             }
@@ -72,15 +75,15 @@ public final class UmengShare {
          * 分享失败的回调
          *
          * @param platform      平台名称
-         * @param t             错误原因
+         * @param throwable     错误原因
          */
         @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            t.printStackTrace();
+        public void onError(@NonNull SHARE_MEDIA platform, @NonNull Throwable throwable) {
+            throwable.printStackTrace();
             if (mListener == null) {
                 return;
             }
-            mListener.onShareFail(mPlatform, t);
+            mListener.onShareFail(mPlatform, throwable);
             mListener = null;
         }
 
@@ -90,7 +93,7 @@ public final class UmengShare {
          * @param platform      平台名称
          */
         @Override
-        public void onCancel(SHARE_MEDIA platform) {
+        public void onCancel(@NonNull SHARE_MEDIA platform) {
             if (mListener == null) {
                 return;
             }
@@ -106,28 +109,34 @@ public final class UmengShare {
          *
          * @param platform      平台对象
          */
-        default void onShareStart(Platform platform) {}
+        default void onShareStart(@NonNull Platform platform) {
+            // default implementation ignored
+        }
 
         /**
          * 分享成功的回调
          *
          * @param platform      平台对象
          */
-        void onShareSuccess(Platform platform);
+        void onShareSuccess(@NonNull Platform platform);
 
         /**
          * 分享失败的回调
          *
          * @param platform      平台对象
-         * @param t             错误原因
+         * @param throwable     错误原因
          */
-        default void onShareFail(Platform platform, Throwable t) {}
+        default void onShareFail(@NonNull Platform platform, @NonNull Throwable throwable) {
+            // default implementation ignored
+        }
 
         /**
          * 分享取消的回调
          *
          * @param platform      平台对象
          */
-        default void onShareCancel(Platform platform) {}
+        default void onShareCancel(@NonNull Platform platform) {
+            // default implementation ignored
+        }
     }
 }

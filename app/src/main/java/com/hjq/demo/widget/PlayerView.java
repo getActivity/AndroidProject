@@ -104,6 +104,7 @@ public final class PlayerView extends SimpleLayout
     private OnPlayListener mListener;
 
     /** 音量管理器 */
+    @Nullable
     private final AudioManager mAudioManager;
     /** 最大音量值 */
     private int mMaxVoice;
@@ -204,7 +205,7 @@ public final class PlayerView extends SimpleLayout
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public PlayerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PlayerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         LayoutInflater.from(getContext()).inflate(R.layout.widget_player_view, this, true);
@@ -707,7 +708,7 @@ public final class PlayerView extends SimpleLayout
      */
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         if (view == this) {
 
             // 先移除之前发送的
@@ -779,7 +780,7 @@ public final class PlayerView extends SimpleLayout
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         // 满足任一条件：关闭手势控制、处于锁定状态、处于缓冲状态
         if (!mGestureEnabled || mLockMode || mLottieView.isAnimating()) {
             return super.onTouchEvent(event);
@@ -787,8 +788,10 @@ public final class PlayerView extends SimpleLayout
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mMaxVoice = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                mCurrentVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                if (mAudioManager != null) {
+                    mMaxVoice = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                    mCurrentVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                }
 
                 if (mWindow != null) {
                     mCurrentBrightnessPercent = mWindow.getAttributes().screenBrightness;
@@ -877,25 +880,27 @@ public final class PlayerView extends SimpleLayout
                         break;
                     }
 
-                    // 更新系统音量
-                    int voice = (int) Math.min(Math.max(mCurrentVolume + delta, 0), mMaxVoice);
-                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, voice, 0);
+                    if (mAudioManager != null) {
+                        // 更新系统音量
+                        int voice = (int) Math.min(Math.max(mCurrentVolume + delta, 0), mMaxVoice);
+                        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, voice, 0);
 
-                    int percent = voice * 100 / mMaxVoice;
+                        int percent = voice * 100 / mMaxVoice;
 
-                    @DrawableRes int iconId;
-                    if (percent > 100 / 3 * 2) {
-                        iconId = R.drawable.video_volume_high_ic;
-                    } else if (percent > 100 / 3) {
-                        iconId = R.drawable.video_volume_medium_ic;
-                    } else if (percent != 0) {
-                        iconId = R.drawable.video_volume_low_ic;
-                    } else {
-                        iconId = R.drawable.video_volume_mute_ic;
+                        @DrawableRes int iconId;
+                        if (percent > 100 / 3 * 2) {
+                            iconId = R.drawable.video_volume_high_ic;
+                        } else if (percent > 100 / 3) {
+                            iconId = R.drawable.video_volume_medium_ic;
+                        } else if (percent != 0) {
+                            iconId = R.drawable.video_volume_low_ic;
+                        } else {
+                            iconId = R.drawable.video_volume_mute_ic;
+                        }
+                        mLottieView.setImageResource(iconId);
+                        mMessageView.setText(String.format("%s %%", percent));
+                        post(mShowMessageRunnable);
                     }
-                    mLottieView.setImageResource(iconId);
-                    mMessageView.setText(String.format("%s %%", percent));
-                    post(mShowMessageRunnable);
                     break;
                 }
                 break;
@@ -909,7 +914,9 @@ public final class PlayerView extends SimpleLayout
                 }
             case MotionEvent.ACTION_CANCEL:
                 mTouchOrientation = -1;
-                mCurrentVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                if (mAudioManager != null) {
+                    mCurrentVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                }
                 if (mAdjustSecond != 0) {
                     // 调整播放进度
                     setProgress(getProgress() + mAdjustSecond * 1000);
@@ -982,37 +989,49 @@ public final class PlayerView extends SimpleLayout
         /**
          * 点击了返回按钮（可在此处处理返回事件）
          */
-        default void onClickBack(PlayerView view) {}
+        default void onClickBack(@NonNull PlayerView view) {
+            // default implementation ignored
+        }
 
         /**
          * 点击了锁定按钮
          */
-        default void onClickLock(PlayerView view) {}
+        default void onClickLock(@NonNull PlayerView view) {
+            // default implementation ignored
+        }
 
         /**
          * 点击了播放按钮
          */
-        default void onClickPlay(PlayerView view) {}
+        default void onClickPlay(@NonNull PlayerView view) {
+            // default implementation ignored
+        }
 
         /**
          * 播放开始（可在此处设置播放进度）
          */
-        default void onPlayStart(PlayerView view) {}
+        default void onPlayStart(@NonNull PlayerView view) {
+            // default implementation ignored
+        }
 
         /**
          * 播放进度发生改变
          */
-        default void onPlayProgress(PlayerView view) {}
+        default void onPlayProgress(@NonNull PlayerView view) {
+            // default implementation ignored
+        }
 
         /**
          * 播放结束（可在此处结束播放或者循环播放）
          */
-        default void onPlayEnd(PlayerView view) {}
+        default void onPlayEnd(@NonNull PlayerView view) {
+            // default implementation ignored
+        }
 
         /**
          * 播放出错
          */
-        default boolean onPlayError(PlayerView view, int what, int extra) {
+        default boolean onPlayError(@NonNull PlayerView view, int what, int extra) {
             return false;
         }
     }

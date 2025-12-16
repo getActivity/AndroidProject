@@ -59,13 +59,13 @@ public final class SplashActivity extends AppActivity {
                         .setListener(new MessageDialog.OnListener() {
 
                             @Override
-                            public void onConfirm(BaseDialog dialog) {
+                            public void onConfirm(@NonNull BaseDialog dialog) {
                                 InitManager.setAgreePrivacy(SplashActivity.this, true);
                                 agreePrivacyAfter();
                             }
 
                             @Override
-                            public void onCancel(BaseDialog dialog) {
+                            public void onCancel(@NonNull BaseDialog dialog) {
                                 ActivityManager.getInstance().finishAllActivities();
                             }
                         })

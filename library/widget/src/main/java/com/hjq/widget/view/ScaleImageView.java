@@ -3,6 +3,8 @@ package com.hjq.widget.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import com.hjq.widget.R;
 
@@ -16,15 +18,15 @@ public final class ScaleImageView extends AppCompatImageView {
 
     private float mScaleSize = 1.2f;
 
-    public ScaleImageView(Context context) {
+    public ScaleImageView(@NonNull Context context) {
         this(context, null);
     }
 
-    public ScaleImageView(Context context, AttributeSet attrs) {
+    public ScaleImageView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ScaleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ScaleImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         final TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ScaleImageView);

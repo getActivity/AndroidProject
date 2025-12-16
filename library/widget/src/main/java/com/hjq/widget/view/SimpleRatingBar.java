@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import com.hjq.widget.R;
 
@@ -22,10 +24,13 @@ import com.hjq.widget.R;
 public final class SimpleRatingBar extends View {
 
     /** 默认的星星图标 */
+    @Nullable
     private Drawable mNormalDrawable;
     /** 选中的星星图标 */
+    @Nullable
     private Drawable mFillDrawable;
     /** 选中的半星图标 */
+    @Nullable
     private Drawable mHalfDrawable;
 
     /** 当前星等级 */
@@ -38,24 +43,29 @@ public final class SimpleRatingBar extends View {
     private int mGradeHeight;
     /** 星星之间的间隔 */
     private int mGradeSpace;
+
     /** 星星选择跨度 */
+    @Nullable
     private GradleStep mGradeStep;
 
-    /** 星星变化监听事件 */
-    private OnRatingChangeListener mListener;
-
     /** 星星位置记录 */
+    @NonNull
     private final Rect mGradeBounds = new Rect();
 
-    public SimpleRatingBar(Context context) {
+    /** 星星变化监听事件 */
+    @Nullable
+    private OnRatingChangeListener mListener;
+
+
+    public SimpleRatingBar(@NonNull Context context) {
         this(context, null);
     }
 
-    public SimpleRatingBar(Context context, AttributeSet attrs) {
+    public SimpleRatingBar(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SimpleRatingBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SimpleRatingBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SimpleRatingBar);
@@ -93,7 +103,7 @@ public final class SimpleRatingBar extends View {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         // 如果控件处于不可用状态，直接不处理
         if (!isEnabled()) {
             return false;
@@ -137,7 +147,7 @@ public final class SimpleRatingBar extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         for (int i = 0; i < mGradeCount; i++) {
 
             int start = mGradeSpace + (mGradeWidth + mGradeSpace) * i;
@@ -262,17 +272,18 @@ public final class SimpleRatingBar extends View {
         requestLayout();
     }
 
-    public void setGradeStep(GradleStep step) {
+    public void setGradeStep(@NonNull GradleStep step) {
         mGradeStep = step;
         optimizationGradeValue();
         invalidate();
     }
 
+    @Nullable
     public GradleStep getGradeStep() {
         return mGradeStep;
     }
 
-    public void setOnRatingBarChangeListener(OnRatingChangeListener listener) {
+    public void setOnRatingBarChangeListener(@Nullable OnRatingChangeListener listener) {
         mListener = listener;
     }
 
@@ -311,6 +322,6 @@ public final class SimpleRatingBar extends View {
          * @param grade             当前星星数
          * @param touch             是否通过触摸改变
          */
-        void onRatingChanged(SimpleRatingBar ratingBar, float grade, boolean touch);
+        void onRatingChanged(@NonNull SimpleRatingBar ratingBar, float grade, boolean touch);
     }
 }
