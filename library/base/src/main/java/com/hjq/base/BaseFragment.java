@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -331,7 +330,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         if (mActivity == null) {
             return;
         }
-        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             mActivity.registerActivityLifecycleCallbacks(this);
         } else {
             mActivity.getApplication().registerActivityLifecycleCallbacks(this);
@@ -345,7 +344,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         if (mActivity == null) {
             return;
         }
-        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             mActivity.unregisterActivityLifecycleCallbacks(this);
         } else {
             mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
