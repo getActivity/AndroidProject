@@ -25,6 +25,9 @@ public final class PrivacyAgreementDialog {
         public Builder(@NonNull Context context) {
             super(context);
 
+            setCancelable(false);
+            setCanceledOnTouchOutside(false);
+
             setTitle(getString(R.string.privacy_agreement_title));
             setConfirm(getString(R.string.privacy_agreement_agree));
             setCancel(getString(R.string.privacy_agreement_disagree));
