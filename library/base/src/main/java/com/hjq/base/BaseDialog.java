@@ -53,7 +53,8 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
         ActivityAction, ResourcesAction, HandlerAction, ClickAction, AnimAction, KeyboardAction,
         DialogInterface.OnShowListener, DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
-    private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
+    @NonNull
+    private LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
     @NonNull
     private final List<BaseDialog.OnShowListener> mShowListeners = new ArrayList<>();
@@ -78,20 +79,20 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+        handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START);
+        handleLifecycleEvent(Lifecycle.Event.ON_START);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+        handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
+        handleLifecycleEvent(Lifecycle.Event.ON_STOP);
     }
 
     /**
@@ -99,7 +100,7 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
      */
     @Override
     public void onShow(DialogInterface dialog) {
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+        handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
         // 这里解释一下为什么要创建一个新的 ArrayList，这是因为执行监听方法可能会删除 List 集合中的元素
         // 例如 Builder 类中的 postDelayed 方法，就会移除监听对象，所以这里遍历可能出现 ConcurrentModificationException
         List<BaseDialog.OnShowListener> listeners = new ArrayList<>(mShowListeners);
@@ -124,7 +125,7 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
      */
     @Override
     public void onDismiss(DialogInterface dialog) {
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         List<BaseDialog.OnDismissListener> listeners = new ArrayList<>(mDismissListeners);
         for (OnDismissListener listener : listeners) {
             listener.onDismiss(this);
@@ -135,6 +136,34 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
     @Override
     public Lifecycle getLifecycle() {
         return mLifecycle;
+    }
+
+    /**
+     * 处理 Lifecycle 事件
+     */
+    public void handleLifecycleEvent(@NonNull Lifecycle.Event event) {
+        // 以下代码主要是为了解决复用 BaseDialog 对象会出现异常的问题
+        // https://github.com/androidx/androidx/blob/4bb422f5c09d4ed7200f1bdc03a463b39743af85/lifecycle/lifecycle-runtime/src/commonMain/kotlin/androidx/lifecycle/LifecycleRegistry.kt#L89
+        switch (mLifecycle.getCurrentState()) {
+            case INITIALIZED:
+                if (event == Lifecycle.Event.ON_DESTROY) {
+                    // 如果当前是初始化状态，并且下一个状态事件是销毁，必须要有 Create 事件过渡，否则会出现报错
+                    // java.lang.IllegalStateException: State must be at least 'CREATED'  to be moved to `DESTROYED` in component
+                    mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+                }
+                break;
+            case DESTROYED:
+                if (event != Lifecycle.Event.ON_DESTROY) {
+                    // 如果当前是销毁状态，并且下一个状态事件不是销毁，需要重置一下 Lifecycle，否则会出现报错
+                    // java.lang.IllegalStateException: State is 'DESTROYED' and cannot be moved to `STARTED` in component
+                    mLifecycle = new LifecycleRegistry(this);
+                }
+                break;
+            default:
+                break;
+        }
+        // 处理下一个状态事件
+        mLifecycle.handleLifecycleEvent(event);
     }
 
     /**

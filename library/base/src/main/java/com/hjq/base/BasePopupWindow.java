@@ -54,7 +54,8 @@ public class BasePopupWindow extends PopupWindow
         implements LifecycleOwner, ActivityAction, HandlerAction, ClickAction,
         AnimAction, KeyboardAction, PopupWindow.OnDismissListener {
 
-    private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
+    @NonNull
+    private LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
     @NonNull
     private final Context mContext;
@@ -155,9 +156,9 @@ public class BasePopupWindow extends PopupWindow
     }
 
     public void onShow() {
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START);
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+        handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+        handleLifecycleEvent(Lifecycle.Event.ON_START);
+        handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
         List<BasePopupWindow.OnShowListener> listeners = new ArrayList<>(mShowListeners);
         for (BasePopupWindow.OnShowListener listener : listeners) {
             listener.onShow(this);
@@ -169,9 +170,9 @@ public class BasePopupWindow extends PopupWindow
      */
     @Override
     public void onDismiss() {
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP);
-        mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
+        handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+        handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         List<BasePopupWindow.OnDismissListener> listeners = new ArrayList<>(mDismissListeners);
         for (BasePopupWindow.OnDismissListener listener : listeners) {
             listener.onDismiss(this);
@@ -200,6 +201,34 @@ public class BasePopupWindow extends PopupWindow
     public void dismiss() {
         removeCallbacks();
         super.dismiss();
+    }
+
+    /**
+     * 处理 Lifecycle 事件
+     */
+    public void handleLifecycleEvent(@NonNull Lifecycle.Event event) {
+        // 以下代码主要是为了解决复用 BasePopupWindow 对象会出现异常的问题
+        // https://github.com/androidx/androidx/blob/4bb422f5c09d4ed7200f1bdc03a463b39743af85/lifecycle/lifecycle-runtime/src/commonMain/kotlin/androidx/lifecycle/LifecycleRegistry.kt#L89
+        switch (mLifecycle.getCurrentState()) {
+            case INITIALIZED:
+                if (event == Lifecycle.Event.ON_DESTROY) {
+                    // 如果当前是初始化状态，并且下一个状态事件是销毁，必须要有 Create 事件过渡，否则会出现报错
+                    // java.lang.IllegalStateException: State must be at least 'CREATED'  to be moved to `DESTROYED` in component
+                    mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+                }
+                break;
+            case DESTROYED:
+                if (event != Lifecycle.Event.ON_DESTROY) {
+                    // 如果当前是销毁状态，并且下一个状态事件不是销毁，需要重置一下 Lifecycle，否则会出现报错
+                    // java.lang.IllegalStateException: State is 'DESTROYED' and cannot be moved to `STARTED` in component
+                    mLifecycle = new LifecycleRegistry(this);
+                }
+                break;
+            default:
+                break;
+        }
+        // 处理下一个状态事件
+        mLifecycle.handleLifecycleEvent(event);
     }
 
     @Override

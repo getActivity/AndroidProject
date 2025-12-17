@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseDialog;
+import com.hjq.base.BasePopupWindow;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
@@ -44,6 +45,9 @@ public final class DialogActivity extends AppActivity {
 
     /** 等待对话框 */
     private BaseDialog mWaitDialog;
+
+    /** 菜单弹窗 */
+    private BasePopupWindow mListPopup;
 
     @Override
     protected int getLayoutId() {
@@ -525,12 +529,16 @@ public final class DialogActivity extends AppActivity {
 
     @Override
     public void onRightClick(TitleBar titleBar) {
-        // 菜单弹窗
-        new ListPopup.Builder(this)
+        if (mListPopup == null) {
+            mListPopup = new ListPopup.Builder(this)
                 .setList("选择拍照", "选取相册")
                 .addOnShowListener(popupWindow -> toast("PopupWindow 显示了"))
                 .addOnDismissListener(popupWindow -> toast("PopupWindow 销毁了"))
                 .setListener((ListPopup.OnListener<String>) (popupWindow, position, s) -> toast("点击了：" + s))
-                .showAsDropDown(titleBar.getRightView());
+                .create();
+        }
+        if (!mListPopup.isShowing()) {
+            mListPopup.showAsDropDown(titleBar.getRightView());
+        }
     }
 }
