@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
-import androidx.core.widget.PopupWindowCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
@@ -234,33 +233,6 @@ public class BasePopupWindow extends PopupWindow
     @Override
     public <V extends View> V findViewById(@IdRes int id) {
         return getContentView().findViewById(id);
-    }
-
-    @Override
-    public void setWindowLayoutType(int type) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            super.setWindowLayoutType(type);
-        } else {
-            PopupWindowCompat.setWindowLayoutType(this, type);
-        }
-    }
-
-    @Override
-    public int getWindowLayoutType() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return super.getWindowLayoutType();
-        } else {
-            return PopupWindowCompat.getWindowLayoutType(this);
-        }
-    }
-
-    @Override
-    public void setOverlapAnchor(boolean overlapAnchor) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            super.setOverlapAnchor(overlapAnchor);
-        } else {
-            PopupWindowCompat.setOverlapAnchor(this, overlapAnchor);
-        }
     }
 
     /**
