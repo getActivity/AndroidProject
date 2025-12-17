@@ -219,6 +219,10 @@ dependencies {
     debugImplementation libs.leakCanary
     previewImplementation libs.leakCanary
 
+    debugImplementation libs.chucker
+    previewImplementation libs.chucker
+    releaseImplementation libs.chuckerNoOp
+
     // 多语种：https://github.com/getActivity/MultiLanguages
     // 悬浮窗：https://github.com/getActivity/EasyWindow
     // 日志输出：https://github.com/getActivity/Logcat

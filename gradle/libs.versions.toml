@@ -26,6 +26,7 @@ timber = "4.7.1"
 circleIndicator = "2.1.6"
 mmkv = "2.3.0"
 leakCanary = "3.0-alpha-8"
+chucker = "4.2.0"
 softInputEvent = "1.0.9"
 umengCommon = "9.8.8"
 umengAsms = "1.8.7.2"
@@ -120,6 +121,10 @@ mmkvStatic = { module = "com.tencent:mmkv-static", version.ref = "mmkv" }
 
 # LeakCanary 内存泄漏监测：https://github.com/square/leakcanary
 leakCanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }
+
+# OkHttp 抓包工具：https://github.com/ChuckerTeam/chucker
+chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
+chuckerNoOp = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 
 # 软键盘遮挡解决方案：https://github.com/liangjingkanji/soft-input-event
 softInputEvent = { module = "com.github.liangjingkanji:soft-input-event", version.ref = "softInputEvent" }

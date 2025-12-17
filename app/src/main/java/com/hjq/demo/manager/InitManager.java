@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
+import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonToken;
 import com.hjq.bar.TitleBar;
@@ -129,6 +130,7 @@ public final class InitManager {
 
         // 网络请求框架初始化
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .addInterceptor(new ChuckerInterceptor(application))
             .build();
 
         EasyConfig.with(okHttpClient)
