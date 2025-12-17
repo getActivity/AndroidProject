@@ -3,6 +3,7 @@ agp = "8.13.2"
 kotlin = "2.2.21"
 androidAop = "2.7.4"
 easyLauncher = "6.4.1"
+
 appCompat = "1.7.1"
 material = "1.13.0"
 deviceCompat = "2.5"
@@ -21,7 +22,7 @@ immersionBar = "3.2.2"
 photoView = "2.3.0"
 bugly = "4.4.7.3"
 lottie = "6.7.1"
-refreshAlpha = "3.0.0-alpha"
+refreshLayout = "3.0.0-alpha"
 timber = "4.7.1"
 circleIndicator = "2.1.6"
 mmkv = "2.3.0"
@@ -34,7 +35,7 @@ umengShareCore = "7.3.7"
 umengShareWX = "7.3.7"
 umengShareQQ = "7.3.7"
 qqSdk = "3.5.18.0"
-wechatSdk = "6.8.34"
+wxSdk = "6.8.34"
 
 [plugins]
 # Android 应用构建插件（AGP）：https://developer.android.com/build
@@ -46,7 +47,7 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 # Android AOP 插件：切面编程框架：https://github.com/FlyJingFish/AndroidAOP
 aop = { id = "io.github.flyjingfish.androidaop", version.ref = "androidAop" }
 # 多构建类型图标标记插件：在不同 buildType 添加角标：https://github.com/usefulness/easylauncher-gradle-plugin
-easylauncher = { id = "com.starter.easylauncher", version.ref = "easyLauncher" }
+easyLauncher = { id = "com.starter.easylauncher", version.ref = "easyLauncher" }
 
 [libraries]
 # AndroidX AppCompat：兼容支持库（ActionBar 等）
@@ -107,8 +108,8 @@ bugly = { module = "com.tencent.bugly_16kb:bugly-pro", version.ref = "bugly" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 # SmartRefreshLayout 刷新控件：https://github.com/scwang90/SmartRefreshLayout
-refreshLayoutKernel = { module = "io.github.scwang90:refresh-layout-kernel", version.ref = "refreshAlpha" }
-refreshHeaderMaterial = { module = "io.github.scwang90:refresh-header-material", version.ref = "refreshAlpha" }
+refreshLayoutKernel = { module = "io.github.scwang90:refresh-layout-kernel", version.ref = "refreshLayout" }
+refreshHeaderMaterial = { module = "io.github.scwang90:refresh-header-material", version.ref = "refreshLayout" }
 
 # Timber 日志打印：https://github.com/JakeWharton/timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -145,4 +146,4 @@ umengShareQQ = { module = "com.umeng.umsdk:share-qq", version.ref = "umengShareQ
 # QQ 开放平台组件文档：https://wikinew.open.qq.com/#/iwiki/4007776153
  qqSdk = { module = "com.tencent.qq:open-sdk", version.ref = "qqSdk" }
 # 微信开放平台组件文档：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
- wechatSdk = { module = "com.tencent.mm.opensdk:wechat-sdk-android", version.ref = "wechatSdk" }
+ wxSdk = { module = "com.tencent.mm.opensdk:wechat-sdk-android", version.ref = "wxSdk" }
