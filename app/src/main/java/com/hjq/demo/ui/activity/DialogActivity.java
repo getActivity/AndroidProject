@@ -413,14 +413,16 @@ public final class DialogActivity extends AppActivity {
 
             toast("记得改好第三方 AppID 和 Secret，否则会调不起来哦");
 
-            UMWeb content = new UMWeb("https://github.com/getActivity/AndroidProject");
-            content.setTitle("Github");
-            content.setThumb(new UMImage(this, R.mipmap.launcher_ic));
-            content.setDescription(getString(R.string.app_name));
+            UMWeb umWeb = new UMWeb("https://github.com/getActivity/AndroidProject");
+            umWeb.setTitle("Github");
+            umWeb.setThumb(new UMImage(this, R.mipmap.launcher_ic));
+            umWeb.setDescription(getString(R.string.app_name));
+
+            /* UMImage umImage = new UMImage(this, R.mipmap.launcher_ic); */
 
             // 分享对话框
             new ShareDialog.Builder(this)
-                    .setShareLink(content)
+                    .setShareLink(umWeb)
                     .setListener(new UmengShare.OnShareListener() {
 
                         @Override
