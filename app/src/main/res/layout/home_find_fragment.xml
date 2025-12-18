@@ -22,14 +22,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.hjq.widget.view.ClearEditText
+            <com.hjq.custom.widget.view.ClearEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp_20"
                 android:text="这是一个带清除的按钮的EditText" />
 
-            <com.hjq.widget.view.PasswordEditText
+            <com.hjq.custom.widget.view.PasswordEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 android:singleLine="true"
                 android:text="78797078" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:hint="这里只能输入手机号（只能以 1 开头）"
                 app:regexType="mobile" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:hint="这里只能输入中文（普通的中文字符）"
                 app:regexType="chinese" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 android:hint="这里只能输入英文（大写和小写的英文）"
                 app:regexType="english" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:hint="这里只能输入数字（只允许输入纯数字）"
                 app:regexType="number" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:hint="这里只能输入数量（非 0 开头的数字）"
                 app:regexType="count" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 android:hint="这里只能输入用户名（中文、英文、数字）"
                 app:regexType="name" />
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
 
             </LinearLayout>
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -238,20 +238,20 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.hjq.widget.view.SwitchButton
+                <com.hjq.custom.widget.view.SwitchButton
                     android:id="@+id/sb_home_find_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
                     android:checked="true" />
 
-                <com.hjq.widget.view.SwitchButton
+                <com.hjq.custom.widget.view.SwitchButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
                     android:checked="false" />
 
-                <com.hjq.widget.view.SwitchButton
+                <com.hjq.custom.widget.view.SwitchButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
@@ -267,19 +267,19 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.hjq.widget.view.CountdownView
+                <com.hjq.custom.widget.view.CountdownView
                     android:id="@+id/cv_home_find_countdown"
                     style="@style/CountdownViewStyle"
                     android:layout_marginHorizontal="@dimen/dp_15" />
 
-                <com.hjq.widget.view.CountdownView
+                <com.hjq.custom.widget.view.CountdownView
                     style="@style/CountdownViewStyle"
                     android:layout_marginHorizontal="@dimen/dp_15"
                     android:enabled="false" />
 
             </LinearLayout>
 
-            <com.hjq.widget.view.SimpleRatingBar
+            <com.hjq.custom.widget.view.SimpleRatingBar
                 android:id="@+id/srb_home_find_rating_bar_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -288,7 +288,7 @@
                 app:grade="2.5"
                 app:gradeStep="half" />
 
-            <com.hjq.widget.view.SimpleRatingBar
+            <com.hjq.custom.widget.view.SimpleRatingBar
                 android:id="@+id/srb_home_find_rating_bar_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -297,7 +297,7 @@
                 app:grade="3"
                 app:gradeStep="one" />
 
-            <com.hjq.widget.view.DrawableTextView
+            <com.hjq.custom.widget.view.DrawableTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

@@ -1,4 +1,4 @@
-package com.hjq.widget.view;
+package com.hjq.custom.widget.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
-import com.hjq.widget.R;
+import com.hjq.custom.widget.R;
 import java.util.regex.Pattern;
 
 /**

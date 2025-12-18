@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.custom.widget.view.SubmitButton;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
@@ -36,7 +37,6 @@ import com.hjq.umeng.Platform;
 import com.hjq.umeng.UmengClient;
 import com.hjq.umeng.UmengLogin;
 import com.hjq.umeng.WXEntryActivity;
-import com.hjq.widget.view.SubmitButton;
 
 /**
  *    author : Android 轮子哥

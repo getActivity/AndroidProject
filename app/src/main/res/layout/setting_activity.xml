@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_change_language"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                 app:bar_startText="@string/setting_language_switchover"
                 tools:bar_endHint="@string/setting_language_simple" />
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_check_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,9 +51,9 @@
                     app:shape_solidColor="#F85E5E"
                     app:shape_type="rectangle" />
 
-            </com.hjq.widget.layout.SettingBar>
+            </com.hjq.custom.widget.layout.SettingBar>
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_modify_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 app:bar_startText="@string/setting_phone"
                 tools:bar_endText="181****1413" />
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_modify_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 app:bar_startText="@string/setting_password"
                 tools:bar_endText="密码强度较低" />
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_read_agreement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,37 +78,37 @@
                 app:bar_endDrawable="@drawable/arrows_right_ic"
                 app:bar_startText="@string/setting_agreement" />
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_about_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:bar_endDrawable="@drawable/arrows_right_ic"
                 app:bar_startText="@string/setting_about" />
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_auto_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_15"
                 app:bar_startText="@string/setting_auto">
 
-                <com.hjq.widget.view.SwitchButton
+                <com.hjq.custom.widget.view.SwitchButton
                     android:id="@+id/sb_setting_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginHorizontal="@dimen/dp_15" />
 
-            </com.hjq.widget.layout.SettingBar>
+            </com.hjq.custom.widget.layout.SettingBar>
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_clear_cache"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:bar_endDrawable="@drawable/arrows_right_ic"
                 app:bar_startText="@string/setting_cache" />
 
-            <com.hjq.widget.layout.SettingBar
+            <com.hjq.custom.widget.layout.SettingBar
                 android:id="@+id/sb_setting_exit_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

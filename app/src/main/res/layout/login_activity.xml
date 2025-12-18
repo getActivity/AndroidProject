@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.hjq.widget.view.ClearEditText
+        <com.hjq.custom.widget.view.ClearEditText
             android:id="@+id/et_login_phone"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             style="@style/HorizontalLineStyle"
             android:layout_marginHorizontal="@dimen/dp_40" />
 
-        <com.hjq.widget.view.PasswordEditText
+        <com.hjq.custom.widget.view.PasswordEditText
             android:id="@+id/et_login_password"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
             android:text="@string/login_forget"
             android:textColor="@color/common_accent_color" />
 
-        <com.hjq.widget.view.SubmitButton
+        <com.hjq.custom.widget.view.SubmitButton
             android:id="@+id/btn_login_commit"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.hjq.widget.view.ScaleImageView
+        <com.hjq.custom.widget.view.ScaleImageView
             android:id="@+id/iv_login_qq"
             android:layout_width="@dimen/dp_35"
             android:layout_height="@dimen/dp_35"
@@ -141,7 +141,7 @@
             app:scaleRatio="1.2"
             app:srcCompat="@drawable/login_qq_ic" />
 
-        <com.hjq.widget.view.ScaleImageView
+        <com.hjq.custom.widget.view.ScaleImageView
             android:id="@+id/iv_login_wechat"
             android:layout_width="@dimen/dp_35"
             android:layout_height="@dimen/dp_35"

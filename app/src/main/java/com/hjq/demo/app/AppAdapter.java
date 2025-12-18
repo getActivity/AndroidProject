@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.hjq.base.BaseAdapter;
-import com.hjq.widget.layout.WrapRecyclerView;
+import com.hjq.custom.widget.layout.WrapRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 

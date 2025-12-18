@@ -1,4 +1,4 @@
-package com.hjq.widget.layout;
+package com.hjq.custom.widget.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.hjq.widget.R;
+import com.hjq.custom.widget.R;
 
 /**
  *    author : Android 轮子哥

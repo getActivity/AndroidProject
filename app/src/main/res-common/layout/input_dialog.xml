@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hjq.widget.view.RegexEditText xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hjq.custom.widget.view.RegexEditText xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tv_input_message"
     android:layout_width="match_parent"

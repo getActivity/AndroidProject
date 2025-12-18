@@ -18,7 +18,7 @@
         app:lottie_loop="false"
         app:lottie_rawRes="@raw/welcome" />
 
-    <com.hjq.widget.view.SlantedTextView
+    <com.hjq.custom.widget.view.SlantedTextView
         android:id="@+id/iv_splash_debug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

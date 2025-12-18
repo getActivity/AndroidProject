@@ -4,7 +4,7 @@ plugins {
 apply from : '../../common.gradle'
 
 android {
-    namespace 'com.hjq.widget'
+    namespace 'com.hjq.custom.widget'
 }
 
 dependencies {

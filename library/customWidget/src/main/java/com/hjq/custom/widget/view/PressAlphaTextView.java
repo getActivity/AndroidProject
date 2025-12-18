@@ -1,4 +1,4 @@
-package com.hjq.widget.view;
+package com.hjq.custom.widget.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

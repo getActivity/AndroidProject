@@ -21,7 +21,7 @@
         android:textColor="#A4A4A4"
         android:textSize="@dimen/sp_14" />
 
-    <com.hjq.widget.view.RegexEditText
+    <com.hjq.custom.widget.view.RegexEditText
         android:id="@+id/et_phone_reset_phone"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <com.hjq.widget.view.RegexEditText
+        <com.hjq.custom.widget.view.RegexEditText
             android:id="@+id/et_phone_reset_code"
             style="@style/EditTextStyle"
             android:layout_width="0px"
@@ -64,7 +64,7 @@
             android:singleLine="true"
             app:regexType="number" />
 
-        <com.hjq.widget.view.CountdownView
+        <com.hjq.custom.widget.view.CountdownView
             android:id="@+id/cv_phone_reset_countdown"
             style="@style/CountdownViewStyle"
             android:layout_marginHorizontal="@dimen/dp_15" />

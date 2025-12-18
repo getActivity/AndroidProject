@@ -6,6 +6,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.base.BaseDialog;
+import com.hjq.custom.widget.layout.SettingBar;
+import com.hjq.custom.widget.view.SwitchButton;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
@@ -25,8 +27,6 @@ import com.hjq.demo.ui.dialog.UpdateDialog;
 import com.hjq.demo.ui.dialog.common.MenuDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallbackProxy;
-import com.hjq.widget.layout.SettingBar;
-import com.hjq.widget.view.SwitchButton;
 
 /**
  *    author : Android 轮子哥

@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <com.hjq.widget.view.RegexEditText
+            <com.hjq.custom.widget.view.RegexEditText
                 android:id="@+id/et_safe_code"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
 
         </FrameLayout>
 
-        <com.hjq.widget.view.CountdownView
+        <com.hjq.custom.widget.view.CountdownView
             android:id="@+id/cv_safe_countdown"
             style="@style/CountdownViewStyle"
             android:layout_marginHorizontal="@dimen/dp_5" />

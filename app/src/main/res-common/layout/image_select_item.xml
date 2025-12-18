@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     tools:context=".ui.adapter.common.ImageSelectAdapter">
 
-    <com.hjq.widget.view.ScaleImageView
+    <com.hjq.custom.widget.view.ScaleImageView
         android:id="@+id/iv_image_select_image"
         android:layout_width="match_parent"
         android:layout_height="0px"

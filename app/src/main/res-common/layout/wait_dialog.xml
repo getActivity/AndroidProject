@@ -28,7 +28,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/progress" />
 
-        <com.hjq.widget.view.SmartTextView
+        <com.hjq.custom.widget.view.SmartTextView
             android:id="@+id/tv_wait_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

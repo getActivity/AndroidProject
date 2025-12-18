@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hjq.widget.layout.SimpleLayout
+<com.hjq.custom.widget.layout.SimpleLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sl_select_layout"
@@ -15,4 +15,4 @@
         tools:itemCount="5"
         tools:listitem="@layout/select_item" />
 
-</com.hjq.widget.layout.SimpleLayout>
+</com.hjq.custom.widget.layout.SimpleLayout>

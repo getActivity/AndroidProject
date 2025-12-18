@@ -1,4 +1,4 @@
-package com.hjq.widget.layout;
+package com.hjq.custom.widget.layout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

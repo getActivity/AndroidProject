@@ -23,7 +23,7 @@
         app:lottie_loop="true"
         tools:src="@drawable/status_network_ic" />
 
-    <com.hjq.widget.view.SmartTextView
+    <com.hjq.custom.widget.view.SmartTextView
         android:id="@+id/tv_status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

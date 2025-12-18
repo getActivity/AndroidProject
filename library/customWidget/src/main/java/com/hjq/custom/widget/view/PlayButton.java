@@ -1,4 +1,4 @@
-package com.hjq.widget.view;
+package com.hjq.custom.widget.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.hjq.custom.widget.R;
 import com.hjq.smallest.width.SmallestWidthAdaptation;
-import com.hjq.widget.R;
 
 /**
  *    author : codeestX & Android 轮子哥

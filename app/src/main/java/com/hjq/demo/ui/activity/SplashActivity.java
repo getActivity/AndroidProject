@@ -9,6 +9,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseDialog;
+import com.hjq.custom.widget.view.SlantedTextView;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.api.UserInfoApi;
@@ -20,7 +21,6 @@ import com.hjq.demo.ui.dialog.PrivacyAgreementDialog;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallbackProxy;
-import com.hjq.widget.view.SlantedTextView;
 
 /**
  *    author : Android 轮子哥

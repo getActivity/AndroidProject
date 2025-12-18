@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     tools:context=".ui.adapter.common.VideoSelectAdapter">
 
-    <com.hjq.widget.view.ScaleImageView
+    <com.hjq.custom.widget.view.ScaleImageView
         android:id="@+id/iv_video_select_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

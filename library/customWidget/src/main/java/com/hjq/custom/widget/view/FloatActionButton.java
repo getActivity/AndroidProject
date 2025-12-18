@@ -1,4 +1,4 @@
-package com.hjq.widget.view;
+package com.hjq.custom.widget.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;

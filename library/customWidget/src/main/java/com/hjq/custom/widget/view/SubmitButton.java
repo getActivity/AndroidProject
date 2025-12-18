@@ -1,4 +1,4 @@
-package com.hjq.widget.view;
+package com.hjq.custom.widget.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,7 +19,7 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import com.hjq.widget.R;
+import com.hjq.custom.widget.R;
 
 /**
  *    author : Unstoppable & Android 轮子哥

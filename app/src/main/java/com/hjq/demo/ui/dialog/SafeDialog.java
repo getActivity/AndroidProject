@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.base.BaseDialog;
+import com.hjq.custom.widget.view.CountdownView;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.http.api.GetCodeApi;
@@ -16,7 +17,6 @@ import com.hjq.demo.ui.dialog.common.StyleDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnHttpListener;
 import com.hjq.toast.Toaster;
-import com.hjq.widget.view.CountdownView;
 
 /**
  *    author : Android 轮子哥

@@ -32,7 +32,7 @@
 
         </com.hjq.demo.widget.StatusLayout>
 
-        <com.hjq.widget.view.FloatActionButton
+        <com.hjq.custom.widget.view.FloatActionButton
             android:id="@+id/fab_image_select_floating"
             android:layout_width="@dimen/dp_60"
             android:layout_height="@dimen/dp_60"

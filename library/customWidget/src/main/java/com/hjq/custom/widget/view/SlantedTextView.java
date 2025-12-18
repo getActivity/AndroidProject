@@ -1,4 +1,4 @@
-package com.hjq.widget.view;
+package com.hjq.custom.widget.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,8 +21,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import com.hjq.custom.widget.R;
 import com.hjq.smallest.width.SmallestWidthAdaptation;
-import com.hjq.widget.R;
 
 /**
  *    author : HaoZhang & Android 轮子哥

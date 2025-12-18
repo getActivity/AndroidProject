@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import com.hjq.custom.widget.view.CountdownView;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
@@ -23,7 +24,6 @@ import com.hjq.demo.ui.dialog.common.TipsDialog;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallbackProxy;
 import com.hjq.toast.Toaster;
-import com.hjq.widget.view.CountdownView;
 
 /**
  *    author : Android 轮子哥

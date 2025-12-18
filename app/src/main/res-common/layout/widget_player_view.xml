@@ -73,7 +73,7 @@
             app:srcCompat="@drawable/video_lock_open_ic"
             tools:visibility="visible" />
 
-        <com.hjq.widget.view.PlayButton
+        <com.hjq.custom.widget.view.PlayButton
             android:id="@+id/iv_player_view_control"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/progress" />
 
-            <com.hjq.widget.view.SmartTextView
+            <com.hjq.custom.widget.view.SmartTextView
                 android:id="@+id/tv_player_view_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

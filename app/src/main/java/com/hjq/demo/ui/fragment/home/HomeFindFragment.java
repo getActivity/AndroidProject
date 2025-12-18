@@ -7,15 +7,15 @@ import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.hjq.custom.widget.view.CountdownView;
+import com.hjq.custom.widget.view.SimpleRatingBar;
+import com.hjq.custom.widget.view.SwitchButton;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.TitleBarFragment;
 import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.ui.activity.HomeActivity;
 import com.hjq.smallest.width.SmallestWidthAdaptation;
-import com.hjq.widget.view.CountdownView;
-import com.hjq.widget.view.SimpleRatingBar;
-import com.hjq.widget.view.SwitchButton;
 
 /**
  *    author : Android 轮子哥

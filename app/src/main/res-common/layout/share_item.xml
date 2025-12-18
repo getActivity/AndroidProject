@@ -10,7 +10,7 @@
     android:paddingBottom="@dimen/dp_15"
     tools:context=".ui.dialog.common.ShareDialog">
 
-    <com.hjq.widget.view.ScaleImageView
+    <com.hjq.custom.widget.view.ScaleImageView
         android:id="@+id/iv_share_image"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"

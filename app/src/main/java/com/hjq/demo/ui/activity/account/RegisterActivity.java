@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseActivity;
+import com.hjq.custom.widget.view.CountdownView;
+import com.hjq.custom.widget.view.SubmitButton;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.aop.SingleClick;
@@ -22,8 +24,6 @@ import com.hjq.demo.manager.InputTextManager;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.HttpCallbackProxy;
-import com.hjq.widget.view.CountdownView;
-import com.hjq.widget.view.SubmitButton;
 
 /**
  *    author : Android 轮子哥

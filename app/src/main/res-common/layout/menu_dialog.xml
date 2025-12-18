@@ -15,7 +15,7 @@
         app:cardCornerRadius="@dimen/dialog_ui_round_size"
         app:cardElevation="0px">
 
-        <com.hjq.widget.layout.SimpleLayout
+        <com.hjq.custom.widget.layout.SimpleLayout
             android:id="@+id/sl_menu_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
@@ -27,7 +27,7 @@
                 tools:layoutManager="LinearLayoutManager"
                 tools:listitem="@layout/menu_item" />
 
-        </com.hjq.widget.layout.SimpleLayout>
+        </com.hjq.custom.widget.layout.SimpleLayout>
 
     </androidx.cardview.widget.CardView>
 
@@ -39,7 +39,7 @@
         app:cardCornerRadius="@dimen/dialog_ui_round_size"
         app:cardElevation="0px">
 
-        <com.hjq.widget.view.SmartTextView
+        <com.hjq.custom.widget.view.SmartTextView
             android:id="@+id/tv_menu_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

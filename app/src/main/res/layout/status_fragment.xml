@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         app:srlEnablePreviewInEditMode="false">
 
-        <com.hjq.widget.layout.WrapRecyclerView
+        <com.hjq.custom.widget.layout.WrapRecyclerView
             android:id="@+id/rv_status_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
