@@ -65,6 +65,11 @@ public final class PasswordEditText extends RegexEditText
         super.setOnTouchListener(this);
         super.setOnFocusChangeListener(this);
         super.addTextChangedListener(this);
+
+        // 适配 RTL 特性
+        if (getTextAlignment() == TEXT_ALIGNMENT_GRAVITY) {
+            setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
+        }
     }
 
     private void setDrawableVisible(boolean visible) {
@@ -131,17 +136,12 @@ public final class PasswordEditText extends RegexEditText
         int x = (int) event.getX();
 
         // 是否触摸了 Drawable
-        boolean touchDrawable = false;
-        // 获取布局方向
-        int layoutDirection = getLayoutDirection();
-        if (layoutDirection == LAYOUT_DIRECTION_LTR) {
-            // 从左往右
-            touchDrawable = x > getWidth() - mCurrentDrawable.getIntrinsicWidth() - getPaddingEnd() &&
-                    x < getWidth() - getPaddingEnd();
-        } else if (layoutDirection == LAYOUT_DIRECTION_RTL) {
-            // 从右往左
-            touchDrawable = x > getPaddingStart() &&
-                    x < getPaddingStart() + mCurrentDrawable.getIntrinsicWidth();
+        final boolean touchDrawable;
+        // 适配 RTL 特性
+        if (getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+            touchDrawable = x > getPaddingStart() && x < getPaddingStart() + mCurrentDrawable.getIntrinsicWidth();
+        } else {
+            touchDrawable = x > getWidth() - mCurrentDrawable.getIntrinsicWidth() - getPaddingEnd() && x < getWidth() - getPaddingEnd();
         }
 
         if (mCurrentDrawable.isVisible() && touchDrawable) {

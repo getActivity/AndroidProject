@@ -1,5 +1,6 @@
 package com.hjq.demo.ui.activity.account;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,16 @@ public final class PersonalDataActivity extends AppActivity {
         mIdView = findViewById(R.id.sb_person_data_id);
         mNameView = findViewById(R.id.sb_person_data_name);
         mAddressView = findViewById(R.id.sb_person_data_address);
+
+        // 适配 RTL 特性
+        Drawable iconDrawable;
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            iconDrawable = getDrawable(R.drawable.arrows_left_ic);
+        } else {
+            iconDrawable = getDrawable(R.drawable.arrows_right_ic);
+        }
+        mAddressView.setEndDrawable(iconDrawable);
+
         setOnClickListener(mAvatarLayout, mAvatarView, mNameView, mAddressView);
     }
 
@@ -66,11 +77,11 @@ public final class PersonalDataActivity extends AppActivity {
                 .transform(new MultiTransformation<>(new CenterCrop(), new CircleCrop()))
                 .into(mAvatarView);
 
-        mIdView.setRightText("880634");
-        mNameView.setRightText("Android 轮子哥");
+        mIdView.setEndText("880634");
+        mNameView.setEndText("Android 轮子哥");
 
         String address = mProvince + mCity + mArea;
-        mAddressView.setRightText(address);
+        mAddressView.setEndText(address);
     }
 
     @SingleClick
@@ -92,7 +103,7 @@ public final class PersonalDataActivity extends AppActivity {
         } else if (view == mNameView) {
             new InputDialog.Builder(this)
                     .setTitle(getString(R.string.personal_data_name_hint))
-                    .setContent(mNameView.getRightText())
+                    .setContent(mNameView.getEndText())
                     //.setHint(getString(R.string.personal_data_name_hint))
                     //.setConfirm("确定")
                     // 设置 null 表示不显示取消按钮
@@ -100,8 +111,8 @@ public final class PersonalDataActivity extends AppActivity {
                     // 设置点击按钮后不关闭对话框
                     //.setAutoDismiss(false)
                     .setListener((dialog, content) -> {
-                        if (!mNameView.getRightText().equals(content)) {
-                            mNameView.setRightText(content);
+                        if (!mNameView.getEndText().equals(content)) {
+                            mNameView.setEndText(content);
                         }
                     })
                     .show();
@@ -116,11 +127,11 @@ public final class PersonalDataActivity extends AppActivity {
                     //.setIgnoreArea()
                     .setListener((dialog, province, city, area) -> {
                         String address = province + city + area;
-                        if (!mAddressView.getRightText().equals(address)) {
+                        if (!mAddressView.getEndText().equals(address)) {
                             mProvince = province;
                             mCity = city;
                             mArea = area;
-                            mAddressView.setRightText(address);
+                            mAddressView.setEndText(address);
                         }
                     })
                     .show();

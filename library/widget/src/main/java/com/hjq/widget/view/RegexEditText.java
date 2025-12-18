@@ -88,6 +88,11 @@ public class RegexEditText extends AppCompatEditText implements InputFilter {
         }
 
         array.recycle();
+
+        // 适配 RTL 特性
+        if (getTextAlignment() == TEXT_ALIGNMENT_GRAVITY) {
+            setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
+        }
     }
 
     /**

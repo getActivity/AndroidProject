@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -66,7 +67,7 @@ public final class PlayerView extends SimpleLayout
 
     private final ViewGroup mTopLayout;
     private final TextView mTitleView;
-    private final View mLeftView;
+    private final ImageView mBackView;
 
     private final ViewGroup mBottomLayout;
     private final TextView mPlayTime;
@@ -210,7 +211,7 @@ public final class PlayerView extends SimpleLayout
 
         LayoutInflater.from(getContext()).inflate(R.layout.widget_player_view, this, true);
         mTopLayout = findViewById(R.id.ll_player_view_top);
-        mLeftView = findViewById(R.id.iv_player_view_left);
+        mBackView = findViewById(R.id.iv_player_view_left);
         mTitleView = findViewById(R.id.tv_player_view_title);
 
         mBottomLayout = findViewById(R.id.ll_player_view_bottom);
@@ -226,7 +227,7 @@ public final class PlayerView extends SimpleLayout
         mLottieView = findViewById(R.id.lav_player_view_lottie);
         mMessageView = findViewById(R.id.tv_player_view_message);
 
-        mLeftView.setOnClickListener(this);
+        mBackView.setOnClickListener(this);
         mControlView.setOnClickListener(this);
         mLockView.setOnClickListener(this);
         this.setOnClickListener(this);
@@ -239,6 +240,15 @@ public final class PlayerView extends SimpleLayout
         mVideoView.setOnErrorListener(this);
 
         mAudioManager = ContextCompat.getSystemService(getContext(), AudioManager.class);
+
+        Drawable backIconDrawable;
+        // 注意这里不要用 View 的 getLayoutDirection() 来判断，因为获取到的不准确
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            backIconDrawable = ContextCompat.getDrawable(context, R.drawable.arrows_right_ic);
+        } else {
+            backIconDrawable = ContextCompat.getDrawable(context, R.drawable.arrows_left_ic);
+        }
+        mBackView.setImageDrawable(backIconDrawable);
 
         Activity activity = getActivity();
         if (activity != null) {
@@ -400,7 +410,7 @@ public final class PlayerView extends SimpleLayout
      */
     public void setOnPlayListener(@Nullable OnPlayListener listener) {
         mListener = listener;
-        mLeftView.setVisibility(mListener != null ? VISIBLE : INVISIBLE);
+        mBackView.setVisibility(mListener != null ? VISIBLE : INVISIBLE);
     }
 
     /**
@@ -725,7 +735,7 @@ public final class PlayerView extends SimpleLayout
             post(mShowControllerRunnable);
             postDelayed(mHideControllerRunnable, CONTROLLER_TIME);
 
-        } else if (view == mLeftView) {
+        } else if (view == mBackView) {
 
             if (mListener == null) {
                 return;
@@ -786,6 +796,8 @@ public final class PlayerView extends SimpleLayout
             return super.onTouchEvent(event);
         }
 
+        int layoutDirection = getResources().getConfiguration().getLayoutDirection();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (mAudioManager != null) {
@@ -824,13 +836,21 @@ public final class PlayerView extends SimpleLayout
 
                 // 如果手指触摸方向是水平的
                 if (mTouchOrientation == LinearLayout.HORIZONTAL) {
-                    int second = -(int) (distanceX / (float) getWidth() * 60f);
+                    int second = -(int) (distanceX / getWidth() * 60f);
+                    if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+                        second = -second;
+                    }
                     int progress = getProgress() + second * 1000;
                     if (progress >= 0 && progress <= getDuration()) {
                         mAdjustSecond = second;
-                        mLottieView.setImageResource(mAdjustSecond < 0 ?
-                                R.drawable.video_schedule_rewind_ic :
-                                R.drawable.video_schedule_forward_ic);
+                        @DrawableRes
+                        int imageResource;
+                        if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                            imageResource = mAdjustSecond < 0 ? R.drawable.video_schedule_rewind_ic : R.drawable.video_schedule_forward_ic;
+                        } else {
+                            imageResource = mAdjustSecond < 0 ? R.drawable.video_schedule_forward_ic : R.drawable.video_schedule_rewind_ic;
+                        }
+                        mLottieView.setImageResource(imageResource);
                         mMessageView.setText(String.format("%s s", Math.abs(mAdjustSecond)));
                         post(mShowMessageRunnable);
                     }
@@ -840,7 +860,8 @@ public final class PlayerView extends SimpleLayout
                 // 如果手指触摸方向是垂直的
                 if (mTouchOrientation == LinearLayout.VERTICAL) {
                     // 判断触摸点是在屏幕左边还是右边
-                    if ((int) event.getX() < getWidth() / 2) {
+                    if ((layoutDirection == View.LAYOUT_DIRECTION_LTR && (int) event.getX() < getWidth() / 2) ||
+                        (layoutDirection == View.LAYOUT_DIRECTION_RTL && (int) event.getX() > getWidth() / 2)) {
                         // 手指在屏幕左边
                         float delta = (distanceY / getHeight()) * WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
                         if (delta == 0) {

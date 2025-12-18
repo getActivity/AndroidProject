@@ -300,6 +300,13 @@ public final class SwitchButton extends View {
             return;
         }
 
+        // 适配 RTL 特性
+        int layoutDirection = getResources().getConfiguration().getLayoutDirection();
+        if (layoutDirection == LAYOUT_DIRECTION_RTL) {
+            canvas.save();
+            canvas.scale(-1f, 1f, mCenterX, mCenterY);
+        }
+
         mPaint.setAntiAlias(true);
 
         final boolean isOn = (mCheckedState == STATE_SWITCH_ON || mCheckedState == STATE_SWITCH_ON2);
@@ -351,6 +358,10 @@ public final class SwitchButton extends View {
         mPaint.reset();
         if (mAnim1 > 0 || mAnim2 > 0) {
             invalidate();
+        }
+
+        if (layoutDirection == LAYOUT_DIRECTION_RTL) {
+            canvas.restore();
         }
     }
 

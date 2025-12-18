@@ -78,9 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginStart="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_15"
-            android:layout_marginEnd="@dimen/dp_60"
+            android:layout_marginEnd="@dimen/dp_50"
             android:text="@string/login_forget"
             android:textColor="@color/common_accent_color" />
 

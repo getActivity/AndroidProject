@@ -450,6 +450,8 @@ public final class AddressDialog {
                     (int) getResources().getDimension(R.dimen.dp_10),
                     (int) getResources().getDimension(R.dimen.dp_20),
                     (int) getResources().getDimension(R.dimen.dp_10));
+            // 适配 RTL 特性
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             return new ViewHolder(textView);
         }
 

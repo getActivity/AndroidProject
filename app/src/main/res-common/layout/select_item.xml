@@ -17,6 +17,7 @@
         android:paddingHorizontal="@dimen/dp_10"
         android:paddingVertical="@dimen/dp_10"
         android:singleLine="true"
+        android:textAlignment="viewStart"
         android:textColor="@color/black80"
         android:textSize="@dimen/sp_15"
         tools:text="条目" />

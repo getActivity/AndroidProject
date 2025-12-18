@@ -50,6 +50,11 @@ public final class ClearEditText extends RegexEditText
         super.setOnTouchListener(this);
         super.setOnFocusChangeListener(this);
         super.addTextChangedListener(this);
+
+        // 适配 RTL 特性
+        if (getTextAlignment() == TEXT_ALIGNMENT_GRAVITY) {
+            setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
+        }
     }
 
     private void setDrawableVisible(boolean visible) {
@@ -95,19 +100,14 @@ public final class ClearEditText extends RegexEditText
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         int x = (int) event.getX();
-
         // 是否触摸了 Drawable
-        boolean touchDrawable = false;
-        // 获取布局方向
-        int layoutDirection = getLayoutDirection();
-        if (layoutDirection == LAYOUT_DIRECTION_LTR) {
-            // 从左往右
+        final boolean touchDrawable;
+        // 适配 RTL 特性
+        if (getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+            touchDrawable = x > getPaddingStart() && x < getPaddingStart() + mClearDrawable.getIntrinsicWidth();
+        } else {
             touchDrawable = x > getWidth() - mClearDrawable.getIntrinsicWidth() - getPaddingEnd() &&
-                    x < getWidth() - getPaddingEnd();
-        } else if (layoutDirection == LAYOUT_DIRECTION_RTL) {
-            // 从右往左
-            touchDrawable = x > getPaddingStart() &&
-                    x < getPaddingStart() + mClearDrawable.getIntrinsicWidth();
+                x < getWidth() - getPaddingEnd();
         }
 
         if (mClearDrawable.isVisible() && touchDrawable) {

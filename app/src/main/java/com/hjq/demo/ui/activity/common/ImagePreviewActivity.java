@@ -70,7 +70,9 @@ public final class ImagePreviewActivity extends AppActivity
     }
 
     private ViewPager2 mViewPager2;
-    private ImagePreviewAdapter mAdapter;
+
+    @NonNull
+    private final ImagePreviewAdapter mAdapter = new ImagePreviewAdapter(this);
 
     /** 圆圈指示器 */
     private CircleIndicator3 mCircleIndicatorView;
@@ -83,7 +85,14 @@ public final class ImagePreviewActivity extends AppActivity
         @SuppressLint("SetTextI18n")
         @Override
         public void onPageSelected(int position) {
-            mTextIndicatorView.setText((position + 1) + "/" + mAdapter.getCount());
+            // 适配 RTL 特性
+            String text;
+            if (mAdapter.getContext().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                text = mAdapter.getCount() + "/" + (position + 1);
+            } else {
+                text = (position + 1) + "/" + mAdapter.getCount();
+            }
+            mTextIndicatorView.setText(text);
         }
     };
 
@@ -107,7 +116,6 @@ public final class ImagePreviewActivity extends AppActivity
             finish();
             return;
         }
-        mAdapter = new ImagePreviewAdapter(this);
         mAdapter.setData(images);
         mAdapter.setOnItemClickListener(this);
         mViewPager2.setAdapter(mAdapter);

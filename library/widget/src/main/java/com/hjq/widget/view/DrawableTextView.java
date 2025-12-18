@@ -91,8 +91,8 @@ public final class DrawableTextView extends AppCompatTextView {
         Drawable[] compoundDrawables = getCompoundDrawables();
         Drawable[] compoundDrawablesRelative = getCompoundDrawablesRelative();
 
-        // 获取布局方向
-        int layoutDirection = getLayoutDirection();
+        // 适配 RTL 特性
+        int layoutDirection = getResources().getConfiguration().getLayoutDirection();
 
         Drawable leftDrawable = compoundDrawablesRelative[layoutDirection == LAYOUT_DIRECTION_LTR ?
                 DRAWABLE_INDEX_LEFT : DRAWABLE_INDEX_RIGHT];

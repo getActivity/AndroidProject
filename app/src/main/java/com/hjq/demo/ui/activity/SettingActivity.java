@@ -1,5 +1,6 @@
 package com.hjq.demo.ui.activity;
 
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -36,10 +37,16 @@ import com.hjq.widget.view.SwitchButton;
 public final class SettingActivity extends AppActivity
         implements SwitchButton.OnCheckedChangeListener {
 
-    private SettingBar mLanguageView;
-    private SettingBar mPhoneView;
-    private SettingBar mPasswordView;
+    private SettingBar mChangeLanguageView;
+    private SettingBar mCheckUpdateView;
+    private SettingBar mModifyPhoneView;
+    private SettingBar mModifyPasswordView;
+    private SettingBar mReadAgreementView;
+    private SettingBar mAboutAppView;
+    private SettingBar mAutoLoginView;
     private SettingBar mCleanCacheView;
+    private SettingBar mExitLoginView;
+
     private SwitchButton mAutoSwitchView;
 
     @Override
@@ -49,28 +56,48 @@ public final class SettingActivity extends AppActivity
 
     @Override
     protected void initView() {
-        mLanguageView = findViewById(R.id.sb_setting_language);
-        mPhoneView = findViewById(R.id.sb_setting_phone);
-        mPasswordView = findViewById(R.id.sb_setting_password);
-        mCleanCacheView = findViewById(R.id.sb_setting_cache);
+        mChangeLanguageView = findViewById(R.id.sb_setting_change_language);
+        mCheckUpdateView = findViewById(R.id.sb_setting_check_update);
+        mModifyPhoneView = findViewById(R.id.sb_setting_modify_phone);
+        mModifyPasswordView = findViewById(R.id.sb_setting_modify_password);
+        mReadAgreementView = findViewById(R.id.sb_setting_read_agreement);
+        mAboutAppView = findViewById(R.id.sb_setting_about_app);
+        mAutoLoginView = findViewById(R.id.sb_setting_auto_login);
+        mCleanCacheView = findViewById(R.id.sb_setting_clear_cache);
+        mExitLoginView = findViewById(R.id.sb_setting_exit_login);
+
         mAutoSwitchView = findViewById(R.id.sb_setting_switch);
+
+        // 适配 RTL 特性
+        Drawable iconDrawable;
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            iconDrawable = getDrawable(R.drawable.arrows_left_ic);
+        } else {
+            iconDrawable = getDrawable(R.drawable.arrows_right_ic);
+        }
+        mChangeLanguageView.setEndDrawable(iconDrawable);
+        mModifyPhoneView.setEndDrawable(iconDrawable);
+        mModifyPasswordView.setEndDrawable(iconDrawable);
+        mReadAgreementView.setEndDrawable(iconDrawable);
+        mAboutAppView.setEndDrawable(iconDrawable);
+        mAutoLoginView.setEndDrawable(iconDrawable);
+        mCleanCacheView.setEndDrawable(iconDrawable);
+        mExitLoginView.setEndDrawable(iconDrawable);
 
         // 设置切换按钮的监听
         mAutoSwitchView.setOnCheckedChangeListener(this);
 
-        setOnClickListener(R.id.sb_setting_language, R.id.sb_setting_update, R.id.sb_setting_phone,
-                R.id.sb_setting_password, R.id.sb_setting_agreement, R.id.sb_setting_about,
-                R.id.sb_setting_cache, R.id.sb_setting_auto, R.id.sb_setting_exit);
+        setOnClickListener(mChangeLanguageView, mCheckUpdateView, mModifyPhoneView, mModifyPasswordView,
+                           mReadAgreementView, mAboutAppView, mAutoLoginView, mCleanCacheView, mExitLoginView);
     }
 
     @Override
     protected void initData() {
         // 获取应用缓存大小
-        mCleanCacheView.setRightText(CacheDataManager.getTotalCacheSize(this));
-
-        mLanguageView.setRightText("简体中文");
-        mPhoneView.setRightText("181****1413");
-        mPasswordView.setRightText("密码强度较低");
+        mCleanCacheView.setEndText(CacheDataManager.getTotalCacheSize(this));
+        mChangeLanguageView.setEndText("简体中文");
+        mModifyPhoneView.setEndText("181****1413");
+        mModifyPasswordView.setEndText("密码强度较低");
     }
 
     @Nullable
@@ -82,8 +109,7 @@ public final class SettingActivity extends AppActivity
     @SingleClick
     @Override
     public void onClick(@NonNull View view) {
-        int viewId = view.getId();
-        if (viewId == R.id.sb_setting_language) {
+        if (view == mChangeLanguageView) {
 
             // 底部选择框
             new MenuDialog.Builder(this)
@@ -91,14 +117,14 @@ public final class SettingActivity extends AppActivity
                     //.setAutoDismiss(false)
                     .setList(R.string.setting_language_simple, R.string.setting_language_complex)
                     .setListener((MenuDialog.OnListener<String>) (dialog, position, string) -> {
-                        mLanguageView.setRightText(string);
+                        mChangeLanguageView.setEndText(string);
                         BrowserActivity.start(SettingActivity.this, "https://github.com/getActivity/MultiLanguages");
                     })
                     .setGravity(Gravity.BOTTOM)
                     .setAnimStyle(BaseDialog.ANIM_BOTTOM)
                     .show();
 
-        } else if (viewId == R.id.sb_setting_update) {
+        } else if (view == mCheckUpdateView) {
 
             // 本地的版本码和服务器的进行比较
             if (20 > AppConfig.getVersionCode()) {
@@ -113,32 +139,32 @@ public final class SettingActivity extends AppActivity
                 toast(R.string.update_no_update);
             }
 
-        } else if (viewId == R.id.sb_setting_phone) {
+        } else if (view == mModifyPhoneView) {
 
             new SafeDialog.Builder(this)
                     .setListener((dialog, phone, code) -> PhoneResetActivity.start(this, code))
                     .show();
 
-        } else if (viewId == R.id.sb_setting_password) {
+        } else if (view == mModifyPasswordView) {
 
             new SafeDialog.Builder(this)
                     .setListener((dialog, phone, code) -> PasswordResetActivity.start(this, phone, code))
                     .show();
 
-        } else if (viewId == R.id.sb_setting_agreement) {
+        } else if (view == mReadAgreementView) {
 
             BrowserActivity.start(this, "https://github.com/getActivity/Donate");
 
-        } else if (viewId == R.id.sb_setting_about) {
+        } else if (view == mAboutAppView) {
 
             startActivity(AboutActivity.class);
 
-        } else if (viewId == R.id.sb_setting_auto) {
+        } else if (view == mAutoLoginView) {
 
             // 自动登录
             mAutoSwitchView.setChecked(!mAutoSwitchView.isChecked());
 
-        } else if (viewId == R.id.sb_setting_cache) {
+        } else if (view == mCleanCacheView) {
 
             // 清除内存缓存（必须在主线程）
             GlideApp.get(this).clearMemory();
@@ -148,11 +174,11 @@ public final class SettingActivity extends AppActivity
                 GlideApp.get(SettingActivity.this).clearDiskCache();
                 post(() -> {
                     // 重新获取应用缓存大小
-                    mCleanCacheView.setRightText(CacheDataManager.getTotalCacheSize(SettingActivity.this));
+                    mCleanCacheView.setEndText(CacheDataManager.getTotalCacheSize(SettingActivity.this));
                 });
             });
 
-        } else if (viewId == R.id.sb_setting_exit) {
+        } else if (view == mExitLoginView) {
 
             if (true) {
                 startActivity(LoginActivity.class);

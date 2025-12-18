@@ -37,11 +37,11 @@
                 android:id="@+id/iv_player_view_left"
                 android:layout_width="@dimen/dp_50"
                 android:layout_height="@dimen/dp_50"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:padding="@dimen/dp_10"
                 android:visibility="invisible"
-                app:srcCompat="@drawable/arrows_left_ic"
                 app:tint="@color/white"
+                tools:srcCompat="@drawable/arrows_left_ic"
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatTextView

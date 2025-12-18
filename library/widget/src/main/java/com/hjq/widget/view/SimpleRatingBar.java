@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -24,13 +23,13 @@ import com.hjq.widget.R;
 public final class SimpleRatingBar extends View {
 
     /** 默认的星星图标 */
-    @Nullable
+    @NonNull
     private Drawable mNormalDrawable;
     /** 选中的星星图标 */
-    @Nullable
+    @NonNull
     private Drawable mFillDrawable;
     /** 选中的半星图标 */
-    @Nullable
+    @NonNull
     private Drawable mHalfDrawable;
 
     /** 当前星等级 */
@@ -55,7 +54,6 @@ public final class SimpleRatingBar extends View {
     /** 星星变化监听事件 */
     @Nullable
     private OnRatingChangeListener mListener;
-
 
     public SimpleRatingBar(@NonNull Context context) {
         this(context, null);
@@ -109,11 +107,17 @@ public final class SimpleRatingBar extends View {
             return false;
         }
 
+        int layoutDirection = getResources().getConfiguration().getLayoutDirection();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
                 float grade = 0;
-                float distance = event.getX() - getPaddingLeft() - mGradeSpace;
+                float distance;
+                if (layoutDirection == LAYOUT_DIRECTION_RTL) {
+                    distance = (getWidth() - event.getX()) - getPaddingRight() - mGradeSpace;
+                } else {
+                    distance = event.getX() - getPaddingLeft() - mGradeSpace;
+                }
                 if (distance > 0) {
                     grade = distance / (mGradeWidth + mGradeSpace);
                 }
@@ -150,7 +154,9 @@ public final class SimpleRatingBar extends View {
     protected void onDraw(@NonNull Canvas canvas) {
         for (int i = 0; i < mGradeCount; i++) {
 
-            int start = mGradeSpace + (mGradeWidth + mGradeSpace) * i;
+            int layoutDirection = getResources().getConfiguration().getLayoutDirection();
+            int visualIndex = layoutDirection == LAYOUT_DIRECTION_RTL ? (mGradeCount - 1 - i) : i;
+            int start = mGradeSpace + (mGradeWidth + mGradeSpace) * visualIndex;
 
             mGradeBounds.left = getPaddingLeft() + start;
             mGradeBounds.top = getPaddingTop();
@@ -158,57 +164,60 @@ public final class SimpleRatingBar extends View {
             mGradeBounds.bottom = mGradeBounds.top + mGradeHeight;
 
             if (mCurrentGrade > i) {
-                if (mHalfDrawable != null && mGradeStep == GradleStep.HALF &&
-                        (int) mCurrentGrade == i && mCurrentGrade - (float) (int) mCurrentGrade == 0.5f) {
-                    mHalfDrawable.setBounds(mGradeBounds);
-                    mHalfDrawable.draw(canvas);
+                if (mGradeStep == GradleStep.HALF && (int) mCurrentGrade == i
+                    && mCurrentGrade - (int) mCurrentGrade == 0.5f) {
+                    drawDrawableRtlAware(canvas, mHalfDrawable, mGradeBounds);
                 } else {
-                    mFillDrawable.setBounds(mGradeBounds);
-                    mFillDrawable.draw(canvas);
+                    drawDrawableRtlAware(canvas, mFillDrawable, mGradeBounds);
                 }
             } else {
-                mNormalDrawable.setBounds(mGradeBounds);
-                mNormalDrawable.draw(canvas);
+                drawDrawableRtlAware(canvas, mNormalDrawable, mGradeBounds);
             }
         }
     }
 
-    public void setRatingDrawable(@DrawableRes int normalDrawableId, @DrawableRes int halfDrawableId, @DrawableRes int fillDrawableId) {
-        setRatingDrawable(ContextCompat.getDrawable(getContext(), normalDrawableId),
-                ContextCompat.getDrawable(getContext(), halfDrawableId),
-                ContextCompat.getDrawable(getContext(), fillDrawableId));
+    private void drawDrawableRtlAware(@NonNull Canvas canvas, @NonNull Drawable drawable, @NonNull Rect bounds) {
+        drawable.setBounds(bounds);
+        if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+            float cx = bounds.exactCenterX();
+            float cy = bounds.exactCenterY();
+            canvas.save();
+            canvas.scale(-1f, 1f, cx, cy);
+            drawable.draw(canvas);
+            canvas.restore();
+        } else {
+            drawable.draw(canvas);
+        }
     }
 
-    public void setRatingDrawable(Drawable normalDrawable, Drawable halfDrawable, Drawable fillDrawable) {
-        if (normalDrawable == null || fillDrawable == null) {
-            throw new IllegalStateException("Drawable cannot be empty");
-        }
+    public void setRatingDrawable(@NonNull Drawable normalDrawable, @NonNull Drawable fillDrawable) {
+        setRatingDrawable(normalDrawable, null, fillDrawable);
+    }
+
+    public void setRatingDrawable(@NonNull Drawable normalDrawable, @Nullable Drawable halfDrawable, @NonNull Drawable fillDrawable) {
+        mNormalDrawable = normalDrawable;
+        // 如果 halfDrawable 是 null，就用 normalDrawable 代替
+        mHalfDrawable = halfDrawable != null ? halfDrawable : normalDrawable;
+        mFillDrawable = fillDrawable;
 
         // 两张图片的宽高不一致
-        if (normalDrawable.getIntrinsicWidth() != fillDrawable.getIntrinsicWidth() ||
-                normalDrawable.getIntrinsicHeight() != fillDrawable.getIntrinsicHeight()) {
+        if (mNormalDrawable.getIntrinsicWidth() != mFillDrawable.getIntrinsicWidth() ||
+            mNormalDrawable.getIntrinsicHeight() != mFillDrawable.getIntrinsicHeight()) {
             throw new IllegalStateException("The width and height of the picture do not agree");
         }
 
-        if (halfDrawable != null) {
-            if (normalDrawable.getIntrinsicWidth() != halfDrawable.getIntrinsicWidth() ||
-                    normalDrawable.getIntrinsicHeight() != halfDrawable.getIntrinsicHeight()) {
-                throw new IllegalStateException("The width and height of the picture do not agree");
-            }
+        if (mNormalDrawable.getIntrinsicWidth() != mHalfDrawable.getIntrinsicWidth() ||
+            mNormalDrawable.getIntrinsicHeight() != mHalfDrawable.getIntrinsicHeight()) {
+            throw new IllegalStateException("The width and height of the picture do not agree");
         }
 
-        if (mNormalDrawable != null) {
-            if (mGradeWidth == mNormalDrawable.getIntrinsicWidth()) {
-                mGradeWidth = 0;
-            }
-            if (mGradeHeight == mNormalDrawable.getIntrinsicHeight()) {
-                mGradeHeight = 0;
-            }
+        if (mGradeWidth == mNormalDrawable.getIntrinsicWidth()) {
+            mGradeWidth = 0;
+        }
+        if (mGradeHeight == mNormalDrawable.getIntrinsicHeight()) {
+            mGradeHeight = 0;
         }
 
-        mNormalDrawable = normalDrawable;
-        mHalfDrawable = halfDrawable;
-        mFillDrawable = fillDrawable;
         if (mGradeWidth == 0) {
             mGradeWidth = mNormalDrawable.getIntrinsicWidth();
         }
@@ -293,9 +302,9 @@ public final class SimpleRatingBar extends View {
         }
         switch (mGradeStep) {
             case HALF:
-                if (mCurrentGrade - (float) (int) mCurrentGrade > 0.5f) {
+                if (mCurrentGrade - (int) mCurrentGrade > 0.5f) {
                     mCurrentGrade = Math.round(mCurrentGrade);
-                } else if (mCurrentGrade - (float) (int) mCurrentGrade != 0.5f) {
+                } else if (mCurrentGrade - (int) mCurrentGrade != 0.5f) {
                     mCurrentGrade += 0.5f;
                 }
                 break;

@@ -3,6 +3,7 @@ package com.hjq.demo.other;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -41,6 +42,9 @@ public final class TitleBarStyle extends LightBarStyle {
 
     @Override
     public Drawable getBackButtonDrawable(@NonNull Context context) {
+        if (context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            return ContextCompat.getDrawable(context, R.drawable.arrows_right_ic);
+        }
         return ContextCompat.getDrawable(context, R.drawable.arrows_left_ic);
     }
 

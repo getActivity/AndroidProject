@@ -31,6 +31,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="@dimen/dp_30"
                 android:layout_marginBottom="@dimen/dp_5"
+                android:gravity="left"
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -75,6 +76,7 @@
                 android:layout_marginHorizontal="@dimen/dp_20"
                 android:layout_marginVertical="@dimen/dp_10"
                 android:lineSpacingExtra="@dimen/dp_5"
+                android:textAlignment="viewStart"
                 android:maxLines="4"
                 android:minLines="3"
                 android:scrollbars="vertical"

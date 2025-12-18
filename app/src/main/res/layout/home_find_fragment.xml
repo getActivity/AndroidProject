@@ -136,9 +136,10 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:bar_leftText="左文本"
-                app:bar_rightDrawable="@drawable/arrows_right_ic"
-                app:bar_rightText="右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本" />
+                app:bar_endDrawable="@drawable/avatar_placeholder_ic"
+                app:bar_endDrawableSize="@dimen/dp_20"
+                app:bar_endText="右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本右文本"
+                app:bar_startText="左文本" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -302,7 +303,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_20"
                 android:drawableStart="@drawable/avatar_placeholder_ic"
-                android:drawableRight="@drawable/avatar_placeholder_ic"
                 android:drawablePadding="@dimen/dp_10"
                 android:gravity="center_vertical"
                 android:text="支持限定 Drawable 大小的 TextView"
@@ -324,7 +324,7 @@
                 app:shape_solidGradientCenterX="0.5"
                 app:shape_solidGradientCenterY="0.5"
                 app:shape_solidGradientEndColor="@color/common_accent_color"
-                app:shape_solidGradientOrientation="leftToRight"
+                app:shape_solidGradientOrientation="startToEnd"
                 app:shape_solidGradientStartColor="@color/common_button_pressed_color"
                 app:shape_type="rectangle" />
 
