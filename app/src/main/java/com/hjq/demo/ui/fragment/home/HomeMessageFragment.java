@@ -14,6 +14,7 @@ import com.hjq.demo.permission.PermissionInterceptor;
 import com.hjq.demo.ui.activity.HomeActivity;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 
 /**
  *    author : Android 轮子哥
@@ -77,7 +78,7 @@ public final class HomeMessageFragment extends TitleBarFragment<HomeActivity> {
             mImageView.setVisibility(View.VISIBLE);
             GlideApp.with(this)
                     .load("https://www.baidu.com/img/bd_logo.png")
-                    .transform(new RoundedCorners((int) getResources().getDimension(R.dimen.dp_20)))
+                    .transform(new RoundedCorners((int) SmallestWidthAdaptation.dp2px(this, 20)))
                     .into(mImageView);
 
         } else if (viewId == R.id.btn_home_message_toast) {

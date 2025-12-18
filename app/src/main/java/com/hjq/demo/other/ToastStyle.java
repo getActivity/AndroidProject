@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import androidx.annotation.NonNull;
 import com.hjq.demo.R;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.toast.style.BlackToastStyle;
 
 /**
@@ -27,16 +28,16 @@ public final class ToastStyle extends BlackToastStyle {
 
     @Override
     protected float getTextSize(@NonNull Context context) {
-        return context.getResources().getDimension(R.dimen.sp_14);
+        return SmallestWidthAdaptation.sp2px(context, 14);
     }
 
     @Override
     protected int getHorizontalPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.sp_24);
+        return (int) SmallestWidthAdaptation.sp2px(context, 24);
     }
 
     @Override
     protected int getVerticalPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.sp_16);
+        return (int) SmallestWidthAdaptation.sp2px(context, 16);
     }
 }

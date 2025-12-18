@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.widget.R;
 
 /**
@@ -98,17 +99,17 @@ public final class SettingBar extends FrameLayout {
         mStartView.setEllipsize(TextUtils.TruncateAt.END);
         mEndView.setEllipsize(TextUtils.TruncateAt.END);
 
-        mStartView.setLineSpacing(getResources().getDimension(R.dimen.dp_5), mStartView.getLineSpacingMultiplier());
-        mEndView.setLineSpacing(getResources().getDimension(R.dimen.dp_5), mEndView.getLineSpacingMultiplier());
+        mStartView.setLineSpacing(SmallestWidthAdaptation.dp2px(context, 5), mStartView.getLineSpacingMultiplier());
+        mEndView.setLineSpacing(SmallestWidthAdaptation.dp2px(context, 5), mEndView.getLineSpacingMultiplier());
 
-        mStartView.setPaddingRelative((int) getResources().getDimension(R.dimen.dp_15),
-                (int) getResources().getDimension(R.dimen.dp_12),
-                (int) getResources().getDimension(R.dimen.dp_15),
-                (int) getResources().getDimension(R.dimen.dp_12));
-        mEndView.setPaddingRelative((int) getResources().getDimension(R.dimen.dp_15),
-                (int) getResources().getDimension(R.dimen.dp_12),
-                (int) getResources().getDimension(R.dimen.dp_15),
-                (int) getResources().getDimension(R.dimen.dp_12));
+        mStartView.setPaddingRelative((int) SmallestWidthAdaptation.dp2px(context, 15),
+                (int) SmallestWidthAdaptation.dp2px(context, 12),
+                (int) SmallestWidthAdaptation.dp2px(context, 15),
+                (int) SmallestWidthAdaptation.dp2px(context, 12));
+        mEndView.setPaddingRelative((int) SmallestWidthAdaptation.dp2px(context, 15),
+                (int) SmallestWidthAdaptation.dp2px(context, 12),
+                (int) SmallestWidthAdaptation.dp2px(context, 15),
+                (int) SmallestWidthAdaptation.dp2px(context, 12));
 
         final TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.SettingBar);
 
@@ -151,10 +152,10 @@ public final class SettingBar extends FrameLayout {
         // 图标和文字之间的间距
         setStartDrawablePadding(array.hasValue(R.styleable.SettingBar_bar_startDrawablePadding) ?
                 array.getDimensionPixelSize(R.styleable.SettingBar_bar_startDrawablePadding, 0) :
-                (int) getResources().getDimension(R.dimen.dp_10));
+                (int) SmallestWidthAdaptation.dp2px(context, 10));
         setEndDrawablePadding(array.hasValue(R.styleable.SettingBar_bar_endDrawablePadding) ?
                 array.getDimensionPixelSize(R.styleable.SettingBar_bar_endDrawablePadding, 0) :
-                (int) getResources().getDimension(R.dimen.dp_10));
+                (int) SmallestWidthAdaptation.dp2px(context, 10));
 
         // 图标设置
         if (array.hasValue(R.styleable.SettingBar_bar_startDrawable)) {
@@ -170,8 +171,8 @@ public final class SettingBar extends FrameLayout {
         setEndTextColor(array.getColor(R.styleable.SettingBar_bar_endTextColor, ContextCompat.getColor(getContext(), R.color.black60)));
 
         // 文字大小设置
-        setStartTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimensionPixelSize(R.styleable.SettingBar_bar_startTextSize, (int) getResources().getDimension(R.dimen.sp_15)));
-        setEndTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimensionPixelSize(R.styleable.SettingBar_bar_endTextSize, (int) getResources().getDimension(R.dimen.sp_14)));
+        setStartTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimensionPixelSize(R.styleable.SettingBar_bar_startTextSize, (int) SmallestWidthAdaptation.sp2px(context, 15)));
+        setEndTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimensionPixelSize(R.styleable.SettingBar_bar_endTextSize, (int) SmallestWidthAdaptation.sp2px(context, 14)));
 
         // 分割线设置
         if (array.hasValue(R.styleable.SettingBar_bar_lineDrawable)) {

@@ -19,6 +19,7 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.ui.adapter.common.TabAdapter;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.tencent.bugly.library.Bugly;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -444,12 +445,12 @@ public final class AddressDialog {
             textView.setGravity(Gravity.CENTER_VERTICAL);
             textView.setBackgroundResource(R.drawable.transparent_selector);
             textView.setTextColor(Color.parseColor("#222222"));
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.sp_14));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SmallestWidthAdaptation.sp2px(parent, 14));
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setPadding((int) getResources().getDimension(R.dimen.dp_20),
-                    (int) getResources().getDimension(R.dimen.dp_10),
-                    (int) getResources().getDimension(R.dimen.dp_20),
-                    (int) getResources().getDimension(R.dimen.dp_10));
+            textView.setPadding((int) SmallestWidthAdaptation.dp2px(getContext(), 20),
+                    (int) SmallestWidthAdaptation.dp2px(getContext(), 10),
+                    (int) SmallestWidthAdaptation.dp2px(getContext(), 20),
+                    (int) SmallestWidthAdaptation.dp2px(getContext(), 10));
             // 适配 RTL 特性
             textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             return new ViewHolder(textView);

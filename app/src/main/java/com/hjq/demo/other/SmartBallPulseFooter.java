@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import com.hjq.demo.R;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.scwang.smart.refresh.layout.api.RefreshFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
@@ -54,7 +55,7 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
     public SmartBallPulseFooter(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
 
-        setMinimumHeight((int) getResources().getDimension(R.dimen.dp_60));
+        setMinimumHeight((int) SmallestWidthAdaptation.dp2px(context, 60));
 
         mPaint = new Paint();
         mPaint.setColor(Color.WHITE);
@@ -63,8 +64,8 @@ public final class SmartBallPulseFooter extends SimpleComponent implements Refre
 
         mSpinnerStyle = SpinnerStyle.Translate;
 
-        mCircleSpacing = getResources().getDimension(R.dimen.dp_2);
-        mPaint.setTextSize(getResources().getDimension(R.dimen.sp_14));
+        mCircleSpacing = SmallestWidthAdaptation.dp2px(context, 2);
+        mPaint.setTextSize(SmallestWidthAdaptation.sp2px(context, 14));
         mTextWidth = mPaint.measureText(getContext().getString(R.string.common_no_more_data));
     }
 

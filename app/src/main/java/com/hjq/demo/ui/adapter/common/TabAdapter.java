@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.hjq.base.BaseAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppAdapter;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 
 /**
  *    author : Android 轮子哥
@@ -211,8 +212,8 @@ public final class TabAdapter extends AppAdapter<String> implements BaseAdapter.
             mTitleView = findViewById(R.id.tv_tab_sliding_title);
             mLineView = findViewById(R.id.v_tab_sliding_line);
 
-            mDefaultTextSize = (int) getResources().getDimension(R.dimen.sp_14);
-            mSelectedTextSize = (int) getResources().getDimension(R.dimen.sp_15);
+            mDefaultTextSize = (int) SmallestWidthAdaptation.sp2px(getContext(), 14);
+            mSelectedTextSize = (int) SmallestWidthAdaptation.sp2px(getContext(), 15);
 
             mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mDefaultTextSize);
 

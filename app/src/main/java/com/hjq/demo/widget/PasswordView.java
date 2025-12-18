@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.hjq.demo.R;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 
 /**
  *    author : Android 轮子哥
@@ -58,8 +58,8 @@ public final class PasswordView extends View {
     public PasswordView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        mItemWidth = (int) getResources().getDimension(R.dimen.dp_44);
-        mItemHeight = (int) getResources().getDimension(R.dimen.dp_41);
+        mItemWidth = (int) SmallestWidthAdaptation.dp2px(context, 44);
+        mItemHeight = (int) SmallestWidthAdaptation.dp2px(context, 41);
 
         mPaint = new Paint();
         // 设置抗锯齿

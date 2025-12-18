@@ -1,0 +1,8 @@
+plugins {
+    alias(libs.plugins.library)
+}
+apply from: '../../common.gradle'
+
+android {
+    namespace 'com.hjq.smallest.width'
+}

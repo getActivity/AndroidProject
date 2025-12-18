@@ -21,6 +21,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.widget.R;
 
 /**
@@ -80,7 +81,7 @@ public final class SlantedTextView extends View {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SlantedTextView);
 
         setText(array.getString(R.styleable.SlantedTextView_android_text));
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimensionPixelSize(R.styleable.SlantedTextView_android_textSize, (int) getResources().getDimension(R.dimen.sp_12)));
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimensionPixelSize(R.styleable.SlantedTextView_android_textSize, (int) SmallestWidthAdaptation.sp2px(context, 12)));
         setTextColor(array.getColor(R.styleable.SlantedTextView_android_textColor, Color.WHITE));
         setTextStyle(Typeface.defaultFromStyle(array.getInt(R.styleable.SlantedTextView_android_textStyle, Typeface.NORMAL)));
         setGravity(array.getInt(R.styleable.SlantedTextView_android_gravity, Gravity.END));

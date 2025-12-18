@@ -12,6 +12,7 @@ import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.TitleBarFragment;
 import com.hjq.demo.http.glide.GlideApp;
 import com.hjq.demo.ui.activity.HomeActivity;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.widget.view.CountdownView;
 import com.hjq.widget.view.SimpleRatingBar;
 import com.hjq.widget.view.SwitchButton;
@@ -67,7 +68,7 @@ public final class HomeFindFragment extends TitleBarFragment<HomeActivity>
         // 显示圆角的 ImageView
         GlideApp.with(this)
                 .load(R.drawable.update_app_top_bg)
-                .transform(new MultiTransformation<>(new CenterCrop(), new RoundedCorners((int) getResources().getDimension(R.dimen.dp_10))))
+                .transform(new MultiTransformation<>(new CenterCrop(), new RoundedCorners((int) SmallestWidthAdaptation.dp2px(this, 10))))
                 .into(mCornerView);
     }
 

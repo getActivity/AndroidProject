@@ -32,6 +32,7 @@ import com.hjq.demo.ui.dialog.common.AlbumDialog;
 import com.hjq.demo.widget.StatusLayout;
 import com.hjq.permissions.XXPermissions;
 import com.hjq.permissions.permission.PermissionLists;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.widget.view.FloatActionButton;
 import java.io.File;
 import java.util.ArrayList;
@@ -195,7 +196,7 @@ public final class ImageSelectActivity extends AppActivity
         // 禁用动画效果
         mRecyclerView.setItemAnimator(null);
         // 添加分割线
-        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) getResources().getDimension(R.dimen.dp_3)));
+        mRecyclerView.addItemDecoration(new GridSpaceDecoration((int) SmallestWidthAdaptation.dp2px(this, 3)));
         // 设置滚动监听
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.widget.R;
 
 /**
@@ -71,7 +72,7 @@ public final class PlayButton extends View {
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PlayButton);
         int lineColor = typedArray.getColor(R.styleable.PlayButton_pb_lineColor, Color.WHITE);
-        int lineSize = typedArray.getInteger(R.styleable.PlayButton_pb_lineSize, (int) getResources().getDimension(R.dimen.dp_4));
+        int lineSize = typedArray.getInteger(R.styleable.PlayButton_pb_lineSize, (int) SmallestWidthAdaptation.dp2px(context, 4));
         mAnimDuration = typedArray.getInteger(R.styleable.PlayButton_pb_animDuration, 200);
         typedArray.recycle();
 
@@ -95,7 +96,7 @@ public final class PlayButton extends View {
         super.onSizeChanged(width, height, oldWidth, oldHeight);
         mViewWidth = width * 9 / 10;
         mViewHeight = height * 9 / 10;
-        mCircleRadius = mViewWidth / (int) getResources().getDimension(R.dimen.dp_4);
+        mCircleRadius = mViewWidth / (int) SmallestWidthAdaptation.dp2px(this, 4);
         mCenterX = width / 2;
         mCenterY = height / 2;
         mRectF.set(mCenterX - mCircleRadius, mCenterY + 0.6f * mCircleRadius,
@@ -115,7 +116,7 @@ public final class PlayButton extends View {
         switch (MeasureSpec.getMode(widthMeasureSpec)) {
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
-                widthMeasureSpec = MeasureSpec.makeMeasureSpec((int) getResources().getDimension(R.dimen.dp_60), MeasureSpec.EXACTLY);
+                widthMeasureSpec = MeasureSpec.makeMeasureSpec((int) SmallestWidthAdaptation.dp2px(this, 60), MeasureSpec.EXACTLY);
                 break;
             case MeasureSpec.EXACTLY:
             default:
@@ -125,7 +126,7 @@ public final class PlayButton extends View {
         switch (MeasureSpec.getMode(heightMeasureSpec)) {
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
-                heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) getResources().getDimension(R.dimen.dp_60), MeasureSpec.EXACTLY);
+                heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) SmallestWidthAdaptation.dp2px(this, 60), MeasureSpec.EXACTLY);
                 break;
             case MeasureSpec.EXACTLY:
             default:

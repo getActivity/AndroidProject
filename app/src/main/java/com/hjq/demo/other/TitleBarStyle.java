@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import com.hjq.bar.style.LightBarStyle;
 import com.hjq.demo.R;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.hjq.widget.view.PressAlphaTextView;
 
 /**
@@ -65,46 +66,46 @@ public final class TitleBarStyle extends LightBarStyle {
 
     @Override
     public int getLeftHorizontalPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_10);
+        return (int) SmallestWidthAdaptation.dp2px(context, 10);
     }
 
     @Override
     public int getRightHorizontalPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_10);
+        return (int) SmallestWidthAdaptation.dp2px(context, 10);
     }
 
     @Override
     public int getChildVerticalPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_14);
+        return (int) SmallestWidthAdaptation.dp2px(context, 14);
     }
 
     @Override
     public float getTitleSize(@NonNull Context context) {
-        return context.getResources().getDimension(R.dimen.sp_15);
+        return SmallestWidthAdaptation.sp2px(context, 15);
     }
 
     @Override
     public float getLeftTitleSize(@NonNull Context context) {
-        return context.getResources().getDimension(R.dimen.sp_13);
+        return SmallestWidthAdaptation.sp2px(context, 13);
     }
 
     @Override
     public float getRightTitleSize(@NonNull Context context) {
-        return context.getResources().getDimension(R.dimen.sp_13);
+        return SmallestWidthAdaptation.sp2px(context, 13);
     }
 
     @Override
     public int getTitleIconPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_2);
+        return (int) SmallestWidthAdaptation.dp2px(context, 2);
     }
 
     @Override
     public int getLeftIconPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_2);
+        return (int) SmallestWidthAdaptation.dp2px(context, 2);
     }
 
     @Override
     public int getRightIconPadding(@NonNull Context context) {
-        return (int) context.getResources().getDimension(R.dimen.dp_2);
+        return (int) SmallestWidthAdaptation.dp2px(context, 2);
     }
 }

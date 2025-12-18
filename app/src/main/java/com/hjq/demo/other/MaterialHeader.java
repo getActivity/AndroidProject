@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import com.hjq.demo.R;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import com.scwang.smart.refresh.header.material.CircleImageView;
 import com.scwang.smart.refresh.header.material.MaterialProgressDrawable;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;
@@ -62,7 +63,7 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
         super(context, attrs, 0);
 
         mSpinnerStyle = SpinnerStyle.MatchLayout;
-        setMinimumHeight((int) getResources().getDimension(R.dimen.dp_100));
+        setMinimumHeight((int) SmallestWidthAdaptation.dp2px(context, 100));
 
         mProgressDrawable = new MaterialProgressDrawable(this);
         mProgressDrawable.setColorSchemeColors(
@@ -76,7 +77,7 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
         mCircleView.setAlpha(0f);
         addView(mCircleView);
 
-        mCircleDiameter = (int) getResources().getDimension(R.dimen.dp_40);
+        mCircleDiameter = (int) SmallestWidthAdaptation.dp2px(context, 40);
 
         mBezierPath = new Path();
         mBezierPaint = new Paint();
@@ -274,9 +275,9 @@ public final class MaterialHeader extends SimpleComponent implements RefreshHead
             return this;
         }
         if (style == BALL_STYLE_LARGE) {
-            mCircleDiameter = (int) getResources().getDimension(R.dimen.dp_56);
+            mCircleDiameter = (int) SmallestWidthAdaptation.dp2px(getContext(), 56);
         } else {
-            mCircleDiameter = (int) getResources().getDimension(R.dimen.dp_40);
+            mCircleDiameter = (int) SmallestWidthAdaptation.dp2px(getContext(), 40);
         }
         // force the bounds of the progress circle inside the circle view to
         // update by setting it to null before updating its size and then

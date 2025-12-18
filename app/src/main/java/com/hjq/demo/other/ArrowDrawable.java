@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import com.hjq.demo.R;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 
 /**
  *    author : 王浩 & Android 轮子哥
@@ -203,8 +204,8 @@ public final class ArrowDrawable extends Drawable {
             mContext = context;
             mBackgroundColor = ContextCompat.getColor(context, R.color.black);
             mShadowColor = ContextCompat.getColor(context, R.color.black20);
-            mArrowHeight = (int) context.getResources().getDimension(R.dimen.dp_6);
-            mRadius = (int) context.getResources().getDimension(R.dimen.dp_4);
+            mArrowHeight = (int) SmallestWidthAdaptation.dp2px(context, 6);
+            mRadius = (int) SmallestWidthAdaptation.dp2px(context, 4);
             mShadowSize = 0;
             mArrowOffsetX = 0;
             mArrowOffsetY = 0;

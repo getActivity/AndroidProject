@@ -15,6 +15,7 @@ import com.hjq.base.action.AnimAction;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppAdapter;
 import com.hjq.demo.other.ArrowDrawable;
+import com.hjq.smallest.width.SmallestWidthAdaptation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,14 +48,14 @@ public final class ListPopup {
             recyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             setContentView(recyclerView);
 
-            mAdapter = new MenuAdapter(getContext());
+            mAdapter = new MenuAdapter(context);
             mAdapter.setOnItemClickListener(this);
             recyclerView.setAdapter(mAdapter);
 
             new ArrowDrawable.Builder(context)
                     .setArrowOrientation(Gravity.TOP)
                     .setArrowGravity(Gravity.CENTER)
-                    .setShadowSize((int) getResources().getDimension(R.dimen.dp_10))
+                    .setShadowSize((int) SmallestWidthAdaptation.dp2px(context, 10))
                     .setBackgroundColor(getColor(R.color.white))
                     .apply(recyclerView);
         }
@@ -140,17 +141,17 @@ public final class ListPopup {
                 super(new TextView(getContext()));
                 mTextView = (TextView) getItemView();
                 mTextView.setTextColor(getColor(R.color.black50));
-                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.sp_16));
+                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SmallestWidthAdaptation.sp2px(getContext(), 16));
             }
 
             @Override
             public void onBindView(int position) {
                 mTextView.setText(getItem(position).toString());
 
-                mTextView.setPaddingRelative((int) getResources().getDimension(R.dimen.dp_12),
-                        (position == 0 ? (int) getResources().getDimension(R.dimen.dp_12) : 0),
-                        (int) getResources().getDimension(R.dimen.dp_12),
-                        (int) getResources().getDimension(R.dimen.dp_10));
+                mTextView.setPaddingRelative((int) SmallestWidthAdaptation.dp2px(itemView, 12),
+                        (position == 0 ? (int) SmallestWidthAdaptation.dp2px(itemView, 12) : 0),
+                        (int) SmallestWidthAdaptation.dp2px(itemView, 12),
+                        (int) SmallestWidthAdaptation.dp2px(itemView, 10));
             }
         }
     }
