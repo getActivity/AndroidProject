@@ -165,7 +165,7 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:smallestWidth')
     implementation project(':library:customWidget')
-    implementation project(':library:umeng')
+    implementation project(':library:umengSdk')
 
     implementation libs.deviceCompat
     implementation libs.xxPermissions

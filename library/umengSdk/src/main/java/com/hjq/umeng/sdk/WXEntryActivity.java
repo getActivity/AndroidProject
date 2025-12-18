@@ -1,4 +1,4 @@
-package com.hjq.umeng;
+package com.hjq.umeng.sdk;
 
 import com.umeng.socialize.weixin.view.WXCallbackActivity;
 

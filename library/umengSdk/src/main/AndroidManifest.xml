@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.hjq.umeng">
+    package="com.hjq.umeng.sdk">
 
     <application>
 
@@ -53,13 +53,13 @@
             tools:node="replace" />
 
         <!-- 微信回调（使用狸猫换太子） -->
-        <activity android:name="com.hjq.umeng.WXEntryActivity" />
+        <activity android:name=".WXEntryActivity" />
         <activity-alias
             android:name="${applicationId}.wxapi.WXEntryActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:targetActivity="com.hjq.umeng.WXEntryActivity"
+            android:targetActivity=".WXEntryActivity"
             android:taskAffinity="${applicationId}"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 

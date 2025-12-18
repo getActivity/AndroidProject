@@ -20,7 +20,7 @@ import com.hjq.demo.other.AndroidVersion;
 import com.hjq.demo.ui.dialog.common.WaitDialog;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.OnHttpListener;
-import com.hjq.umeng.UmengClient;
+import com.hjq.umeng.sdk.UmengClient;
 
 /**
  *    author : Android 轮子哥

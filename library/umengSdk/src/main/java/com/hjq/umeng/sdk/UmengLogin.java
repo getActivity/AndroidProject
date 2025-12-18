@@ -1,4 +1,4 @@
-package com.hjq.umeng;
+package com.hjq.umeng.sdk;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

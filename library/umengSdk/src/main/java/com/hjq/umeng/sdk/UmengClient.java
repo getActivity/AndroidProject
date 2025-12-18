@@ -1,4 +1,4 @@
-package com.hjq.umeng;
+package com.hjq.umeng.sdk;
 
 import android.app.Activity;
 import android.app.Application;

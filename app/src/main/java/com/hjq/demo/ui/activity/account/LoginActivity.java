@@ -33,10 +33,10 @@ import com.hjq.http.EasyConfig;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.listener.HttpCallbackProxy;
-import com.hjq.umeng.Platform;
-import com.hjq.umeng.UmengClient;
-import com.hjq.umeng.UmengLogin;
-import com.hjq.umeng.WXEntryActivity;
+import com.hjq.umeng.sdk.Platform;
+import com.hjq.umeng.sdk.UmengClient;
+import com.hjq.umeng.sdk.UmengLogin;
+import com.hjq.umeng.sdk.WXEntryActivity;
 
 /**
  *    author : Android 轮子哥
