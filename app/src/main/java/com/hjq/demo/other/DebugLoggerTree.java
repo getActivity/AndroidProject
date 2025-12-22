@@ -1,5 +1,6 @@
 package com.hjq.demo.other;
 
+import com.hjq.core.tools.AndroidVersion;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 

@@ -1,4 +1,4 @@
-package com.hjq.demo.manager;
+package com.hjq.core.manager;
 
 import android.content.Context;
 import android.os.Environment;

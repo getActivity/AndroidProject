@@ -1,4 +1,4 @@
-package com.hjq.demo.manager;
+package com.hjq.core.manager;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,9 +6,10 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.hjq.demo.other.AndroidVersion;
+import com.hjq.core.tools.AndroidVersion;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import timber.log.Timber;
 
 /**
  *    author : Android 轮子哥
@@ -179,12 +179,12 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-        Timber.i("%s - onCreate", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onCreate", activity.getClass().getSimpleName()));
         if (mActivityList.isEmpty()) {
             for (ApplicationLifecycleCallback callback : mLifecycleCallbacks) {
                 callback.onApplicationCreate(activity);
             }
-            Timber.i("%s - onApplicationCreate", activity.getClass().getSimpleName());
+            printLog(String.format("%s - onApplicationCreate", activity.getClass().getSimpleName()));
         }
         mActivityList.add(activity);
         mTopActivity = activity;
@@ -192,17 +192,17 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-        Timber.i("%s - onStart", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onStart", activity.getClass().getSimpleName()));
     }
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        Timber.i("%s - onResume", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onResume", activity.getClass().getSimpleName()));
         if (mTopActivity == activity && mResumedActivity == null) {
             for (ApplicationLifecycleCallback callback : mLifecycleCallbacks) {
                 callback.onApplicationForeground(activity);
             }
-            Timber.i("%s - onApplicationForeground", activity.getClass().getSimpleName());
+            printLog(String.format("%s - onApplicationForeground", activity.getClass().getSimpleName()));
         }
         mTopActivity = activity;
         mResumedActivity = activity;
@@ -210,12 +210,12 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-        Timber.i("%s - onPause", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onPause", activity.getClass().getSimpleName()));
     }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-        Timber.i("%s - onStop", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onStop", activity.getClass().getSimpleName()));
         if (mResumedActivity == activity) {
             mResumedActivity = null;
         }
@@ -223,18 +223,18 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
             for (ApplicationLifecycleCallback callback : mLifecycleCallbacks) {
                 callback.onApplicationBackground(activity);
             }
-            Timber.i("%s - onApplicationBackground", activity.getClass().getSimpleName());
+            printLog(String.format("%s - onApplicationBackground", activity.getClass().getSimpleName()));
         }
     }
 
     @Override
     public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-        Timber.i("%s - onSaveInstanceState", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onSaveInstanceState", activity.getClass().getSimpleName()));
     }
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-        Timber.i("%s - onDestroy", activity.getClass().getSimpleName());
+        printLog(String.format("%s - onDestroy", activity.getClass().getSimpleName()));
         mActivityList.remove(activity);
         if (mTopActivity == activity) {
             mTopActivity = null;
@@ -243,7 +243,7 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
             for (ApplicationLifecycleCallback callback : mLifecycleCallbacks) {
                 callback.onApplicationDestroy(activity);
             }
-            Timber.i("%s - onApplicationDestroy", activity.getClass().getSimpleName());
+            printLog(String.format("%s - onApplicationDestroy", activity.getClass().getSimpleName()));
         }
     }
 
@@ -307,6 +307,13 @@ public final class ActivityManager implements Application.ActivityLifecycleCallb
             }
         }
         return null;
+    }
+
+    /**
+     * 打印日志
+     */
+    private void printLog(String content) {
+        Log.i("ActivityManager", content);
     }
 
     /**

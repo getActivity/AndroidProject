@@ -1,4 +1,4 @@
-package com.hjq.demo.manager;
+package com.hjq.core.recycler;
 
 import android.content.Context;
 import android.view.View;

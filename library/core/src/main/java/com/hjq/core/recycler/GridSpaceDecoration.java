@@ -1,4 +1,4 @@
-package com.hjq.demo.other;
+package com.hjq.core.recycler;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;

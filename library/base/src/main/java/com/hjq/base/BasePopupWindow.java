@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -33,12 +32,13 @@ import androidx.annotation.StyleRes;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import com.hjq.base.action.ActivityAction;
-import com.hjq.base.action.AnimAction;
-import com.hjq.base.action.ClickAction;
-import com.hjq.base.action.HandlerAction;
-import com.hjq.base.action.KeyboardAction;
-import com.hjq.base.action.ResourcesAction;
+import com.hjq.core.action.ActivityAction;
+import com.hjq.core.action.AnimAction;
+import com.hjq.core.action.ClickAction;
+import com.hjq.core.action.HandlerAction;
+import com.hjq.core.action.KeyboardAction;
+import com.hjq.core.action.ResourcesAction;
+import com.hjq.core.tools.AndroidVersion;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -952,7 +952,7 @@ public class BasePopupWindow extends PopupWindow
                 return;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 mActivity.registerActivityLifecycleCallbacks(this);
             } else {
                 mActivity.getApplication().registerActivityLifecycleCallbacks(this);
@@ -967,7 +967,7 @@ public class BasePopupWindow extends PopupWindow
                 return;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 mActivity.unregisterActivityLifecycleCallbacks(this);
             } else {
                 mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);

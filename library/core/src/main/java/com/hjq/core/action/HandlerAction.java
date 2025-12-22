@@ -1,4 +1,4 @@
-package com.hjq.base.action;
+package com.hjq.core.action;
 
 import android.os.Handler;
 import android.os.Looper;

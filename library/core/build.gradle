@@ -1,0 +1,13 @@
+plugins {
+    alias(libs.plugins.library)
+}
+apply from: '../../common.gradle'
+
+android {
+    namespace 'com.hjq.core'
+
+    defaultConfig {
+        // 模块混淆配置
+        consumerProguardFiles 'proguard-core.pro'
+    }
+}

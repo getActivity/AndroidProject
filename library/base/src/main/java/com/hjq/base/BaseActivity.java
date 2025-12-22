@@ -13,12 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import com.hjq.base.action.ActivityAction;
-import com.hjq.base.action.BundleAction;
-import com.hjq.base.action.ClickAction;
-import com.hjq.base.action.FixOrientationAction;
-import com.hjq.base.action.HandlerAction;
-import com.hjq.base.action.KeyboardAction;
+import com.hjq.core.action.ActivityAction;
+import com.hjq.core.action.BundleAction;
+import com.hjq.core.action.ClickAction;
+import com.hjq.core.action.FixOrientationAction;
+import com.hjq.core.action.HandlerAction;
+import com.hjq.core.action.KeyboardAction;
 import java.util.List;
 import java.util.Random;
 

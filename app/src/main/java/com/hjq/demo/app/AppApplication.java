@@ -1,9 +1,9 @@
 package com.hjq.demo.app;
 
 import android.app.Application;
+import com.hjq.core.manager.ActivityManager;
 import com.hjq.demo.aop.Log;
 import com.hjq.demo.http.glide.GlideApp;
-import com.hjq.demo.manager.ActivityManager;
 import com.hjq.demo.manager.InitManager;
 
 /**

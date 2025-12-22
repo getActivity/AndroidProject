@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,10 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import com.hjq.base.action.BundleAction;
-import com.hjq.base.action.ClickAction;
-import com.hjq.base.action.HandlerAction;
-import com.hjq.base.action.KeyboardAction;
+import com.hjq.core.action.BundleAction;
+import com.hjq.core.action.ClickAction;
+import com.hjq.core.action.HandlerAction;
+import com.hjq.core.action.KeyboardAction;
+import com.hjq.core.tools.AndroidVersion;
 import java.util.List;
 
 /**
@@ -330,7 +330,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         if (mActivity == null) {
             return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (AndroidVersion.isAndroid10()) {
             mActivity.registerActivityLifecycleCallbacks(this);
         } else {
             mActivity.getApplication().registerActivityLifecycleCallbacks(this);
@@ -344,7 +344,7 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment impl
         if (mActivity == null) {
             return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (AndroidVersion.isAndroid10()) {
             mActivity.unregisterActivityLifecycleCallbacks(this);
         } else {
             mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);

@@ -1,10 +1,11 @@
-package com.hjq.base.action;
+package com.hjq.core.action;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
-import android.os.Build;
+import androidx.annotation.NonNull;
+import com.hjq.core.tools.AndroidVersion;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -19,8 +20,8 @@ public interface FixOrientationAction {
     /**
      * 是否允许 Activity 设置显示方向
      */
-    default boolean isAllowOrientation(Activity activity) {
-        if (Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
+    default boolean isAllowOrientation(@NonNull Activity activity) {
+        if (AndroidVersion.isAndroid8()) {
             return true;
         }
         return !isTranslucentOrFloating(activity);
@@ -31,7 +32,7 @@ public interface FixOrientationAction {
      */
     @SuppressLint("PrivateApi")
     @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
-    default boolean isTranslucentOrFloating(Activity activity) {
+    default boolean isTranslucentOrFloating(@NonNull Activity activity) {
         TypedArray typedArray = null;
         try {
             int[] styleableRes = (int[]) Class.forName("com.android.internal.R$styleable").getField("Window").get(null);
@@ -57,7 +58,7 @@ public interface FixOrientationAction {
      */
     @SuppressLint("DiscouragedPrivateApi")
     @SuppressWarnings("JavaReflectionMemberAccess")
-    default void fixScreenOrientation(Activity activity) {
+    default void fixScreenOrientation(@NonNull Activity activity) {
         try {
             Field field = Activity.class.getDeclaredField("mActivityInfo");
             field.setAccessible(true);

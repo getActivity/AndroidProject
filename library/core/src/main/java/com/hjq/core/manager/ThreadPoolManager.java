@@ -1,4 +1,4 @@
-package com.hjq.demo.manager;
+package com.hjq.core.manager;
 
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;

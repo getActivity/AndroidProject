@@ -1,4 +1,4 @@
-package com.hjq.demo.manager;
+package com.hjq.core.manager;
 
 import android.app.Activity;
 import android.app.Application;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.hjq.demo.other.AndroidVersion;
+import com.hjq.core.tools.AndroidVersion;
 import java.util.ArrayList;
 import java.util.List;
 

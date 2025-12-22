@@ -1,4 +1,4 @@
-package com.hjq.demo.other;
+package com.hjq.core.other;
 
 import android.app.Activity;
 import android.app.Application;
@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.hjq.core.tools.AndroidVersion;
 
 /**
  *    author : Android 轮子哥

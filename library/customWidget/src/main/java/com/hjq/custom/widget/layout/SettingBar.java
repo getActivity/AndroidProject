@@ -9,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -24,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
+import com.hjq.core.tools.AndroidVersion;
 import com.hjq.custom.widget.R;
 import com.hjq.smallest.width.SmallestWidthAdaptation;
 
@@ -383,7 +383,7 @@ public final class SettingBar extends FrameLayout {
         Drawable drawable = getStartDrawable();
         if (drawable != null && color != NO_COLOR) {
             drawable.mutate();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 drawable.setColorFilter(new BlendModeColorFilter(color, BlendMode.SRC_IN));
             } else {
                 drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -400,7 +400,7 @@ public final class SettingBar extends FrameLayout {
         Drawable drawable = getEndDrawable();
         if (drawable != null && color != NO_COLOR) {
             drawable.mutate();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.isAndroid10()) {
                 drawable.setColorFilter(new BlendModeColorFilter(color, BlendMode.SRC_IN));
             } else {
                 drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);

@@ -1,6 +1,6 @@
-package com.hjq.base.action;
+package com.hjq.core.action;
 
-import com.hjq.base.R;
+import com.hjq.core.R;
 
 /**
  *    author : Android 轮子哥

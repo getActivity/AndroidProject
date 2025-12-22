@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.Build;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -16,6 +15,7 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.base.BaseDialog;
+import com.hjq.core.tools.AndroidVersion;
 import com.hjq.demo.R;
 import com.hjq.demo.ui.dialog.common.MessageDialog;
 import timber.log.Timber;
@@ -44,7 +44,6 @@ public class BrowserViewClient extends WebViewClient {
     /**
      * 同名 API 兼容
      */
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onReceivedError(@NonNull WebView view, @NonNull WebResourceRequest request, @NonNull WebResourceError error) {
         if (!request.isForMainFrame()) {
@@ -189,7 +188,7 @@ public class BrowserViewClient extends WebViewClient {
     /**
      * 同名 API 兼容
      */
-    @TargetApi(Build.VERSION_CODES.N)
+    @TargetApi(AndroidVersion.ANDROID_7)
     @Override
     public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull WebResourceRequest request) {
         return shouldOverrideUrlLoading(view, request.getUrl().toString());

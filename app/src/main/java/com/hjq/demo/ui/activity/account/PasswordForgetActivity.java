@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import com.hjq.core.manager.InputTextManager;
 import com.hjq.custom.widget.view.CountdownView;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
@@ -15,7 +16,6 @@ import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.http.api.GetCodeApi;
 import com.hjq.demo.http.api.VerifyCodeApi;
 import com.hjq.demo.http.model.HttpData;
-import com.hjq.demo.manager.InputTextManager;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallbackProxy;
 

@@ -32,7 +32,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
 import com.airbnb.lottie.LottieAnimationView;
-import com.hjq.base.action.ActivityAction;
+import com.hjq.core.action.ActivityAction;
 import com.hjq.custom.widget.layout.SimpleLayout;
 import com.hjq.custom.widget.view.PlayButton;
 import com.hjq.demo.R;

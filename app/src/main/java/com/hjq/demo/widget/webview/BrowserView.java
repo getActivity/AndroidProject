@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
-import com.hjq.base.action.ActivityAction;
+import com.hjq.core.action.ActivityAction;
 import com.hjq.demo.other.AppConfig;
 import com.hjq.nested.scroll.layout.NestedScrollWebView;
 import java.util.Map;

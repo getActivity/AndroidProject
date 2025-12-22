@@ -1,4 +1,4 @@
-package com.hjq.demo.other;
+package com.hjq.core.tools;
 
 import android.os.SystemClock;
 
