@@ -27,6 +27,9 @@ import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
 import com.hjq.demo.other.AppConfig;
+import com.hjq.device.compat.DeviceBrand;
+import com.hjq.device.compat.DeviceMarketName;
+import com.hjq.device.compat.DeviceOs;
 import com.tencent.bugly.library.Bugly;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -166,8 +169,14 @@ public final class CrashActivity extends AppActivity {
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append("设备品牌：\t").append(Build.BRAND)
-                .append("\n设备型号：\t").append(Build.MODEL)
+        builder.append("设备品牌：\t").append(DeviceBrand.getBrandName());
+
+        String marketName = DeviceMarketName.getMarketName(this);
+        if (!TextUtils.isEmpty(marketName)) {
+            builder.append("\n设备名称：\t").append(marketName);
+        }
+
+        builder.append("\n设备型号：\t").append(Build.MODEL)
                 .append("\n设备类型：\t").append(isTabletDevice() ? "平板" : "手机");
 
         builder.append("\n屏幕宽高：\t").append(screenWidth).append(" x ").append(screenHeight)
@@ -179,6 +188,15 @@ public final class CrashActivity extends AppActivity {
         builder.append("\n安卓版本：\t").append(Build.VERSION.RELEASE)
                 .append("\nAPI 版本：\t").append(AndroidVersion.getSdkVersion())
                 .append("\nCPU 架构：\t").append(Build.SUPPORTED_ABIS[0]);
+
+        String osName = DeviceOs.getOsName();
+        if (!TextUtils.isEmpty(osName)) {
+            builder.append("\n厂商系统：\t").append(osName);
+            String osVersionName = DeviceOs.getOsVersionName();
+            if (!TextUtils.isEmpty(osVersionName)) {
+                builder.append("\n厂商版本：\t").append(osVersionName);
+            }
+        }
 
         builder.append("\n应用版本：\t").append(AppConfig.getVersionName())
                 .append("\n版本代码：\t").append(AppConfig.getVersionCode());
