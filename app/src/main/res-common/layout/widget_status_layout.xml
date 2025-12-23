@@ -33,7 +33,7 @@
         tools:text="@string/status_layout_error_network" />
 
     <com.hjq.shape.view.ShapeButton
-        android:id="@+id/iv_status_retry"
+        android:id="@+id/btn_status_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_20"

@@ -143,7 +143,7 @@ public final class StatusLayout extends FrameLayout {
 
         mLottieView = mMainLayout.findViewById(R.id.iv_status_icon);
         mTextView = mMainLayout.findViewById(R.id.tv_status_text);
-        mRetryView = mMainLayout.findViewById(R.id.iv_status_retry);
+        mRetryView = mMainLayout.findViewById(R.id.btn_status_retry);
 
         if (mMainLayout.getBackground() == null) {
             // 默认使用 windowBackground 作为背景
