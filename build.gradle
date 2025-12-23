@@ -1,4 +1,4 @@
-// AndroidProject 版本：v15.0
+// AndroidProject 版本：v16.0
 plugins {
     alias(libs.plugins.application) apply false
     alias(libs.plugins.library) apply false
