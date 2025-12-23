@@ -921,7 +921,6 @@ public class BaseDialog extends AppCompatDialog implements LifecycleOwner,
                         mAnimStyle = BaseDialog.ANIM_RIGHT;
                         break;
                     default:
-                        mAnimStyle = BaseDialog.ANIM_DEFAULT;
                         break;
                 }
             }

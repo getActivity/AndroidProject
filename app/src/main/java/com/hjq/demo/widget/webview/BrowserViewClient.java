@@ -57,6 +57,7 @@ public class BrowserViewClient extends WebViewClient {
     /**
      * 网页加载错误时回调，需要注意的是：这个方法会在 onPageFinished 之前调用
      */
+    @SuppressWarnings("deprecation")
     @Override
     public final void onReceivedError(@NonNull WebView view, int errorCode, @NonNull String description, @NonNull String failingUrl) {
         super.onReceivedError(view, errorCode, description, failingUrl);

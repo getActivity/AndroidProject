@@ -47,13 +47,12 @@ public final class BrowserFullScreenController {
         mCustomViewCallback = callback;
 
         int currentActivityOrientation = activity.getRequestedOrientation();
-        int targetActivityOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
         // 如果当前 Activity 不是横屏，就将 Activity 设置成横屏
-        if (currentActivityOrientation != targetActivityOrientation) {
+        if (currentActivityOrientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             try {
                 // 兼容问题：在 Android 8.0 的手机上可以固定 Activity 的方向，但是这个 Activity 不能是透明的，否则就会抛出异常
                 // 复现场景：只需要给 Activity 主题设置 <item name="android:windowIsTranslucent">true</item> 属性即可
-                activity.setRequestedOrientation(targetActivityOrientation);
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             } catch (IllegalStateException e) {
                 // java.lang.IllegalStateException: Only fullscreen activities can request orientation
                 e.printStackTrace();

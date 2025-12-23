@@ -2,6 +2,7 @@ package com.hjq.core.tools;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
+import androidx.annotation.ChecksSdkIntAtLeast;
 
 /**
  *    author : Android 轮子哥
@@ -52,6 +53,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 16 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_16)
     public static boolean isAndroid16() {
         return Build.VERSION.SDK_INT >= ANDROID_16;
     }
@@ -59,6 +61,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 15 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_15)
     public static boolean isAndroid15() {
         return Build.VERSION.SDK_INT >= ANDROID_15;
     }
@@ -66,6 +69,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 14 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_14)
     public static boolean isAndroid14() {
         return Build.VERSION.SDK_INT >= ANDROID_14;
     }
@@ -73,6 +77,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 13 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_13)
     public static boolean isAndroid13() {
         return Build.VERSION.SDK_INT >= ANDROID_13;
     }
@@ -80,6 +85,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 12.1（又称 Android 12L）及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_12_1)
     public static boolean isAndroid12_1() {
         return Build.VERSION.SDK_INT >= ANDROID_12_1;
     }
@@ -87,6 +93,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 12 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_12)
     public static boolean isAndroid12() {
         return Build.VERSION.SDK_INT >= ANDROID_12;
     }
@@ -94,6 +101,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 11 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_11)
     public static boolean isAndroid11() {
         return Build.VERSION.SDK_INT >= ANDROID_11;
     }
@@ -101,6 +109,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 10 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_10)
     public static boolean isAndroid10() {
         return Build.VERSION.SDK_INT >= ANDROID_10;
     }
@@ -108,6 +117,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 9.0 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_9)
     public static boolean isAndroid9() {
         return Build.VERSION.SDK_INT >= ANDROID_9;
     }
@@ -115,6 +125,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 8.1 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_8_1)
     public static boolean isAndroid8_1() {
         return Build.VERSION.SDK_INT >= ANDROID_8_1;
     }
@@ -122,6 +133,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 8.0 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_8)
     public static boolean isAndroid8() {
         return Build.VERSION.SDK_INT >= ANDROID_8;
     }
@@ -129,6 +141,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 7.1 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_7_1)
     public static boolean isAndroid7_1() {
         return Build.VERSION.SDK_INT >= ANDROID_7_1;
     }
@@ -136,6 +149,7 @@ public final class AndroidVersion {
     /**
      * 是否是 Android 7.0 及以上版本
      */
+    @ChecksSdkIntAtLeast(api = ANDROID_7)
     public static boolean isAndroid7() {
         return Build.VERSION.SDK_INT >= ANDROID_7;
     }

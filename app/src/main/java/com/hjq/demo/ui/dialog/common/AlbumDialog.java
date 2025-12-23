@@ -68,24 +68,26 @@ public final class AlbumDialog  {
         @Override
         public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
             List<AlbumInfo> data = mAdapter.getData();
-
-            for (AlbumInfo info : data) {
-                if (info.isSelect()) {
-                    info.setSelect(false);
-                    break;
+            for (int i = 0; i < data.size(); i++) {
+                AlbumInfo albumInfo = data.get(i);
+                if (!albumInfo.isSelect()) {
+                    continue;
                 }
+                albumInfo.setSelect(false);
+                mAdapter.notifyItemChanged(i);
+                break;
             }
-            mAdapter.getItem(position).setSelect(true);
-            mAdapter.notifyDataSetChanged();
+
+            AlbumInfo albumInfo = mAdapter.getItem(position);
+            albumInfo.setSelect(true);
+            mAdapter.notifyItemChanged(position);
 
             // 延迟消失
             postDelayed(() -> {
-
                 if (mListener != null) {
-                    mListener.onSelected(getDialog(), position, mAdapter.getItem(position));
+                    mListener.onSelected(getDialog(), position, albumInfo);
                 }
                 dismiss();
-
             }, 300);
         }
 

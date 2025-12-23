@@ -53,13 +53,14 @@
             tools:node="replace" />
 
         <!-- 微信回调（使用狸猫换太子） -->
-        <activity android:name=".WXEntryActivity" />
         <activity-alias
             android:name="${applicationId}.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:targetActivity=".WXEntryActivity" />
+        <activity android:name=".WXEntryActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:targetActivity=".WXEntryActivity"
             android:taskAffinity="${applicationId}"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 

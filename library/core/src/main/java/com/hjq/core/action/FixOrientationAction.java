@@ -21,7 +21,7 @@ public interface FixOrientationAction {
      * 是否允许 Activity 设置显示方向
      */
     default boolean isAllowOrientation(@NonNull Activity activity) {
-        if (AndroidVersion.isAndroid8()) {
+        if (AndroidVersion.getSdkVersion() != AndroidVersion.ANDROID_8) {
             return true;
         }
         return !isTranslucentOrFloating(activity);

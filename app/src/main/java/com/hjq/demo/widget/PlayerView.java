@@ -190,9 +190,7 @@ public final class PlayerView extends SimpleLayout
     /**
      * 隐藏提示
      */
-    private final Runnable mHideMessageRunnable = () -> {
-        mMessageLayout.setVisibility(GONE);
-    };
+    private final Runnable mHideMessageRunnable = () -> mMessageLayout.setVisibility(GONE);
 
     public PlayerView(@NonNull Context context) {
         this(context, null);
@@ -579,12 +577,13 @@ public final class PlayerView extends SimpleLayout
         if (progress != 0) {
             // 记录当前播放进度
             mCurrentProgress = progress;
-        } else {
-            // 如果 Activity 返回到后台，progress 会等于 0，而 mVideoView.getDuration 会等于 -1
-            // 所以要避免在这种情况下记录当前的播放进度，以便用户从后台返回到前台的时候恢复正确的播放进度
-            if (mVideoView.getDuration() > 0) {
-                mCurrentProgress = progress;
-            }
+            return;
+        }
+
+        // 如果 Activity 返回到后台，progress 会等于 0，而 mVideoView.getDuration 会等于 -1
+        // 所以要避免在这种情况下记录当前的播放进度，以便用户从后台返回到前台的时候恢复正确的播放进度
+        if (mVideoView.getDuration() > 0) {
+            mCurrentProgress = 0;
         }
     }
 

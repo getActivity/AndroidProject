@@ -226,7 +226,7 @@ public final class SelectDialog {
         /**
          * {@link BaseAdapter.OnItemClickListener}
          */
-
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
             if (mSelectSet.containsKey(position)) {

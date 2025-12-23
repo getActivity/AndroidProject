@@ -2,6 +2,7 @@ package com.hjq.demo.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import com.hjq.http.listener.HttpCallbackProxy;
  *    time   : 2018/10/18
  *    desc   : 闪屏界面
  */
+@SuppressLint("CustomSplashScreen")
 public final class SplashActivity extends AppActivity {
 
     private LottieAnimationView mLottieView;
@@ -106,9 +108,10 @@ public final class SplashActivity extends AppActivity {
                 .hideBar(BarHide.FLAG_HIDE_BAR);
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
-        //禁用返回键
+        // 禁用返回键
         //super.onBackPressed();
     }
 

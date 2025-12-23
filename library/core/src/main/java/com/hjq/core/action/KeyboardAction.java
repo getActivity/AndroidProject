@@ -24,7 +24,7 @@ public interface KeyboardAction {
         if (manager == null) {
             return;
         }
-        manager.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+        manager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
     /**

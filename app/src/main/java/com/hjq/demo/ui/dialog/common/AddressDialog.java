@@ -40,6 +40,10 @@ import org.json.JSONObject;
  */
 public final class AddressDialog {
 
+    private static final int TYPE_PROVINCE = 0;
+    private static final int TYPE_CITY = 1;
+    private static final int TYPE_AREA = 2;
+
     public static final class Builder
             extends BaseDialog.Builder<Builder>
             implements TabAdapter.OnTabListener,
@@ -149,7 +153,7 @@ public final class AddressDialog {
                 if (!province.equals(data.get(i).getName())) {
                     continue;
                 }
-                selectedAddress(0, i, false);
+                selectedAddress(TYPE_PROVINCE, i, false);
                 break;
             }
             return this;
@@ -178,7 +182,7 @@ public final class AddressDialog {
                 }
                 // 避开直辖市，因为选择省的时候已经自动跳过市区了
                 if (mAdapter.getItem(1).size() > 1) {
-                    selectedAddress(1, i, false);
+                    selectedAddress(TYPE_CITY, i, false);
                 }
                 break;
             }
@@ -220,22 +224,22 @@ public final class AddressDialog {
         @SuppressWarnings("all")
         private void selectedAddress(int type, int position, boolean smoothScroll) {
             switch (type) {
-                case 0:
+                case TYPE_PROVINCE:
                     // 记录当前选择的省份
                     mProvince = mAdapter.getItem(type).get(position).getName();
                     mTabAdapter.setItem(type, mProvince);
 
                     mTabAdapter.addItem(getString(R.string.address_hint));
-                    mTabAdapter.setSelectedPosition(type + 1);
+                    mTabAdapter.setSelectedPosition(TYPE_CITY);
                     mAdapter.addItem(AddressManager.getCityList(mAdapter.getItem(type).get(position).getNext()));
-                    mViewPager2.setCurrentItem(type + 1, smoothScroll);
+                    mViewPager2.setCurrentItem(TYPE_CITY, smoothScroll);
 
                     // 如果当前选择的是直辖市，就直接跳过选择城市，直接选择区域
-                    if (mAdapter.getItem(type + 1).size() == 1) {
-                        selectedAddress(type + 1, 0, false);
+                    if (mAdapter.getItem(TYPE_CITY).size() == 1) {
+                        selectedAddress(TYPE_CITY, 0, false);
                     }
                     break;
-                case 1:
+                case TYPE_CITY:
                     // 记录当前选择的城市
                     mCity = mAdapter.getItem(type).get(position).getName();
                     mTabAdapter.setItem(type, mCity);
@@ -251,13 +255,13 @@ public final class AddressDialog {
 
                     } else {
                         mTabAdapter.addItem(getString(R.string.address_hint));
-                        mTabAdapter.setSelectedPosition(type + 1);
+                        mTabAdapter.setSelectedPosition(TYPE_AREA);
                         mAdapter.addItem(AddressManager.getAreaList(mAdapter.getItem(type).get(position).getNext()));
-                        mViewPager2.setCurrentItem(type + 1, smoothScroll);
+                        mViewPager2.setCurrentItem(TYPE_AREA, smoothScroll);
                     }
 
                     break;
-                case 2:
+                case TYPE_AREA:
                     // 记录当前选择的区域
                     mArea = mAdapter.getItem(type).get(position).getName();
                     mTabAdapter.setItem(type, mArea);

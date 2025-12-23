@@ -70,6 +70,7 @@ public final class NavigationAdapter extends AppAdapter<NavigationItem>
      * {@link BaseAdapter.OnItemClickListener}
      */
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onItemClick(@NonNull RecyclerView recyclerView, @NonNull View itemView, int position) {
         if (mSelectedPosition == position) {

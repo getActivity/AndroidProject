@@ -5,6 +5,7 @@ import android.os.Environment;
 import androidx.annotation.NonNull;
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  *    author : Android 轮子哥
@@ -96,19 +97,19 @@ public final class CacheDataManager {
 
         double megaByte = kiloByte / 1024;
         if (megaByte < 1) {
-            return new BigDecimal(kiloByte).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "K";
+            return new BigDecimal(kiloByte).setScale(2, RoundingMode.HALF_UP).toPlainString() + "K";
         }
 
         double gigaByte = megaByte / 1024;
         if (gigaByte < 1) {
-            return new BigDecimal(megaByte).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "M";
+            return new BigDecimal(megaByte).setScale(2, RoundingMode.HALF_UP).toPlainString() + "M";
         }
 
         double teraBytes = gigaByte / 1024;
         if (teraBytes < 1) {
-            return new BigDecimal(gigaByte).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
+            return new BigDecimal(gigaByte).setScale(2, RoundingMode.HALF_UP).toPlainString() + "GB";
         }
 
-        return new BigDecimal(teraBytes).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
+        return new BigDecimal(teraBytes).setScale(2, RoundingMode.HALF_UP).toPlainString() + "TB";
     }
 }
