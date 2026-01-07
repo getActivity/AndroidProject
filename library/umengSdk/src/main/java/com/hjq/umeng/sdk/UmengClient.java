@@ -97,10 +97,12 @@ public final class UmengClient {
         }
 
         try {
-            // 删除旧的第三方登录授权
-            UMShareAPI.get(activity).deleteOauth(activity, platform.getThirdParty(), null);
-            // 要先等上面的代码执行完毕之后
-            Thread.sleep(200);
+            if (UMShareAPI.get(activity).isAuthorize(activity, platform.getThirdParty())) {
+                // 删除旧的第三方登录授权
+                UMShareAPI.get(activity).deleteOauth(activity, platform.getThirdParty(), null);
+                // 要先等上面的代码执行完毕之后
+                Thread.sleep(200);
+            }
             // 开启新的第三方登录授权
             UMShareAPI.get(activity).getPlatformInfo(activity, platform.getThirdParty(), new UmengLogin.LoginListenerWrapper(platform.getThirdParty(), listener));
         } catch (InterruptedException e) {
