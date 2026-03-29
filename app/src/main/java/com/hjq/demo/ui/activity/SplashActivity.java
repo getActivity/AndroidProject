@@ -33,7 +33,7 @@ import com.hjq.http.listener.HttpCallbackProxy;
 public final class SplashActivity extends AppActivity {
 
     private LottieAnimationView mLottieView;
-    private SlantedTextView mDebugView;
+    private SlantedTextView mBuildTypeView;
 
     @Override
     protected int getLayoutId() {
@@ -43,7 +43,7 @@ public final class SplashActivity extends AppActivity {
     @Override
     protected void initView() {
         mLottieView = findViewById(R.id.lav_splash_lottie);
-        mDebugView = findViewById(R.id.iv_splash_debug);
+        mBuildTypeView = findViewById(R.id.iv_splash_build_type);
         // 设置动画监听
         mLottieView.addAnimatorListener(new AnimatorListenerAdapter() {
 
@@ -78,11 +78,11 @@ public final class SplashActivity extends AppActivity {
 
     @Override
     protected void initData() {
-        mDebugView.setText(AppConfig.getBuildType().toUpperCase());
         if (AppConfig.isDebug()) {
-            mDebugView.setVisibility(View.VISIBLE);
+            mBuildTypeView.setVisibility(View.VISIBLE);
+            mBuildTypeView.setText(AppConfig.getBuildType().toUpperCase());
         } else {
-            mDebugView.setVisibility(View.INVISIBLE);
+            mBuildTypeView.setVisibility(View.INVISIBLE);
         }
 
         if (true) {
