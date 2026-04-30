@@ -189,8 +189,8 @@ public final class HomeMineFragment extends TitleBarFragment<HomeActivity> {
             }
 
             new VideoPlayActivity.Builder()
-                    .setVideoTitle("速度与激情特别行动")
-                    .setVideoSource("http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4")
+                    .setVideoTitle("动物世界")
+                    .setVideoSource("http://vjs.zencdn.net/v/oceans.mp4")
                     .setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                     .start(activity);
 
