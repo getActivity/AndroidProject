@@ -12,10 +12,14 @@ android {
         versionCode 10
     }
 
-    // 支持 Java JDK 8
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        // 允许项目代码使用 Java 21 的新语法
+        sourceCompatibility JavaVersion.VERSION_21
+        // 编译后的字节码适配 Java 21 虚拟机，为了兼容安卓低版本系统 ART
+        targetCompatibility JavaVersion.VERSION_21
+        // 开启 JDK 核心库脱糖：把高版本 JDK 新增的类 (如 java.time) 打包进 apk，让安卓低版本手机也能正常运行不闪退
+        // https://developer.android.google.cn/studio/write/java8-support-table?hl=zh-cn
+        coreLibraryDesugaringEnabled true
     }
 
     // 设置存放 so 文件的目录
@@ -69,4 +73,6 @@ dependencies {
 
     implementation libs.appCompat
     implementation libs.material
+
+    coreLibraryDesugaring libs.desugarJdkLibs
 }

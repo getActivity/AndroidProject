@@ -6,6 +6,7 @@ easyLauncher = "6.4.1"
 
 appCompat = "1.7.1"
 material = "1.13.0"
+desugarJdkLibs = "2.0.4"
 deviceCompat = "2.6"
 xxPermissions = "28.2"
 titleBar = "10.8"
@@ -56,6 +57,9 @@ appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat"
 # Material 组件库：Material Design 组件
 # 项目主页：https://github.com/material-components/material-components-android
 material = { module = "com.google.android.material:material", version.ref = "material" }
+
+# JDK 8+ API 反向兼容库：https://developer.android.com/studio/write/java8-support
+desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 # 设备兼容框架：统一设备品牌、系统等差异 https://github.com/getActivity/DeviceCompat
 deviceCompat = { module = "com.github.getActivity:DeviceCompat", version.ref = "deviceCompat" }
