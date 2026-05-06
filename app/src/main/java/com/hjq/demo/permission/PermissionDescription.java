@@ -5,9 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -22,6 +19,7 @@ import com.hjq.demo.ui.popup.PermissionDescriptionPopup;
 import com.hjq.permissions.OnPermissionDescription;
 import com.hjq.permissions.permission.PermissionPageType;
 import com.hjq.permissions.permission.base.IPermission;
+import com.hjq.permissions.tools.PermissionTaskHandler;
 import java.util.List;
 
 /**
@@ -31,9 +29,6 @@ import java.util.List;
  *    desc   : 权限请求描述实现
  */
 public final class PermissionDescription implements OnPermissionDescription {
-
-    /** 消息处理 Handler 对象 */
-    public static final Handler HANDLER = new Handler(Looper.getMainLooper());
 
     /** 权限请求描述弹窗显示类型：Dialog */
     private static final int DESCRIPTION_WINDOW_TYPE_DIALOG = 0;
@@ -103,13 +98,13 @@ public final class PermissionDescription implements OnPermissionDescription {
         // 这样做是为了避免 PopupWindow 显示了又马上消失，这样就不会出现 PopupWindow 一闪而过的效果，提升用户的视觉体验
         // 最后补充一点：350 毫秒只是一个经验值，经过测试可覆盖大部分机型，具体可根据实际情况进行调整，这里不做强制要求
         // 相关 Github issue 地址：https://github.com/getActivity/XXPermissions/issues/366
-        HANDLER.postAtTime(showPopupRunnable, mHandlerToken, SystemClock.uptimeMillis() + 350);
+        PermissionTaskHandler.sendTask(showPopupRunnable, mHandlerToken, 350);
     }
 
     @Override
     public void onRequestPermissionEnd(@NonNull Activity activity, @NonNull List<IPermission> requestList) {
         // 移除跟这个 Token 有关但是没有还没有执行的消息
-        HANDLER.removeCallbacksAndMessages(mHandlerToken);
+        PermissionTaskHandler.cancelTask(mHandlerToken);
         // 销毁当前正在显示的弹窗
         dismissPopupWindow();
         dismissDialog();
