@@ -1,7 +1,6 @@
 package com.hjq.demo.ui.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -38,13 +37,6 @@ public final class StatusAdapter extends AppAdapter<String> {
         @Override
         public void onBindView(int position) {
             mTextView.setText(getItem(position));
-            getItemView().setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    removeItem(position);
-                    return false;
-                }
-            });
         }
     }
 }
