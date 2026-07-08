@@ -109,13 +109,20 @@ public abstract class TitleBarFragment<A extends AppActivity>
      */
     @NonNull
     protected ImmersionBar createStatusBarConfig() {
-        return ImmersionBar.with(this)
-                // 默认状态栏字体颜色为黑色
-                .statusBarDarkFont(isStatusBarDarkFont())
-                // 指定导航栏背景颜色
-                .navigationBarColor(R.color.white)
-                // 状态栏字体和导航栏内容自动变色，必须指定状态栏颜色和导航栏颜色才可以自动变色
-                .autoDarkModeEnable(true, 0.2f);
+        ImmersionBar immersionBar = ImmersionBar.with(this)
+            // 默认状态栏字体颜色为黑色
+            .statusBarDarkFont(isStatusBarDarkFont())
+            // 状态栏字体和导航栏内容自动变色，必须指定状态栏颜色和导航栏颜色才可以自动变色
+            .autoDarkModeEnable(true, 0.2f);
+        // 适配 Android 15 EdgeToEdge 特性
+        if (AndroidVersion.isAndroid15()) {
+            // 设置透明的导航栏
+            immersionBar.transparentNavigationBar();
+        } else {
+            // 指定导航栏背景颜色
+            immersionBar.navigationBarColor(R.color.white);
+        }
+        return immersionBar;
     }
 
     /**
