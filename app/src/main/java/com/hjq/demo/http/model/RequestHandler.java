@@ -174,7 +174,8 @@ public final class RequestHandler implements IRequestHandler {
             return new CancelException(mApplication.getString(R.string.http_request_cancel), throwable);
         }
 
-        return new HttpException(throwable.getMessage(), throwable);
+        String message = throwable.getMessage();
+        return new HttpException(message != null ? message : "", throwable);
     }
 
     @NonNull

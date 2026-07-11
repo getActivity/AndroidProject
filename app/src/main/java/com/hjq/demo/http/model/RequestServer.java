@@ -2,7 +2,7 @@ package com.hjq.demo.http.model;
 
 import androidx.annotation.NonNull;
 import com.hjq.demo.other.AppConfig;
-import com.hjq.http.config.IHttpPostBodyStrategy;
+import com.hjq.http.config.IHttpBodyStrategy;
 import com.hjq.http.config.IRequestServer;
 import com.hjq.http.model.RequestBodyType;
 
@@ -22,7 +22,7 @@ public class RequestServer implements IRequestServer {
 
     @NonNull
     @Override
-    public IHttpPostBodyStrategy getBodyType() {
+    public IHttpBodyStrategy getBodyType() {
         // 以表单的形式提交参数
         return RequestBodyType.FORM;
     }
