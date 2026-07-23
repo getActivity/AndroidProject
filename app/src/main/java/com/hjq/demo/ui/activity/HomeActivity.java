@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BasePagerAdapter;
 import com.hjq.core.manager.ActivityManager;
 import com.hjq.core.tools.DoubleClickHelper;
@@ -150,14 +149,6 @@ public final class HomeActivity extends AppActivity
             default:
                 return false;
         }
-    }
-
-    @NonNull
-    @Override
-    protected ImmersionBar createStatusBarConfig() {
-        return super.createStatusBarConfig()
-                // 指定导航栏背景颜色
-                .navigationBarColor(R.color.white);
     }
 
     @Override

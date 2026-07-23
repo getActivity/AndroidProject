@@ -3,13 +3,15 @@ package com.hjq.demo.ui.fragment.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.ColorStateList;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BasePagerAdapter;
 import com.hjq.demo.R;
 import com.hjq.demo.app.AppFragment;
@@ -31,6 +33,7 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
         XCollapsingToolbarLayout.OnScrimsListener {
 
     private XCollapsingToolbarLayout mCollapsingToolbarLayout;
+    private Toolbar mToolbar;
 
     private TextView mAddressView;
     private TextView mHintView;
@@ -54,6 +57,7 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
     @Override
     protected void initView() {
         mCollapsingToolbarLayout = findViewById(R.id.ctl_home_main_bar);
+        mToolbar = findViewById(R.id.tb_home_main_title);
 
         mAddressView = findViewById(R.id.tv_home_main_address);
         mHintView = findViewById(R.id.tv_home_main_hint);
@@ -71,13 +75,21 @@ public final class HomeMainFragment extends TitleBarFragment<HomeActivity>
         mTabAdapter = new TabAdapter(mTabView.getContext());
         mTabView.setAdapter(mTabAdapter);
 
-        Activity activity = getAttachActivity();
-        if (activity != null) {
-            ImmersionBar.setTitleBarMarginTop(activity, findViewById(R.id.tb_home_main_title));
-        }
-
         // 设置渐变监听
         mCollapsingToolbarLayout.setOnScrimsListener(this);
+
+        // 监听状态栏高度
+        observeStatusBarHeight(statusBarHeight -> {
+            if (statusBarHeight == null) {
+                return;
+            }
+            LayoutParams layoutParams = mToolbar.getLayoutParams();
+            if (!(layoutParams instanceof MarginLayoutParams marginLayoutParams)) {
+                return;
+            }
+            marginLayoutParams.topMargin = statusBarHeight;
+            mToolbar.setLayoutParams(marginLayoutParams);
+        });
     }
 
     @Override

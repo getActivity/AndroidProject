@@ -232,8 +232,6 @@ public final class RegisterActivity extends AppActivity
     @Override
     protected ImmersionBar createStatusBarConfig() {
         return super.createStatusBarConfig()
-                // 指定导航栏背景颜色
-                .navigationBarColor(R.color.white)
                 // 不要把整个布局顶上去
                 .keyboardEnable(true);
     }

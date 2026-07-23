@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.core.manager.InputTextManager;
 import com.hjq.core.other.KeyboardWatcher;
 import com.hjq.custom.widget.view.SubmitButton;
@@ -365,13 +364,5 @@ public final class LoginActivity extends AppActivity
             return true;
         }
         return false;
-    }
-
-    @NonNull
-    @Override
-    protected ImmersionBar createStatusBarConfig() {
-        return super.createStatusBarConfig()
-                // 指定导航栏背景颜色
-                .navigationBarColor(R.color.white);
     }
 }

@@ -6,7 +6,6 @@ import android.view.animation.ScaleAnimation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
@@ -105,13 +104,5 @@ public final class GuideActivity extends AppActivity {
     protected void onDestroy() {
         super.onDestroy();
         mViewPager.unregisterOnPageChangeCallback(mCallback);
-    }
-
-    @NonNull
-    @Override
-    protected ImmersionBar createStatusBarConfig() {
-        return super.createStatusBarConfig()
-                // 指定导航栏背景颜色
-                .navigationBarColor(R.color.white);
     }
 }

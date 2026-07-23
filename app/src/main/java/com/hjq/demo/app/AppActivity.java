@@ -1,17 +1,20 @@
 package com.hjq.demo.app;
 
 import android.content.Intent;
-import android.graphics.Insets;
 import android.view.View;
-import android.view.View.OnApplyWindowInsetsListener;
-import android.view.WindowInsets;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
-import com.hjq.core.tools.AndroidVersion;
 import com.hjq.demo.R;
 import com.hjq.demo.action.ImmersionAction;
 import com.hjq.demo.action.TitleBarAction;
@@ -35,6 +38,12 @@ public abstract class AppActivity extends BaseActivity
     private TitleBar mTitleBar;
     /** 状态栏沉浸 */
     private ImmersionBar mImmersionBar;
+    /** 状态栏高度 LiveData */
+    @NonNull
+    private final MutableLiveData<Integer> mStatusBarHeightLiveData = new MutableLiveData<>();
+    /** 导航栏高度 LiveData */
+    @NonNull
+    private final MutableLiveData<Integer> mNavigationBarHeightLiveData = new MutableLiveData<>();
 
     /** 加载对话框 */
     private WaitDialog.Builder mDialog;
@@ -110,38 +119,75 @@ public abstract class AppActivity extends BaseActivity
             getStatusBarConfig().init();
         }
 
-        // 适配 Android 15 EdgeToEdge 特性
-        if (AndroidVersion.isAndroid15()) {
-            getWindow().getDecorView().setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener()  {
-
-                @NonNull
-                @Override
-                public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
-                    Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
-                    View immersionTopView = getImmersionTopView();
-                    View immersionBottomView = getImmersionBottomView();
-                    if (immersionTopView != null && immersionTopView == immersionBottomView) {
-                        immersionTopView.setPadding(immersionTopView.getPaddingLeft(), systemBars.top,
-                                                    immersionTopView.getPaddingRight(), systemBars.bottom);
-                        return insets;
-                    }
-                    if (immersionTopView != null) {
-                        immersionTopView.setPadding(immersionTopView.getPaddingLeft(), systemBars.top,
-                                                    immersionTopView.getPaddingRight(), immersionTopView.getPaddingBottom());
-                    }
-                    if (immersionBottomView != null) {
-                        immersionBottomView.setPadding(immersionBottomView.getPaddingLeft(), immersionBottomView.getPaddingTop(),
-                                                       immersionBottomView.getPaddingRight(), systemBars.bottom);
-                    }
-                    return insets;
-                }
-            });
-        } else {
-            View immersionTopView = getImmersionTopView();
-            if (immersionTopView != null) {
-                ImmersionBar.setTitleBar(this, immersionTopView);
+        // 监听状态栏和导航栏高度变化
+        mStatusBarHeightLiveData.observe(this, statusBarHeight -> {
+            if (statusBarHeight == null) {
+                return;
             }
-        }
+            View immersionTopView = getImmersionTopView();
+            if (immersionTopView == null) {
+                return;
+            }
+            immersionTopView.setPadding(immersionTopView.getPaddingLeft(), statusBarHeight,
+                immersionTopView.getPaddingRight(), immersionTopView.getPaddingBottom());
+        });
+        mNavigationBarHeightLiveData.observe(this, navigationBarHeight -> {
+            if (navigationBarHeight == null) {
+                return;
+            }
+            View immersionBottomView = getImmersionBottomView();
+            if (immersionBottomView == null) {
+                return;
+            }
+            immersionBottomView.setPadding(immersionBottomView.getPaddingLeft(), immersionBottomView.getPaddingTop(),
+                immersionBottomView.getPaddingRight(), navigationBarHeight);
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+
+            @NonNull
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                Insets windowInsets = getWindowInsets(insets);
+                Integer statusBarHeight = mStatusBarHeightLiveData.getValue();
+                if (statusBarHeight == null || statusBarHeight != windowInsets.top) {
+                    mStatusBarHeightLiveData.postValue(windowInsets.top);
+                }
+                Integer navigationBarHeight = mNavigationBarHeightLiveData.getValue();
+                if (navigationBarHeight == null || navigationBarHeight != windowInsets.bottom) {
+                    mNavigationBarHeightLiveData.postValue(windowInsets.bottom);
+                }
+                return insets;
+            }
+        });
+    }
+
+    /**
+     * 获取系统栏的高度
+     */
+    public Insets getWindowInsets(@NonNull WindowInsetsCompat insets) {
+        return insets.getInsets(WindowInsetsCompat.Type.systemBars());
+    }
+
+    /**
+     * 监听状态栏高度变化
+     */
+    public void observeStatusBarHeight(@NonNull Observer<Integer> observer) {
+        observeStatusBarHeight(this, observer);
+    }
+
+    public void observeStatusBarHeight(@NonNull LifecycleOwner lifecycleOwner, @NonNull Observer<Integer> observer) {
+        mStatusBarHeightLiveData.observe(lifecycleOwner, observer);
+    }
+
+    /**
+     * 监听导航栏高度变化
+     */
+    public void observeNavigationBarHeight(@NonNull Observer<Integer> observer) {
+        observeNavigationBarHeight(this, observer);
+    }
+
+    public void observeNavigationBarHeight(@NonNull LifecycleOwner lifecycleOwner, @NonNull Observer<Integer> observer) {
+        mNavigationBarHeightLiveData.observe(lifecycleOwner, observer);
     }
 
     /**
@@ -155,6 +201,15 @@ public abstract class AppActivity extends BaseActivity
      * 状态栏字体深色模式
      */
     protected boolean isStatusBarDarkFont() {
+        // 返回 true 表示黑色字体
+        return true;
+    }
+
+    /**
+     * 获取导航栏图标颜色
+     */
+    protected boolean isNavigationBarDarkIcon() {
+        // 返回 true 表示黑色图标
         return true;
     }
 
@@ -174,20 +229,13 @@ public abstract class AppActivity extends BaseActivity
      */
     @NonNull
     protected ImmersionBar createStatusBarConfig() {
-        ImmersionBar immersionBar = ImmersionBar.with(this)
-            // 默认状态栏字体颜色为黑色
+        return ImmersionBar.with(this)
+            // 设置状态栏字体的颜色
             .statusBarDarkFont(isStatusBarDarkFont())
-            // 状态栏字体和导航栏内容自动变色，必须指定状态栏颜色和导航栏颜色才可以自动变色
-            .autoDarkModeEnable(true, 0.2f);
-        // 适配 Android 15 EdgeToEdge 特性
-        if (AndroidVersion.isAndroid15()) {
             // 设置透明的导航栏
-            immersionBar.transparentNavigationBar();
-        } else {
-            // 指定导航栏背景颜色
-            immersionBar.navigationBarColor(R.color.white);
-        }
-        return immersionBar;
+            .transparentNavigationBar()
+            // 设置导航栏图标的颜色
+            .navigationBarDarkIcon(isNavigationBarDarkIcon());
     }
 
     /**
