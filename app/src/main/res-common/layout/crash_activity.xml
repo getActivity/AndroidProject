@@ -105,6 +105,7 @@
                 android:id="@+id/tv_crash_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_15"
                 android:layout_marginVertical="@dimen/dp_15"
                 android:lineSpacingExtra="@dimen/dp_5"
                 android:textColor="@color/black60"
