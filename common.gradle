@@ -2,12 +2,12 @@
 android {
 
     // 编译源码版本
-    compileSdk 36
+    compileSdk 37
     defaultConfig {
         // 最低安装版本
         minSdk 23
         // Android 版本适配指南：https://github.com/getActivity/AndroidVersionAdapter
-        targetSdk 36
+        targetSdk 37
         versionName '1.0'
         versionCode 10
     }
