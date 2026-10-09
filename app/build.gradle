@@ -23,10 +23,8 @@ android {
         applicationId 'com.hjq.demo'
 
         // 仅保留中文语种的资源
-        resConfigs 'zh'
-
         // 仅保留 xxhdpi 图片资源（目前主流分辨率 1920 * 1080）
-        resConfigs 'xxhdpi'
+        resourceConfigurations += ['zh', 'xxhdpi']
 
         // 混淆配置
         proguardFiles 'proguard-sdk.pro', 'proguard-app.pro'
@@ -111,11 +109,6 @@ android {
                     'app_name'    :    '@string/app_name'
             ])
         }
-    }
-
-    packagingOptions {
-        // 剔除这个包下的所有文件（不会移除签名信息）
-        exclude 'META-INF/*******'
     }
 
     // AOP 配置（exclude 和 include 二选一）

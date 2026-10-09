@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.2"
+agp = "9.3.0"
 kotlin = "2.4.20"
 androidAop = "2.7.6"
 easyLauncher = "6.4.1"
