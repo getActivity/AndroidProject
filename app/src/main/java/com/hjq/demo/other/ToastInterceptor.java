@@ -1,5 +1,6 @@
 package com.hjq.demo.other;
 
+import androidx.annotation.NonNull;
 import com.hjq.toast.ToastLogInterceptor;
 import timber.log.Timber;
 
@@ -17,7 +18,7 @@ public final class ToastInterceptor extends ToastLogInterceptor {
     }
 
     @Override
-    protected void printLog(String msg) {
+    protected void printLog(@NonNull String msg) {
         Timber.tag("Toaster");
         Timber.i(msg);
     }
