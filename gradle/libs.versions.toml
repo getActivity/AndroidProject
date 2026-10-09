@@ -36,7 +36,7 @@ umengShareCore = "7.3.7"
 umengShareWX = "7.3.7"
 umengShareQQ = "7.3.7"
 qqSdk = "3.5.18.0"
-wxSdk = "6.8.34"
+wxSdk = "6.8.40"
 
 [plugins]
 # Android 应用构建插件（AGP）：https://developer.android.com/build
