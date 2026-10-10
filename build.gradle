@@ -11,10 +11,6 @@ void main() {
     loadAppConfig()
 }
 
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
-}
-
 /**
  * 根据 Gradle 命令行参数配置 App 的服务器类型和相关参数
  */
