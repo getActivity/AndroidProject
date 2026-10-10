@@ -16,11 +16,11 @@ void main() {
  */
 void loadAppConfig() {
     // 测试服
-    def SERVER_TYPE_TEST = "test"
+    def serverTypeTest = "test"
     // 预发布服
-    def SERVER_TYPE_PREVIEW = "pre"
+    def serverTypePreview = "pre"
     // 正式服
-    def SERVER_TYPE_PRODUCT = "product"
+    def serverTypeProduct = "product"
 
     def taskName = project.gradle.startParameter.taskNames[0]
     if (taskName == null) {
@@ -32,11 +32,11 @@ void loadAppConfig() {
     def serverType
 
     if (taskName.endsWith("Debug")) {
-        serverType = SERVER_TYPE_TEST
+        serverType = serverTypeTest
     } else if (taskName.endsWith("Preview")) {
-        serverType = SERVER_TYPE_PREVIEW
+        serverType = serverTypePreview
     } else {
-        serverType = SERVER_TYPE_PRODUCT
+        serverType = serverTypeProduct
     }
 
     // 从 Gradle 命令中读取参数配置，例如：./gradlew assembleRelease -P ServerType="test"
@@ -61,18 +61,18 @@ void loadAppConfig() {
         WX_APP_SECRET = "0c8c7cf831dd135a32b3e395ea459b5a"
 
         switch(serverType) {
-            case SERVER_TYPE_TEST:
-            case SERVER_TYPE_PREVIEW:
+            case serverTypeTest:
+            case serverTypePreview:
                 LOG_ENABLE = true
                 BUGLY_ID = "请自行替换 Bugly 上面的 AppId"
                 BUGLY_KEY = "请自行替换 Bugly 上面的 AppKey"
-                if (serverType == SERVER_TYPE_PREVIEW) {
+                if (serverType == serverTypePreview) {
                     HOST_URL = "https://www.pre.baidu.com/"
                 } else {
                     HOST_URL = "https://www.test.baidu.com/"
                 }
                 break
-            case SERVER_TYPE_PRODUCT:
+            case serverTypeProduct:
                 LOG_ENABLE = false
                 BUGLY_ID = "请自行替换 Bugly 上面的 AppId"
                 BUGLY_KEY = "请自行替换 Bugly 上面的 AppKey"
