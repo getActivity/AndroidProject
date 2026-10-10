@@ -62,6 +62,7 @@ void loadAppConfig() {
 
         switch(serverType) {
             case serverTypeTest:
+                // fallthrough
             case serverTypePreview:
                 LOG_ENABLE = true
                 BUGLY_ID = "请自行替换 Bugly 上面的 AppId"
