@@ -11,16 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/dp_20"
-        android:paddingVertical="@dimen/dp_10">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_crash_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dp_20"
+            android:paddingVertical="@dimen/dp_15">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_crash_info"
@@ -61,8 +60,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_15">
+            android:layout_marginHorizontal="@dimen/dp_15">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_crash_message"
@@ -70,6 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:lineSpacingExtra="@dimen/dp_5"
+                android:paddingHorizontal="@dimen/dp_30"
+                android:paddingVertical="@dimen/dp_5"
                 android:textColor="#FF4444"
                 android:textSize="@dimen/sp_15"
                 tools:text="我是错误信息" />
@@ -86,16 +86,15 @@
 
         <LinearLayout
             android:id="@+id/ll_crash_info"
-            android:layout_width="@dimen/dp_240"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_10"
+                android:gravity="center_horizontal"
                 android:text="详细信息"
                 android:textColor="@color/black80"
                 android:textSize="@dimen/sp_16"
@@ -103,11 +102,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_crash_info"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_15"
-                android:layout_marginVertical="@dimen/dp_15"
+                android:gravity="start"
                 android:lineSpacingExtra="@dimen/dp_5"
+                android:paddingHorizontal="@dimen/dp_30"
+                android:paddingVertical="@dimen/dp_10"
                 android:textColor="@color/black60"
                 android:textSize="@dimen/sp_14" />
 

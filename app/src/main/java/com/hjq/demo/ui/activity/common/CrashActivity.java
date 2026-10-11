@@ -15,12 +15,12 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.core.manager.ThreadPoolManager;
 import com.hjq.core.tools.AndroidVersion;
 import com.hjq.demo.R;
@@ -71,7 +71,6 @@ public final class CrashActivity extends AppActivity {
     private TextView mTitleView;
     private DrawerLayout mDrawerLayout;
     private TextView mInfoView;
-    private ViewGroup mInfoLayout;
     private TextView mMessageView;
     private String mStackTrace;
 
@@ -84,19 +83,9 @@ public final class CrashActivity extends AppActivity {
     protected void initView() {
         mTitleView = findViewById(R.id.tv_crash_title);
         mDrawerLayout = findViewById(R.id.dl_crash_drawer);
-        mInfoLayout = findViewById(R.id.ll_crash_info);
         mInfoView = findViewById(R.id.tv_crash_info);
         mMessageView = findViewById(R.id.tv_crash_message);
         setOnClickListener(R.id.iv_crash_info, R.id.iv_crash_share, R.id.iv_crash_restart);
-
-        // 监听状态栏高度
-        observeStatusBarHeight(statusBarHeight -> {
-            if (statusBarHeight == null) {
-                return;
-            }
-            mInfoLayout.setPadding(mInfoLayout.getPaddingLeft(), statusBarHeight,
-                mInfoLayout.getPaddingRight(), mInfoLayout.getPaddingBottom());
-        });
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -244,18 +233,6 @@ public final class CrashActivity extends AppActivity {
         }
     }
 
-    @Nullable
-    @Override
-    public View getImmersionTopView() {
-        return findViewById(R.id.ll_crash_bar);
-    }
-
-    @Nullable
-    @Override
-    public View getImmersionBottomView() {
-        return findViewById(R.id.ll_crash_bar);
-    }
-
     @SingleClick
     @Override
     public void onClick(@NonNull View view) {
@@ -280,6 +257,14 @@ public final class CrashActivity extends AppActivity {
         // 重启应用
         RestartActivity.restart(this);
         finish();
+    }
+
+    @NonNull
+    @Override
+    protected ImmersionBar createStatusBarConfig() {
+        return super.createStatusBarConfig()
+            // 隐藏状态栏和导航栏
+            .hideBar(BarHide.FLAG_HIDE_BAR);
     }
 
     /**
