@@ -4,8 +4,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
+import com.gyf.immersionbar.BarHide;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.demo.R;
 import com.hjq.demo.aop.SingleClick;
 import com.hjq.demo.app.AppActivity;
@@ -85,12 +86,6 @@ public final class GuideActivity extends AppActivity {
         mIndicatorView.setViewPager(mViewPager);
     }
 
-    @Nullable
-    @Override
-    public View getImmersionBottomView() {
-        return findViewById(R.id.fl_guide_control);
-    }
-
     @SingleClick
     @Override
     public void onClick(@NonNull View view) {
@@ -104,5 +99,13 @@ public final class GuideActivity extends AppActivity {
     protected void onDestroy() {
         super.onDestroy();
         mViewPager.unregisterOnPageChangeCallback(mCallback);
+    }
+
+    @NonNull
+    @Override
+    protected ImmersionBar createStatusBarConfig() {
+        return super.createStatusBarConfig()
+            // 隐藏状态栏和导航栏
+            .hideBar(BarHide.FLAG_HIDE_BAR);
     }
 }
