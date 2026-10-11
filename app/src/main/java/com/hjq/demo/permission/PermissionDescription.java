@@ -133,14 +133,11 @@ public final class PermissionDescription implements OnPermissionDescription {
         if (activity.isFinishing() || activity.isDestroyed()) {
             return;
         }
-        // 另外这里需要判断 Activity 的类型来申请权限，这是因为只有 AppCompatActivity 才能调用 AndroidX 库的 AlertDialog 来显示，否则会出现报错
-        // java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity
-        // 为什么不直接用系统包 AlertDialog 来显示，而是两套规则？因为系统包 AlertDialog 是系统自带的类，不同 Android 版本展现的样式可能不太一样
-        // 如果这个 Android 版本比较低，那么这个对话框的样式就会变得很丑，准确来讲也不能说丑，而是当时系统的 UI 设计就是那样，它只是跟随系统的样式而已
         mPermissionDialog = new MessageDialog.Builder(activity)
             .setTitle(dialogTitle)
             .setMessage(dialogMessage)
             .setConfirm(confirmButtonText)
+            .setCancel(null)
             .setCancelable(false)
             .setListener(listener)
             .create();
