@@ -11,6 +11,8 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.PickVisualMediaRequest.Builder;
@@ -223,6 +225,22 @@ public final class VideoSelectActivity extends AppActivity
                         break;
                 }
             }
+        });
+
+        // 监听底部导航栏高度
+        observeNavigationBarHeight(navigationBarHeight -> {
+            if (navigationBarHeight == null) {
+                return;
+            }
+            LayoutParams layoutParams = mFloatingView.getLayoutParams();
+            if (!(layoutParams instanceof ViewGroup.MarginLayoutParams marginLayoutParams)) {
+                return;
+            }
+            if (marginLayoutParams.bottomMargin >= navigationBarHeight) {
+                return;
+            }
+            marginLayoutParams.bottomMargin = navigationBarHeight;
+            mFloatingView.setLayoutParams(marginLayoutParams);
         });
     }
 
