@@ -171,6 +171,7 @@ dependencies {
 
     implementation libs.easyHttp
     implementation libs.okHttp
+    implementation libs.okHttpSse
 
     implementation(libs.gsonFactory) {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'

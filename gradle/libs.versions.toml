@@ -13,6 +13,7 @@ titleBar = "10.8"
 toaster = "15.2"
 easyHttp = "13.8"
 okHttp = "5.4.0"
+okHttpSse = "5.0.0-alpha.11"
 gsonFactory = "10.8"
 gson = "2.14.0"
 shapeView = "11.3"
@@ -77,6 +78,7 @@ easyHttp = { module = "com.github.getActivity:EasyHttp", version.ref = "easyHttp
 
 # OkHttp 客户端：https://github.com/square/okhttp
 okHttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
+okHttpSse = { module = "com.squareup.okhttp3:okhttp-sse", version.ref = "okHttpSse" }
 
 # Gson 容错工厂：提升解析稳定性 https://github.com/getActivity/GsonFactory
 gsonFactory = { module = "com.github.getActivity:GsonFactory", version.ref = "gsonFactory" }
