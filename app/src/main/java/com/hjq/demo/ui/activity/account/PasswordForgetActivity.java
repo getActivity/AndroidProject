@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.hjq.core.manager.InputTextManager;
 import com.hjq.custom.widget.view.CountdownView;
 import com.hjq.demo.R;
@@ -132,7 +133,7 @@ public final class PasswordForgetActivity extends AppActivity
      * {@link TextView.OnEditorActionListener}
      */
     @Override
-    public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
+    public boolean onEditorAction(@NonNull TextView v, int actionId, @Nullable KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
             // 模拟点击下一步按钮
             onClick(mCommitView);

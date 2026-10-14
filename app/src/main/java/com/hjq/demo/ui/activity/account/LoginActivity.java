@@ -357,7 +357,7 @@ public final class LoginActivity extends AppActivity
      * {@link TextView.OnEditorActionListener}
      */
     @Override
-    public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
+    public boolean onEditorAction(@NonNull TextView v, int actionId, @Nullable KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && mCommitView.isEnabled()) {
             // 模拟点击登录按钮
             onClick(mCommitView);

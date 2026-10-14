@@ -111,7 +111,7 @@ public final class InputDialog {
          * {@link TextView.OnEditorActionListener}
          */
         @Override
-        public boolean onEditorAction(@NonNull TextView v, int actionId, @NonNull KeyEvent event) {
+        public boolean onEditorAction(@NonNull TextView v, int actionId, @Nullable KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // 模拟点击确认按钮
                 onClick(findViewById(R.id.tv_ui_confirm));
