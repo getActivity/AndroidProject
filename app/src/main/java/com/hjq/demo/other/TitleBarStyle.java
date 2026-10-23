@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import com.hjq.bar.style.LightBarStyle;
@@ -21,26 +22,31 @@ import com.hjq.smallest.width.SmallestWidthAdaptation;
  */
 public final class TitleBarStyle extends LightBarStyle {
 
+    @NonNull
     @Override
     public TextView newTitleView(@NonNull Context context) {
         return new AppCompatTextView(context);
     }
 
+    @NonNull
     @Override
     public TextView newLeftView(@NonNull Context context) {
         return new PressAlphaTextView(context);
     }
 
+    @NonNull
     @Override
     public TextView newRightView(@NonNull Context context) {
         return new PressAlphaTextView(context);
     }
 
+    @Nullable
     @Override
     public Drawable getTitleBarBackground(@NonNull Context context) {
         return new ColorDrawable(ContextCompat.getColor(context, R.color.common_primary_color));
     }
 
+    @Nullable
     @Override
     public Drawable getBackButtonDrawable(@NonNull Context context) {
         if (context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
@@ -49,11 +55,13 @@ public final class TitleBarStyle extends LightBarStyle {
         return ContextCompat.getDrawable(context, R.drawable.arrows_left_ic);
     }
 
+    @Nullable
     @Override
     public Drawable getLeftTitleBackground(@NonNull Context context) {
         return null;
     }
 
+    @Nullable
     @Override
     public Drawable getRightTitleBackground(@NonNull Context context) {
         return null;

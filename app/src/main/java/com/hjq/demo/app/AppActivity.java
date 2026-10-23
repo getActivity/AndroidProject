@@ -277,7 +277,7 @@ public abstract class AppActivity extends BaseActivity
     }
 
     @Override
-    public void onLeftClick(TitleBar titleBar) {
+    public void onLeftClick(@NonNull TitleBar titleBar) {
         onBackPressed();
     }
 
