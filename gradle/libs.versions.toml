@@ -6,7 +6,7 @@ easyLauncher = "6.4.1"
 
 appCompat = "1.8.0"
 material = "1.14.0"
-desugarJdkLibs = "2.0.4"
+desugarJdkLibs = "2.1.5"
 deviceCompat = "2.6"
 xxPermissions = "28.3"
 titleBar = "11.0"
